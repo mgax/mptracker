@@ -17,4 +17,6 @@ def fetch_day(day):
 
 
 if __name__ == '__main__':
+    import requests_cache
+    requests_cache.install_cache()
     fetch_day(date(2013, 6, 10))
