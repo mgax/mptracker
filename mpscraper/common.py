@@ -12,8 +12,8 @@ class Scraper(object):
 
 def install_requests_cache():
     import requests_cache
-    here = path(__file__).abspath().parent
-    requests_cache.install_cache(here / 'http_cache')
+    project_root = path(__file__).abspath().parent.parent
+    requests_cache.install_cache(project_root / '_data' / 'http_cache')
 
 
 def fix_encoding(text):
