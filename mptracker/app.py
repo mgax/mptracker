@@ -2,6 +2,7 @@ import flask
 from flask.ext.script import Manager
 from path import path
 from mptracker import models
+from mptracker.pages import pages
 
 
 def configure(app):
@@ -10,12 +11,14 @@ def configure(app):
     data_dir.mkdir_p()
     db_path = data_dir / 'db.sqlite'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+    app.debug = True
 
 
 def create_app():
     app = flask.Flask(__name__)
     configure(app)
     models.db.init_app(app)
+    app.register_blueprint(pages)
     return app
 
 

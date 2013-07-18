@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Openpolitics.ro MP Tracker</h1>
+
+  <ul>
+  {% for person in people %}
+    <li>
+      {{ person.name }}
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}
