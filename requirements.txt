@@ -1,3 +1,6 @@
+cssselect==0.8
+lxml==3.2.1
 path.py==4.3
+pyquery==1.2.4
 requests-cache==0.4.0
 requests==1.2.3
