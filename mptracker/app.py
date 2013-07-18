@@ -61,8 +61,11 @@ def import_steno():
         assert name_bits(a).issubset(name_bits(b)), (a, b)
 
     install_requests_cache()
+    session = models.db.session
     cdep_person = {p.cdep_id: p for p in models.Person.query}
     for paragraph in StenogramScraper().fetch_day(date(2013, 6, 10)):
         p = cdep_person[paragraph['speaker_cdep_id']]
         check_name_bits(p.name, paragraph['speaker_name'])
         s = models.Stenogram(person=p, text=paragraph['text'])
+        session.add(s)
+    session.commit()
