@@ -1,7 +1,7 @@
 """ Fetch and parse stenograms """
 
 from datetime import date
-from urlparse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs
 from path import path
 from pyquery import PyQuery as pq
 
@@ -64,7 +64,7 @@ class StenogramScraper(object):
     def fetch_day(self, day):
         for link in self.links_for_day(day):
             for paragraph in self.parse_steno_page(link):
-                print paragraph
+                print(paragraph)
 
 
 if __name__ == '__main__':
