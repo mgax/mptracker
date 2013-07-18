@@ -8,9 +8,13 @@ from pyquery import PyQuery as pq
 
 class StenogramScraper(object):
 
+    def fetch_url(self, *args, **kwargs):
+        return pq(*args, **kwargs)
+
     def links_for_day(self, day):
-        contents = pq('http://www.cdep.ro/pls/steno/steno.data',
-                      {'cam': 2, 'dat': day.strftime('%Y%m%d'), 'idl': 1})
+        contents = self.fetch_url('http://www.cdep.ro/pls/steno/steno.data',
+                                  {'cam': 2, 'idl': 1,
+                                   'dat': day.strftime('%Y%m%d')})
         for link_el in contents('td.headlinetext1 b a'):
             link = link_el.attrib['href']
             plink = urlparse(link)
