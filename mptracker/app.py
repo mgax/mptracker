@@ -25,3 +25,16 @@ manager = Manager(create_app)
 @manager.command
 def syncdb():
     models.db.create_all()
+
+
+@manager.command
+def import_people():
+    from mpscraper.common import install_requests_cache
+    from mpscraper.people import PersonScraper
+    install_requests_cache()
+    ps = PersonScraper()
+    session = models.db.session
+    for person_info in ps.fetch_people():
+        p = models.Person(**person_info)
+        session.add(p)
+    session.commit()

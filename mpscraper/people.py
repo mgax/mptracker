@@ -14,9 +14,9 @@ class PersonScraper(Scraper):
                 href = a.attr('href')
                 if 'structura.mp' in href:
                     name = fix_encoding(a.text())
-                    id_cdep = int(parse_qs(urlparse(href).query)['idm'][0])
+                    cdep_id = int(parse_qs(urlparse(href).query)['idm'][0])
                     yield {
-                        'id_cdep': id_cdep,
+                        'cdep_id': cdep_id,
                         'name': name,
                     }
 
