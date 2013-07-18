@@ -7,10 +7,11 @@ from common import Scraper, pqitems, fix_encoding, install_requests_cache
 
 class StenogramScraper(Scraper):
 
+    steno_url = 'http://www.cdep.ro/pls/steno/steno.data?cam=2&idl=1'
+
     def links_for_day(self, day):
-        contents = self.fetch_url('http://www.cdep.ro/pls/steno/steno.data',
-                                  {'cam': 2, 'idl': 1,
-                                   'dat': day.strftime('%Y%m%d')})
+        contents = self.fetch_url(self.steno_url,
+                                  {'dat': day.strftime('%Y%m%d')})
         for link_el in contents('td.headlinetext1 b a'):
             link = link_el.attrib['href']
             plink = urlparse(link)
