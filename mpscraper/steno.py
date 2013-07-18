@@ -30,26 +30,34 @@ class StenogramScraper(Scraper):
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
-                    speakers = paragraph('b a[target="PARLAMENTARI"] font')
+                    speakers = paragraph('b a[target="PARLAMENTARI"]')
                     if speakers:
                         assert len(speakers) == 1
-                        speaker = fix_encoding(speakers.text())
+                        speaker_name = fix_encoding(speakers.text())
+                        qs = parse_qs(urlparse(speakers.attr('href')).query)
+                        assert qs['cam'] == ['2']
+                        assert qs['leg'] == ['2012']
+                        speaker_cdep_id = int(qs['idm'][0])
+                        speaker = (speaker_cdep_id, speaker_name)
 
                     else:
                         if speaker is None:
                             continue  # still looking for first speaker
+                        (speaker_cdep_id, speaker_name) = speaker
                         text = fix_encoding(paragraph.text())
                         yield {
-                            'speaker': speaker,
+                            'speaker_cdep_id': speaker_cdep_id,
+                            'speaker_name': speaker_name,
                             'text': text,
                         }
 
     def fetch_day(self, day):
         for link in self.links_for_day(day):
             for paragraph in self.parse_steno_page(link):
-                print(paragraph)
+                yield paragraph
 
 
 if __name__ == '__main__':
     install_requests_cache()
-    StenogramScraper().fetch_day(date(2013, 6, 10))
+    for paragraph in StenogramScraper().fetch_day(date(2013, 6, 10)):
+        print(paragraph)
