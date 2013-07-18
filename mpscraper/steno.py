@@ -6,10 +6,25 @@ from path import path
 from pyquery import PyQuery as pq
 
 
+def fix_encoding(text):
+    return text.encode('latin-1').decode('iso-8859-2')
+
+
+def pqitems(ob, selector=None):
+    cls = type(ob)
+    if selector is None:
+        found = ob
+    else:
+        found = ob(selector)
+    return (cls(el) for el in found)
+
+
 class StenogramScraper(object):
 
     def fetch_url(self, *args, **kwargs):
-        return pq(*args, **kwargs)
+        page = pq(*args, parser='html', **kwargs)
+        page.make_links_absolute()
+        return page
 
     def links_for_day(self, day):
         contents = self.fetch_url('http://www.cdep.ro/pls/steno/steno.data',
@@ -25,9 +40,31 @@ class StenogramScraper(object):
                 continue
             yield link
 
+    def parse_steno_page(self, link):
+        page = self.fetch_url(link)
+        table_rows = pqitems(page, '#pageContent > table tr')
+        speaker = None
+        for tr in table_rows:
+            for td in pqitems(tr, 'td'):
+                for paragraph in pqitems(td, 'p'):
+                    speakers = paragraph('b a[target="PARLAMENTARI"] font')
+                    if speakers:
+                        [speaker_el] = speakers
+                        speaker = fix_encoding(pq(speaker_el).text())
+
+                    else:
+                        if speaker is None:
+                            continue  # still looking for first speaker
+                        text = fix_encoding(paragraph.text())
+                        yield {
+                            'speaker': speaker,
+                            'text': text,
+                        }
+
     def fetch_day(self, day):
         for link in self.links_for_day(day):
-            print link
+            for paragraph in self.parse_steno_page(link):
+                print paragraph
 
 
 if __name__ == '__main__':
