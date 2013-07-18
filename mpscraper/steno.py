@@ -2,29 +2,10 @@
 
 from datetime import date
 from urllib.parse import urlparse, parse_qs
-from path import path
-from pyquery import PyQuery as pq
+from common import Scraper, pqitems, fix_encoding, install_requests_cache
 
 
-def fix_encoding(text):
-    return text.encode('latin-1').decode('iso-8859-2')
-
-
-def pqitems(ob, selector=None):
-    cls = type(ob)
-    if selector is None:
-        found = ob
-    else:
-        found = ob(selector)
-    return (cls(el) for el in found)
-
-
-class StenogramScraper(object):
-
-    def fetch_url(self, *args, **kwargs):
-        page = pq(*args, parser='html', **kwargs)
-        page.make_links_absolute()
-        return page
+class StenogramScraper(Scraper):
 
     def links_for_day(self, day):
         contents = self.fetch_url('http://www.cdep.ro/pls/steno/steno.data',
@@ -49,8 +30,8 @@ class StenogramScraper(object):
                 for paragraph in pqitems(td, 'p'):
                     speakers = paragraph('b a[target="PARLAMENTARI"] font')
                     if speakers:
-                        [speaker_el] = speakers
-                        speaker = fix_encoding(pq(speaker_el).text())
+                        assert len(speakers) == 1
+                        speaker = fix_encoding(speakers.text())
 
                     else:
                         if speaker is None:
@@ -68,7 +49,5 @@ class StenogramScraper(object):
 
 
 if __name__ == '__main__':
-    import requests_cache
-    here = path(__file__).abspath().parent
-    requests_cache.install_cache(here / 'http_cache')
+    install_requests_cache()
     StenogramScraper().fetch_day(date(2013, 6, 10))
