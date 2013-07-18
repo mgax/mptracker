@@ -1,6 +1,7 @@
 """ Fetch and parse stenograms """
 
 from datetime import date
+from path import path
 import requests
 
 
@@ -18,5 +19,6 @@ def fetch_day(day):
 
 if __name__ == '__main__':
     import requests_cache
-    requests_cache.install_cache()
+    here = path(__file__).abspath().parent
+    requests_cache.install_cache(here / 'http_cache')
     fetch_day(date(2013, 6, 10))
