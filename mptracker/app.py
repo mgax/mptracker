@@ -45,3 +45,21 @@ def import_people():
             new_people += 1
     print('added', new_people, 'people')
     session.commit()
+
+
+@manager.command
+def import_steno():
+    from datetime import date
+    from mpscraper.common import install_requests_cache
+    from mpscraper.steno import StenogramScraper
+
+    name_bits = lambda name: set(name.replace('-', ' ').split())
+    def check_name_bits(a, b):
+        assert name_bits(a).issubset(name_bits(b)), (a, b)
+
+    install_requests_cache()
+    cdep_person = {p.cdep_id: p for p in models.Person.query}
+    for paragraph in StenogramScraper().fetch_day(date(2013, 6, 10)):
+        p = cdep_person[paragraph['speaker_cdep_id']]
+        check_name_bits(p.name, paragraph['speaker_name'])
+        s = models.Stenogram(person=p, text=paragraph['text'])
