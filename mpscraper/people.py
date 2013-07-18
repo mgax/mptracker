@@ -1,5 +1,6 @@
 from urllib.parse import urlparse, parse_qs
-from common import Scraper, pqitems, fix_encoding, install_requests_cache
+from mpscraper.common import (Scraper, pqitems, fix_encoding,
+                              install_requests_cache)
 
 
 class PersonScraper(Scraper):
