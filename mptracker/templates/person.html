@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>{{ person.name }}</h1>
+
+  <ul>
+  {% for stenogram in person.stenograms %}
+    <li>
+      {{ stenogram.text }}
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}
