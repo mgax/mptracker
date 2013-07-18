@@ -33,8 +33,15 @@ def import_people():
     from mpscraper.people import PersonScraper
     install_requests_cache()
     ps = PersonScraper()
+    existing_cdep_ids = set(p.cdep_id for p in models.Person.query)
+    new_people = 0
     session = models.db.session
     for person_info in ps.fetch_people():
-        p = models.Person(**person_info)
-        session.add(p)
+        if person_info['cdep_id'] not in existing_cdep_ids:
+            print('adding person:', person_info)
+            p = models.Person(**person_info)
+            session.add(p)
+            existing_cdep_ids.add(p.cdep_id)
+            new_people += 1
+    print('added', new_people, 'people')
     session.commit()
