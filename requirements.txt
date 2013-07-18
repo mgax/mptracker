@@ -1,3 +1,4 @@
+-e git+https://github.com/techniq/flask-script.git@6e47afcea25e2ad26a9c32371b3ebe34f3704b12#egg=Flask_Script-dev
 cssselect==0.8
 Flask==0.10.1
 itsdangerous==0.22
