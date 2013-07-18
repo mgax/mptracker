@@ -1,3 +1,4 @@
 *.pyc
 *.egg-info
 mpscraper/http_cache.sqlite
+_data
