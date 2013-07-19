@@ -2,6 +2,7 @@
 
 from datetime import date
 from urllib.parse import urlparse, parse_qs
+from pyquery import PyQuery as pq
 from mpscraper.common import (Scraper, pqitems, fix_encoding,
                               get_cached_session)
 
@@ -27,7 +28,7 @@ class StenogramScraper(Scraper):
 
     steno_url = 'http://www.cdep.ro/pls/steno/steno.data?cam=2&idl=1'
 
-    def links_for_day(self, day):
+    def sections_for_day(self, day):
         contents = self.fetch_url(self.steno_url,
                                   {'dat': day.strftime('%Y%m%d')})
         for link_el in contents('td.headlinetext1 b a'):
@@ -38,7 +39,11 @@ class StenogramScraper(Scraper):
                 # this is a fragment page. we can ignore it since we
                 # already have the content from the parent page.
                 continue
-            yield link
+            parent_tr = pq(link_el).parents('tr')[-1]
+            headline_el = pq(parent_tr)('td')[-1]
+            headline = fix_encoding(pq(headline_el).text())
+            print(repr(headline))
+            yield link, headline
 
     def parse_steno_page(self, link):
         page = self.fetch_url(link)
@@ -73,8 +78,9 @@ class StenogramScraper(Scraper):
 
     def fetch_day(self, day):
         steno_day = StenoDay()
-        for link in self.links_for_day(day):
+        for link, headline in self.sections_for_day(day):
             steno_section = self.parse_steno_page(link)
+            steno_section.headline = headline
             steno_day.sections.append(steno_section)
         return steno_day
 

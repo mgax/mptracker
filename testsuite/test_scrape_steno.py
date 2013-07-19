@@ -38,6 +38,10 @@ def test_2013_06_10(session):
     })
     steno_scraper = steno.StenogramScraper(session)
     steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
+
+    assert ("cooperarea dintre Parlament şi Guvern în "
+            "domeniul afacerilor europene") in steno_day.sections[1].headline
+
     paragraphs = []
     for steno_section in steno_day.sections:
         for paragraph in steno_section.paragraphs:
