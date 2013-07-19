@@ -20,10 +20,19 @@ class Person(db.Model):
     cdep_id = db.Column(db.Integer)
 
 
-class Stenogram(db.Model):
+class StenoSection(db.Model):
+    id = uuid_column()
+    date = db.Column(db.Date, index=True)
+
+
+class StenoParagraph(db.Model):
     id = uuid_column()
     text = db.Column(db.Text)
 
+    section_id = db.Column(uuid_type(), db.ForeignKey('steno_section.id'))
+    section = db.relationship('StenoSection',
+        backref=db.backref('paragraphs', lazy='dynamic'))
+
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
     person = db.relationship('Person',
-        backref=db.backref('stenograms', lazy='dynamic'))
+        backref=db.backref('steno_paragraphs', lazy='dynamic'))
