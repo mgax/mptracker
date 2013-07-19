@@ -32,10 +32,9 @@ def syncdb():
 
 @manager.command
 def import_people():
-    from mpscraper.common import install_requests_cache
+    from mpscraper.common import get_cached_session
     from mpscraper.people import PersonScraper
-    install_requests_cache()
-    ps = PersonScraper()
+    ps = PersonScraper(get_cached_session())
     existing_cdep_ids = set(p.cdep_id for p in models.Person.query)
     new_people = 0
     session = models.db.session
@@ -53,19 +52,24 @@ def import_people():
 @manager.command
 def import_steno():
     from datetime import date
-    from mpscraper.common import install_requests_cache
+    from mpscraper.common import get_cached_session
     from mpscraper.steno import StenogramScraper
 
     name_bits = lambda name: set(name.replace('-', ' ').split())
     def check_name_bits(a, b):
         assert name_bits(a).issubset(name_bits(b)), (a, b)
 
-    install_requests_cache()
     session = models.db.session
     cdep_person = {p.cdep_id: p for p in models.Person.query}
-    for paragraph in StenogramScraper().fetch_day(date(2013, 6, 10)):
-        p = cdep_person[paragraph['speaker_cdep_id']]
-        check_name_bits(p.name, paragraph['speaker_name'])
-        s = models.Stenogram(person=p, text=paragraph['text'])
-        session.add(s)
+    steno_scraper = StenogramScraper(get_cached_session())
+    steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
+    new_paragraphs = 0
+    for steno_section in steno_day.sections:
+        for paragraph in steno_section.paragraphs:
+            p = cdep_person[paragraph['speaker_cdep_id']]
+            check_name_bits(p.name, paragraph['speaker_name'])
+            s = models.Stenogram(person=p, text=paragraph['text'])
+            session.add(s)
+            new_paragraphs += 1
+    print('added', new_paragraphs, 'stenogram paragraphs')
     session.commit()
