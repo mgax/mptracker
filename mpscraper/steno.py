@@ -42,7 +42,6 @@ class StenogramScraper(Scraper):
             parent_tr = pq(link_el).parents('tr')[-1]
             headline_el = pq(parent_tr)('td')[-1]
             headline = fix_encoding(pq(headline_el).text())
-            print(repr(headline))
             yield link, headline
 
     def parse_steno_page(self, link):
