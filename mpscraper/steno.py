@@ -47,25 +47,21 @@ class StenogramScraper(Scraper):
     def parse_steno_page(self, link):
         page = self.fetch_url(link)
         table_rows = pqitems(page, '#pageContent > table tr')
-        speaker = None
+        steno_paragraph = None
         steno_section = StenoSection()
         text_buffer = []
 
         def save_paragraph():
-            (speaker_cdep_id, speaker_name) = speaker
-            steno_section.paragraphs.append(StenoParagraph({
-                'speaker_cdep_id': speaker_cdep_id,
-                'speaker_name': speaker_name,
-                'text': "\n".join(text_buffer),
-            }))
-            text_buffer[:] = []
+            text = "\n".join(steno_paragraph.pop('text_buffer'))
+            steno_paragraph['text'] = text
+            steno_section.paragraphs.append(steno_paragraph)
 
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
                     speakers = paragraph('b a[target="PARLAMENTARI"]')
                     if speakers:
-                        if speaker:
+                        if steno_paragraph:
                             save_paragraph()
                         assert len(speakers) == 1
                         speaker_name = fix_encoding(speakers.text())
@@ -73,15 +69,19 @@ class StenogramScraper(Scraper):
                         assert qs['cam'] == ['2']
                         assert qs['leg'] == ['2012']
                         speaker_cdep_id = int(qs['idm'][0])
-                        speaker = (speaker_cdep_id, speaker_name)
+                        steno_paragraph = StenoParagraph({
+                            'speaker_cdep_id': speaker_cdep_id,
+                            'speaker_name': speaker_name,
+                            'text_buffer': [],
+                        })
 
                     else:
-                        if speaker is None:
+                        if steno_paragraph is None:
                             continue  # still looking for first speaker
                         text = fix_encoding(paragraph.text())
-                        text_buffer.append(text)
+                        steno_paragraph['text_buffer'].append(text)
 
-        if speaker and text_buffer:
+        if steno_paragraph:
             save_paragraph()
 
         return steno_section
