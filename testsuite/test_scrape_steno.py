@@ -37,7 +37,11 @@ def test_2013_06_10(session):
             PAGES_DIR / 'steno.stenograma-7277-12',
     })
     steno_scraper = steno.StenogramScraper(session)
-    stenograms = list(steno_scraper.fetch_day(date(2013, 6, 10)))
-    assert len(stenograms) == 477
-    assert stenograms[0]['speaker_cdep_id'] == 168
-    assert stenograms[0]['text'] == "Stimaţi colegi,"
+    steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
+    paragraphs = []
+    for steno_section in steno_day.sections:
+        for paragraph in steno_section.paragraphs:
+            paragraphs.append(paragraph)
+    assert len(paragraphs) == 477
+    assert paragraphs[0]['speaker_cdep_id'] == 168
+    assert paragraphs[0]['text'] == "Stimaţi colegi,"

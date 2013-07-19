@@ -76,12 +76,12 @@ class StenogramScraper(Scraper):
         for link in self.links_for_day(day):
             steno_section = self.parse_steno_page(link)
             steno_day.sections.append(steno_section)
-        for s in steno_day.sections:
-            for p in s.paragraphs:
-                yield p
+        return steno_day
 
 
 if __name__ == '__main__':
     steno_scraper = StenogramScraper(get_cached_session())
-    for paragraph in steno_scraper.fetch_day(date(2013, 6, 10)):
-        print(paragraph)
+    steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
+    for steno_section in steno_day.sections:
+        for paragraph in steno_section.paragraphs:
+            print(paragraph)
