@@ -1,0 +1,4 @@
+-r requirements.txt
+mock==1.0.1
+py==1.4.15
+pytest==2.3.5
