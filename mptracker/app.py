@@ -31,6 +31,16 @@ def syncdb():
 
 
 @manager.command
+def flush_steno(no_create=False):
+    engine = models.db.get_engine(flask.current_app)
+    for model in [models.Stenogram]:
+        table = model.__table__
+        table.drop(engine, checkfirst=True)
+        if not no_create:
+            table.create(engine)
+
+
+@manager.command
 def import_people():
     from mpscraper.common import get_cached_session
     from mpscraper.people import PersonScraper
