@@ -1,4 +1,6 @@
+from collections import defaultdict
 import flask
+from sqlalchemy.orm import joinedload
 from mptracker import models
 
 
@@ -14,4 +16,12 @@ def home():
 @pages.route('/person/<person_id>')
 def person(person_id):
     person = models.Person.query.get_or_404(person_id)
-    return flask.render_template('person.html', person=person)
+
+    steno_data = defaultdict(list)
+    for paragraph in person.steno_paragraphs:
+        steno_data[paragraph.section.date].append(paragraph)
+
+    return flask.render_template('person.html', **{
+        'person': person,
+        'steno_data': sorted(steno_data.items()),
+    })

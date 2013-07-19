@@ -4,11 +4,16 @@
 {% block content %}
   <h1>{{ person.name }}</h1>
 
+  {% for date, paragraphs in steno_data %}
+  <h3>{{ date }}</h3>
+
   <ul>
-  {% for stenogram in person.steno_paragraphs %}
+  {% for p in paragraphs %}
     <li>
-      {{ stenogram.text }}
+      {{ p.text }}
     </li>
   {% endfor %}
   </ul>
+  {% endfor %}
+
 {% endblock %}
