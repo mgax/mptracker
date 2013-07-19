@@ -6,6 +6,23 @@ from mpscraper.common import (Scraper, pqitems, fix_encoding,
                               get_cached_session)
 
 
+class StenoDay:
+
+    def __init__(self):
+        self.sections = []
+
+
+class StenoSection:
+
+    def __init__(self):
+        self.paragraphs = []
+
+
+class StenoParagraph(dict):
+
+    pass
+
+
 class StenogramScraper(Scraper):
 
     steno_url = 'http://www.cdep.ro/pls/steno/steno.data?cam=2&idl=1'
@@ -27,6 +44,7 @@ class StenogramScraper(Scraper):
         page = self.fetch_url(link)
         table_rows = pqitems(page, '#pageContent > table tr')
         speaker = None
+        steno_section = StenoSection()
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
@@ -45,16 +63,22 @@ class StenogramScraper(Scraper):
                             continue  # still looking for first speaker
                         (speaker_cdep_id, speaker_name) = speaker
                         text = fix_encoding(paragraph.text())
-                        yield {
+                        steno_section.paragraphs.append(StenoParagraph({
                             'speaker_cdep_id': speaker_cdep_id,
                             'speaker_name': speaker_name,
                             'text': text,
-                        }
+                        }))
+
+        return steno_section
 
     def fetch_day(self, day):
+        steno_day = StenoDay()
         for link in self.links_for_day(day):
-            for paragraph in self.parse_steno_page(link):
-                yield paragraph
+            steno_section = self.parse_steno_page(link)
+            steno_day.sections.append(steno_section)
+        for s in steno_day.sections:
+            for p in s.paragraphs:
+                yield p
 
 
 if __name__ == '__main__':
