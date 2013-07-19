@@ -1,6 +1,6 @@
 from urllib.parse import urlparse, parse_qs
 from mpscraper.common import (Scraper, pqitems, fix_encoding,
-                              install_requests_cache)
+                              get_cached_session)
 
 
 class PersonScraper(Scraper):
@@ -22,5 +22,5 @@ class PersonScraper(Scraper):
 
 
 if __name__ == '__main__':
-    install_requests_cache()
-    print(list(PersonScraper().fetch_people()))
+    person_scraper = PersonScraper(get_cached_session())
+    print(list(person_scraper.fetch_people()))

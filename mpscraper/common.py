@@ -4,6 +4,9 @@ import requests
 from pyquery import PyQuery as pq
 
 
+project_root = path(__file__).abspath().parent.parent
+
+
 class Scraper(object):
 
     def __init__(self, session=None):
@@ -22,10 +25,10 @@ class Scraper(object):
         return page
 
 
-def install_requests_cache():
+def get_cached_session():
     import requests_cache
-    project_root = path(__file__).abspath().parent.parent
-    requests_cache.install_cache(project_root / '_data' / 'http_cache')
+    cache_path = project_root / '_data' / 'http_cache'
+    return requests_cache.CachedSession(cache_path)
 
 
 def fix_encoding(text):

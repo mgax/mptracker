@@ -3,7 +3,7 @@
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from mpscraper.common import (Scraper, pqitems, fix_encoding,
-                              install_requests_cache)
+                              get_cached_session)
 
 
 class StenogramScraper(Scraper):
@@ -58,6 +58,6 @@ class StenogramScraper(Scraper):
 
 
 if __name__ == '__main__':
-    install_requests_cache()
-    for paragraph in StenogramScraper().fetch_day(date(2013, 6, 10)):
+    steno_scraper = StenogramScraper(get_cached_session())
+    for paragraph in steno_scraper.fetch_day(date(2013, 6, 10)):
         print(paragraph)
