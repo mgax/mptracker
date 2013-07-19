@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 def main():
     from mptracker.app import manager
     manager.run()
