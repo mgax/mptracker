@@ -48,6 +48,7 @@ def test_2013_06_10(session):
     for steno_section in steno_day.sections:
         for paragraph in steno_section.paragraphs:
             paragraphs.append(paragraph)
-    assert len(paragraphs) == 477
+    assert len(paragraphs) == 100
     assert paragraphs[0]['speaker_cdep_id'] == 168
-    assert paragraphs[0]['text'] == "Stimaţi colegi,"
+    assert "Stimaţi colegi," in paragraphs[0]['text']
+    assert "Declar deschise lucrările" in paragraphs[0]['text']

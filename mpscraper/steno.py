@@ -50,11 +50,24 @@ class StenogramScraper(Scraper):
         table_rows = pqitems(page, '#pageContent > table tr')
         speaker = None
         steno_section = StenoSection()
+        text_buffer = []
+
+        def save_paragraph():
+            (speaker_cdep_id, speaker_name) = speaker
+            steno_section.paragraphs.append(StenoParagraph({
+                'speaker_cdep_id': speaker_cdep_id,
+                'speaker_name': speaker_name,
+                'text': "\n".join(text_buffer),
+            }))
+            text_buffer[:] = []
+
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
                     speakers = paragraph('b a[target="PARLAMENTARI"]')
                     if speakers:
+                        if speaker:
+                            save_paragraph()
                         assert len(speakers) == 1
                         speaker_name = fix_encoding(speakers.text())
                         qs = parse_qs(urlparse(speakers.attr('href')).query)
@@ -66,13 +79,11 @@ class StenogramScraper(Scraper):
                     else:
                         if speaker is None:
                             continue  # still looking for first speaker
-                        (speaker_cdep_id, speaker_name) = speaker
                         text = fix_encoding(paragraph.text())
-                        steno_section.paragraphs.append(StenoParagraph({
-                            'speaker_cdep_id': speaker_cdep_id,
-                            'speaker_name': speaker_name,
-                            'text': text,
-                        }))
+                        text_buffer.append(text)
+
+        if speaker and text_buffer:
+            save_paragraph()
 
         return steno_section
 
