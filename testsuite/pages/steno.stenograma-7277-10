@@ -1,0 +1,382 @@
+<html lang="ro"><head><title>Dezbateri parlamentare</title><meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-2" /><link rel="stylesheet" href="/stylesheets/general.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/general_roz.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/home.css" type="text/css" /></head><body style="background: url(/img/banners/body101.gif) #f3f3f3 fixed no-repeat 0px 100%;">
+    <script type='text/javascript' src='/js/hv_menu_conf_1.js'></script>
+    <script type="text/javascript">
+    var NoOffFirstLineMenus=4;			                      // Number of first level items
+  	var LowBgColor="#c7c7c7";			          // Background color when mouse is not over
+  	var LowSubBgColor="#c7c7c7";			        // Background color when mouse is not over on subs
+  	var HighBgColor="#730A48";			          // Background color when mouse is over
+  	var HighSubBgColor="#730A48";			      // Background color when mouse is over on subs
+  	var FontLowColor="#730A48";			                      // Font color when mouse is not over
+  	var FontSubLowColor="#730A48";		                    // Font color subs when mouse is not over
+  	var FontHighColor="#FFFFFF";			                    // Font color when mouse is over
+  	var FontSubHighColor="#FFFFFF";		                    // Font color subs when mouse is over
+  	var BorderColor="#c7c7c7";			          // Border color
+  	var BorderSubColor="#b19477";			                    // Border color for subs
+  	var BorderWidth=1;				                            // Border width
+  	var BorderBtwnElmnts=1;				                        // Border between elements 1 or 0
+  	var FontFamily="arial,comic sans ms,technical"	      // Font family menu items
+  	var FontSize=9;				                                // Font size menu items
+  	var FontBold=0;					                              // Bold menu items 1 or 0
+  	var FontItalic=0;				                              // Italic menu items 1 or 0
+  	var MenuTextCentered="left";			                    // Item text position "left", "center" or "right"
+  	var MenuCentered="left";			                        // Menu horizontal position "left", "center" or "right"
+  	var MenuVerticalCentered="top";		                    // Menu vertical position "top", "middle","bottom" or static
+  	var ChildOverlap=.2;				                          // horizontal overlap child/ parent
+  	var ChildVerticalOverlap=.2;			                    // vertical overlap child/parent
+  	var StartTop=0;					                              // Menu offset x coordinate
+  	var StartLeft=0;				                              // Menu offset y coordinate
+  	var VerCorrect=0;				                              // Multiple frames y correction
+  	var HorCorrect=0;				                              // Multiple frames x correction
+  	var LeftPaddng=3;				                              // Left padding
+  	var TopPaddng=2;				                              // Top padding
+  	var FirstLineHorizontal=1;			                      // SET TO 1 FOR HORIZONTAL MENU, 0 FOR VERTICAL
+  	var MenuFramesVertical=1;			                        // Frames in cols or rows 1 or 0
+  	var DissapearDelay=1000;			                        // delay before menu folds in
+  	var TakeOverBgColor=1;				                        // Menu frame takes over background color subitem frame
+  	var FirstLineFrame="navig";			                      // Frame where first level appears
+  	var SecLineFrame="space";			                        // Frame where sub levels appear
+  	var DocTargetFrame="space";			                      // Frame where target documents appear
+  	var TargetLoc="MenuPos";			                        // span id for relative positioning
+  	var HideTop=0;					                              // Hide first level when loading new document 1 or 0
+  	var MenuWrap=1;					                              // enables/ disables menu wrap 1 or 0
+  	var RightToLeft=0;				                            // enables/ disables right to left unfold 1 or 0
+  	var UnfoldsOnClick=1;				                          // Level 1 unfolds onclick/ onmouseover
+  	var WebMasterCheck=0;				                          // menu tree checking on or off 1 or 0
+  	var ShowArrow=1;				                              // Uses arrow gifs when 1
+  	var KeepHilite=1;				                              // Keep selected path highligthed
+  	var Arrws=["/img/icon_link_r.gif",9,5,"",0,0,"/img/icon_link_l.gif",9,5];	// Arrow source, width and height
+    </script>
+    <script type='text/javascript' src='/js/hv_menu.js'></script>
+<table border=0 cellspacing=0 cellpadding=0 width=985>
+<tr>
+  <td><img src="/img/spacer.gif" width=40></td>
+  <td width="100%">
+    <table style="background: url(/img/banners/cd_1.gif) no-repeat" cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <tr>
+      <td height=22 width=65><a href="/"><img src="/img/spacer.gif" height=22 width=65></a></td>
+    </tr>
+    <tr>
+      <td valign=top width=65 height=51><a href="/pls/dic/site.home?idl=1"><img src="/img/spacer.gif" height=51 width=65></a></td>
+      <td valign=top width="100%" height=51>
+        <table border=0 cellspacing=0 cellpadding=0 width=550>
+        <tr>
+        <td>
+          <div id=MenuTop style="margin-top: 33px; margin-left: 0px;">
+<a href="/pls/dic/site.page?id=794">Menţiune juridică</a> |
+<a href="/pls/dic/site.page?id=709">Forum</a> | <a href="/pls/dic/site.page?den=servicii-contact&amp;idl=1">Contact</a>
+| <a href="/pls/steno/steno.stenograma?ids=7277&idm=10&idl=2">English</a>
+
+          </div>
+        </td>
+        <td align="right">
+          <div id=MenuTop style="margin-top: 27px;">
+          <form name="frmSearch" method="post" action=""><input type="hidden" name="idl" value="1">
+          <table cellSpacing=0 cellPadding=0 border=0>
+          <tr>
+            <td vAlign=middle><input type="text" name="sir" size="15" class="size1"></td>
+            <td vAlign=middle>&nbsp;<a href="#">Caută</a></td>
+          </tr>
+          </table>
+          </form>
+          </div>
+        </td>      
+        </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign=top align=left width="100%" colSpan=3 height=20><div id="MenuPos" style="position:relative; height=18; MARGIN-RIGHT: 10px; MARGIN-LEFT: 10px; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px;"></div></td>
+    </tr>
+    </table>
+
+<table width="100%" border="0" cellspacing="5" cellpadding="0">
+<tr valign="top">
+<td align="left">
+<table border=0 cellpadding=0 cellspacing=0 width="100%" align="center">
+<tr><td align="center" class="headlinetext1">
+<a href="/" target="PARLAMENTARI"><img alt="Plen" src="/img/plen150.jpg" border="0" width=150 /></a>
+
+ </td>
+</tr>
+<tr>
+ <td><img src="/img/spacer.gif" width=1 height=10></td>
+</tr>
+<tr>
+ <td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr>
+<td bgcolor="#fef9c2"><img src="/img/spacer.gif" alt="" width=2 height=20 hspace=0 vspace=0 border=0 align="left"></td>
+             <td bgcolor="#fef9c2" valign="middle" align="left" width=137><span class="menutit">Şedinţa Camerei Deputaţilor din 10 iunie      2013</span></td>
+</tr>
+           <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td bgcolor="#fffef2" colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><span class="menuitm"><table border=0 width="100%" cellspacing=1 cellpadding=1><tr><td colspan=4><A HREF="/pls/steno/steno.sumar?ids=7277&idl=1">Sumarul şedinţei</A></td></tr><tr><td colspan=4><A HREF="/pls/steno/steno.stenograma?ids=7277&idl=1">Stenograma completă</A></td></tr><tr valign="top"><td></td><td colspan=3>publicată în Monitorul Oficial, Partea a II-a nr.80/19-06-2013</td></tr><tr><td><a href="/pls/steno/steno.ram?rmfile=IDS:7277"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a></td><td colspan=3><a href="/pls/steno/steno.ram?rmfile=IDS:7277">Video - Real Media</a></td></tr></table></span></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+<p>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr>
+<td bgcolor="#ececec"><img src="/img/spacer.gif" alt="" width=2 height=20 hspace=0 vspace=0 border=0 align="left"></td>
+             <td bgcolor="#ececec" valign="middle" align="left" width=137><span class="menutit">Dezbateri parlamentare</span></td>
+</tr>
+           <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><span class="menuitm"><table border=0 width="100%" cellspacing=1 cellpadding=1><tr><td colspan=2>Calendarul şedinţelor</td></tr><tr valign="top"><td nowrap colspan=2>- <b>Camerei Deputaţilor:</b></td></tr><tr valign="top"><td colspan=2 nowrap align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.calendar?cam=2&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.calendar?cam=2&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.calendar?cam=2&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.calendar?cam=2&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.calendar?cam=2&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.calendar?cam=2&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.calendar?cam=2&an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.calendar?cam=2&an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2001&amp;idl=1">2001</a> <a href="/pls/steno/steno.calendar?cam=2&an=2000&amp;idl=1">2000</a> <a href="/pls/steno/steno.calendar?cam=2&an=1999&amp;idl=1">1999</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=1998&amp;idl=1">1998</a> <a href="/pls/steno/steno.calendar?cam=2&an=1997&amp;idl=1">1997</a> <a href="/pls/steno/steno.calendar?cam=2&an=1996&amp;idl=1">1996</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr><tr valign="top"><td nowrap>- <b>Senatului:</b></td><td nowrap align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.calendar?cam=1&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.calendar?cam=1&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.calendar?cam=1&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.calendar?cam=1&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.calendar?cam=1&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.calendar?cam=1&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.calendar?cam=1&an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.calendar?cam=1&an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr><tr valign="top"><td nowrap>- <b>comune:</b></td><td nowrap align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.calendar?cam=0&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.calendar?cam=0&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.calendar?cam=0&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.calendar?cam=0&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.calendar?cam=0&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.calendar?cam=0&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.calendar?cam=0&an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.calendar?cam=0&an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2001&amp;idl=1">2001</a> <a href="/pls/steno/steno.calendar?cam=0&an=2000&amp;idl=1">2000</a> <a href="/pls/steno/steno.calendar?cam=0&an=1999&amp;idl=1">1999</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=1998&amp;idl=1">1998</a> <a href="/pls/steno/steno.calendar?cam=0&an=1997&amp;idl=1">1997</a> <a href="/pls/steno/steno.calendar?cam=0&an=1996&amp;idl=1">1996</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr>
+<tr>
+ <td colspan=2>Interoghează dezbaterile</td>
+</tr>
+<tr>
+ <td colspan=2>
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+   <tr>
+    <td>din legislatura:</td>
+    <td align="right"><a href="/pls/steno/steno.cautare?leg=2012&amp;idl=1">2012-prezent</a></td>
+   </tr>
+  </table>
+ </td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=2008&amp;idl=1">2008-2012</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=2004&amp;idl=1">2004-2008</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=2000&amp;idl=1">2000-2004</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=1996&amp;idl=1">1996-2000</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=1992&amp;idl=1">1992-1996</a></td>
+</tr><tr valign="top"><td colspan=2>Monitorul Oficial</td></tr><tr valign="top"><td nowrap>Partea a II-a:</td><td nowrap align="right"><a href="/pls/steno/steno.mof?an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.mof?an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.mof?an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.mof?an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.mof?an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.mof?an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.mof?an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.mof?an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.mof?an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.mof?an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.mof?an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.mof?an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr></table></span></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+
+ </td>
+</tr>     
+<tr>
+ <td><img src="/img/spacer.gif" height=5></td>
+</tr>
+<tr>
+ <td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr>
+<td bgcolor="#ececec"><img src="/img/spacer.gif" alt="" width=2 height=20 hspace=0 vspace=0 border=0 align="left"></td>
+             <td bgcolor="#ececec" valign="middle" align="left" width=137><span class="menutit">Transmisii video</span></td>
+</tr>
+           <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><span class="menuitm"><table border=0 width="100%" cellspacing=1 cellpadding=1><tr><td align="center"><a href="/pls/steno/steno.ram?rmfile=broadcast/direct.rm"><img src="/img/icon_real1.gif" border=0 width=30 height=26 alt="Video in format Real Media"></a></td><td><a href="/pls/steno/steno.ram?rmfile=broadcast/direct.rm">Transmisie în direct</a><br>format Real Media</td></tr></table><table border=0 width="100%" cellspacing=1 cellpadding=1></table><table border=0 width="100%" cellspacing=1 cellpadding=1><tr valign="top"><td nowrap><b>Arhiva video:</b></td><td nowrap align="right"><a href="/pls/steno/steno.video?sursa=1&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.video?sursa=1&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.video?sursa=1&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.video?sursa=1&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.video?sursa=1&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.video?sursa=1&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.video?sursa=1&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.video?sursa=1&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.video?sursa=1&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.video?sursa=1&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.video?sursa=1&an=2003&amp;idl=1">2003</a> </td></tr><tr><td colspan=2>Pentru a vizualiza înregistrările video trebuie să instalaţi programul <A HREF="http://www.real.com">Real Player</A>
+      </td></tr></table></span></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+
+ </td>
+</tr>
+
+</table>
+</td>
+<td width=785>
+
+<table border=0>
+ <tr valign="top">
+  <td nowrap class="cale1">Sunteţi în secţiunea:</td>
+   <td width ="100%" class="cale2"><a href="/pls/dic/site.home?idl=1">Prima pagină</a> &gt; <a href="/pls/dic/site.page?den=legislativ1">Proceduri parlamentare</a> &gt; <a href="/pls/steno/steno.home?idl=1">Dezbateri</a> &gt; <A HREF="/pls/steno/steno.calendar?an=2013&cam=2&idl=1">Calendar 2013</A> &gt; 10-06-2013</td>
+<td width=50 align="right"><a href="/pls/steno/steno.stenograma?ids=7277&idm=10&idl=1&prn=1" target="PRN"><img src="/img/printer0.jpg" border=0 alt="Versiunea pentru printare"></a></td>
+
+  </tr>
+</table>
+
+<div id=pageContent>
+<div id=pageHeader>
+<div class=pageHeaderLinks>DEZBATERI PARLAMENTARE</DIV>
+<div class=pageHeaderDiv></DIV>
+</div>
+<div id=pageStand></div>
+<p><span class="headline">Şedinţa Camerei Deputaţilor din 10 iunie      2013</span>
+<p><table border=0 width="100%" cellspacing="0" cellpadding="5" align="center">
+<tr valign="top">
+           <td><A HREF="/pls/steno/steno.stenograma?ids=7277&idm=9&idl=1"><img src="/img/blue2_l.gif" border=0></A></td>
+           <td class="headlinetext1" nowrap bgcolor="#fef9c2"><b>10.</td>
+           <td width="100%" class="headlinetext1" colspan=3 bgcolor="#fef9c2"><b>Dezbaterea Proiectului de Lege pentru aprobarea Ordonanţei Guvernului nr.20/2012 privind instalaţiile portuare de preluare a deşeurilor generate de nave şi a reziduurilor mărfii (PL-x 390/2012). (<i>rămas pentru votul final</i>)</b></td>
+           <td><A HREF="/pls/steno/steno.stenograma?ids=7277&idm=11&idl=1"><img src="/img/blue2_r.gif" border=0></A></td>
+           </tr>
+<tr valign="top">
+               <td class="headlinetext1">&nbsp;</td>
+               <td class="headlinetext1" colspan=4><div id="MaiMulte">consultă fişa PL nr. <A HREF="/pls/proiecte/upl_pck.proiect?idp=12896&cam=2" TARGET="PROIECTE">390/2012</A></div></td>
+               </tr>
+</table>
+<p><table border=0 width="100%" cellspacing="0" cellpadding="5">
+<tr valign="top">
+<td class="textn">&nbsp;</td>
+<td class="textn"><P><B><a href="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" target="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></a></B>:</td>
+</tr>
+<tr valign="top">
+<td class="textn">&nbsp;</td>
+<td class="textn">................................................</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:72,01"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787192,3444910,3466389 -->
+ <p align="justify">15. Proiectul de Lege pentru aprobarea Ordonanţei Guvernului nr. 20/2012 privind instalaţiile portuare de preluare a deşeurilor generate de nave şi a reziduurilor mărfii. <p align="justify">Din partea Guvernului României, vă rog, domnule secretar de stat. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:73"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787193,3475567,3520813 -->
+<p align="justify"><B><font color="#0000FF">Domnul Nicuşor Marian Buică</font></B> <I>(secretar de stat, Ministerul Transporturilor)</I>: <p align="justify">Secretar de stat la Ministerul Transporturilor. <p align="justify">Mulţumesc, domnule preşedinte. <p align="justify">Scopul prezentei ordonanţe este diminuarea descărcării deşeurilor generate de nave şi a reziduurilor mărfii în apele naţionale navigabile, în special a descărcărilor ilegale de la navele care utilizează porturile româneşti, prin îmbunătăţirea disponibilităţii şi utilizării instalaţiilor portuare de preluare a deşeurilor generate de nave şi a reziduurilor mărfii, în vederea îmbunătăţirii protecţiei mediului marin. <p align="justify">În prezentul act normativ, s-au instituit contravenţii administraţiilor portuare pentru lipsa planului de preluare şi gestionare a deşeurilor generate de nave şi a reziduurilor mărfii, precum şi pentru lipsa vizei de reaprobare a planului de preluare şi gestionare a deşeurilor. <p align="justify">Vă mulţumesc. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:74"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787194,3520814,3534964 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></A></B>: <p align="justify">Vă mulţumesc şi eu. <p align="justify">Doamna Raluca Surdu, din partea Comisiei pentru administraţie publică, amenajarea teritoriului şi echilibru ecologic. <p align="justify">Domnule Iancu, vă rog să fiţi cavaler. <p align="justify">Domnule Iancu, doamna Raluca Surdu, şi pe urmă dumneavoastră. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:75"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787195,3534965,3536914 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=173&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Iulian Iancu</font></A></B>: <p align="justify">Noi suntem pe raport. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:76"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787196,3536915,3537665 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></A></B>: <p align="justify">A, dumneavoastră sunteţi pe raport! 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:77"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787197,3537666,3539716 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=173&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Iulian Iancu</font></A></B>: <p align="justify">Vă mulţumesc foarte mult, domnule preşedinte. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:78"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787198,3539717,3540666 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></A></B>: <p align="justify">Pe ce raport sunteţi? 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:79"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787199,3540667,3624530 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=173&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Iulian Iancu</font></A></B>: <p align="justify">Stimaţi colegi, <p align="justify">Comisia pentru industrii şi servicii, precum şi Comisia pentru administraţie publică, amenajarea teritoriului şi echilibru ecologic au fost sesizate, pentru dezbaterea în fond, în procedura obişnuită, cu proiectul de lege menţionat. <p align="justify">Aş vrea să vă subliniez că proiectul a fost adoptat de Senat. <p align="justify">De asemenea, proiectul a fost avizat favorabil de către Comisia juridică, de disciplină şi imunităţi. <p align="justify">Proiectul de lege reglementează instalaţiile portuare de preluare a deşeurilor generate de nave şi, de asemenea, reziduurilor mărfii. <p align="justify">Principalele modificări propuse prin prezentul proiect de lege se referă la implicarea Ministerului Mediului şi Schimbărilor Climatice, prin structura sa organizatorică, cu competenţe pentru emiterea autorizaţiilor de mediu în activităţile de evaluare, aprobare, monitorizare şi reaprobare a planurilor de preluare şi gestionare a deşeurilor generate de nave şi/sau a reziduurilor mărfii elaborate de administraţiile portuare. <p align="justify">Totodată, stabileşte şi sancţiuni pentru faptele ce constituie contravenţii. <p align="justify">În urma dezbaterilor, membrii celor două comisii au hotărât cu unanimitate de voturi adoptarea proiectului cu amendamente admise. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:80"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787200,3624531,3637279 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></A></B>: <p align="justify">Vă mulţumesc, domnule Iancu. <p align="justify">Dacă aveţi vreo completare, doamna Surdu? Nu aveţi nicio completare. <p align="justify">Vă mulţumesc. <p align="justify">Dacă din partea grupurilor doreşte cineva să ia cuvântul? Vă rog. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:81"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787201,3645070,3847439 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=175&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ovidiu-Cristian Iane</font></A></B>: <p align="justify">Domnule preşedinte, <p align="justify">Stimaţi colegi, <p align="justify">Prezentul proiect de lege vine să aprobe ordonanţa care transpune Directiva 2000/59/CE a Parlamentului European şi a Consiliului privind instalaţiile portuare de preluare a deşeurilor provenite din exploatarea navelor şi a reziduurilor de încărcătură, precum şi Directiva 2007/71/CE de modificare a Anexei II la Directiva 2000/59/CE a Parlamentului European şi a Consiliului privind instalaţiile portuare de preluare a deşeurilor şi provenite din exploatarea navelor şi reziduurilor de încărcătură. <p align="justify">Astfel, după cum ştim, în 2010, a avut loc vizita de evaluare a reprezentanţilor Agenţiei Europene de Siguranţă Maritimă EMSA, în urma acestei vizite a fost analizat sistemul creat la nivel naţional şi modul în care sunt îndeplinite responsabilităţile reprezentanţilor autorităţii centrale şi ai unităţilor implicate în controlul, înregistrarea, monitorizarea şi administrarea deşeurilor provenite din exploatarea navelor şi a reziduurilor de încărcătură, precum şi colectarea şi eliminarea lor finală. <p align="justify">În urma acestui raport s-au constatat unele neconcordanţe care vizează acoperirea parţială a domeniului de aplicare, lipsa procedurii de monitorizare a activităţii, prevăzute în planurile de preluare şi gestionare a deşeurilor generate de nave şi reziduurilor mărfii, precum şi faptul că legislaţia naţională nu prevede sancţiuni. <p align="justify">În concluzie, s-a solicitat modificarea actului normativ naţional, ce transpune directiva europeană. <p align="justify">Trebuie să precizăm că netranspunerea în regim de urgenţă a dispoziţiilor acestei directive conduce la neîndeplinirea obligaţiilor asumate de România, putând avea ca efect declanşarea procedurii de infringement şi aplicarea de penalităţi pecuniare, în conformitate cu legislaţia Uniunii Europene, cu consecinţe grave asupra bugetului de stat. <p align="justify">Astfel, fiecare administraţie portuară trebuie să elaboreze şi să implementeze un plan corespunzător de preluare şi gestionare a deşeurilor generate de nave şi a reziduurilor mărfii, în urma consultării cu părţile interesate. <p align="justify">Totodată, prezentul act normativ vine în completarea Hotărârii de Guvern nr. 876/2007 pentru stabilirea şi sancţionarea contravenţiilor la regimul transporturilor navale şi stabileşte sancţiuni pentru anumite fapte, ce constituie contravenţii şi nu se regăsesc în alte acte normative aflate în vigoare. <p align="justify">Avem, astfel, obligativitatea ca comandantul unei nave care face escală într-un port românesc să predea toate deşeurile generate de navă unei instalaţii portuare de preluare, autorizate din punct de vedere al protecţiei mediului şi în conformitate cu prevederile Marpol 73/78. <p align="justify">Operatorii instalaţiilor portuare de preluare trebuie să elibereze un document de confirmare a cantităţii şi tipurilor de deşeuri preluate, pe care-l vor înmâna comandantului navei, iar în ceea ce priveşte marfa, comandantul unei nave care face escală într-un port românesc trebuie să predea toate reziduurile mărfii instalaţiilor portuare de preluare, autorizate din punct de vedere al protecţiei mediului, tot în conformitate cu prevederile Marpol 73/78. <p align="justify">În concluzie, Grupul parlamentar PSD susţine acest proiect de lege la vot. <p align="justify">Mulţumesc. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:82"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787202,3847440,3851589 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></A></B>: <p align="justify">Vă mulţumim din suflet. <p align="justify">Domnule Popa, vă rog frumos, din partea Grupului PNL. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:83"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787203,3860229,3990408 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=295&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Octavian-Marius Popa</font></A></B>: <p align="justify">Domnule preşedinte, <p align="justify">Stimaţi colegi, <p align="justify">Eu aş fi putut să fiu scurt şi să spun că fiind o urgenţă, Grupul Partidului Naţional Liberal va vota acest proiect de lege. <p align="justify">Daţi-mi voie, însă, să vă spun, pentru a fi pe înţelesul tuturor, câteva lucruri care atrag atenţia asupra modului în care se legiferează în România. Directiva cu pricina, e vorba de Directiva 59/2000 a Consiliului Europei, a fost transpusă prin Ordinul ministrului transporturilor, construcţiilor şi turismului nr. 322/2006 în legislaţia românească. Numai că, în transpunerea ei, aşa cum v-au spus şi colegii mei şi reprezentantul ministerului, erau o serie de lucruri care nu erau stabilite. Deci, în primul rând, contravenţiile pentru nerespectarea acestor măsuri, în al doilea rând, un sistem de monitorizare şi, culmea, nu era inclusă în acest proces de verificare a planurilor de management al deşeurilor singura autoritate competentă pe acest domeniu, pe mediu, adică Agenţia de Protecţie a Mediului. <p align="justify">Au trebuit să treacă patru ani de zile, până în 2010, până când Agenţia Europeană de Siguranţă Maritimă, fiind aici într-o evaluare a modului în care aplicăm legislaţia, a constatat ceea ce eu spusesem de mai demult, încă de la învestirea noilor miniştri, că s-ar putea să intrăm în procedură de infringement. <p align="justify">Vreau să vă spun că suntem în procedura anterioară declanşării procedurii de infringement şi trebuie neapărat să îndreptăm aceste greşeli copilăreşti care au fost făcute şi de aceea, aşa cum spuneam şi la început, Grupul Partidului Naţional Liberal susţine adoptarea acestui proiect de lege. 
+<!-- END -->
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:10;NRO:84"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787204,3990409,4009948 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=168&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Viorel Hrebenciuc</font></A></B>: <p align="justify">Vă mulţumesc. <p align="justify">Dacă mai doreşte cineva să vorbească din partea grupurilor parlamentare? Nu. <p align="justify">Dacă aveţi observaţii la amendamentele admise? <p align="justify">De la punctul 1 la punctul 22? Nu sunt observaţii. <p align="justify">Proiectul de lege trece la votul final. 
+<!-- END -->
+</td>
+</tr>
+</table>
+</div></td></tr></table>
+
+<table width="100%" border=0>
+<tr>
+<td width="100%" colspan=2><div class=pageHeaderDiv></div></td>
+
+</tr>
+
+
+<tr>
+  <td class="footlinetext"><b>Adresa poştală:</b> Palatul Parlamentului, str.Izvor nr.2-4, sect.5, Bucureşti
+  </td><td align="right" class="footlinetext">joi, 18 iulie      2013, 17:47</td>
+</tr>
+<tr>
+  <td class="footlinetext"><b>Telefoane (centrala):</b> 021 316 0300, 021 414 1111
+  </td>
+  <td align="right" rowspan=2 class="footlinetext"><a href="https://www.cdep.ro"><img src="/img/eToken.gif" width=60 height=32 border=0 /></a>
+  </td>
+</tr>
+<tr><td class="footlinetext"><b>E-mail:</b> <A HREF="mailto:webmaster@cdep.ro">webmaster@cdep.ro</A></td>
+</table>
+</td></tr></table>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<html lang="ro"><head><title>Dezbateri parlamentare</title><meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-2" /><link rel="stylesheet" href="/stylesheets/general.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/general_roz.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/home.css" type="text/css" /></head><body style="background: url(/img/banners/body101.gif) #f3f3f3 fixed no-repeat 0px 100%;">
+    <script type='text/javascript' src='/js/hv_menu_conf_1.js'></script>
+    <script type="text/javascript">
+    var NoOffFirstLineMenus=4;			                      // Number of first level items
+  	var LowBgColor="#c7c7c7";			          // Background color when mouse is not over
+  	var LowSubBgColor="#c7c7c7";			        // Background color when mouse is not over on subs
+  	var HighBgColor="#730A48";			          // Background color when mouse is over
+  	var HighSubBgColor="#730A48";			      // Background color when mouse is over on subs
+  	var FontLowColor="#730A48";			                      // Font color when mouse is not over
+  	var FontSubLowColor="#730A48";		                    // Font color subs when mouse is not over
+  	var FontHighColor="#FFFFFF";			                    // Font color when mouse is over
+  	var FontSubHighColor="#FFFFFF";		                    // Font color subs when mouse is over
+  	var BorderColor="#c7c7c7";			          // Border color
+  	var BorderSubColor="#b19477";			                    // Border color for subs
+  	var BorderWidth=1;				                            // Border width
+  	var BorderBtwnElmnts=1;				                        // Border between elements 1 or 0
+  	var FontFamily="arial,comic sans ms,technical"	      // Font family menu items
+  	var FontSize=9;				                                // Font size menu items
+  	var FontBold=0;					                              // Bold menu items 1 or 0
+  	var FontItalic=0;				                              // Italic menu items 1 or 0
+  	var MenuTextCentered="left";			                    // Item text position "left", "center" or "right"
+  	var MenuCentered="left";			                        // Menu horizontal position "left", "center" or "right"
+  	var MenuVerticalCentered="top";		                    // Menu vertical position "top", "middle","bottom" or static
+  	var ChildOverlap=.2;				                          // horizontal overlap child/ parent
+  	var ChildVerticalOverlap=.2;			                    // vertical overlap child/parent
+  	var StartTop=0;					                              // Menu offset x coordinate
+  	var StartLeft=0;				                              // Menu offset y coordinate
+  	var VerCorrect=0;				                              // Multiple frames y correction
+  	var HorCorrect=0;				                              // Multiple frames x correction
+  	var LeftPaddng=3;				                              // Left padding
+  	var TopPaddng=2;				                              // Top padding
+  	var FirstLineHorizontal=1;			                      // SET TO 1 FOR HORIZONTAL MENU, 0 FOR VERTICAL
+  	var MenuFramesVertical=1;			                        // Frames in cols or rows 1 or 0
+  	var DissapearDelay=1000;			                        // delay before menu folds in
+  	var TakeOverBgColor=1;				                        // Menu frame takes over background color subitem frame
+  	var FirstLineFrame="navig";			                      // Frame where first level appears
+  	var SecLineFrame="space";			                        // Frame where sub levels appear
+  	var DocTargetFrame="space";			                      // Frame where target documents appear
+  	var TargetLoc="MenuPos";			                        // span id for relative positioning
+  	var HideTop=0;					                              // Hide first level when loading new document 1 or 0
+  	var MenuWrap=1;					                              // enables/ disables menu wrap 1 or 0
+  	var RightToLeft=0;				                            // enables/ disables right to left unfold 1 or 0
+  	var UnfoldsOnClick=1;				                          // Level 1 unfolds onclick/ onmouseover
+  	var WebMasterCheck=0;				                          // menu tree checking on or off 1 or 0
+  	var ShowArrow=1;				                              // Uses arrow gifs when 1
+  	var KeepHilite=1;				                              // Keep selected path highligthed
+  	var Arrws=["/img/icon_link_r.gif",9,5,"",0,0,"/img/icon_link_l.gif",9,5];	// Arrow source, width and height
+    </script>
+    <script type='text/javascript' src='/js/hv_menu.js'></script>
+<table border=0 cellspacing=0 cellpadding=0 width=985>
+<tr>
+  <td><img src="/img/spacer.gif" width=40></td>
+  <td width="100%">
+    <table style="background: url(/img/banners/cd_1.gif) no-repeat" cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <tr>
+      <td height=22 width=65><a href="/"><img src="/img/spacer.gif" height=22 width=65></a></td>
+    </tr>
+    <tr>
+      <td valign=top width=65 height=51><a href="/pls/dic/site.home?idl=1"><img src="/img/spacer.gif" height=51 width=65></a></td>
+      <td valign=top width="100%" height=51>
+        <table border=0 cellspacing=0 cellpadding=0 width=550>
+        <tr>
+        <td>
+          <div id=MenuTop style="margin-top: 33px; margin-left: 0px;">
+<a href="/pls/dic/site.page?id=794">Menţiune juridică</a> |
+<a href="/pls/dic/site.page?id=709">Forum</a> | <a href="/pls/dic/site.page?den=servicii-contact&amp;idl=1">Contact</a>
+| <a href="/pls/steno/steno.stenograma?ids=7277&idm=12&idl=2">English</a>
+
+          </div>
+        </td>
+        <td align="right">
+          <div id=MenuTop style="margin-top: 27px;">
+          <form name="frmSearch" method="post" action=""><input type="hidden" name="idl" value="1">
+          <table cellSpacing=0 cellPadding=0 border=0>
+          <tr>
+            <td vAlign=middle><input type="text" name="sir" size="15" class="size1"></td>
+            <td vAlign=middle>&nbsp;<a href="#">Caută</a></td>
+          </tr>
+          </table>
+          </form>
+          </div>
+        </td>      
+        </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign=top align=left width="100%" colSpan=3 height=20><div id="MenuPos" style="position:relative; height=18; MARGIN-RIGHT: 10px; MARGIN-LEFT: 10px; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px;"></div></td>
+    </tr>
+    </table>
+
+<table width="100%" border="0" cellspacing="5" cellpadding="0">
+<tr valign="top">
+<td align="left">
+<table border=0 cellpadding=0 cellspacing=0 width="100%" align="center">
+<tr><td align="center" class="headlinetext1">
+<a href="/" target="PARLAMENTARI"><img alt="Plen" src="/img/plen150.jpg" border="0" width=150 /></a>
+
+ </td>
+</tr>
+<tr>
+ <td><img src="/img/spacer.gif" width=1 height=10></td>
+</tr>
+<tr>
+ <td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr>
+<td bgcolor="#fef9c2"><img src="/img/spacer.gif" alt="" width=2 height=20 hspace=0 vspace=0 border=0 align="left"></td>
+             <td bgcolor="#fef9c2" valign="middle" align="left" width=137><span class="menutit">Şedinţa Camerei Deputaţilor din 10 iunie      2013</span></td>
+</tr>
+           <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td bgcolor="#fffef2" colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><span class="menuitm"><table border=0 width="100%" cellspacing=1 cellpadding=1><tr><td colspan=4><A HREF="/pls/steno/steno.sumar?ids=7277&idl=1">Sumarul şedinţei</A></td></tr><tr><td colspan=4><A HREF="/pls/steno/steno.stenograma?ids=7277&idl=1">Stenograma completă</A></td></tr><tr valign="top"><td></td><td colspan=3>publicată în Monitorul Oficial, Partea a II-a nr.80/19-06-2013</td></tr><tr><td><a href="/pls/steno/steno.ram?rmfile=IDS:7277"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a></td><td colspan=3><a href="/pls/steno/steno.ram?rmfile=IDS:7277">Video - Real Media</a></td></tr></table></span></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+<p>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr>
+<td bgcolor="#ececec"><img src="/img/spacer.gif" alt="" width=2 height=20 hspace=0 vspace=0 border=0 align="left"></td>
+             <td bgcolor="#ececec" valign="middle" align="left" width=137><span class="menutit">Dezbateri parlamentare</span></td>
+</tr>
+           <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><span class="menuitm"><table border=0 width="100%" cellspacing=1 cellpadding=1><tr><td colspan=2>Calendarul şedinţelor</td></tr><tr valign="top"><td nowrap colspan=2>- <b>Camerei Deputaţilor:</b></td></tr><tr valign="top"><td colspan=2 nowrap align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.calendar?cam=2&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.calendar?cam=2&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.calendar?cam=2&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.calendar?cam=2&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.calendar?cam=2&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.calendar?cam=2&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.calendar?cam=2&an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.calendar?cam=2&an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=2001&amp;idl=1">2001</a> <a href="/pls/steno/steno.calendar?cam=2&an=2000&amp;idl=1">2000</a> <a href="/pls/steno/steno.calendar?cam=2&an=1999&amp;idl=1">1999</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=2&an=1998&amp;idl=1">1998</a> <a href="/pls/steno/steno.calendar?cam=2&an=1997&amp;idl=1">1997</a> <a href="/pls/steno/steno.calendar?cam=2&an=1996&amp;idl=1">1996</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr><tr valign="top"><td nowrap>- <b>Senatului:</b></td><td nowrap align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.calendar?cam=1&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.calendar?cam=1&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.calendar?cam=1&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.calendar?cam=1&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.calendar?cam=1&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.calendar?cam=1&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=1&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.calendar?cam=1&an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.calendar?cam=1&an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr><tr valign="top"><td nowrap>- <b>comune:</b></td><td nowrap align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.calendar?cam=0&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.calendar?cam=0&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.calendar?cam=0&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.calendar?cam=0&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.calendar?cam=0&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.calendar?cam=0&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.calendar?cam=0&an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.calendar?cam=0&an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=2001&amp;idl=1">2001</a> <a href="/pls/steno/steno.calendar?cam=0&an=2000&amp;idl=1">2000</a> <a href="/pls/steno/steno.calendar?cam=0&an=1999&amp;idl=1">1999</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.calendar?cam=0&an=1998&amp;idl=1">1998</a> <a href="/pls/steno/steno.calendar?cam=0&an=1997&amp;idl=1">1997</a> <a href="/pls/steno/steno.calendar?cam=0&an=1996&amp;idl=1">1996</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr>
+<tr>
+ <td colspan=2>Interoghează dezbaterile</td>
+</tr>
+<tr>
+ <td colspan=2>
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+   <tr>
+    <td>din legislatura:</td>
+    <td align="right"><a href="/pls/steno/steno.cautare?leg=2012&amp;idl=1">2012-prezent</a></td>
+   </tr>
+  </table>
+ </td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=2008&amp;idl=1">2008-2012</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=2004&amp;idl=1">2004-2008</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=2000&amp;idl=1">2000-2004</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=1996&amp;idl=1">1996-2000</a></td>
+</tr>
+<tr>
+ <td colspan=2 align="right"><a href="/pls/steno/steno.cautare?leg=1992&amp;idl=1">1992-1996</a></td>
+</tr><tr valign="top"><td colspan=2>Monitorul Oficial</td></tr><tr valign="top"><td nowrap>Partea a II-a:</td><td nowrap align="right"><a href="/pls/steno/steno.mof?an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.mof?an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.mof?an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.mof?an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.mof?an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.mof?an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.mof?an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.mof?an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.mof?an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.mof?an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.mof?an=2003&amp;idl=1">2003</a> <a href="/pls/steno/steno.mof?an=2002&amp;idl=1">2002</a> </td></tr><tr><td nowrap colspan=2 align="right"></td></tr></table></span></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+
+ </td>
+</tr>     
+<tr>
+ <td><img src="/img/spacer.gif" height=5></td>
+</tr>
+<tr>
+ <td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr>
+<td bgcolor="#ececec"><img src="/img/spacer.gif" alt="" width=2 height=20 hspace=0 vspace=0 border=0 align="left"></td>
+             <td bgcolor="#ececec" valign="middle" align="left" width=137><span class="menutit">Transmisii video</span></td>
+</tr>
+           <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><span class="menuitm"><table border=0 width="100%" cellspacing=1 cellpadding=1><tr><td align="center"><a href="/pls/steno/steno.ram?rmfile=broadcast/direct.rm"><img src="/img/icon_real1.gif" border=0 width=30 height=26 alt="Video in format Real Media"></a></td><td><a href="/pls/steno/steno.ram?rmfile=broadcast/direct.rm">Transmisie în direct</a><br>format Real Media</td></tr></table><table border=0 width="100%" cellspacing=1 cellpadding=1></table><table border=0 width="100%" cellspacing=1 cellpadding=1><tr valign="top"><td nowrap><b>Arhiva video:</b></td><td nowrap align="right"><a href="/pls/steno/steno.video?sursa=1&an=2013&amp;idl=1">2013</a> <a href="/pls/steno/steno.video?sursa=1&an=2012&amp;idl=1">2012</a> <a href="/pls/steno/steno.video?sursa=1&an=2011&amp;idl=1">2011</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.video?sursa=1&an=2010&amp;idl=1">2010</a> <a href="/pls/steno/steno.video?sursa=1&an=2009&amp;idl=1">2009</a> <a href="/pls/steno/steno.video?sursa=1&an=2008&amp;idl=1">2008</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.video?sursa=1&an=2007&amp;idl=1">2007</a> <a href="/pls/steno/steno.video?sursa=1&an=2006&amp;idl=1">2006</a> <a href="/pls/steno/steno.video?sursa=1&an=2005&amp;idl=1">2005</a> </td></tr><tr><td nowrap colspan=2 align="right"><a href="/pls/steno/steno.video?sursa=1&an=2004&amp;idl=1">2004</a> <a href="/pls/steno/steno.video?sursa=1&an=2003&amp;idl=1">2003</a> </td></tr><tr><td colspan=2>Pentru a vizualiza înregistrările video trebuie să instalaţi programul <A HREF="http://www.real.com">Real Player</A>
+      </td></tr></table></span></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+
+ </td>
+</tr>
+
+</table>
+</td>
+<td width=785>
+
+<table border=0>
+ <tr valign="top">
+  <td nowrap class="cale1">Sunteţi în secţiunea:</td>
+   <td width ="100%" class="cale2"><a href="/pls/dic/site.home?idl=1">Prima pagină</a> &gt; <a href="/pls/dic/site.page?den=legislativ1">Proceduri parlamentare</a> &gt; <a href="/pls/steno/steno.home?idl=1">Dezbateri</a> &gt; <A HREF="/pls/steno/steno.calendar?an=2013&cam=2&idl=1">Calendar 2013</A> &gt; 10-06-2013</td>
+<td width=50 align="right"><a href="/pls/steno/steno.stenograma?ids=7277&idm=12&idl=1&prn=1" target="PRN"><img src="/img/printer0.jpg" border=0 alt="Versiunea pentru printare"></a></td>
+
+  </tr>
+</table>
+
+<div id=pageContent>
+<div id=pageHeader>
+<div class=pageHeaderLinks>DEZBATERI PARLAMENTARE</DIV>
+<div class=pageHeaderDiv></DIV>
+</div>
+<div id=pageStand></div>
+<p><span class="headline">Şedinţa Camerei Deputaţilor din 10 iunie      2013</span>
+<p><table border=0 width="100%" cellspacing="0" cellpadding="5" align="center">
+<tr valign="top">
+           <td><A HREF="/pls/steno/steno.stenograma?ids=7277&idm=11&idl=1"><img src="/img/blue2_l.gif" border=0></A></td>
+           <td class="headlinetext1" nowrap bgcolor="#fef9c2"><b>12.</td>
+           <td width="100%" class="headlinetext1" colspan=3 bgcolor="#fef9c2"><b>Primirea de răspunsuri la interpelările adresate primului-ministru şi membrilor Guvernului.</b></td>
+           <td>&nbsp;</td>
+           </tr>
+<tr valign="top"><td colspan=6 align=center><A HREF="/pls/steno/steno.stenograma?ids=7277&idm=12,001&idl=1"><img src="/img/blue2_d.gif" border=0></A></td></tr>
+</table>
+<p><table border=0 width="100%" cellspacing="0" cellpadding="5">
+<tr valign="top">
+<td class="textn">
+&nbsp;
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787210,, -->
+<p align="justify"><I>(În continuare, şedinţa a fost condusă de domnul deputat Ioan Oltean, vicepreşedinte al Camerei Deputaţilor.)</I> 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:90"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787211,4140846,4144434 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">Doamnelor şi domnilor colegi, <p align="justify">Vă rog să ocupaţi locurile în sala de şedinţă. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:90,01"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+<a name="S0" href="/pls/steno/steno.stenograma?ids=7277&idm=12,001&idl=1"><img src="/img/marin_r.gif" border=0 alt="Liliana Mincă"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787212,4145884,4240432 -->
+ <p align="justify">Declar deschisă şedinţa consacrată răspunsurilor orale la interpelările pe care dumneavoastră le-aţi adresat membrilor Guvernului. <p align="justify">Având în vedere că avem deja prezenţi reprezentanţii ministerului, care astăzi au fost înscrişi pentru a ne răspunde, intrăm direct în obiectul şedinţei noastre de astăzi. <p align="justify">Primul răspuns este acordat domnului deputat PDL Movilă Petru. Domnia Sa a adresat ministrului sănătăţii o interpelare referitoare la redeschiderea spitalelor închise în timpul guvernării Partidului Democrat Liberal. <p align="justify">Dacă domnul deputat Petru Movilă este? Nu este. Domnul ministru este. I s-a comunicat în scris. Considerăm că procedura parlamentară a fost îndeplinită. <p align="justify">Doamna deputat Mincă Liliana, din partea Grupului parlamentar al Partidului Poporului - Dan Diaconescu, a adresat domnului ministru al sănătăţii Eugen Nicolăescu o interpelare referitoare la cei 35.000 de bolnavi ţinuţi ostatici la Întorsura Buzăului. <p align="justify">Doamna deputat este prezentă, domnul ministru este prezent. <p align="justify">Domnule ministru, vă rog să punctaţi pe scurt răspunsul la această interpelare. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+<table border=0 cellspacing=0 cellpadding=1>
+<tr><td><a href="#S1"><img src="/img/marin_d.gif" border=0></a></td></tr>
+</table>
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:91"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787213,4242632,4405140 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=256&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Gheorghe-Eugen Nicolăescu</font></A></B> <I>(ministrul sănătăţii)</I>: <p align="justify">Domnule preşedinte de şedinţă, <p align="justify">Doamnă deputat, <p align="justify">Răspunsul pe care vi l-am pregătit la interpelarea dumneavoastră este un răspuns foarte amplu, o să vi-l transmitem şi în scris, astfel încât să puteţi să utilizaţi toate informaţiile pe care cred eu că vi le-am dat şi sunt importante şi ar putea să vă ajute la modul în care priviţi această problemă. Eu nu vreau decât să vă spun, în răspunsul pe care vi-l dau, că desfiinţarea acestui centru a fost o mare eroare, că ne asumăm, în numele tuturor guvernelor de până acum, faptul, că aceasta este viaţa, până la urmă, faptul că a fost o eroare închiderea acestui centru medical. <p align="justify">De asemenea, vreau să vă mai informez, în răspunsul pe care vi-l dau, că am demarat o serie de acţiuni, prin care să încercăm să aşezăm acest spital la locul pe care-l merită. <p align="justify">Prima acţiune este să avem o discuţie foarte serioasă cu Comisia de neurologie şi neurologie pediatrică, astfel încât să putem să avem un punct de vedere mai mult decât profesionist pe acest subiect, drept pentru care avem un prim răspuns de la această comisie care ne încurajează în demersul de a reînfiinţa această instituţie sanitară. <p align="justify">Al doilea aspect al răspunsului se referă, de data aceasta, la un lucru mai puţin simplu, şi anume, a găsi sursele financiare pentru a renova toată acea clădire, pentru că, aşa cum probabil că ştiţi şi dumneavoastră, condiţiile sunt improprii, pe de o parte, nu se mai respectă circuitele medicale şi este nevoie de o investiţie foarte serioasă în acest domeniu. <p align="justify">Credem că prin strategia pe care Ministerul Sănătăţii doreşte să o finalizeze până la sfârşitul acestei veri, începutul toamnei, vom putea să constatăm şi de câţi bani avem nevoie pentru reabilitarea acestei locaţii sau să putem să facem o dezvoltare mai amplă a zonei şi după aceea, printr-un program multianual de investiţii în infrastructură, să putem să punem la punct această instituţie. <p align="justify">Răspunsul simplu şi clar este că dorim să repunem în funcţiune această instituţie. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:92"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787214,4405141,4420760 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">Mulţumesc, domnule ministru. <p align="justify">Doamnă deputat, dacă aveţi vreun comentariu, vă rog să poftiţi la microfon. <p align="justify">Doamna deputat Mincă Liliana, vă rog. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:93"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787215,4420761,4437000 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=221&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Doamna Liliana Mincă</font></A></B>: <p align="justify">Domnule preşedinte, <p align="justify">Domnule ministru, <p align="justify">În numele celor peste 35.000 de bolnavi cu distrofie musculară, eu vreau să vă mulţumesc şi să ştiţi că eu personal, ca deputat, îmi pun mare încredere în dumneavoastră, ca ministru al Ministerului Sănătăţii. <p align="justify">Vă mulţumesc. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:94"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787216,4437001,4439863 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">Mulţumim şi noi. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:94,01"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+<a name="S1" href="/pls/steno/steno.stenograma?ids=7277&idm=12,002&idl=1"><img src="/img/marin_r.gif" border=0 alt="Florin-Costin Pâslaru"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787217,4439864,4474793 -->
+ <p align="justify">Domnul deputat Pâslaru Florin-Costin, din partea Grupului Partidului Democrat.... Partidului Social Democrat... Gura păcătosului uneori adevăr grăieşte... a adresat o interpelare Ministrului Sănătăţii referitoare la strategia europeană a bolilor rare. <p align="justify">Domnul deputat este prezent, domnul ministru aşişderea. Domnule ministru, vă rog, tot pe scurt, să oferiţi răspunsul pregătit. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+<table border=0 cellspacing=0 cellpadding=1>
+<tr><td><a href="#S0"><img src="/img/marin_u.gif" border=0></a></td></tr>
+<tr><td><a href="#S2"><img src="/img/marin_d.gif" border=0></a></td></tr>
+</table>
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:95"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787218,4474794,4614823 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=256&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Gheorghe-Eugen Nicolăescu</font></A></B>: <p align="justify">De asemenea, domnule preşedinte de şedinţă, domnule deputat, răspunsul este mai amplu, o să vi-l dau în scris. <p align="justify">Pentru şedinţa de plen de astăzi vreau să vă fac următoarele remarci: prima şi poate aceasta este foarte importantă, în lume sunt identificate astăzi circa 7.000 de boli rare. Pentru fiecare din aceste boli este nevoie de tratamente ţintite, distincte; circa 50% din ele se prezintă din punct de vedere simptomatic la maturitatea oamenilor. Se încearcă deseori şi foarte multe acţiuni de prevenţie, dar cu mai puţine şanse de reuşită, dar cu toate acestea putem să sperăm că îmbunătăţirea calităţii vieţii şi a creşterii speranţei de viaţă sunt obiective care pot fi realizate. <p align="justify">De asemenea, vreau să vă spun că Ministerul Sănătăţii, împreună cu casa derulează un program naţional de tratament al hemofiliei şi talasemiei, în cadrul Programului naţional de tratament pentru boli rare. <p align="justify">De asemenea, bugetul Ministerului Sănătăţii, prin acest program, mai asigură şi pentru alte tipuri de boli rare diverse finanţări, cum ar fi screeningul neonatal, care este important, vorbind puţin şi despre prevenţie. <p align="justify">De asemenea, profilaxia distrofiei la copii, diagnosticaţi cu alte boli înnăscute de metabolism, prin administrarea de alimente cu destinaţie medicală specială şi multe alte asemenea lucruri. <p align="justify">Ultimul lucru pe care vreau să vi-l spun este că Ministerul Sănătăţii, având în vedere gravitatea situaţiei pe care dumneavoastră aţi sesizat-o, împreună cu Alianţa Naţională pentru Boli Rare, a semnat un parteneriat, prin care vrem să definitivăm şi să implementăm în România Planul naţional de boli rare. Prin acest plan, vrem să introducem în strategia naţională de sănătate publică, aflată în curs de elaborare, acest plan şi evident să putem să realizăm finanţarea a cât mai multor boli rare, cu toate că acestea, aşa cum vă spuneam, sunt foarte multe la număr şi foarte costisitoare. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:96"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787219,4614824,4625302 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">Domnule ministru, mulţumesc foarte mult. <p align="justify">Domnule deputat, vă rog să poftiţi la microfon pentru a vă exprima poziţia în raport cu răspunsul primit. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:97"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787220,4625303,4647452 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=283&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Florin-Costin Pâslaru</font></A></B>: <p align="justify">Vă mulţumesc mult, domnule preşedinte. <p align="justify">Domnule ministru, <p align="justify">Eu mă aşteptam să daţi un răspuns atât de complex, mulţumesc mult de tot, aţi răspuns tuturor celor care-şi puneau aceste probleme şi nu sunt puţini, nu numai în Galaţi, acolo unde activez eu, ci în toată ţara, dar eu vreau să vă mulţumesc mult pentru faptul că aţi venit personal să răspundeţi acestei interpelări. <p align="justify">Sunteţi un exemplu pentru tot guvernul. <p align="justify">Vă mulţumesc mult. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:98"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787221,4647453,4685570 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">Mulţumesc şi eu, domnule deputat. <p align="justify">Subliniez şi eu faptul că este unul dintre puţinii miniştri titulari de portofoliu care se prezintă personal pentru a răspunde la întrebările şi interpelările deputaţilor. Se vede că a fost mulţi ani pe băncile Parlamentului şi ştie ce înseamnă sau câtă seriozitate există în aceste interpelări şi în aceste întrebări. <p align="justify">Domnule ministru, mulţumim, vă dorim o seară... Nu, nu mai aveţi. Pentru seara aceasta aceste trei interpelări. Noi vă mulţumim pentru prezenţă, vă dorim o seară bună în continuare. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:98,01"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+<a name="S2" href="/pls/steno/steno.stenograma?ids=7277&idm=12,003&idl=1"><img src="/img/marin_r.gif" border=0 alt="Liliana Mincă"></a>
+</td>
+<td width="100%" class="textn">
+<!-- START=1787222,4685571,4868646 -->
+ <p align="justify">Doamna deputat Boghicevici Claudia, din partea Grupului parlamentar al Partidului Democrat Liberal, a adresat Ministerului Muncii, Familiei, Protecţiei Sociale şi Persoanelor Vârstnice o interpelare referitoare la stadiul implementării proiectului de asistenţă tehnică finanţat de Guvernul japonez pentru îmbunătăţirea serviciilor acordate persoanelor cu handicap. <p align="justify">Doamna Georgeta Bratu? Bănuiesc că Ministerul Muncii are şi ministru, are şi secretar de stat; aceasta nu este o motivaţie care să justifice absenţa Domniei Sale de la şedinţa noastră. <p align="justify">Rog staff-ul tehnic să comunice ministerului ca în asemenea situaţii să desemneze un alt secretar de stat sau chiar doamna ministru, pentru a putea oferi răspunsurile pe care deputaţii le solicită. Repet, nu este o scuză şi nu putem accepta o asemenea atitudine. <p align="justify">Următorul răspuns ar trebui tot din partea aceluiaşi minister, pentru doamna deputat Mincă Liliana. În situaţia aceasta... Da, aşa este. <p align="justify">Doamnă secretar de stat Georgeta Bratu, sunteţi chiar mai punctuală decât ceasul meu... Acum făceam observaţii că nu este o justificare, având în vedere că noi am început mai repede şedinţa... Revin asupra interpelării pe care doamna Boghicevici Claudia a adresat-o ministerului, dar având în vedere că doamna deputat nu este prezentă în sală, o să vă rog să i-o comunicaţi în scris şi vom aprecia că răspunsul este acordat în temeiul Regulamentului Camerei Deputaţilor. <p align="justify">Doamna deputat Mincă Liliana, din partea Grupului parlamentar al Partidului Poporului - Dan Diaconescu, a adresat aceluiaşi minister o interpelare referitoare la pensionarea revoluţionarilor şi acordarea indemnizaţiilor restante. <p align="justify">O avem prezentă pe doamna secretar de stat Georgeta Bratu. <p align="justify">Doamna deputat este prezentă. Răspunsul de la microfonul Camerei, doamnă ministru, vă rog să respectăm procedurile parlamentare. Oferiţi pe urmă şi răspunsul scris, dar vă rog în acelaşi timp să-l oferiţi şi de la microfonul Camerei Deputaţilor pentru stenograma noastră de şedinţă. <p align="justify">Vă mulţumesc, doamnă ministru, aveţi cuvântul. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+<table border=0 cellspacing=0 cellpadding=1>
+<tr><td><a href="#S1"><img src="/img/marin_u.gif" border=0></a></td></tr>
+<tr><td><a href="#S3"><img src="/img/marin_d.gif" border=0></a></td></tr>
+</table>
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:99"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787223,4868647,4905165 -->
+<p align="justify"><B><font color="#0000FF">Doamna Georgeta Bratu</font></B> <I>(secretar de stat, Ministerul Muncii, Familiei, Protecţiei Sociale şi Persoanelor Vârstnice)</I>: <p align="justify">Mulţumesc, domnule preşedinte. <p align="justify">Din datele transmise de Casa Judeţeană de Pensii Botoşani rezultă că în baza Deciziei nr. 152.082 din 17.12.2007, domnul Apaţie Ioan beneficiază de indemnizaţie reparatorie prevăzută de Legea nr. 341/2004, cu modificările şi completările ulterioare, pentru calitatea de luptător remarcat prin fapte deosebite. Drepturile s-au acordat începând cu data de 01.02.2005. <p align="justify">Pe de altă parte, dânsul solicită pensionarea cu 5 ani... O să mai sar din prevederile legale... 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:100"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787224,4905166,4907027 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">O să vă rog, pe scurt! Foarte pe scurt, doamnă ministru. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:101"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787225,4907028,4971627 -->
+<p align="justify"><B><font color="#0000FF">Doamna Georgeta Bratu</font></B>: <p align="justify">...o să vorbesc doar de speţa în sine, că aici am dat toate detaliile legale. Solicită pensionarea cu 5 ani înainte de împlinirea vârstei standard, conform Legii nr. 341. Dar domnul Apaţie Ioan este născut în 08.05.1956, având în prezent vârsta de 57 ani şi a realizat un stagiu de cotizare de 34 de ani, 10 luni şi 21 de zile. <p align="justify">Conform legii, vârsta standard în cazul său este de 65 de ani, iar stagiul complet de 35. În consecinţă, susnumitul, având în prezent vârsta de 57 de ani şi un stagiu de cotizare de 34 de ani, 10 luni şi 21 de zile poate solicita înscrierea la pensie pentru limită de vârstă cu 5 ani înaintea împlinirii vârstei standard, respectiv la vârsta de 60 de ani. <p align="justify">Totodată, referire făcându-se şi la aplicarea Ordonanţei nr. 53, trebuie să precizăm faptul că domnul şi-a primit drepturile aferente perioadei 2005 şi 2008 şi pe cale de consecinţă nu face obiectul dispoziţiilor Ordonanţei nr. 53/2010. <p align="justify">Mulţumesc. 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:102"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787226,4971628,5040344 -->
+<p align="justify"><B><A HREF="/pls/parlam/structura.mp?idm=271&cam=2&leg=2012" TARGET="PARLAMENTARI"><font color="#0000FF">Domnul Ioan Oltean</font></A></B>: <p align="justify">Doamnă ministru, vă mulţumesc şi eu pentru răspunsul oferit. <p align="justify">Dacă doamna deputat... Doamna deputat prezintă semne de deplină mulţumire. În consecinţă, mulţumesc doamnei ministru Georgeta Bratu şi îi doresc o seară bună în continuare. <p align="justify">Pe ordinea de zi mai aveam planificat un răspuns pentru domnul deputat Vasilică Radu Costin, din partea Grupului parlamentar al Partidului Social Democrat. Interpelarea fiind adresată ministrului delegat pentru ape, păduri şi piscicultură, Domnia Sa, respectiv doamna ministru, a solicitat să fie reprogramat răspunsul. În consecinţă, acceptăm această solicitare şi într-o şedinţă viitoare stimata noastră colegă va beneficia de răspunsul oferit de către doamna ministru. <p align="justify">Cu aceasta, stimaţi colegi, declar închisă şedinţa noastră, ordinea de zi a fost epuizată, ne vedem mâine dimineaţă la ora 8,30, la şedinţa consacrată declaraţiilor politice. <p align="justify">O seară bună tuturor şi să auzim numai de bine! 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">
+<a href="/pls/steno/steno.ram?rmfile=IDS:7277;IDM:12;NRO:103"><img src="/img/icon_real2.gif" border=0 width=14 height=16 alt="Video in format Real Media"></a>
+</td>
+<td nowrap class="textn" bgcolor="#fffef2">
+&nbsp;
+</td>
+<td width="100%" class="textn">
+<!-- START=1787227,5040345, -->
+<p align="justify"><I>Şedinţa s-a încheiat la ora 18,05.</I> 
+<!-- END -->
+</td>
+<td bgcolor="#dfefff" width=8 class="textn">
+&nbsp;
+</td>
+</tr>
+<tr valign="top">
+<td class="textn">&nbsp;</td>
+<td class="textn" bgcolor="#fffef2">&nbsp;</td>
+<td class="textn"><a name="S3">&nbsp;</a></td>
+<td bgcolor="#dfefff"><a href="#S2"><img src="/img/marin_u.gif" border=0></a></td>
+</tr>
+</table>
+</div></td></tr></table>
+
+<table width="100%" border=0>
+<tr>
+<td width="100%" colspan=2><div class=pageHeaderDiv></div></td>
+
+</tr>
+
+
+<tr>
+  <td class="footlinetext"><b>Adresa poştală:</b> Palatul Parlamentului, str.Izvor nr.2-4, sect.5, Bucureşti
+  </td><td align="right" class="footlinetext">joi, 18 iulie      2013, 17:47</td>
+</tr>
+<tr>
+  <td class="footlinetext"><b>Telefoane (centrala):</b> 021 316 0300, 021 414 1111
+  </td>
+  <td align="right" rowspan=2 class="footlinetext"><a href="https://www.cdep.ro"><img src="/img/eToken.gif" width=60 height=32 border=0 /></a>
+  </td>
+</tr>
+<tr><td class="footlinetext"><b>E-mail:</b> <A HREF="mailto:webmaster@cdep.ro">webmaster@cdep.ro</A></td>
+</table>
+</td></tr></table>
+</body>
+</html>
