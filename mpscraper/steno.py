@@ -78,6 +78,7 @@ class StenogramScraper(Scraper):
 
     def fetch_day(self, day):
         steno_day = StenoDay()
+        steno_day.date = day
         for link, headline in self.sections_for_day(day):
             steno_section = self.parse_steno_page(link)
             steno_section.headline = headline
