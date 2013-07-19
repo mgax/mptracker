@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {% set url = url_for('.steno_contents', date_str=date.strftime('%Y%m%d')) %}
+  <p>
+    <a href="{{ url }}">
+      &laquo; stenograme din
+      {{ date.strftime('%Y-%m-%d') }}
+    </a>
+  </p>
+  <h1>{{ section.headline }}</h1>
+
+  <ul>
+  {% for paragraph in section.paragraphs %}
+    <li>
+      <h4>{{ paragraph.person.name }}</h4>
+      <p>{{ paragraph.text }}</p>
+    </li>
+  {% endfor %}
+  </ul>
+
+{% endblock %}

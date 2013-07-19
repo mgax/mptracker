@@ -8,6 +8,10 @@ from mptracker import models
 pages = flask.Blueprint('pages', __name__)
 
 
+def parse_date(date_str):
+    return datetime.strptime(date_str, '%Y%m%d').date()
+
+
 @pages.route('/')
 def home():
     people = models.Person.query.order_by('name')
@@ -30,8 +34,20 @@ def person(person_id):
 
 @pages.route('/steno/<date_str>')
 def steno_contents(date_str):
-    date_value = datetime.strptime(date_str, '%Y%m%d').date()
+    date_value = parse_date(date_str)
     return flask.render_template('steno_contents.html', **{
         'date': date_value,
         'sections': models.StenoSection.query.filter_by(date=date_value),
+    })
+
+
+@pages.route('/steno/<date_str>/<section_id>')
+def steno_section(date_str, section_id):
+    date_value = parse_date(date_str)
+    section = models.StenoSection.query.get_or_404(section_id)
+    if section.date != date_value:
+        flask.abort(404)
+    return flask.render_template('steno_section.html', **{
+        'date': date_value,
+        'section': section,
     })
