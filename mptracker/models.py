@@ -23,6 +23,7 @@ class Person(db.Model):
 class StenoSection(db.Model):
     id = uuid_column()
     date = db.Column(db.Date, index=True)
+    headline = db.Column(db.String)
 
 
 class StenoParagraph(db.Model):

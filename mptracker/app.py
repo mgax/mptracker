@@ -75,7 +75,8 @@ def import_steno():
     steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
     new_paragraphs = 0
     for steno_section in steno_day.sections:
-        section_ob = models.StenoSection(date=steno_day.date)
+        section_ob = models.StenoSection(date=steno_day.date,
+                                         headline=steno_section.headline)
         session.add(section_ob)
         for paragraph in steno_section.paragraphs:
             person = cdep_person[paragraph['speaker_cdep_id']]
