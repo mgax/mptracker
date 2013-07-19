@@ -1,11 +1,23 @@
+from urllib.parse import urlencode
 from path import path
+import requests
 from pyquery import PyQuery as pq
 
 
 class Scraper(object):
 
-    def fetch_url(self, *args, **kwargs):
-        page = pq(*args, parser='html', **kwargs)
+    def __init__(self, session=None):
+        self.session = session or requests.Session()
+
+    def fetch_url(self, url, args=None):
+        if args:
+            if '?' not in url:
+                url += '?'
+            elif url[-1] not in ['?', '&']:
+                url += '&'
+            url += urlencode(args)
+        opener = lambda url: self.session.get(url).content
+        page = pq(url, opener=opener, parser='html')
         page.make_links_absolute()
         return page
 
