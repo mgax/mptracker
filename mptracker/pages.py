@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 import flask
 from sqlalchemy.orm import joinedload
 from mptracker import models
@@ -24,4 +25,13 @@ def person(person_id):
     return flask.render_template('person.html', **{
         'person': person,
         'steno_data': sorted(steno_data.items()),
+    })
+
+
+@pages.route('/steno/<date_str>')
+def steno_contents(date_str):
+    date_value = datetime.strptime(date_str, '%Y%m%d').date()
+    return flask.render_template('steno_contents.html', **{
+        'date': date_value,
+        'sections': models.StenoSection.query.filter_by(date=date_value),
     })

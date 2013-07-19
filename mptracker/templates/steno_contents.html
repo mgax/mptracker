@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Stenograme din {{ date.strftime('%Y-%m-%d') }}</h1>
+
+  {% for section in sections %}
+    <h3>{{ section.headline }}</h3>
+
+    <ul>
+    {% for paragraph in section.paragraphs %}
+      <li>
+        <h4>{{ paragraph.person.name }}</h4>
+        <p>{{ paragraph.text }}</p>
+      </li>
+    {% endfor %}
+    </ul>
+  {% endfor %}
+
+{% endblock %}
