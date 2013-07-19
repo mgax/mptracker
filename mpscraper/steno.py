@@ -44,6 +44,11 @@ class StenogramScraper(Scraper):
             headline = fix_encoding(pq(headline_el).text())
             yield link, headline
 
+    def next_serial(self):
+        self.day_serial += 1
+        next_serial = self.day_serial
+        return int(self.day.strftime('%Y%m%d') + '%04d' % next_serial)
+
     def parse_steno_page(self, link):
         page = self.fetch_url(link)
         table_rows = pqitems(page, '#pageContent > table tr')
@@ -73,6 +78,7 @@ class StenogramScraper(Scraper):
                             'speaker_cdep_id': speaker_cdep_id,
                             'speaker_name': speaker_name,
                             'text_buffer': [],
+                            'serial': self.next_serial()
                         })
 
                     else:
@@ -87,6 +93,8 @@ class StenogramScraper(Scraper):
         return steno_section
 
     def fetch_day(self, day):
+        self.day = day
+        self.day_serial = 0
         steno_day = StenoDay()
         steno_day.date = day
         for link, headline in self.sections_for_day(day):

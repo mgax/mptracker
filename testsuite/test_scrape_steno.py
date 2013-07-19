@@ -52,3 +52,7 @@ def test_2013_06_10(session):
     assert paragraphs[0]['speaker_cdep_id'] == 168
     assert "Stimaţi colegi," in paragraphs[0]['text']
     assert "Declar deschise lucrările" in paragraphs[0]['text']
+
+    assert paragraphs[0]['serial'] == 201306100001
+    serial_values = [p['serial'] for p in paragraphs]
+    assert sorted(set(serial_values)) == serial_values
