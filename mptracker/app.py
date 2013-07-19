@@ -82,7 +82,8 @@ def import_steno():
             check_name_bits(person.name, paragraph['speaker_name'])
             paragraph_ob = models.StenoParagraph(text=paragraph['text'],
                                                  section=section_ob,
-                                                 person=person)
+                                                 person=person,
+                                                 serial=paragraph['serial'])
             session.add(paragraph_ob)
             new_paragraphs += 1
     print('added', new_paragraphs, 'stenogram paragraphs')

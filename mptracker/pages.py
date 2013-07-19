@@ -18,7 +18,7 @@ def person(person_id):
     person = models.Person.query.get_or_404(person_id)
 
     steno_data = defaultdict(list)
-    for paragraph in person.steno_paragraphs:
+    for paragraph in person.steno_paragraphs.order_by('serial'):
         steno_data[paragraph.section.date].append(paragraph)
 
     return flask.render_template('person.html', **{

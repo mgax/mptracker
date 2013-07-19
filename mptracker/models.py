@@ -28,6 +28,7 @@ class StenoSection(db.Model):
 class StenoParagraph(db.Model):
     id = uuid_column()
     text = db.Column(db.Text)
+    serial = db.Column(db.Integer, index=True)
 
     section_id = db.Column(uuid_type(), db.ForeignKey('steno_section.id'))
     section = db.relationship('StenoSection',
