@@ -14,7 +14,15 @@
   <ul>
   {% for paragraph in section.paragraphs %}
     <li>
-      <h4>{{ paragraph.person.name }}</h4>
+      <h4>
+        {% set person = paragraph.person %}
+        {% if person.cdep_id %}
+          {% set url = url_for('.person', person_id=person.id) %}
+          <a href="{{ url }}">{{ person.name }}</a>
+        {% else %}
+          {{ person.name }}
+        {% endif %}
+      </h4>
       <p>{{ paragraph.text }}</p>
     </li>
   {% endfor %}
