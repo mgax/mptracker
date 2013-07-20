@@ -37,12 +37,13 @@ class StenoSection(db.Model):
     id = uuid_column()
     date = db.Column(db.Date, index=True)
     headline = db.Column(db.String)
+    serial = db.Column(db.String, index=True)
 
 
 class StenoParagraph(db.Model):
     id = uuid_column()
     text = db.Column(db.Text)
-    serial = db.Column(db.Integer, index=True)
+    serial = db.Column(db.String, index=True)
 
     section_id = db.Column(uuid_type(), db.ForeignKey('steno_section.id'))
     section = db.relationship('StenoSection',

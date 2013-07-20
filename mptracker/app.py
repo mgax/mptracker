@@ -76,7 +76,8 @@ def import_steno():
     new_paragraphs = 0
     for steno_section in steno_day.sections:
         section_ob = models.StenoSection(date=steno_day.date,
-                                         headline=steno_section.headline)
+                                         headline=steno_section.headline,
+                                         serial=steno_section.serial)
         session.add(section_ob)
         for paragraph in steno_section.paragraphs:
             cdep_id = paragraph['speaker_cdep_id']
