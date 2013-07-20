@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
+import calendar
 import flask
 from sqlalchemy.orm import joinedload
 from mptracker import models
@@ -29,6 +30,13 @@ def person(person_id):
     return flask.render_template('person.html', **{
         'person': person,
         'steno_data': sorted(steno_data.items()),
+    })
+
+
+@pages.route('/steno/')
+def steno_calendar():
+    return flask.render_template('steno_calendar.html', **{
+        'calendar': calendar.Calendar(),
     })
 
 
