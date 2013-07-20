@@ -30,7 +30,10 @@ class Person(db.Model):
             return row
         else:
             logger.info('Creating non-MP %s %r', cls.__name__, name)
-            return cls(name=name)
+            row = cls(name=name)
+            db.session.add(row)
+            db.session.flush()
+            return row
 
 
 class StenoSection(db.Model):
