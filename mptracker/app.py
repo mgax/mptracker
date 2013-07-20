@@ -59,12 +59,8 @@ def import_people():
     session.commit()
 
 
-@manager.command
-def import_steno(day='2013-06-10'):
-    from mpscraper.common import get_cached_session
+def import_steno_day(day, http_session):
     from mpscraper.steno import StenogramScraper
-
-    day = parse_date(day)
 
     name_bits = lambda name: set(name.replace('-', ' ').split())
     cdep_person = {p.cdep_id: p for p in models.Person.query}
@@ -77,7 +73,7 @@ def import_steno(day='2013-06-10'):
         return models.Person.get_or_create_non_mp(name)
 
     session = models.db.session
-    steno_scraper = StenogramScraper(get_cached_session())
+    steno_scraper = StenogramScraper(http_session)
     steno_day = steno_scraper.fetch_day(day)
     new_paragraphs = 0
     for steno_chapter in steno_day.chapters:
@@ -97,3 +93,10 @@ def import_steno(day='2013-06-10'):
             new_paragraphs += 1
     print('added', new_paragraphs, 'stenogram paragraphs')
     session.commit()
+
+
+@manager.command
+def import_steno(day='2013-06-10'):
+    from mpscraper.common import get_cached_session
+    http_session = get_cached_session()
+    import_steno_day(parse_date(day), http_session)
