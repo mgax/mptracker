@@ -53,9 +53,13 @@ def test_2013_06_10(session):
     assert "Stimaţi colegi," in paragraphs[0]['text']
     assert "Declar deschise lucrările" in paragraphs[0]['text']
 
-    assert paragraphs[0]['serial'] == 201306100001
-    serial_values = [p['serial'] for p in paragraphs]
-    assert sorted(set(serial_values)) == serial_values
+    assert steno_day.sections[0].serial == '2013-06-10/01'
+    section_serial_values = [s.serial for s in steno_day.sections]
+    assert sorted(set(section_serial_values)) == section_serial_values
+
+    assert paragraphs[0]['serial'] == '2013-06-10/01-001'
+    paragraph_serial_values = [p['serial'] for p in paragraphs]
+    assert sorted(set(paragraph_serial_values)) == paragraph_serial_values
 
     assert paragraphs[-2]['speaker_cdep_id'] is None
     assert paragraphs[-2]['speaker_name'] == "Georgeta Bratu"

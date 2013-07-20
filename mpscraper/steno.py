@@ -44,10 +44,12 @@ class StenogramScraper(Scraper):
             headline = fix_encoding(pq(headline_el).text())
             yield link, headline
 
-    def next_serial(self):
-        self.day_serial += 1
-        next_serial = self.day_serial
-        return int(self.day.strftime('%Y%m%d') + '%04d' % next_serial)
+    def get_section_serial(self):
+        return self.day.strftime('%Y-%m-%d') + '/%02d' % self.section_serial
+
+    def next_paragraph_serial(self):
+        self.paragraph_serial += 1
+        return self.get_section_serial() + '-%03d' % self.paragraph_serial
 
     def trim_name(self, name):
         for prefix in ['Domnul ', 'Doamna ']:
@@ -90,7 +92,7 @@ class StenogramScraper(Scraper):
                             'speaker_cdep_id': speaker_cdep_id,
                             'speaker_name': speaker_name,
                             'text_buffer': [],
-                            'serial': self.next_serial()
+                            'serial': self.next_paragraph_serial()
                         })
 
                     else:
@@ -106,12 +108,15 @@ class StenogramScraper(Scraper):
 
     def fetch_day(self, day):
         self.day = day
-        self.day_serial = 0
+        self.section_serial = 0
         steno_day = StenoDay()
         steno_day.date = day
         for link, headline in self.sections_for_day(day):
+            self.section_serial += 1
+            self.paragraph_serial = 0
             steno_section = self.parse_steno_page(link)
             steno_section.headline = headline
+            steno_section.serial = self.get_section_serial()
             steno_day.sections.append(steno_section)
         return steno_day
 
