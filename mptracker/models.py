@@ -36,7 +36,7 @@ class Person(db.Model):
             return row
 
 
-class StenoSection(db.Model):
+class StenoChapter(db.Model):
     id = uuid_column()
     date = db.Column(db.Date, index=True)
     headline = db.Column(db.String)
@@ -52,8 +52,8 @@ class StenoParagraph(db.Model):
     text = db.Column(db.Text)
     serial = db.Column(db.String, index=True)
 
-    section_id = db.Column(uuid_type(), db.ForeignKey('steno_section.id'))
-    section = db.relationship('StenoSection',
+    chapter_id = db.Column(uuid_type(), db.ForeignKey('steno_chapter.id'))
+    chapter = db.relationship('StenoChapter',
         backref=db.backref('paragraphs', lazy='dynamic'))
 
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))

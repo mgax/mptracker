@@ -42,20 +42,20 @@ def test_2013_06_10(session):
     assert steno_day.date == date(2013, 6, 10)
 
     assert ("cooperarea dintre Parlament şi Guvern în "
-            "domeniul afacerilor europene") in steno_day.sections[1].headline
+            "domeniul afacerilor europene") in steno_day.chapters[1].headline
 
     paragraphs = []
-    for steno_section in steno_day.sections:
-        for paragraph in steno_section.paragraphs:
+    for steno_chapter in steno_day.chapters:
+        for paragraph in steno_chapter.paragraphs:
             paragraphs.append(paragraph)
     assert len(paragraphs) == 109
     assert paragraphs[0]['speaker_cdep_id'] == 168
     assert "Stimaţi colegi," in paragraphs[0]['text']
     assert "Declar deschise lucrările" in paragraphs[0]['text']
 
-    assert steno_day.sections[0].serial == '2013-06-10/01'
-    section_serial_values = [s.serial for s in steno_day.sections]
-    assert sorted(set(section_serial_values)) == section_serial_values
+    assert steno_day.chapters[0].serial == '2013-06-10/01'
+    chapter_serial_values = [s.serial for s in steno_day.chapters]
+    assert sorted(set(chapter_serial_values)) == chapter_serial_values
 
     assert paragraphs[0]['serial'] == '2013-06-10/01-001'
     paragraph_serial_values = [p['serial'] for p in paragraphs]

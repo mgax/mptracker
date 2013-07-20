@@ -5,12 +5,12 @@
   <h1>Stenograme din {{ date.isoformat() }}</h1>
 
   <ul>
-  {% for section in sections %}
+  {% for chapter in chapters %}
     <li>
-      {% set url = url_for('.steno_section',
+      {% set url = url_for('.steno_chapter',
                            date_str=date.isoformat(),
-                           section_serial_number=section.serial_number) %}
-      <a href="{{ url }}">{{ section.headline }}</a>
+                           chapter_serial_number=chapter.serial_number) %}
+      <a href="{{ url }}">{{ chapter.headline }}</a>
     </li>
   {% endfor %}
   </ul>

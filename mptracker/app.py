@@ -33,7 +33,7 @@ def syncdb():
 @manager.command
 def flush_steno(no_create=False):
     engine = models.db.get_engine(flask.current_app)
-    for model in [models.StenoSection, models.StenoParagraph]:
+    for model in [models.StenoChapter, models.StenoParagraph]:
         table = model.__table__
         table.drop(engine, checkfirst=True)
         if not no_create:
@@ -74,12 +74,12 @@ def import_steno():
     steno_scraper = StenogramScraper(get_cached_session())
     steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
     new_paragraphs = 0
-    for steno_section in steno_day.sections:
-        section_ob = models.StenoSection(date=steno_day.date,
-                                         headline=steno_section.headline,
-                                         serial=steno_section.serial)
-        session.add(section_ob)
-        for paragraph in steno_section.paragraphs:
+    for steno_chapter in steno_day.chapters:
+        chapter_ob = models.StenoChapter(date=steno_day.date,
+                                         headline=steno_chapter.headline,
+                                         serial=steno_chapter.serial)
+        session.add(chapter_ob)
+        for paragraph in steno_chapter.paragraphs:
             cdep_id = paragraph['speaker_cdep_id']
             if cdep_id is None:
                 name = paragraph['speaker_name']
@@ -88,7 +88,7 @@ def import_steno():
                 person = cdep_person[cdep_id]
                 check_name_bits(person.name, paragraph['speaker_name'])
             paragraph_ob = models.StenoParagraph(text=paragraph['text'],
-                                                 section=section_ob,
+                                                 chapter=chapter_ob,
                                                  person=person,
                                                  serial=paragraph['serial'])
             session.add(paragraph_ob)

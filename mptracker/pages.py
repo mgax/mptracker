@@ -25,7 +25,7 @@ def person(person_id):
 
     steno_data = defaultdict(list)
     for paragraph in person.steno_paragraphs.order_by('serial'):
-        steno_data[paragraph.section.date].append(paragraph)
+        steno_data[paragraph.chapter.date].append(paragraph)
 
     return flask.render_template('person.html', **{
         'person': person,
@@ -35,7 +35,7 @@ def person(person_id):
 
 @pages.route('/steno/')
 def steno_calendar():
-    date_query = models.db.session.query(models.StenoSection.date)
+    date_query = models.db.session.query(models.StenoChapter.date)
     steno_days = set(row[0] for row in date_query.distinct())
     return flask.render_template('steno_calendar.html', **{
         'calendar': calendar.Calendar(),
@@ -48,20 +48,20 @@ def steno_contents(date_str):
     date_value = parse_date(date_str)
     return flask.render_template('steno_contents.html', **{
         'date': date_value,
-        'sections': models.StenoSection.query.filter_by(date=date_value),
+        'chapters': models.StenoChapter.query.filter_by(date=date_value),
     })
 
 
-@pages.route('/steno/<date_str>/<section_serial_number>')
-def steno_section(date_str, section_serial_number):
+@pages.route('/steno/<date_str>/<chapter_serial_number>')
+def steno_chapter(date_str, chapter_serial_number):
     date_value = parse_date(date_str)
-    section_serial = date_value.strftime('%Y-%m-%d/') + section_serial_number
-    section = (models.StenoSection.query
-                .filter_by(serial=section_serial)
+    chapter_serial = date_value.strftime('%Y-%m-%d/') + chapter_serial_number
+    chapter = (models.StenoChapter.query
+                .filter_by(serial=chapter_serial)
                 .first_or_404())
-    if section.date != date_value:
+    if chapter.date != date_value:
         flask.abort(404)
-    return flask.render_template('steno_section.html', **{
+    return flask.render_template('steno_chapter.html', **{
         'date': date_value,
-        'section': section,
+        'chapter': chapter,
     })

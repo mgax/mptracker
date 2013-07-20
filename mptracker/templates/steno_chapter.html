@@ -6,10 +6,10 @@
   <p>
     <a href="{{ url }}">&laquo; stenograme din {{ date.isoformat() }}</a>
   </p>
-  <h1>{{ section.headline }}</h1>
+  <h1>{{ chapter.headline }}</h1>
 
   <ul>
-  {% for paragraph in section.paragraphs %}
+  {% for paragraph in chapter.paragraphs %}
     <li>
       <h4>
         {% set person = paragraph.person %}

@@ -10,11 +10,11 @@
   <ul>
   {% for p in paragraphs %}
     <li>
-      {% set section = p.section %}
-      {% set url = url_for('.steno_section',
-                           date_str=section.date.isoformat(),
-                           section_serial_number=section.serial_number) %}
-      [<a href="{{ url }}">{{ section.serial }}</a>]
+      {% set chapter = p.chapter %}
+      {% set url = url_for('.steno_chapter',
+                           date_str=chapter.date.isoformat(),
+                           chapter_serial_number=chapter.serial_number) %}
+      [<a href="{{ url }}">{{ chapter.serial }}</a>]
 
       {{ p.text }}
     </li>
