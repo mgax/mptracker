@@ -39,6 +39,10 @@ class StenoSection(db.Model):
     headline = db.Column(db.String)
     serial = db.Column(db.String, index=True)
 
+    @property
+    def serial_number(self):
+        return self.serial.split('/', 1)[1]
+
 
 class StenoParagraph(db.Model):
     id = uuid_column()

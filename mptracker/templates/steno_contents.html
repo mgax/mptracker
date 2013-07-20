@@ -9,7 +9,7 @@
     <li>
       {% set url = url_for('.steno_section',
                            date_str=date.strftime('%Y%m%d'),
-                           section_id=section.id) %}
+                           section_serial_number=section.serial_number) %}
       <a href="{{ url }}">{{ section.headline }}</a>
     </li>
   {% endfor %}

@@ -41,10 +41,13 @@ def steno_contents(date_str):
     })
 
 
-@pages.route('/steno/<date_str>/<section_id>')
-def steno_section(date_str, section_id):
+@pages.route('/steno/<date_str>/<section_serial_number>')
+def steno_section(date_str, section_serial_number):
     date_value = parse_date(date_str)
-    section = models.StenoSection.query.get_or_404(section_id)
+    section_serial = date_value.strftime('%Y-%m-%d/') + section_serial_number
+    section = (models.StenoSection.query
+                .filter_by(serial=section_serial)
+                .first_or_404())
     if section.date != date_value:
         flask.abort(404)
     return flask.render_template('steno_section.html', **{
