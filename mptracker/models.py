@@ -1,5 +1,10 @@
+import logging
 import uuid
 from flask.ext.sqlalchemy import SQLAlchemy
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def uuid_type():
@@ -24,6 +29,7 @@ class Person(db.Model):
         for row in cls.query.filter_by(name=name, cdep_id=None):
             return row
         else:
+            logger.info('Creating non-MP %s %r', cls.__name__, name)
             return cls(name=name)
 
 

@@ -7,4 +7,6 @@ def main():
 
 
 if __name__ == '__main__':
+    import logging
+    logging.basicConfig(loglevel=logging.INFO)
     main()
