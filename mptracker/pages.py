@@ -9,7 +9,7 @@ pages = flask.Blueprint('pages', __name__)
 
 
 def parse_date(date_str):
-    return datetime.strptime(date_str, '%Y%m%d').date()
+    return datetime.strptime(date_str, '%Y-%m-%d').date()
 
 
 @pages.route('/')

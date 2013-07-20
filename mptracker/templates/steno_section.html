@@ -2,12 +2,9 @@
 
 
 {% block content %}
-  {% set url = url_for('.steno_contents', date_str=date.strftime('%Y%m%d')) %}
+  {% set url = url_for('.steno_contents', date_str=date.isoformat()) %}
   <p>
-    <a href="{{ url }}">
-      &laquo; stenograme din
-      {{ date.strftime('%Y-%m-%d') }}
-    </a>
+    <a href="{{ url }}">&laquo; stenograme din {{ date.isoformat() }}</a>
   </p>
   <h1>{{ section.headline }}</h1>
 

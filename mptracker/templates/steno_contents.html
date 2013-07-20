@@ -2,13 +2,13 @@
 
 
 {% block content %}
-  <h1>Stenograme din {{ date.strftime('%Y-%m-%d') }}</h1>
+  <h1>Stenograme din {{ date.isoformat() }}</h1>
 
   <ul>
   {% for section in sections %}
     <li>
       {% set url = url_for('.steno_section',
-                           date_str=date.strftime('%Y%m%d'),
+                           date_str=date.isoformat(),
                            section_serial_number=section.serial_number) %}
       <a href="{{ url }}">{{ section.headline }}</a>
     </li>
