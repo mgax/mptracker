@@ -49,6 +49,13 @@ class StenogramScraper(Scraper):
         next_serial = self.day_serial
         return int(self.day.strftime('%Y%m%d') + '%04d' % next_serial)
 
+    def trim_name(self, name):
+        for prefix in ['Domnul ', 'Doamna ']:
+            if name.startswith(prefix):
+                return name[len(prefix):]
+        else:
+            return name
+
     def parse_steno_page(self, link):
         page = self.fetch_url(link)
         table_rows = pqitems(page, '#pageContent > table tr')
@@ -64,16 +71,21 @@ class StenogramScraper(Scraper):
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
-                    speakers = paragraph('b a[target="PARLAMENTARI"]')
+                    speakers = paragraph('b font[color="#0000FF"]')
                     if speakers:
                         if steno_paragraph:
                             save_paragraph()
                         assert len(speakers) == 1
-                        speaker_name = fix_encoding(speakers.text())
-                        qs = parse_qs(urlparse(speakers.attr('href')).query)
-                        assert qs['cam'] == ['2']
-                        assert qs['leg'] == ['2012']
-                        speaker_cdep_id = int(qs['idm'][0])
+                        speaker_name = self.trim_name(
+                            fix_encoding(speakers.text()))
+                        link = speakers.parents('a')
+                        if link:
+                            qs = parse_qs(urlparse(link.attr('href')).query)
+                            assert qs['cam'] == ['2']
+                            assert qs['leg'] == ['2012']
+                            speaker_cdep_id = int(qs['idm'][0])
+                        else:
+                            speaker_cdep_id = None
                         steno_paragraph = StenoParagraph({
                             'speaker_cdep_id': speaker_cdep_id,
                             'speaker_name': speaker_name,
