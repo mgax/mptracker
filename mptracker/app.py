@@ -67,11 +67,16 @@ def import_steno(day='2013-06-10'):
     day = parse_date(day)
 
     name_bits = lambda name: set(name.replace('-', ' ').split())
-    def check_name_bits(a, b):
-        assert name_bits(a).issubset(name_bits(b)), (a, b)
+    cdep_person = {p.cdep_id: p for p in models.Person.query}
+
+    def get_person(name, cdep_id):
+        if cdep_id is not None:
+            person = cdep_person[cdep_id]
+            if name_bits(person.name) == name_bits(name):
+                return person
+        return models.Person.get_or_create_non_mp(name)
 
     session = models.db.session
-    cdep_person = {p.cdep_id: p for p in models.Person.query}
     steno_scraper = StenogramScraper(get_cached_session())
     steno_day = steno_scraper.fetch_day(day)
     new_paragraphs = 0
@@ -81,13 +86,9 @@ def import_steno(day='2013-06-10'):
                                          serial=steno_chapter.serial)
         session.add(chapter_ob)
         for paragraph in steno_chapter.paragraphs:
-            cdep_id = paragraph['speaker_cdep_id']
-            if cdep_id is None:
-                name = paragraph['speaker_name']
-                person = models.Person.get_or_create_non_mp(name)
-            else:
-                person = cdep_person[cdep_id]
-                check_name_bits(person.name, paragraph['speaker_name'])
+            person = get_person(paragraph['speaker_name'],
+                                paragraph['speaker_cdep_id'])
+
             paragraph_ob = models.StenoParagraph(text=paragraph['text'],
                                                  chapter=chapter_ob,
                                                  person=person,
