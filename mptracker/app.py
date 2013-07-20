@@ -2,7 +2,7 @@ import flask
 from flask.ext.script import Manager
 from path import path
 from mptracker import models
-from mptracker.pages import pages
+from mptracker.pages import pages, parse_date
 
 
 def configure(app):
@@ -60,10 +60,11 @@ def import_people():
 
 
 @manager.command
-def import_steno():
-    from datetime import date
+def import_steno(day='2013-06-10'):
     from mpscraper.common import get_cached_session
     from mpscraper.steno import StenogramScraper
+
+    day = parse_date(day)
 
     name_bits = lambda name: set(name.replace('-', ' ').split())
     def check_name_bits(a, b):
@@ -72,7 +73,7 @@ def import_steno():
     session = models.db.session
     cdep_person = {p.cdep_id: p for p in models.Person.query}
     steno_scraper = StenogramScraper(get_cached_session())
-    steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
+    steno_day = steno_scraper.fetch_day(day)
     new_paragraphs = 0
     for steno_chapter in steno_day.chapters:
         chapter_ob = models.StenoChapter(date=steno_day.date,
