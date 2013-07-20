@@ -52,7 +52,7 @@ class StenogramScraper(Scraper):
         return self.get_chapter_serial() + '-%03d' % self.paragraph_serial
 
     def trim_name(self, name):
-        for prefix in ['Domnul ', 'Doamna ']:
+        for prefix in ['Domnul ', 'Doamna ', 'Domnişoara ']:
             if name.startswith(prefix):
                 return name[len(prefix):]
         else:
