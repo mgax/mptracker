@@ -79,8 +79,13 @@ def import_steno():
                                          headline=steno_section.headline)
         session.add(section_ob)
         for paragraph in steno_section.paragraphs:
-            person = cdep_person[paragraph['speaker_cdep_id']]
-            check_name_bits(person.name, paragraph['speaker_name'])
+            cdep_id = paragraph['speaker_cdep_id']
+            if cdep_id is None:
+                name = paragraph['speaker_name']
+                person = models.Person.get_or_create_non_mp(name)
+            else:
+                person = cdep_person[cdep_id]
+                check_name_bits(person.name, paragraph['speaker_name'])
             paragraph_ob = models.StenoParagraph(text=paragraph['text'],
                                                  section=section_ob,
                                                  person=person,

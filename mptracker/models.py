@@ -19,6 +19,13 @@ class Person(db.Model):
     name = db.Column(db.String)
     cdep_id = db.Column(db.Integer)
 
+    @classmethod
+    def get_or_create_non_mp(cls, name):
+        for row in cls.query.filter_by(name=name, cdep_id=None):
+            return row
+        else:
+            return cls(name=name)
+
 
 class StenoSection(db.Model):
     id = uuid_column()
