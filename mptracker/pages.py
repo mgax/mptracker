@@ -35,8 +35,11 @@ def person(person_id):
 
 @pages.route('/steno/')
 def steno_calendar():
+    date_query = models.db.session.query(models.StenoSection.date)
+    steno_days = set(row[0] for row in date_query.distinct())
     return flask.render_template('steno_calendar.html', **{
         'calendar': calendar.Calendar(),
+        'steno_days': steno_days,
     })
 
 

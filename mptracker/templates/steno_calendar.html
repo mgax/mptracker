@@ -23,7 +23,13 @@
       {% for day in week %}
         <td>
           {% if day.month == month %}
-            {{ day.day }}
+            {% if day in steno_days %}
+              {% set url = url_for('.steno_contents',
+                                   date_str=day.isoformat()) %}
+              <a href="{{ url }}">{{ day.day }}</a>
+            {% else %}
+              {{ day.day }}
+            {% endif %}
           {% endif %}
         </td>
       {% endfor %}
