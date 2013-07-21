@@ -60,8 +60,10 @@ def import_people():
     session.commit()
 
 
-def import_steno_day(day, http_session):
+def import_steno_day(day):
+    from mpscraper.common import get_cached_session
     from mpscraper.steno import StenogramScraper
+    http_session = get_cached_session()
 
     name_bits = lambda name: set(name.replace('-', ' ').split())
     cdep_person = {p.cdep_id: p for p in models.Person.query}
@@ -97,7 +99,19 @@ def import_steno_day(day, http_session):
 
 
 @manager.command
-def import_steno(day='2013-06-10'):
-    from mpscraper.common import get_cached_session
-    http_session = get_cached_session()
-    import_steno_day(parse_date(day), http_session)
+def import_steno(day=None, stdin=False):
+    if stdin:
+        import sys
+        days = [line.strip() for line in sys.stdin]
+    elif day is not None:
+        days = [day]
+    else:
+        raise RuntimeError("Need day or stdin")
+
+    for day in days:
+        try:
+            import_steno_day(parse_date(day))
+            print(day, "ok")
+        except Exception as e:
+            models.db.session.rollback()
+            print(day, "fail", e)
