@@ -13,6 +13,11 @@ def parse_date(date_str):
     return datetime.strptime(date_str, '%Y-%m-%d').date()
 
 
+@pages.route('/_crashme')
+def crashme():
+    raise RuntimeError("Crashing, as requested.")
+
+
 @pages.route('/')
 def home():
     people = models.Person.query.order_by('name')
