@@ -4,6 +4,7 @@ import uuid
 import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
+from mptracker.common import parse_date
 
 
 logger = logging.getLogger(__name__)
@@ -17,6 +18,10 @@ def uuid_type():
 def uuid_column():
     return db.Column(uuid_type(), primary_key=True,
                      default=lambda: str(uuid.uuid4()))
+
+
+def identity(v):
+    return v
 
 
 db = SQLAlchemy()
@@ -91,9 +96,24 @@ class TableLoader:
         self.table_name = name
         self.model = self.model_map[name]
         self.columns = [c.name for c in self.model.__table__._columns]
+        self.columns = []
+        self.encoder = {}
+        self.decoder = {}
+        for col in self.model.__table__._columns:
+            self.columns.append(col.name)
+            if isinstance(col.type, db.Date):
+                self.encoder[col.name] = lambda v: v.isoformat()
+                self.decoder[col.name] = parse_date
+            else:
+                self.encoder[col.name] = self.decoder[col.name] = identity
 
     def to_dict(self, row):
-        return {col: getattr(row, col) for col in self.columns}
+        return {col: self.encoder[col](getattr(row, col))
+                for col in self.columns}
+
+    def decode_dict(self, encoded_row):
+        return {col: self.decoder[col](encoded_row[col])
+                for col in encoded_row}
 
 
 @db_manager.command
@@ -108,7 +128,8 @@ def load(name):
     loader = TableLoader(name)
     row_count = 0
     for line in sys.stdin:
-        row_data = flask.json.loads(line)
+        encoded_row_data = flask.json.loads(line)
+        row_data = loader.decode_dict(encoded_row_data)
         row = loader.model.query.get(row_data['id'])
 
         if row is None:
@@ -116,7 +137,7 @@ def load(name):
             logger.info("Adding row %s", row.id)
 
         else:
-            if loader.to_dict(row) == row_data:
+            if loader.to_dict(row) == encoded_row_data:
                 continue
 
             logger.info("Updating row %s", row.id)

@@ -1,16 +1,14 @@
 from collections import defaultdict
-from datetime import datetime
 import calendar
 import flask
 from sqlalchemy.orm import joinedload
 from mptracker import models
+from mptracker.common import parse_date
 
 
 pages = flask.Blueprint('pages', __name__)
 
 
-def parse_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%d').date()
 
 
 @pages.route('/_crashme')
