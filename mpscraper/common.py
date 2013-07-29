@@ -19,7 +19,11 @@ class Scraper(object):
             elif url[-1] not in ['?', '&']:
                 url += '&'
             url += urlencode(args)
-        opener = lambda url: self.session.get(url).content
+        def opener(url):
+            resp = self.session.get(url)
+            text = resp.content.decode('iso-8859-2')
+            # we use utf-16 because the parser's autodetect works fine with it
+            return text.encode('utf-16')
         page = pq(url, opener=opener, parser='html')
         page.make_links_absolute()
         return page
@@ -32,7 +36,7 @@ def get_cached_session():
 
 
 def fix_encoding(text):
-    return text.encode('latin-1').decode('iso-8859-2')
+    return text
 
 
 def pqitems(ob, selector=None):
