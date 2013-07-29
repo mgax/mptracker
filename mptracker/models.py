@@ -79,3 +79,14 @@ def flush_steno(no_create=False):
         table.drop(engine, checkfirst=True)
         if not no_create:
             table.create(engine)
+
+
+@db_manager.command
+def dump(name):
+    _model_map = {model.__tablename__: model for model in
+                  [Person, StenoParagraph, StenoChapter]}
+    model = _model_map[name]
+    columns = [c.name for c in model.__table__._columns]
+    for row in model.query.order_by('id'):
+        row_data = {col: getattr(row, col) for col in columns}
+        print(flask.json.dumps(row_data, sort_keys=True))
