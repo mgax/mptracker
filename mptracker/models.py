@@ -1,3 +1,4 @@
+import sys
 import logging
 import uuid
 import flask
@@ -100,3 +101,30 @@ def dump(name):
     loader = TableLoader(name)
     for row in loader.model.query.order_by('id'):
         print(flask.json.dumps(loader.to_dict(row), sort_keys=True))
+
+
+@db_manager.command
+def load(name):
+    loader = TableLoader(name)
+    row_count = 0
+    for line in sys.stdin:
+        row_data = flask.json.loads(line)
+        row = loader.model.query.get(row_data['id'])
+
+        if row is None:
+            row = loader.model(**row_data)
+            logger.info("Adding row %s", row.id)
+
+        else:
+            if loader.to_dict(row) == row_data:
+                continue
+
+            logger.info("Updating row %s", row.id)
+            for col in row_data:
+                setattr(row, row_data[col])
+
+        db.session.add(row)
+        row_count += 1
+
+    db.session.commit()
+    logger.info("Touched %d rows", row_count)
