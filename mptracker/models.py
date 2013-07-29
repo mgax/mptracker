@@ -81,12 +81,22 @@ def flush_steno(no_create=False):
             table.create(engine)
 
 
+class TableLoader:
+
+    model_map = {model.__tablename__: model for model in
+                 [Person, StenoParagraph, StenoChapter]}
+
+    def __init__(self, name):
+        self.table_name = name
+        self.model = self.model_map[name]
+        self.columns = [c.name for c in self.model.__table__._columns]
+
+    def to_dict(self, row):
+        return {col: getattr(row, col) for col in self.columns}
+
+
 @db_manager.command
 def dump(name):
-    _model_map = {model.__tablename__: model for model in
-                  [Person, StenoParagraph, StenoChapter]}
-    model = _model_map[name]
-    columns = [c.name for c in model.__table__._columns]
-    for row in model.query.order_by('id'):
-        row_data = {col: getattr(row, col) for col in columns}
-        print(flask.json.dumps(row_data, sort_keys=True))
+    loader = TableLoader(name)
+    for row in loader.model.query.order_by('id'):
+        print(flask.json.dumps(loader.to_dict(row), sort_keys=True))
