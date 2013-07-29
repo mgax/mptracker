@@ -95,7 +95,6 @@ class TableLoader:
     def __init__(self, name):
         self.table_name = name
         self.model = self.model_map[name]
-        self.columns = [c.name for c in self.model.__table__._columns]
         self.columns = []
         self.encoder = {}
         self.decoder = {}
