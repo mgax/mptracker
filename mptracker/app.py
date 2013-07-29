@@ -25,20 +25,7 @@ def create_app():
 
 manager = Manager(create_app)
 
-
-@manager.command
-def syncdb():
-    models.db.create_all()
-
-
-@manager.command
-def flush_steno(no_create=False):
-    engine = models.db.get_engine(flask.current_app)
-    for model in [models.StenoChapter, models.StenoParagraph]:
-        table = model.__table__
-        table.drop(engine, checkfirst=True)
-        if not no_create:
-            table.create(engine)
+manager.add_command('db', models.db_manager)
 
 
 @manager.command

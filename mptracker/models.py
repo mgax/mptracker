@@ -1,6 +1,8 @@
 import logging
 import uuid
+import flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.script import Manager
 
 
 logger = logging.getLogger(__name__)
@@ -59,3 +61,21 @@ class StenoParagraph(db.Model):
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
     person = db.relationship('Person',
         backref=db.backref('steno_paragraphs', lazy='dynamic'))
+
+
+db_manager = Manager()
+
+
+@db_manager.command
+def sync():
+    db.create_all()
+
+
+@db_manager.command
+def flush_steno(no_create=False):
+    engine = db.get_engine(flask.current_app)
+    for model in [StenoChapter, StenoParagraph]:
+        table = model.__table__
+        table.drop(engine, checkfirst=True)
+        if not no_create:
+            table.create(engine)
