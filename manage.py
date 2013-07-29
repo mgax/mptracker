@@ -6,9 +6,13 @@ def main():
     manager.run()
 
 
-if __name__ == '__main__':
+def log_to_stderr():
     import logging
     logging.basicConfig(loglevel=logging.INFO)
+
+
+if __name__ == '__main__':
+    log_to_stderr()
     main()
 
 else:
