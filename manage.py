@@ -10,3 +10,7 @@ if __name__ == '__main__':
     import logging
     logging.basicConfig(loglevel=logging.INFO)
     main()
+
+else:
+    from mptracker.app import create_app
+    app = create_app()
