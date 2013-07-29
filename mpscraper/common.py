@@ -35,10 +35,6 @@ def get_cached_session():
     return requests_cache.CachedSession(cache_path)
 
 
-def fix_encoding(text):
-    return text
-
-
 def pqitems(ob, selector=None):
     cls = type(ob)
     if selector is None:

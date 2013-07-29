@@ -1,6 +1,5 @@
 from urllib.parse import urlparse, parse_qs
-from mpscraper.common import (Scraper, pqitems, fix_encoding,
-                              get_cached_session)
+from mpscraper.common import Scraper, pqitems, get_cached_session
 
 
 class PersonScraper(Scraper):
@@ -13,7 +12,7 @@ class PersonScraper(Scraper):
             for a in pqitems(tr, 'a'):
                 href = a.attr('href')
                 if 'structura.mp' in href:
-                    name = fix_encoding(a.text())
+                    name = a.text()
                     cdep_id = int(parse_qs(urlparse(href).query)['idm'][0])
                     yield {
                         'cdep_id': cdep_id,

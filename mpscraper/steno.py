@@ -3,8 +3,7 @@
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
-from mpscraper.common import (Scraper, pqitems, fix_encoding,
-                              get_cached_session)
+from mpscraper.common import Scraper, pqitems, get_cached_session
 
 
 class StenoDay:
@@ -41,7 +40,7 @@ class StenogramScraper(Scraper):
                 continue
             parent_tr = pq(link_el).parents('tr')[-1]
             headline_el = pq(parent_tr)('td')[-1]
-            headline = fix_encoding(pq(headline_el).text())
+            headline = pq(headline_el).text()
             yield link, headline
 
     def get_chapter_serial(self):
@@ -78,8 +77,7 @@ class StenogramScraper(Scraper):
                         if steno_paragraph:
                             save_paragraph()
                         assert len(speakers) == 1
-                        speaker_name = self.trim_name(
-                            fix_encoding(speakers.text()))
+                        speaker_name = self.trim_name(speakers.text())
                         link = speakers.parents('a')
                         if link:
                             qs = parse_qs(urlparse(link.attr('href')).query)
@@ -98,7 +96,7 @@ class StenogramScraper(Scraper):
                     else:
                         if steno_paragraph is None:
                             continue  # still looking for first speaker
-                        text = fix_encoding(paragraph.text())
+                        text = paragraph.text()
                         steno_paragraph['text_buffer'].append(text)
 
         if steno_paragraph:
