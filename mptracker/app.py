@@ -1,9 +1,13 @@
 import os
+import logging
 import flask
 from flask.ext.script import Manager
 from path import path
 from mptracker import models
 from mptracker.pages import pages, parse_date
+
+
+logger = logging.getLogger(__name__)
 
 
 def configure(app):
@@ -20,6 +24,7 @@ def create_app():
     configure(app)
     models.db.init_app(app)
     app.register_blueprint(pages)
+    app._logger = logger
     return app
 
 
