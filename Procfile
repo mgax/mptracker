@@ -1,1 +1,1 @@
-web: ./manage.py runserver -p $PORT
+web: chaussette --backend waitress manage.app --port $PORT
