@@ -2,15 +2,20 @@
 
 
 {% block content %}
-{% if current_user.is_authenticated() %}
-  <button id="browserid-logout">Logout</button>
-{% else %}
-  <button id="browserid-login">Login</button>
-{% endif %}
+  <h1>Openpolitics.ro MP Tracker – autentificare</h1>
+
+  <p>
+    {% if current_user.is_authenticated() %}
+      <strong>{{ current_user.email }}</strong>
+      <button id="browserid-logout">Logout</button>
+    {% else %}
+      <button id="browserid-login">Login</button>
+    {% endif %}
+  </p>
 {% endblock %}
 
 
 {% block scripts %}
-<script src="https://login.persona.org/include.js"></script>
-<script>{{ auth_script|safe }}</script>
+  <script src="https://login.persona.org/include.js"></script>
+  <script>{{ auth_script|safe }}</script>
 {% endblock %}
