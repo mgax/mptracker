@@ -4,6 +4,14 @@
 {% block content %}
   <h1>{{ person.name }}</h1>
 
+  {% if person.cdep_id %}
+    <p>
+        {% set url = ("http://www.cdep.ro/pls/parlam/structura.mp?idm=" +
+                      person.cdep_id|string + "&cam=2&leg=2012") %}
+        <a href="{{ url }}">{{ url }}</a>
+    </p>
+  {% endif %}
+
   {% for date, paragraphs in steno_data %}
   <h3>{{ date }}</h3>
 
