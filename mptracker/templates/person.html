@@ -12,6 +12,11 @@
     </p>
   {% endif %}
 
+  <p>
+    luări de cuvânt: {{ paragraphs_count }}
+    în {{ steno_data|length }} zile
+  </p>
+
   {% for date, paragraphs in steno_data %}
   <h3>{{ date }}</h3>
 

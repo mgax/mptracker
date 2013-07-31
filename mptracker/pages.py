@@ -43,6 +43,7 @@ def person(person_id):
 
     return flask.render_template('person.html', **{
         'person': person,
+        'paragraphs_count': sum(len(p) for p in steno_data.values()),
         'steno_data': sorted(steno_data.items()),
     })
 
