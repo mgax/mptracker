@@ -28,7 +28,7 @@ def home():
     date_query = models.db.session.query(models.StenoChapter.date)
     steno_days = set(row[0] for row in date_query.distinct())
     return flask.render_template('home.html', **{
-        'calendar': calendar.Calendar(),
+        'calendar_tool': calendar.Calendar(),
         'steno_days': steno_days,
         'people': people,
     })
