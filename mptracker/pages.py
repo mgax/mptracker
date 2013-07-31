@@ -28,7 +28,6 @@ def home():
     date_query = models.db.session.query(models.StenoChapter.date)
     steno_days = set(row[0] for row in date_query.distinct())
     return flask.render_template('home.html', **{
-        'calendar_tool': calendar.Calendar(),
         'steno_days': steno_days,
         'people': people,
     })
@@ -70,3 +69,10 @@ def steno_chapter(date_str, chapter_serial_number):
         'date': date_value,
         'chapter': chapter,
     })
+
+
+@pages.context_processor
+def inject_calendar():
+    return {
+        'calendar_tool_factory': calendar.Calendar,
+    }

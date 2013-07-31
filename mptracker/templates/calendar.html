@@ -1,12 +1,13 @@
-{% macro month(calendar_tool, year, month) %}
-<h3>{{ '%d – %02d'|format(year, month) }}</h3>
+{% macro month(c_year, c_month) %}
+{% set calendar_tool = calendar_tool_factory() %}
+<h3>{{ '%d – %02d'|format(c_year, c_month) }}</h3>
 
 <table>
-{% for week in calendar_tool.monthdatescalendar(year, month) %}
+{% for week in calendar_tool.monthdatescalendar(c_year, c_month) %}
   <tr>
   {% for day in week %}
     <td>
-      {% if day.month == month %}
+      {% if day.month == c_month %}
         {% if day in steno_days %}
           {% set url = url_for('.steno_contents',
                                date_str=day.isoformat()) %}
@@ -23,7 +24,7 @@
 {% endmacro %}
 
 
-{% macro calendar(calendar_tool, c_year, c_month) %}
+{% macro calendar() %}
   {% for (c_year, c_month) in [
       (2012, 12),
       (2013, 1),
@@ -36,7 +37,7 @@
     ] %}
 
     <section class="calendar-month">
-      {{- month(calendar_tool, c_year, c_month) }}
+      {{- month(c_year, c_month) }}
     </section>
   {% endfor %}
 {% endmacro %}
