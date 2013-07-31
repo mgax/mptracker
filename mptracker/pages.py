@@ -25,7 +25,13 @@ def ping():
 @pages.route('/')
 def home():
     people = models.Person.query.order_by('name')
-    return flask.render_template('home.html', people=people)
+    date_query = models.db.session.query(models.StenoChapter.date)
+    steno_days = set(row[0] for row in date_query.distinct())
+    return flask.render_template('home.html', **{
+        'calendar': calendar.Calendar(),
+        'steno_days': steno_days,
+        'people': people,
+    })
 
 
 @pages.route('/person/<person_id>')
@@ -39,16 +45,6 @@ def person(person_id):
     return flask.render_template('person.html', **{
         'person': person,
         'steno_data': sorted(steno_data.items()),
-    })
-
-
-@pages.route('/steno/')
-def steno_calendar():
-    date_query = models.db.session.query(models.StenoChapter.date)
-    steno_days = set(row[0] for row in date_query.distinct())
-    return flask.render_template('steno_calendar.html', **{
-        'calendar': calendar.Calendar(),
-        'steno_days': steno_days,
     })
 
 

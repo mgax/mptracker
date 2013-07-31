@@ -1,1 +1,49 @@
 @import "lib/bootstrap/less/bootstrap.less";
+
+
+//////////////////
+// mixins
+.css3-columns(@column-size) {
+  -webkit-columns: @column-size;
+     -moz-columns: @column-size;
+          columns: @column-size;
+}
+
+
+//////////////////
+// home
+
+.home-row {
+    .make-row();
+}
+
+.home-box {
+    .make-column(12);
+}
+
+
+//////////////////
+// calendar
+
+.calendar {
+    .make-row();
+}
+
+.calendar-month {
+    .make-column(3);
+    height: 200px;
+    overflow: hidden;
+}
+
+.calendar-month td {
+    padding: 0 3px;
+}
+
+
+//////////////////
+// people
+
+.people ul {
+    .css3-columns(200px);
+    .list-unstyled;
+}

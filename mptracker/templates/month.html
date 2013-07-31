@@ -1,0 +1,23 @@
+{% macro month(calendar, year, month) %}
+<h3>{{ '%d – %02d'|format(year, month) }}</h3>
+
+<table>
+{% for week in calendar.monthdatescalendar(year, month) %}
+  <tr>
+  {% for day in week %}
+    <td>
+      {% if day.month == month %}
+        {% if day in steno_days %}
+          {% set url = url_for('.steno_contents',
+                               date_str=day.isoformat()) %}
+          <a href="{{ url }}">{{ day.day }}</a>
+        {% else %}
+          {{ day.day }}
+        {% endif %}
+      {% endif %}
+    </td>
+  {% endfor %}
+  </tr>
+{% endfor %}
+</table>
+{% endmacro %}
