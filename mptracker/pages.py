@@ -16,6 +16,12 @@ def crashme():
     raise RuntimeError("Crashing, as requested.")
 
 
+@pages.route('/_ping')
+def ping():
+    models.Person.query.count()
+    return 'mptracker is ok'
+
+
 @pages.route('/')
 def home():
     people = models.Person.query.order_by('name')
