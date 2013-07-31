@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+{% if current_user.is_authenticated() %}
+  <button id="browserid-logout">Logout</button>
+{% else %}
+  <button id="browserid-login">Login</button>
+{% endif %}
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://login.persona.org/include.js"></script>
+<script>{{ auth_script|safe }}</script>
+{% endblock %}

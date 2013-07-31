@@ -4,6 +4,7 @@ import uuid
 import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
+from flask.ext.login import UserMixin
 from mptracker.common import parse_date
 
 
@@ -67,6 +68,23 @@ class StenoParagraph(db.Model):
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
     person = db.relationship('Person',
         backref=db.backref('steno_paragraphs', lazy='dynamic'))
+
+
+class User(db.Model, UserMixin):
+    id = uuid_column()
+    email = db.Column(db.String)
+
+    @classmethod
+    def get_or_create(cls, email, autosave=True):
+        for row in cls.query.filter_by(email=email):
+            return row
+        else:
+            logger.info('Creating %s %r', cls.__name__, email)
+            row = cls(email=email)
+            if autosave:
+                db.session.add(row)
+                db.session.commit()
+            return row
 
 
 db_manager = Manager()
