@@ -3,6 +3,11 @@
 
 {% block content %}
   <h1>Stenograme din {{ date.isoformat() }}</h1>
+  <p>
+    {% set url = ("http://www.cdep.ro/pls/steno/steno.data?cam=2&dat=" +
+                  date.strftime('%Y%m%d')) %}
+    <a href="{{ url }}">{{ url }}</a>
+  </p>
 
   <ul>
   {% for chapter in chapters %}
