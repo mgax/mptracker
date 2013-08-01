@@ -1,5 +1,5 @@
 from urllib.parse import urlparse, parse_qs
-from mpscraper.common import Scraper, pqitems, get_cached_session
+from mptracker.scraper.common import Scraper, pqitems, get_cached_session
 
 
 class PersonScraper(Scraper):

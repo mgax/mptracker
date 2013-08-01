@@ -4,7 +4,7 @@ import requests
 from pyquery import PyQuery as pq
 
 
-project_root = path(__file__).abspath().parent.parent
+project_root = path(__file__).abspath().parent.parent.parent
 
 
 class Scraper(object):

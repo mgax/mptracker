@@ -1,6 +1,6 @@
 from datetime import date
 from path import path
-from mpscraper import steno
+from mptracker.scraper import steno
 
 
 PAGES_DIR = path(__file__).abspath().parent / 'pages'

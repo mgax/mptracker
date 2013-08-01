@@ -42,8 +42,8 @@ manager.add_command('db', models.db_manager)
 
 @manager.command
 def import_people():
-    from mpscraper.common import get_cached_session
-    from mpscraper.people import PersonScraper
+    from mptracker.scraper.common import get_cached_session
+    from mptracker.scraper.people import PersonScraper
     ps = PersonScraper(get_cached_session())
     existing_cdep_ids = set(p.cdep_id for p in models.Person.query)
     new_people = 0
@@ -60,8 +60,8 @@ def import_people():
 
 
 def import_steno_day(day):
-    from mpscraper.common import get_cached_session
-    from mpscraper.steno import StenogramScraper
+    from mptracker.scraper.common import get_cached_session
+    from mptracker.scraper.steno import StenogramScraper
     http_session = get_cached_session()
 
     name_bits = lambda name: set(name.replace('-', ' ').split())
