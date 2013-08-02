@@ -53,6 +53,8 @@ class QuestionScraper(Scraper):
         assert (self.normalize_space(next(rows).text()) ==
                 'Informaţii privind interpelarea')
 
+        question.pdf_url = None
+
         for row in rows:
             norm_text = self.normalize_space(row.text())
             if norm_text == '':
@@ -66,7 +68,7 @@ class QuestionScraper(Scraper):
             if label_text == 'Nr.înregistrare:':
                 question.number = value.text()
             elif label_text == 'Data înregistrarii:':
-                question.date_record = self.parse_date_dmy(value.text())
+                question.date = self.parse_date_dmy(value.text())
             elif label_text == 'Mod adresare:':
                 question.address_method = value.text()
             elif label_text == 'Destinatar:':
@@ -74,6 +76,10 @@ class QuestionScraper(Scraper):
             elif label_text == 'Adresant:' or label_text == 'Adresanţi:':
                 (question.person_name, question.person_cdep_id) = \
                     self.person_from_td(value)
+            elif label_text == 'Textul intervenţiei:':
+                link = list(pqitems(value, 'a'))[-1]
+                assert link.text() == "fişier PDF"
+                question.pdf_url = link.attr('href')
 
         return question
 
@@ -93,13 +99,16 @@ def main():
     import csv
     steno_scraper = QuestionScraper(get_cached_session())
     out = csv.writer(sys.stdout)
-    out.writerow(['person_name', 'person_cdep_id', 'number', 'date'])
+    out.writerow(['person_name', 'person_cdep_id', 'number', 'date',
+                  'url', 'pdf_url'])
     for question in steno_scraper.run():
         out.writerow([
             question.person_name,
             question.person_cdep_id,
             question.number,
-            question.date_record,
+            question.date,
+            question.url,
+            question.pdf_url,
         ])
 
 
