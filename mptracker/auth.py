@@ -1,5 +1,5 @@
 import flask
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, current_user
 from flask.ext.browserid import BrowserID
 from mptracker import models
 
@@ -30,3 +30,15 @@ def register_login(state):
 @auth.route('/login')
 def login():
     return flask.render_template('login.html')
+
+
+def is_privileged():
+    if current_user is None:
+        return False
+
+    app = flask.current_app
+    privileged_emails = app.config['PRIVILEGED_EMAILS']
+    if current_user.email in privileged_emails:
+        return True
+
+    return False
