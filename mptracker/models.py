@@ -96,11 +96,14 @@ class PersonMatcher:
     def name_bits(self, name):
         return set(name.replace('-', ' ').split())
 
-    def get_person(self, name, cdep_id):
+    def get_person(self, name, cdep_id, strict=False):
         if cdep_id is not None:
             person = self.cdep_person[cdep_id]
             if self.name_bits(person.name) == self.name_bits(name):
                 return person
+        if strict:
+            raise RuntimeError("Could not find a match for %r, %r" %
+                               (name, cdep_id))
         return Person.get_or_create_non_mp(name)
 
 
