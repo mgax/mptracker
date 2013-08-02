@@ -40,7 +40,6 @@ class QuestionScraper(Scraper):
                 return link.text(), get_cdep_id(href)
 
     def get_question(self, href):
-        print(href)
         page = self.fetch_url(href)
         heading = page('#pageHeader .pageHeaderLinks').text()
         heading_m = self.title_pattern.match(heading)
@@ -89,7 +88,20 @@ class QuestionScraper(Scraper):
             yield self.get_question(href)
 
 
-if __name__ == '__main__':
+def main():
+    import sys
+    import csv
     steno_scraper = QuestionScraper(get_cached_session())
+    out = csv.writer(sys.stdout)
+    out.writerow(['person_name', 'person_cdep_id', 'number', 'date'])
     for question in steno_scraper.run():
-        print(question)
+        out.writerow([
+            question.person_name,
+            question.person_cdep_id,
+            question.number,
+            question.date_record,
+        ])
+
+
+if __name__ == '__main__':
+    main()
