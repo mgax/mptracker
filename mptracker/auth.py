@@ -33,7 +33,7 @@ def login():
 
 
 def is_privileged():
-    if current_user is None:
+    if current_user is None or current_user.is_anonymous():
         return False
 
     app = flask.current_app
