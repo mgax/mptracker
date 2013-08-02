@@ -1,4 +1,4 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse, parse_qs
 from path import path
 import requests
 from pyquery import PyQuery as pq
@@ -42,3 +42,10 @@ def pqitems(ob, selector=None):
     else:
         found = ob(selector)
     return (cls(el) for el in found)
+
+
+def get_cdep_id(href):
+    qs = parse_qs(urlparse(href).query)
+    assert qs['cam'] == ['2']
+    assert qs['leg'] == ['2012']
+    return int(qs['idm'][0])

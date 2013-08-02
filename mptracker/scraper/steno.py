@@ -3,7 +3,8 @@
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
-from mptracker.scraper.common import Scraper, pqitems, get_cached_session
+from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
+                                      get_cdep_id)
 
 
 class StenoDay:
@@ -80,10 +81,7 @@ class StenogramScraper(Scraper):
                         speaker_name = self.trim_name(speakers.text())
                         link = speakers.parents('a')
                         if link:
-                            qs = parse_qs(urlparse(link.attr('href')).query)
-                            assert qs['cam'] == ['2']
-                            assert qs['leg'] == ['2012']
-                            speaker_cdep_id = int(qs['idm'][0])
+                            speaker_cdep_id = get_cdep_id(link.attr('href'))
                         else:
                             speaker_cdep_id = None
                         steno_paragraph = StenoParagraph({
