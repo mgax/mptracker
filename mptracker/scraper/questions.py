@@ -1,5 +1,6 @@
 """ Fetch and parse questions & interpellations """
 
+import sys
 import re
 from datetime import datetime
 from pyquery import PyQuery as pq
@@ -95,8 +96,7 @@ class QuestionScraper(Scraper):
             yield self.get_question(href)
 
 
-def main():
-    import sys
+def scrape_question_list():
     import csv
     steno_scraper = QuestionScraper(get_cached_session())
     out = csv.writer(sys.stdout)
@@ -112,6 +112,14 @@ def main():
             question.url,
             question.pdf_url,
         ])
+
+
+def main():
+    cmd = sys.argv[1]
+    if cmd == 'list':
+        scrape_question_list()
+    else:
+        raise RuntimeError('Unknown command %r' % cmd)
 
 
 if __name__ == '__main__':
