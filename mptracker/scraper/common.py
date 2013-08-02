@@ -29,9 +29,9 @@ class Scraper(object):
         return page
 
 
-def get_cached_session():
+def get_cached_session(name='http_cache'):
     import requests_cache
-    cache_path = project_root / '_data' / 'http_cache'
+    cache_path = project_root / '_data' / name
     return requests_cache.CachedSession(cache_path)
 
 
