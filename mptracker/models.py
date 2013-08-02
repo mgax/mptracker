@@ -87,6 +87,23 @@ class User(db.Model, UserMixin):
             return row
 
 
+class PersonMatcher:
+    """ Find the right person based on name and cdep_id """
+
+    def __init__(self):
+        self.cdep_person = {p.cdep_id: p for p in Person.query}
+
+    def name_bits(self, name):
+        return set(name.replace('-', ' ').split())
+
+    def get_person(self, name, cdep_id):
+        if cdep_id is not None:
+            person = self.cdep_person[cdep_id]
+            if self.name_bits(person.name) == self.name_bits(name):
+                return person
+        return Person.get_or_create_non_mp(name)
+
+
 db_manager = Manager()
 
 

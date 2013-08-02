@@ -66,16 +66,7 @@ def import_steno_day(day):
     from mptracker.scraper.steno import StenogramScraper
     http_session = get_cached_session()
 
-    name_bits = lambda name: set(name.replace('-', ' ').split())
-    cdep_person = {p.cdep_id: p for p in models.Person.query}
-
-    def get_person(name, cdep_id):
-        if cdep_id is not None:
-            person = cdep_person[cdep_id]
-            if name_bits(person.name) == name_bits(name):
-                return person
-        return models.Person.get_or_create_non_mp(name)
-
+    person_matcher = models.PersonMatcher()
     session = models.db.session
     steno_scraper = StenogramScraper(http_session)
     steno_day = steno_scraper.fetch_day(day)
@@ -86,8 +77,8 @@ def import_steno_day(day):
                                          serial=steno_chapter.serial)
         session.add(chapter_ob)
         for paragraph in steno_chapter.paragraphs:
-            person = get_person(paragraph['speaker_name'],
-                                paragraph['speaker_cdep_id'])
+            person = person_matcher.get_person(paragraph['speaker_name'],
+                                               paragraph['speaker_cdep_id'])
 
             paragraph_ob = models.StenoParagraph(text=paragraph['text'],
                                                  chapter=chapter_ob,
