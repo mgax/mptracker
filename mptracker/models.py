@@ -150,7 +150,7 @@ def flush_steno(no_create=False):
 class TableLoader:
 
     model_map = {model.__tablename__: model for model in
-                 [Person, StenoParagraph, StenoChapter]}
+                 [Person, StenoParagraph, StenoChapter, Question]}
 
     def __init__(self, name):
         self.table_name = name
