@@ -4,6 +4,7 @@ import flask
 from flask.ext.script import Manager
 from path import path
 from mptracker import models
+from mptracker.questions import questions_manager
 from mptracker.pages import pages, parse_date
 from mptracker.auth import auth
 
@@ -38,6 +39,7 @@ def create_app():
 manager = Manager(create_app)
 
 manager.add_command('db', models.db_manager)
+manager.add_command('questions', questions_manager)
 
 
 @manager.command
