@@ -128,6 +128,15 @@ def sync():
     db.create_all()
 
 
+@db_manager.option('names', nargs='+')
+def drop(names):
+    engine = db.get_engine(flask.current_app)
+    for name in names:
+        table = db.metadata.tables[name]
+        print('dropping', name)
+        table.drop(engine, checkfirst=True)
+
+
 @db_manager.command
 def flush_steno(no_create=False):
     engine = db.get_engine(flask.current_app)
