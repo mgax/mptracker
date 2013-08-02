@@ -70,6 +70,19 @@ class StenoParagraph(db.Model):
         backref=db.backref('steno_paragraphs', lazy='dynamic'))
 
 
+class Question(db.Model):
+    id = uuid_column()
+    number = db.Column(db.String)
+    date = db.Column(db.Date, index=True)
+    title = db.Column(db.String)
+    url = db.Column(db.String)
+    pdf_url = db.Column(db.String)
+
+    person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
+    person = db.relationship('Person',
+        backref=db.backref('questions', lazy='dynamic'))
+
+
 class User(db.Model, UserMixin):
     id = uuid_column()
     email = db.Column(db.String)
