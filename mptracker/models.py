@@ -33,6 +33,9 @@ class Person(db.Model):
     name = db.Column(db.String)
     cdep_id = db.Column(db.Integer)
 
+    def __str__(self):
+        return "<{p.name}>".format(p=self)
+
     @classmethod
     def get_or_create_non_mp(cls, name):
         for row in cls.query.filter_by(name=name, cdep_id=None):

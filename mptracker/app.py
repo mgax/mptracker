@@ -7,6 +7,7 @@ from mptracker import models
 from mptracker.questions import questions_manager
 from mptracker.pages import pages, parse_date
 from mptracker.auth import auth
+from mptracker.admin import admin
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +33,7 @@ def create_app():
     models.db.init_app(app)
     app.register_blueprint(auth)
     app.register_blueprint(pages)
+    admin.init_app(app)
     app._logger = logger
     return app
 
