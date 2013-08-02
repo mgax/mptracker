@@ -48,6 +48,7 @@ class QuestionScraper(Scraper):
         question.q_type = self.types[heading_m.group('type')]
 
         question.url = href
+        question.title = page('.headline').text()
 
         rows = pqitems(page, '#pageContent > dd > table > tr')
         assert (self.normalize_space(next(rows).text()) ==
@@ -100,13 +101,14 @@ def main():
     steno_scraper = QuestionScraper(get_cached_session())
     out = csv.writer(sys.stdout)
     out.writerow(['person_name', 'person_cdep_id', 'number', 'date',
-                  'url', 'pdf_url'])
+                  'title', 'url', 'pdf_url'])
     for question in steno_scraper.run():
         out.writerow([
             question.person_name,
             question.person_cdep_id,
             question.number,
             question.date,
+            question.title,
             question.url,
             question.pdf_url,
         ])
