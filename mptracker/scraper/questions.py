@@ -114,10 +114,19 @@ def scrape_question_list():
         ])
 
 
+def scrape_pdf(url):
+    print(url)
+    session = get_cached_session('question-pdf')
+    pdf_content = session.get(url).content
+    print(len(pdf_content), 'bytes')
+
+
 def main():
     cmd = sys.argv[1]
     if cmd == 'list':
         scrape_question_list()
+    elif cmd == 'pdf':
+        scrape_pdf(sys.argv[2])
     else:
         raise RuntimeError('Unknown command %r' % cmd)
 
