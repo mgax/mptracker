@@ -80,6 +80,8 @@ class Question(db.Model):
     title = db.Column(db.String)
     url = db.Column(db.String)
     pdf_url = db.Column(db.String)
+    type = db.Column(db.String)
+    addressee = db.Column(db.String)
 
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
     person = db.relationship('Person',
