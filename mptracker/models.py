@@ -82,6 +82,7 @@ class Question(db.Model):
     pdf_url = db.Column(db.String)
     type = db.Column(db.String)
     addressee = db.Column(db.String)
+    text = db.Column(db.Text)
 
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
     person = db.relationship('Person',
