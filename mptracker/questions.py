@@ -3,6 +3,7 @@ import logging
 import subprocess
 import flask
 from flask.ext.script import Manager
+from flask.ext.rq import job
 from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
@@ -58,10 +59,14 @@ def load(csv_path):
     logger.info("Created %d, updated %d, found ok %d.", n_add, n_update, n_ok)
 
 
-def ocr_question(url, http_session):
+@job
+def ocr_question(question_id):
+    question = models.Question.query.get(question_id)
+    http_session = get_cached_session('question-pdf')
+
     pages = []
     with temp_dir() as tmp:
-        pdf_data = http_session.get(url).content
+        pdf_data = http_session.get(question.pdf_url).content
         pdf_path = tmp / 'document.pdf'
         with pdf_path.open('wb') as f:
             f.write(pdf_data)
@@ -72,26 +77,25 @@ def ocr_question(url, http_session):
             text = (image_path + '.txt').text()
             pages.append(text)
 
-    return pages
+    question.text = '\n\n'.join(pages)
+
+    models.db.session.add(question)
+    models.db.session.commit()
+    logger.info("done OCR for %s (%d pages)", question, len(pages))
 
 
 @questions_manager.command
-def ocr_all():
+def ocr_all(number=None):
     count = 0
-    http_session = get_cached_session('question-pdf')
     for question in models.Question.query:
-        url = question.pdf_url
-        if not url:
+        if not question.pdf_url:
             logger.info("Skipping %s, no URL", question)
             continue
         if question.text:
             logger.info("Skipping %s, already done OCR", question)
             continue
-        ocr_pages = ocr_question(url, http_session)
-        question.text = '\n\n'.join(ocr_pages)
-        models.db.session.add(question)
-        models.db.session.commit()
-        logger.info("done OCR for %s (%d pages)",
-                    question, len(ocr_pages))
+        ocr_question.delay(question.id)
         count += 1
-    logger.info("Completed OCR for %d questions", count)
+        if number and count >= int(number):
+            break
+    logger.info("enqueued %d jobs", count)
