@@ -1,6 +1,7 @@
 -e git+https://github.com/mgax/chaussette.git@301e4baa2b5251e780a66b37c4478d4b51776c80#egg=chaussette-dev
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
 -e git+https://github.com/mgax/raven-python.git@0b3a3e74ee6a21291d2fa59bcc6ee161d25c0b27#egg=raven-dev
+-e git+https://github.com/mgax/rq.git@8d61d3bf26e84bfa5c1c6f4c212b3eb944e9b792#egg=rq-dev
 -e git+https://github.com/mitsuhiko/flask-sqlalchemy.git@2edb3f14931eefde4bf467e88f7373704ce1ecd3#egg=Flask_SQLAlchemy-dev
 -e git+https://github.com/mitsuhiko/flask.git@2e17ad7fd42d8575f308af9c17496d38ceb72b5e#egg=Flask-dev
 -e git+https://github.com/mrjoes/flask-admin.git@ecaa5d2c49aa63a12f40fa50186aa36b3b8712ab#egg=Flask_Admin-dev
