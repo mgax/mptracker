@@ -88,6 +88,9 @@ class Question(db.Model):
     person = db.relationship('Person',
         backref=db.backref('questions', lazy='dynamic'))
 
+    def __str__(self):
+        return "<{q.number}/{q.date}>".format(q=self)
+
 
 class User(db.Model, UserMixin):
     id = uuid_column()

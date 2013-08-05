@@ -1,8 +1,11 @@
 import csv
 import logging
+import subprocess
 import flask
 from flask.ext.script import Manager
 from mptracker import models
+from mptracker.common import temp_dir
+from mptracker.scraper.common import get_cached_session
 
 
 logger = logging.getLogger(__name__)
@@ -53,3 +56,42 @@ def load(csv_path):
 
     models.db.session.commit()
     logger.info("Created %d, updated %d, found ok %d.", n_add, n_update, n_ok)
+
+
+def ocr_question(url, http_session):
+    pages = []
+    with temp_dir() as tmp:
+        pdf_data = http_session.get(url).content
+        pdf_path = tmp / 'document.pdf'
+        with pdf_path.open('wb') as f:
+            f.write(pdf_data)
+        subprocess.check_call(['pdfimages', pdf_path, tmp / 'img'])
+        for image_path in tmp.listdir('img-*'):
+            subprocess.check_call(['tesseract', image_path, image_path],
+                                  stderr=subprocess.DEVNULL)
+            text = (image_path + '.txt').text()
+            pages.append(text)
+
+    return pages
+
+
+@questions_manager.command
+def ocr_all():
+    count = 0
+    http_session = get_cached_session('question-pdf')
+    for question in models.Question.query:
+        url = question.pdf_url
+        if not url:
+            logger.info("Skipping %s, no URL", question)
+            continue
+        if question.text:
+            logger.info("Skipping %s, already done OCR", question)
+            continue
+        ocr_pages = ocr_question(url, http_session)
+        question.text = '\n\n'.join(ocr_pages)
+        models.db.session.add(question)
+        models.db.session.commit()
+        logger.info("done OCR for %s (%d pages)",
+                    question, len(ocr_pages))
+        count += 1
+    logger.info("Completed OCR for %d questions", count)
