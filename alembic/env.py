@@ -38,6 +38,7 @@ def run_migrations_online():
         context.configure(connection=models.db.session.connection(),
                           target_metadata=models.db.metadata)
         context.run_migrations()
+        models.db.session.commit()
 
 
 if context.is_offline_mode():
