@@ -15,10 +15,7 @@ logger = logging.getLogger(__name__)
 
 def configure(app):
     project_root = path(__file__).abspath().parent.parent
-    data_dir = project_root / '_data'
-    data_dir.mkdir_p()
-    db_path = data_dir / 'db.sqlite'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE']
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     app.config['PRIVILEGED_EMAILS'] = \
         os.environ.get('PRIVILEGED_EMAILS', '').split()
