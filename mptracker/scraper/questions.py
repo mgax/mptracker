@@ -56,6 +56,7 @@ class QuestionScraper(Scraper):
                 'Informaţii privind interpelarea')
 
         question.pdf_url = None
+        question.addressee = None
 
         for row in rows:
             norm_text = self.normalize_space(row.text())
@@ -74,7 +75,7 @@ class QuestionScraper(Scraper):
             elif label_text == 'Mod adresare:':
                 question.address_method = value.text()
             elif label_text == 'Destinatar:':
-                question.target = value.text()
+                question.addressee = value.text()
             elif label_text == 'Adresant:' or label_text == 'Adresanţi:':
                 (question.person_name, question.person_cdep_id) = \
                     self.person_from_td(value)
@@ -100,17 +101,19 @@ def scrape_question_list():
     import csv
     steno_scraper = QuestionScraper(get_cached_session())
     out = csv.writer(sys.stdout)
-    out.writerow(['person_name', 'person_cdep_id', 'number', 'date',
-                  'title', 'url', 'pdf_url'])
+    out.writerow(['person_name', 'person_cdep_id', 'number', 'date', 'type',
+                  'title', 'url', 'pdf_url', 'addressee'])
     for question in steno_scraper.run():
         out.writerow([
             question.person_name,
             question.person_cdep_id,
             question.number,
             question.date,
+            question.q_type,
             question.title,
             question.url,
             question.pdf_url,
+            question.addressee,
         ])
 
 
