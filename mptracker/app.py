@@ -19,6 +19,7 @@ def configure(app):
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     app.config['PRIVILEGED_EMAILS'] = \
         os.environ.get('PRIVILEGED_EMAILS', '').split()
+    app.config['RQ_DEFAULT_URL'] = os.environ.get('REDIS_DSN')
     app.debug = (os.environ.get('DEBUG') == 'on')
     sentry_dsn = os.environ.get('SENTRY_DSN')
     if sentry_dsn:
@@ -41,6 +42,12 @@ manager = Manager(create_app)
 
 manager.add_command('db', models.db_manager)
 manager.add_command('questions', questions_manager)
+
+
+@manager.command
+def worker():
+    from flask.ext.rq import get_worker
+    get_worker().work()
 
 
 @manager.command
