@@ -175,9 +175,10 @@ class TableLoader:
             else:
                 self.encoder[col.name] = self.decoder[col.name] = identity
 
-    def to_dict(self, row):
-        return {col: self.encoder[col](getattr(row, col))
-                for col in self.columns}
+    def to_dict(self, row, columns=None):
+        if columns is None:
+            columns = self.columns
+        return {col: self.encoder[col](getattr(row, col)) for col in columns}
 
     def decode_dict(self, encoded_row):
         return {col: self.decoder[col](encoded_row[col])
@@ -185,10 +186,12 @@ class TableLoader:
 
 
 @db_manager.command
-def dump(name):
+def dump(name, columns=None):
+    if columns:
+        columns = columns.split(',')
     loader = TableLoader(name)
     for row in loader.model.query.order_by('id'):
-        print(flask.json.dumps(loader.to_dict(row), sort_keys=True))
+        print(flask.json.dumps(loader.to_dict(row, columns), sort_keys=True))
 
 
 @db_manager.command
