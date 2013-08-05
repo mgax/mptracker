@@ -15,24 +15,41 @@ questions_manager = Manager()
 def load(csv_path):
     person_matcher = models.PersonMatcher()
 
-    existing = set((row.number, row.date) for row in models.Question.query)
+    existing = {(q.number, q.date): q for q in models.Question.query}
 
-    n_add = n_skip = 0
+    n_add = n_update = n_ok = 0
     with open(csv_path, 'r') as csv_file:
         csv_doc = csv.DictReader(csv_file)
         for row in csv_doc:
             row['date'] = models.parse_date(row.pop('date'))
-            if (row['number'], row['date']) in existing:
-                n_skip += 1
-                continue
-
             person = person_matcher.get_person(row.pop('person_name'),
                                                int(row.pop('person_cdep_id')),
                                                strict=True)
-            question = models.Question(person=person, **row)
+            row['person'] = person
+
+            if (row['number'], row['date']) in existing:
+                question = existing[row['number'], row['date']]
+                changed = False
+                for k in row:
+                    if getattr(question, k) != row[k]:
+                        setattr(question, k, row[k])
+                        changed = True
+
+                if not changed:
+                    n_ok += 1
+                    continue
+
+                n_update += 1
+                logger.info("Updating question %s/%s",
+                            row['number'], row['date'])
+
+            else:
+                question = models.Question(**row)
+                n_add += 1
+                logger.info("Adding question %s/%s",
+                            row['number'], row['date'])
+
             models.db.session.add(question)
-            n_add += 1
-            logger.info("Adding question %s/%s", row['number'], row['date'])
 
     models.db.session.commit()
-    logger.info("Created %d rows, %d were already there.", n_add, n_skip)
+    logger.info("Created %d, updated %d, found ok %d.", n_add, n_update, n_ok)
