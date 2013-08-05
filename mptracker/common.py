@@ -1,7 +1,11 @@
 from datetime import datetime
 from contextlib import contextmanager
+import logging
 import tempfile
 from path import path
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def parse_date(date_str):
@@ -33,11 +37,28 @@ class TablePatcher:
         return tuple(record.get(k) for k in self.key_columns)
 
     def update(self, data):
+        n_add = n_update = n_ok = 0
+
         for record in data:
             key = self.dict_key(record)
             row = self.existing.get(key)
+
             if row is None:
                 row = self.model()
+                logger.info("Adding %r", key)
+                n_add += 1
+
+            else:
+                for k in record:
+                    if getattr(row, k) != record[k]:
+                        logger.info("Updating %r", key)
+                        n_update += 1
+                        break
+
+                else:
+                    logger.info("Not touching %r", key)
+                    n_ok += 1
+                    continue  # all fields are equal
 
             for k in record:
                 setattr(row, k, record[k])
@@ -46,3 +67,5 @@ class TablePatcher:
             self.existing[key] = row
 
         self.session.commit()
+        logger.info("Created %d, updated %d, found ok %d.",
+                    n_add, n_update, n_ok)

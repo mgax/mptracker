@@ -5,7 +5,7 @@ import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.login import UserMixin
-from mptracker.common import parse_date
+from mptracker.common import parse_date, TablePatcher
 
 
 logger = logging.getLogger(__name__)
@@ -202,26 +202,6 @@ def dump(name, columns=None, number=None):
 @db_manager.command
 def load(name):
     loader = TableLoader(name)
-    row_count = 0
-    for line in sys.stdin:
-        encoded_row_data = flask.json.loads(line)
-        row_data = loader.decode_dict(encoded_row_data)
-        row = loader.model.query.get(row_data['id'])
-
-        if row is None:
-            row = loader.model(**row_data)
-            logger.info("Adding row %s", row.id)
-
-        else:
-            if loader.to_dict(row) == encoded_row_data:
-                continue
-
-            logger.info("Updating row %s", row.id)
-            for col in row_data:
-                setattr(row, row_data[col])
-
-        db.session.add(row)
-        row_count += 1
-
-    db.session.commit()
-    logger.info("Touched %d rows", row_count)
+    patcher = TablePatcher(loader.model, db.session, key_columns=['id'])
+    patcher.update(loader.decode_dict(flask.json.loads(line))
+                   for line in sys.stdin)
