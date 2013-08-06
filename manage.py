@@ -9,6 +9,7 @@ def main():
 def log_to_stderr():
     import logging
     logging.basicConfig(loglevel=logging.INFO)
+    logging.getLogger('werkzeug').setLevel(logging.INFO)
 
 
 if __name__ == '__main__':
