@@ -1,6 +1,7 @@
 import csv
 import logging
 import subprocess
+from collections import namedtuple
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -134,11 +135,14 @@ def get_county_names(county_siruta):
     return sorted(names)
 
 
+Token = namedtuple('Token', ['text'])
+
+
 def tokenize(text):
     for word in text.split():
         word = word.strip(',.;!?-()')
         if word:
-            yield word
+            yield Token(word)
 
 
 def match_and_describe(question):
@@ -148,7 +152,7 @@ def match_and_describe(question):
                          / 'prahova-names.json')
     local_names = flask.json.loads(prahova_json_path.text())
     virgil = models.Person.query.filter_by(cdep_id=159).first()
-    text_tokens = list(tokenize(question.text))
+    text_tokens = [token.text for token in tokenize(question.text)]
     matches = []
     for token in text_tokens:
         for name in local_names:
