@@ -1,8 +1,11 @@
 from collections import namedtuple
 import re
 
-Token = namedtuple('Token', ['text'])
-word_pattern = re.compile(r'\S+')
+Token = namedtuple('Token', ['text', 'start', 'end'])
+ANY_PUNCTUATION = r'[.,;!?\-()]*'
+word_pattern = re.compile(r'\b' + ANY_PUNCTUATION +
+                          r'(?P<word>\S+?)' +
+                          ANY_PUNCTUATION + r'\b')
 
 
 def tokenize(text):
@@ -11,8 +14,6 @@ def tokenize(text):
         match = word_pattern.search(text, offset)
         if match is None:
             break
-        word = match.group()
+        word = match.group('word')
         offset = match.end()
-        word = word.strip(',.;!?-()')
-        if word:
-            yield Token(word)
+        yield Token(word, match.start('word'), match.end('word'))
