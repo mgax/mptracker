@@ -134,14 +134,15 @@ def get_county_names(county_siruta):
     return sorted(names)
 
 
+def tokenize(text):
+    for word in text.split():
+        word = word.strip(',.;!?-()')
+        if word:
+            yield word
+
+
 def match_and_describe(question):
     from jellyfish import jaro_winkler
-
-    def tokenize(text):
-        for word in text.split():
-            word = word.strip(',.;!?-()')
-            if word:
-                yield word
 
     prahova_json_path = (path(flask.current_app.config['DATA_DIR'])
                          / 'prahova-names.json')
