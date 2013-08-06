@@ -4,6 +4,7 @@ import subprocess
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
+from path import path
 from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
@@ -129,12 +130,30 @@ def get_county_names(county_siruta):
             yield from walk_siruta(thing)
 
     names = set(walk_siruta(county_siruta))
-    return names
+    return sorted(names)
 
 
 @questions_manager.command
-def county_names():
-    prahova = 298
-    names = get_county_names(prahova)
-    for name in sorted(names):
-        print(name)
+def match():
+    from jellyfish import jaro_winkler
+    def tokenize(text):
+        for word in text.split():
+            word = word.strip(',.;!?-()')
+            if word:
+                yield word
+
+    prahova_json_path = (path(flask.current_app.config['DATA_DIR'])
+                         / 'prahova-names.json')
+    local_names = flask.json.loads(prahova_json_path.text())
+    virgil = models.Person.query.filter_by(cdep_id=159).first()
+    for question in virgil.questions:
+        print(question.title)
+        text_tokens = list(tokenize(question.text))
+        matches = []
+        for token in text_tokens:
+            for name in local_names:
+                distance = jaro_winkler(name, token.lower())
+                matches.append((distance, name, token))
+        for match in sorted(matches, reverse=True)[:10]:
+            print("{:.2f} {} {}".format(*match))
+        print()
