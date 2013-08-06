@@ -1,5 +1,5 @@
 def tokenize(*args, **kwargs):
-    from mptracker.questions import tokenize
+    from mptracker.nlp import tokenize
     return tokenize(*args, **kwargs)
 
 

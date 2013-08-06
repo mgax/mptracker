@@ -1,7 +1,6 @@
 import csv
 import logging
 import subprocess
-from collections import namedtuple
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -9,6 +8,7 @@ from path import path
 from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
+from mptracker.nlp import tokenize
 
 
 logger = logging.getLogger(__name__)
@@ -133,16 +133,6 @@ def get_county_names(county_siruta):
 
     names = set(walk_siruta(county_siruta))
     return sorted(names)
-
-
-Token = namedtuple('Token', ['text'])
-
-
-def tokenize(text):
-    for word in text.split():
-        word = word.strip(',.;!?-()')
-        if word:
-            yield Token(word)
 
 
 def match_and_describe(question):
