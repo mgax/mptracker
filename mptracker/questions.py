@@ -142,11 +142,11 @@ def match_and_describe(question):
                          / 'prahova-names.json')
     local_names = flask.json.loads(prahova_json_path.text())
     virgil = models.Person.query.filter_by(cdep_id=159).first()
-    text_tokens = [token.text for token in tokenize(question.text)]
+    text_tokens = [token for token in tokenize(question.text)]
     matches = []
     for token in text_tokens:
         for name in local_names:
-            distance = jaro_winkler(name, token.lower())
+            distance = jaro_winkler(name, token.text.lower())
             if distance > .90:
                 matches.append({
                     'distance': distance,

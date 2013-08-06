@@ -14,9 +14,10 @@
     <ul>
     {% for match in match_data.top_matches %}
       <li>
-        {{ (match.distance * 100)|int }}%
-        {{ match.name }}
-        {{ match.token }}
+        {{ question.text[:match.token.start][-40:] }}
+        <strong class="qmatch-highlight">{{ match.token.text }}</strong>
+        {{ question.text[match.token.end:][:40] }}
+        ({{ match.name }} {{ (match.distance * 100)|int }}%)
       </li>
     {% endfor %}
     </ul>
