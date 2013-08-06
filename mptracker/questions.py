@@ -13,6 +13,7 @@ from mptracker.scraper.common import get_cached_session
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+questions = flask.Blueprint('questions', __name__)
 
 questions_manager = Manager()
 
@@ -133,9 +134,9 @@ def get_county_names(county_siruta):
     return sorted(names)
 
 
-@questions_manager.command
-def match():
+def match_and_describe(question):
     from jellyfish import jaro_winkler
+
     def tokenize(text):
         for word in text.split():
             word = word.strip(',.;!?-()')
@@ -146,14 +147,32 @@ def match():
                          / 'prahova-names.json')
     local_names = flask.json.loads(prahova_json_path.text())
     virgil = models.Person.query.filter_by(cdep_id=159).first()
-    for question in virgil.questions:
-        print(question.title)
-        text_tokens = list(tokenize(question.text))
-        matches = []
-        for token in text_tokens:
-            for name in local_names:
-                distance = jaro_winkler(name, token.lower())
-                matches.append((distance, name, token))
-        for match in sorted(matches, reverse=True)[:10]:
-            print("{:.2f} {} {}".format(*match))
-        print()
+    text_tokens = list(tokenize(question.text))
+    matches = []
+    for token in text_tokens:
+        for name in local_names:
+            distance = jaro_winkler(name, token.lower())
+            if distance > .90:
+                matches.append({
+                    'distance': distance,
+                    'name': name,
+                    'token': token,
+                })
+    top_matches = sorted(matches,
+                         key=lambda m: m['distance'],
+                         reverse=True)[:5]
+
+    return {
+        'question': question,
+        'top_matches': top_matches,
+    }
+
+
+@questions.route('/person/<person_id>/questions')
+def person_questions(person_id):
+    person = models.Person.query.get_or_404(person_id)
+    question_matches = [match_and_describe(q) for q in person.questions]
+    return flask.render_template('person_questions.html', **{
+        'person': person,
+        'question_matches': question_matches,
+    })

@@ -17,6 +17,12 @@
     în {{ steno_data|length }} zile
   </p>
 
+  <p>
+    întrebări și interpelări:
+    {% set url = url_for('questions.person_questions', person_id=person.id) %}
+    <a href="{{ url }}">{{ questions_count }}</a>
+  </p>
+
   {% for date, paragraphs in steno_data %}
   <h3>{{ date }}</h3>
 

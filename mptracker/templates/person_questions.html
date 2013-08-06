@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>{{ person.name }} – întrebări și interpelări</h1>
+
+{% for match_data in question_matches %}
+  <article class="qmatch">
+    {% set question = match_data.question %}
+
+    <h3>{{ question.title|truncate(80) }}</h3>
+    <p>{{ question.date }}</p>
+
+    <ul>
+    {% for match in match_data.top_matches %}
+      <li>
+        {{ (match.distance * 100)|int }}%
+        {{ match.name }}
+        {{ match.token }}
+      </li>
+    {% endfor %}
+    </ul>
+  </article>
+{% endfor %}
+
+{% endblock %}
