@@ -3,21 +3,37 @@
 
 {% block content %}
   <h1>{{ person.name }} – întrebări și interpelări</h1>
-  <h3>{{ question.title }}</h3>
-  <p>{{ question.date }}</p>
+  <p>{{ question.title }} ({{ question.date }})</p>
 
-  <ul>
-  {% for match in match_result.top_matches %}
-    <li>
-      {{ question.text[:match.token.start][-40:] }}
-      <strong class="qmatch-highlight">{{ match.token.text }}</strong>
-      {{ question.text[match.token.end:][:40] }}
-      ({{ match.name }} {{ (match.distance * 100)|int }}%)
-    </li>
-  {% endfor %}
-  </ul>
+  <section class="question-analysis">
+    <div class="question-analysis-heading">
+      <h3>Rezultatul analizei</h3>
+    </div>
 
-  <p style="white-space: pre">
-    {{ question.text }}
-  </p>
+    {% if match_result.top_matches %}
+      <ul>
+      {% for match in match_result.top_matches %}
+        <li>
+          {{ question.text[:match.token.start][-40:] }}
+          <strong class="qmatch-highlight">{{ match.token.text }}</strong>
+          {{ question.text[match.token.end:][:40] }}
+          ({{ match.name }} {{ (match.distance * 100)|int }}%)
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nu am găsit corespondențe.</p>
+    {% endif %}
+  </section>
+
+  <section class="question-original">
+    <div class="question-original-heading">
+      <h3>Textul original</h3>
+    </div>
+
+    <p>
+      {{- question.text -}}
+    </p>
+  </section>
+
 {% endblock %}
