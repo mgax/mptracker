@@ -117,6 +117,31 @@ def match_question(question):
     return {'top_matches': top_matches}
 
 
+@job
+def analyze_question(question_id):
+    question = models.Question.query.get(question_id)
+    result = match_question(question)
+    question.match_data = flask.json.dumps(result)
+    models.db.session.commit()
+
+
+@questions_manager.command
+def analyze_all(number=None):
+    n_jobs = n_skip = n_ok = 0
+    for question in models.Question.query:
+        if question.match_data is not None:
+            n_ok += 1
+            continue
+        if question.person.county is None:
+            n_skip += 1
+            continue
+        analyze_question.delay(question.id)
+        n_jobs += 1
+        if number and n_jobs >= int(number):
+            break
+    logger.info("enqueued %d jobs, skipped %d, ok %d", n_jobs, n_skip, n_ok)
+
+
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
     def match_and_describe(question):
