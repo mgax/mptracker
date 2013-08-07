@@ -8,6 +8,7 @@
     <thead>
       <th>Nume</th>
       <th>Județ</th>
+      <th>Întrebări și interpelări</th>
     </thead>
 
     <tbody>
@@ -15,6 +16,10 @@
       <tr>
         <td>{{ person.name }}</td>
         <td>{{ person.county.name }}</td>
+        <td>
+          {% set url = url_for('.person_questions', person_id=person.id) %}
+          <a href="{{ url }}">NN</a>
+        </td>
       </tr>
     {% endfor %}
     </tbody>

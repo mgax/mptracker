@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>{{ person.name }} – întrebări și interpelări</h1>
+
+  <table>
+    <thead>
+      <th>titlu</th>
+      <th>dată</th>
+    </thead>
+
+  {% for question in questions %}
+    <tr>
+      <td>
+        {% set url = url_for('.question_detail', question_id=question.id) %}
+        <a href="{{ url }}">{{ question.title|truncate(80) }}</a>
+      </td>
+      <td>{{ question.date }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
+{% endblock %}

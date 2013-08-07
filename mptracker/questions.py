@@ -157,13 +157,20 @@ def person_index():
 
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
-    def match_and_describe(question):
-        rv = flask.json.loads(question.match_data)
-        rv['question'] = question
-        return rv
     person = models.Person.query.get_or_404(person_id)
-    question_matches = [match_and_describe(q) for q in person.questions]
-    return flask.render_template('person_questions.html', **{
+    return flask.render_template('questions/person.html', **{
         'person': person,
-        'question_matches': question_matches,
+        'questions': list(person.questions),
+    })
+
+
+@questions.route('/questions/<question_id>')
+def question_detail(question_id):
+    question = models.Question.query.get_or_404(question_id)
+    match_result = flask.json.loads(question.match_data)
+
+    return flask.render_template('questions/detail.html', **{
+        'person': question.person,
+        'question': question,
+        'match_result': match_result,
     })
