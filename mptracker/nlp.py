@@ -7,6 +7,21 @@ ANY_PUNCTUATION = r'[.,;!?\-()]*'
 word_pattern = re.compile(r'\b' + ANY_PUNCTUATION +
                           r'(?P<word>\S+?)' +
                           ANY_PUNCTUATION + r'\b')
+name_normalization_map = [
+    ('-', ' '),
+    ('ș', 's'),
+    ('ț', 't'),
+    ('ă', 'a'),
+    ('â', 'a'),
+    ('î', 'i'),
+]
+
+
+def normalize(name):
+    name = name.lower()
+    for ch, new_ch in name_normalization_map:
+        name = name.replace(ch, new_ch)
+    return name
 
 
 def tokenize(text):
@@ -28,7 +43,7 @@ def match_names(text, name_list, mp_info={}):
     for idx, token in enumerate(tokens):
         token_matches = []
         for name in name_list:
-            distance = jaro_winkler(name, token.text.lower())
+            distance = jaro_winkler(normalize(name), normalize(token.text))
             if distance > .90:
                 token_matches.append({
                     'distance': distance,
@@ -40,9 +55,10 @@ def match_names(text, name_list, mp_info={}):
             continue
 
         if mp_info.get('name'):
-            mp_name_bits = [t.text.lower() for t in tokenize(mp_info['name'])]
+            mp_name_bits = [normalize(t.text)
+                            for t in tokenize(mp_info['name'])]
             recent_tokens = tokens[:idx][- MP_TITLE_LOOKBEHIND_TOKENS:]
-            recent_text_bits = set(t.text.lower() for t in recent_tokens)
+            recent_text_bits = set(normalize(t.text) for t in recent_tokens)
             expected_mp_title_bits = set(mp_name_bits)
             if expected_mp_title_bits.issubset(recent_text_bits):
                 continue

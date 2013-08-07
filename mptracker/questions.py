@@ -106,30 +106,13 @@ def ocr_all(number=None):
     logger.info("enqueued %d jobs", count)
 
 
-name_normalization_map = [
-    ('-', ' '),
-    ('ș', 's'),
-    ('ț', 't'),
-    ('ă', 'a'),
-    ('â', 'a'),
-    ('î', 'i'),
-]
-
-
-def normalize_place_name(name):
-    name = name.lower()
-    for ch, new_ch in name_normalization_map:
-        name = name.replace(ch, new_ch)
-    return name
-
-
 def get_county_names(county_siruta):
     from sirutalib import SirutaDatabase
     siruta = SirutaDatabase()
 
     def walk_siruta(code):
         name = siruta.get_name(code, prefix=False)
-        yield normalize_place_name(name)
+        yield name
         for thing in siruta.get_inf_codes(code):
             yield from walk_siruta(thing)
 

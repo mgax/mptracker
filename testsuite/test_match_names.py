@@ -23,3 +23,9 @@ def test_ignore_mp_constituency():
     match = match_names(text, ['prahova', 'sinaia'],
                         mp_info={'name': "Guran Virgil"})
     assert [m['name'] for m in match] == ['sinaia']
+
+
+def test_match_regardless_of_diacritics():
+    text = "foo bar brașov campina hello world"
+    match = match_names(text, ["brasov", "câmpina"])
+    assert [m['name'] for m in match] == ['brasov', 'câmpina']
