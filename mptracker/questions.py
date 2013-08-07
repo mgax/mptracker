@@ -130,7 +130,7 @@ def match_and_describe(question):
     matches = match_names(question.text, local_names, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
-                         reverse=True)[:5]
+                         reverse=True)[:10]
 
     return {
         'question': question,

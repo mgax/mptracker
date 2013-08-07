@@ -37,6 +37,7 @@ def tokenize(text):
 
 def match_names(text, name_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
+    DISTANCE_THRESHOLD = .95
 
     matches = []
     tokens = list(tokenize(text))
@@ -44,7 +45,7 @@ def match_names(text, name_list, mp_info={}):
         token_matches = []
         for name in name_list:
             distance = jaro_winkler(normalize(name), normalize(token.text))
-            if distance > .90:
+            if distance >= DISTANCE_THRESHOLD:
                 token_matches.append({
                     'distance': distance,
                     'name': name,
