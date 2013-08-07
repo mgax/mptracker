@@ -1,6 +1,7 @@
 import sys
 import logging
 import uuid
+import argparse
 import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
@@ -147,6 +148,24 @@ db_manager = Manager()
 @db_manager.command
 def sync():
     db.create_all()
+
+
+@db_manager.option('alembic_args', nargs=argparse.REMAINDER)
+def alembic(alembic_args):
+    from alembic.config import CommandLine
+    CommandLine().main(argv=alembic_args)
+
+
+@db_manager.command
+def upgrade(revision='head'):
+    return alembic(['upgrade', revision])
+
+
+@db_manager.command
+def revision(message=None):
+    if message is None:
+        message = input('revision name: ')
+    return alembic(['revision', '--autogenerate', '-m', message])
 
 
 @db_manager.option('names', nargs='+')
