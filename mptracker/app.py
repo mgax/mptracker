@@ -8,6 +8,7 @@ from mptracker.questions import questions, questions_manager
 from mptracker.pages import pages, parse_date
 from mptracker.auth import auth
 from mptracker.admin import admin
+from mptracker.nlp import nlp_manager
 
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,7 @@ manager = Manager(create_app)
 
 manager.add_command('db', models.db_manager)
 manager.add_command('questions', questions_manager)
+manager.add_command('nlp', nlp_manager)
 
 
 @manager.command
