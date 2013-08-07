@@ -132,7 +132,10 @@ def analyze_all(number=None):
         if question.match_data is not None:
             n_ok += 1
             continue
-        if question.person.county is None:
+        county = question.person.county
+        if (question.text is None or
+            county is None or
+            county.geonames_code is None):
             n_skip += 1
             continue
         analyze_question.delay(question.id)
