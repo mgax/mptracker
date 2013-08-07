@@ -121,7 +121,7 @@ def get_county_names(county_siruta):
 
 
 def match_and_describe(question):
-    local_names = get_placenames(30)
+    local_names = get_placenames(question.person.county.geonames_code)
 
     mp_info = {
         'name': question.person.name,
