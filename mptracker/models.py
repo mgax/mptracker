@@ -33,6 +33,10 @@ class Person(db.Model):
     name = db.Column(db.String)
     cdep_id = db.Column(db.Integer)
 
+    county_id = db.Column(uuid_type(), db.ForeignKey('county.id'))
+    county = db.relationship('County',
+        backref=db.backref('people', lazy='dynamic'))
+
     def __str__(self):
         return "<{p.name}>".format(p=self)
 
@@ -46,6 +50,14 @@ class Person(db.Model):
             db.session.add(row)
             db.session.flush()
             return row
+
+
+class County(db.Model):
+    id = uuid_column()
+    name = db.Column(db.String)
+
+    def __str__(self):
+        return self.name
 
 
 class StenoChapter(db.Model):
@@ -159,7 +171,7 @@ def flush_steno(no_create=False):
 class TableLoader:
 
     model_map = {model.__tablename__: model for model in
-                 [Person, StenoParagraph, StenoChapter, Question]}
+                 [Person, County, StenoParagraph, StenoChapter, Question]}
 
     def __init__(self, name):
         self.table_name = name
