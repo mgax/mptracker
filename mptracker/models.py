@@ -97,6 +97,7 @@ class Question(db.Model):
     type = db.Column(db.String)
     addressee = db.Column(db.String)
     text = db.Column(db.Text)
+    match_data = db.Column(db.Text)
 
     person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
     person = db.relationship('Person',
