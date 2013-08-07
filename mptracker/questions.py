@@ -140,9 +140,8 @@ def get_county_names(county_siruta):
 def match_and_describe(question):
     from jellyfish import jaro_winkler
 
-    prahova_json_path = (path(flask.current_app.config['DATA_DIR'])
-                         / 'prahova-names.json')
-    local_names = flask.json.loads(prahova_json_path.text())
+    with questions.open_resource('placenames/prahova.json', 'r') as f:
+        local_names = flask.json.load(f)
     virgil = models.Person.query.filter_by(cdep_id=159).first()
     text_tokens = [token for token in tokenize(question.text)]
     matches = []
