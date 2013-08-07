@@ -145,6 +145,16 @@ def analyze_all(number=None):
     logger.info("enqueued %d jobs, skipped %d, ok %d", n_jobs, n_skip, n_ok)
 
 
+@questions.route('/questions/')
+def person_index():
+    people = (models.Person.query
+                .filter(models.Person.cdep_id)
+                .order_by('name'))
+    return flask.render_template('questions/person_index.html', **{
+        'people': people,
+    })
+
+
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
     def match_and_describe(question):

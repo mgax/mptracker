@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Întrebări și interpelări</h1>
+
+  <table class="peoplequestions">
+    <thead>
+      <th>Nume</th>
+      <th>Județ</th>
+    </thead>
+
+    <tbody>
+    {% for person in people %}
+      <tr>
+        <td>{{ person.name }}</td>
+        <td>{{ person.county.name }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

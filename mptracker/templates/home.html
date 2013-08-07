@@ -11,4 +11,9 @@
   <p>
     <a href="{{ url_for('.steno_index') }}">Toate stenogramele</a>
   </p>
+
+  <p>
+    {% set url = url_for('questions.person_index') %}
+    <a href="{{ url }}">Întrebări și interpelări</a>
+  </p>
 {% endblock %}
