@@ -15,10 +15,10 @@
     {% for person in people %}
       <tr>
         <td>{{ person.name }}</td>
-        <td>{{ person.county.name }}</td>
+        <td>{{ person.county_name }}</td>
         <td>
           {% set url = url_for('.person_questions', person_id=person.id) %}
-          <a href="{{ url }}">NN</a>
+          <a href="{{ url }}">{{ person.question_count }}</a>
         </td>
       </tr>
     {% endfor %}

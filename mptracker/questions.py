@@ -147,11 +147,25 @@ def analyze_all(number=None):
 
 @questions.route('/questions/')
 def person_index():
+    from sqlalchemy import func
+    from sqlalchemy.orm import subqueryload
+    question_count_for_person = dict(
+        models.db.session
+            .query(models.Question.person_id,
+                   func.count(models.Question.person_id))
+            .group_by(models.Question.person_id)
+    )
     people = (models.Person.query
                 .filter(models.Person.cdep_id)
-                .order_by('name'))
+                .order_by('name')
+                .options(subqueryload(models.Person.county)))
     return flask.render_template('questions/person_index.html', **{
-        'people': people,
+        'people': [{
+                'id': p.id,
+                'name': p.name,
+                'county_name': p.county.name if p.county else '',
+                'question_count': question_count_for_person.get(p.id, 0),
+            } for p in people],
     })
 
 
