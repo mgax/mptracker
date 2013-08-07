@@ -9,3 +9,9 @@ def test_match_string_in_text():
     assert match[0]['name'] == 'there'
     assert match[0]['token'].start == 6
     assert match[0]['token'].end == 11
+
+
+def test_match_single_name_per_token():
+    text = "hello theer world"
+    match = match_names(text, ['there', 'theer'])
+    assert [m['name'] for m in match] == ['theer']
