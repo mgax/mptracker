@@ -155,17 +155,18 @@ def person_index():
                    func.count(models.Question.person_id))
             .group_by(models.Question.person_id)
     )
-    people = (models.Person.query
+    people_rows = (models.Person.query
                 .filter(models.Person.cdep_id)
-                .order_by('name')
                 .options(subqueryload(models.Person.county)))
-    return flask.render_template('questions/person_index.html', **{
-        'people': [{
+    people = [{
                 'id': p.id,
                 'name': p.name,
                 'county_name': p.county.name if p.county else '',
                 'question_count': question_count_for_person.get(p.id, 0),
-            } for p in people],
+            } for p in people_rows]
+    people.sort(key=lambda p: p['question_count'], reverse=True)
+    return flask.render_template('questions/person_index.html', **{
+        'people': people,
     })
 
 
