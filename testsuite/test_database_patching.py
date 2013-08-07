@@ -56,6 +56,13 @@ def test_update_existing_records(patcher):
     assert sorted([t.name for t in Thing.query]) == ["Annette", "Bob"]
 
 
+def test_refuse_to_create_records(patcher):
+    from mptracker.common import RowNotFound
+    records = [{'code': 'an', 'name': "Anne"}]
+    with pytest.raises(RowNotFound):
+        patcher.update(records, create=False)
+
+
 def test_twin_natural_key(patcher_twin_key):
     records = [{'code': 'an', 'number': 1, 'name': "Anne"},
                {'code': 'bo', 'number': 2, 'name': "Bob"}]

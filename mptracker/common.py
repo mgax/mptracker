@@ -21,6 +21,10 @@ def temp_dir():
         tmp.rmtree()
 
 
+class RowNotFound(Exception):
+    """ Could not find row to match key. """
+
+
 class TablePatcher:
 
     def __init__(self, model, session, key_columns):
@@ -36,7 +40,7 @@ class TablePatcher:
     def dict_key(self, record):
         return tuple(record.get(k) for k in self.key_columns)
 
-    def update(self, data):
+    def update(self, data, create=True):
         n_add = n_update = n_ok = 0
 
         for record in data:
@@ -44,9 +48,13 @@ class TablePatcher:
             row = self.existing.get(key)
 
             if row is None:
-                row = self.model()
-                logger.info("Adding %r", key)
-                n_add += 1
+                if create:
+                    row = self.model()
+                    logger.info("Adding %r", key)
+                    n_add += 1
+
+                else:
+                    raise RowNotFound("Could not find row with key=%r" % key)
 
             else:
                 for k in record:
