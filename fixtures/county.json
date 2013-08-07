@@ -1,43 +1,43 @@
-{"id": "023b9090-4cf6-43df-a811-7b36677d066c", "name": "Caraș-Severin"}
-{"id": "0d51bb88-9769-472a-886a-09ad6d12fb15", "name": "Covasna"}
-{"id": "10c59443-f383-4ffb-8a7a-354ff49c9cc4", "name": "Bacău"}
-{"id": "1218b2ec-707f-4ed3-99b2-d74d3a608c48", "name": "Timiș"}
-{"id": "1519f22c-4412-45d5-a76d-a2b1cc2ed603", "name": "Satu-Mare"}
-{"id": "18b62e29-5d0a-48f6-a419-017bb3014948", "name": "Cluj"}
-{"id": "190cd24f-9381-48d3-8e9c-8091152f035d", "name": "Giurgiu"}
-{"id": "1e4d355e-4848-4bf0-835c-9abe10c0efca", "name": "Vrancea"}
-{"id": "286d908d-244d-432d-baae-af84738f5574", "name": "Mehedinți"}
-{"id": "2ccb6c19-f988-4724-94b0-7509f7ccfd99", "name": "Sălaj"}
-{"id": "381239a8-dbc6-4c9f-8f8b-6d52f4eb4a2e", "name": "Maramureș"}
-{"id": "3854543a-abe5-415a-864d-3dd2f386cd25", "name": "Constanța"}
-{"id": "3a385b8b-8272-41c6-bad5-e3d6b55a632c", "name": "Brașov"}
-{"id": "3c239c4b-b189-4131-bbea-be49e087bec3", "name": "Dâmbovița"}
-{"id": "3f1acfaf-a375-48b5-826d-8594b377f990", "name": "Iași"}
-{"id": "47acde04-4584-4162-975d-4dc1477493c6", "name": "Brăila"}
-{"id": "492c726b-1aae-4fce-ad16-3e8c1972f931", "name": "Sibiu"}
-{"id": "5b6bb0e8-6918-4cd2-b132-e80b7459423d", "name": "Bistrița Năsăud"}
-{"id": "61862586-0e4c-4c95-8835-ec7d0269852f", "name": "Vaslui"}
-{"id": "68d7fb20-66da-4705-9cae-d64d8cba14c8", "name": "București"}
-{"id": "6d7f7806-e681-42c9-ae12-bbac2af3e143", "name": "Arad"}
-{"id": "6dc95188-54b1-4d3e-bbde-dfe139672e6e", "name": "Mureș"}
-{"id": "723e5c9e-e346-4d0e-a74c-f0248d490b36", "name": "Prahova"}
-{"id": "8839c93e-7918-4ace-a202-83a002443177", "name": "Diaspora"}
-{"id": "98a6bd7c-63a8-4d01-8146-58424f337d88", "name": "Dolj"}
-{"id": "9b383f4f-83af-46a5-84ec-af508ceb1fd5", "name": "Argeș"}
-{"id": "9c071ff1-a970-4732-b517-14cfb75eb462", "name": "Vâlcea"}
-{"id": "9c14ace4-61ac-4d83-8538-b1dbfc9c51ba", "name": "Neamț"}
-{"id": "a02274c8-0a31-42ac-85d4-2f451df009ff", "name": "Gorj"}
-{"id": "a15891bc-3234-4cc8-82f9-b503608344b8", "name": "Călărași"}
-{"id": "a413aa8e-de0f-4c04-9097-0eb8efc48f34", "name": "Ilfov"}
-{"id": "a84b80ab-1159-4238-8e71-df07b7520941", "name": "Alba"}
-{"id": "ac2d45f7-936b-442a-9dce-7eeb6cb89ef2", "name": "Botoșani"}
-{"id": "b4f6d9b8-5d7a-45ad-a72b-acc1b6d5adc1", "name": "Harghita"}
-{"id": "b9960cbd-22b4-4de7-915b-6f3c7bd5de62", "name": "Galați"}
-{"id": "bd9801db-abab-4130-8c94-b0a50f65e46d", "name": "Tulcea"}
-{"id": "d0827640-e5f9-4e1d-9c30-6220ce276f2d", "name": "Suceava"}
-{"id": "d0d4a17d-6dc5-4b96-b8d8-c6729493cb2e", "name": "Olt"}
-{"id": "d1746bb7-e208-4732-b616-4c3e4e64d080", "name": "Buzău"}
-{"id": "e449cd1e-4e97-4a1a-ac7b-2bda9eb4d4a5", "name": "Hunedoara"}
-{"id": "e6a3905d-1305-493b-8cba-d6c936da2888", "name": "Ialomița"}
-{"id": "f0e5b313-11c2-411f-acd3-6b55d582c464", "name": "Teleorman"}
-{"id": "fc5731cb-62c8-43d9-92b5-3a88e6d95b8e", "name": "Bihor"}
+{"geonames_code": 12, "id": "023b9090-4cf6-43df-a811-7b36677d066c", "name": "Cara\u0219-Severin"}
+{"geonames_code": 15, "id": "0d51bb88-9769-472a-886a-09ad6d12fb15", "name": "Covasna"}
+{"geonames_code": 4, "id": "10c59443-f383-4ffb-8a7a-354ff49c9cc4", "name": "Bac\u0103u"}
+{"geonames_code": 36, "id": "1218b2ec-707f-4ed3-99b2-d74d3a608c48", "name": "Timi\u0219"}
+{"geonames_code": 32, "id": "1519f22c-4412-45d5-a76d-a2b1cc2ed603", "name": "Satu-Mare"}
+{"geonames_code": 13, "id": "18b62e29-5d0a-48f6-a419-017bb3014948", "name": "Cluj"}
+{"geonames_code": 42, "id": "190cd24f-9381-48d3-8e9c-8091152f035d", "name": "Giurgiu"}
+{"geonames_code": 40, "id": "1e4d355e-4848-4bf0-835c-9abe10c0efca", "name": "Vrancea"}
+{"geonames_code": 26, "id": "286d908d-244d-432d-baae-af84738f5574", "name": "Mehedin\u021bi"}
+{"geonames_code": 31, "id": "2ccb6c19-f988-4724-94b0-7509f7ccfd99", "name": "S\u0103laj"}
+{"geonames_code": 25, "id": "381239a8-dbc6-4c9f-8f8b-6d52f4eb4a2e", "name": "Maramure\u0219"}
+{"geonames_code": 14, "id": "3854543a-abe5-415a-864d-3dd2f386cd25", "name": "Constan\u021ba"}
+{"geonames_code": 9, "id": "3a385b8b-8272-41c6-bad5-e3d6b55a632c", "name": "Bra\u0219ov"}
+{"geonames_code": 16, "id": "3c239c4b-b189-4131-bbea-be49e087bec3", "name": "D\u00e2mbovi\u021ba"}
+{"geonames_code": 23, "id": "3f1acfaf-a375-48b5-826d-8594b377f990", "name": "Ia\u0219i"}
+{"geonames_code": 8, "id": "47acde04-4584-4162-975d-4dc1477493c6", "name": "Br\u0103ila"}
+{"geonames_code": 33, "id": "492c726b-1aae-4fce-ad16-3e8c1972f931", "name": "Sibiu"}
+{"geonames_code": 6, "id": "5b6bb0e8-6918-4cd2-b132-e80b7459423d", "name": "Bistri\u021ba N\u0103s\u0103ud"}
+{"geonames_code": 38, "id": "61862586-0e4c-4c95-8835-ec7d0269852f", "name": "Vaslui"}
+{"geonames_code": 10, "id": "68d7fb20-66da-4705-9cae-d64d8cba14c8", "name": "Bucure\u0219ti"}
+{"geonames_code": 2, "id": "6d7f7806-e681-42c9-ae12-bbac2af3e143", "name": "Arad"}
+{"geonames_code": 27, "id": "6dc95188-54b1-4d3e-bbde-dfe139672e6e", "name": "Mure\u0219"}
+{"geonames_code": 30, "id": "723e5c9e-e346-4d0e-a74c-f0248d490b36", "name": "Prahova"}
+{"geonames_code": null, "id": "8839c93e-7918-4ace-a202-83a002443177", "name": "Diaspora"}
+{"geonames_code": 17, "id": "98a6bd7c-63a8-4d01-8146-58424f337d88", "name": "Dolj"}
+{"geonames_code": 3, "id": "9b383f4f-83af-46a5-84ec-af508ceb1fd5", "name": "Arge\u0219"}
+{"geonames_code": 39, "id": "9c071ff1-a970-4732-b517-14cfb75eb462", "name": "V\u00e2lcea"}
+{"geonames_code": 28, "id": "9c14ace4-61ac-4d83-8538-b1dbfc9c51ba", "name": "Neam\u021b"}
+{"geonames_code": 19, "id": "a02274c8-0a31-42ac-85d4-2f451df009ff", "name": "Gorj"}
+{"geonames_code": 41, "id": "a15891bc-3234-4cc8-82f9-b503608344b8", "name": "C\u0103l\u0103ra\u0219i"}
+{"geonames_code": 43, "id": "a413aa8e-de0f-4c04-9097-0eb8efc48f34", "name": "Ilfov"}
+{"geonames_code": 1, "id": "a84b80ab-1159-4238-8e71-df07b7520941", "name": "Alba"}
+{"geonames_code": 7, "id": "ac2d45f7-936b-442a-9dce-7eeb6cb89ef2", "name": "Boto\u0219ani"}
+{"geonames_code": 20, "id": "b4f6d9b8-5d7a-45ad-a72b-acc1b6d5adc1", "name": "Harghita"}
+{"geonames_code": 18, "id": "b9960cbd-22b4-4de7-915b-6f3c7bd5de62", "name": "Gala\u021bi"}
+{"geonames_code": 37, "id": "bd9801db-abab-4130-8c94-b0a50f65e46d", "name": "Tulcea"}
+{"geonames_code": 34, "id": "d0827640-e5f9-4e1d-9c30-6220ce276f2d", "name": "Suceava"}
+{"geonames_code": 29, "id": "d0d4a17d-6dc5-4b96-b8d8-c6729493cb2e", "name": "Olt"}
+{"geonames_code": 11, "id": "d1746bb7-e208-4732-b616-4c3e4e64d080", "name": "Buz\u0103u"}
+{"geonames_code": 21, "id": "e449cd1e-4e97-4a1a-ac7b-2bda9eb4d4a5", "name": "Hunedoara"}
+{"geonames_code": 22, "id": "e6a3905d-1305-493b-8cba-d6c936da2888", "name": "Ialomi\u021ba"}
+{"geonames_code": 35, "id": "f0e5b313-11c2-411f-acd3-6b55d582c464", "name": "Teleorman"}
+{"geonames_code": 5, "id": "fc5731cb-62c8-43d9-92b5-3a88e6d95b8e", "name": "Bihor"}
