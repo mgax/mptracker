@@ -200,8 +200,9 @@ def dump(name, columns=None, number=None):
 
 
 @db_manager.command
-def load(name):
+def load(name, update_only=False):
     loader = TableLoader(name)
     patcher = TablePatcher(loader.model, db.session, key_columns=['id'])
-    patcher.update(loader.decode_dict(flask.json.loads(line))
-                   for line in sys.stdin)
+    records = (loader.decode_dict(flask.json.loads(line))
+               for line in sys.stdin)
+    patcher.update(records, create=not update_only)
