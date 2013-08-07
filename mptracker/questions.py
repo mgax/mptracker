@@ -74,8 +74,10 @@ def ocr_question(question_id):
         with pdf_path.open('wb') as f:
             f.write(pdf_data)
         subprocess.check_call(['pdfimages', pdf_path, tmp / 'img'])
-        for image_path in tmp.listdir('img-*'):
-            subprocess.check_call(['tesseract', image_path, image_path],
+        for image_path in sorted(tmp.listdir('img-*'))[:10]:
+            subprocess.check_call(['tesseract',
+                                   image_path, image_path,
+                                   '-l', 'ron'],
                                   stderr=subprocess.DEVNULL)
             text = (image_path + '.txt').text()
             pages.append(text)
