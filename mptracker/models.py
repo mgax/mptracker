@@ -218,12 +218,23 @@ class TableLoader:
 
 
 @db_manager.command
-def dump(name, columns=None, number=None):
+def dump(name, columns=None, number=None, filter=None):
     if columns:
         columns = columns.split(',')
     loader = TableLoader(name)
     count = 0
-    for row in loader.model.query.order_by('id'):
+    query = loader.model.query
+
+    if filter:
+        for filter_spec in filter.split(','):
+            if '=' in filter_spec:
+                name, value = filter_spec.split('=', 1)
+                query = query.filter(getattr(loader.model, name) == value)
+            else:
+                name = filter_spec
+                query = query.filter(getattr(loader.model, name) != None)
+
+    for row in query.order_by('id'):
         print(flask.json.dumps(loader.to_dict(row, columns), sort_keys=True))
         count += 1
         if number is not None:
