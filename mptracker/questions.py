@@ -191,7 +191,8 @@ def person_questions(person_id):
 @questions.route('/questions/<question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
-    match_result = flask.json.loads(question.match_data)
+    match_result = (flask.json.loads(question.match_data)
+                    if question.match_data else None)
 
     return flask.render_template('questions/detail.html', **{
         'person': question.person,
