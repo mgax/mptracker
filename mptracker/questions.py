@@ -148,7 +148,7 @@ def analyze_all(number=None):
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
     def match_and_describe(question):
-        rv = match_question(question)
+        rv = flask.json.loads(question.match_data)
         rv['question'] = question
         return rv
     person = models.Person.query.get_or_404(person_id)
