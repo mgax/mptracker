@@ -2,12 +2,16 @@
 
 
 {% block content %}
-  <h1>{{ person.name }} – întrebări și interpelări</h1>
+  <h1>
+    {% set url = url_for('pages.person', person_id=person.id) %}
+    <a href="{{ url }}">{{ person.name }}</a>
+    – întrebări și interpelări
+  </h1>
 
-  <table>
+  <table class="person-questions">
     <thead>
-      <th>titlu</th>
-      <th>dată</th>
+      <th>Titlu</th>
+      <th>Dată</th>
     </thead>
 
   {% for question in questions %}
