@@ -8,7 +8,7 @@ from path import path
 from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
-from mptracker.nlp import tokenize
+from mptracker.nlp import match_names
 
 
 logger = logging.getLogger(__name__)
@@ -138,22 +138,10 @@ def get_county_names(county_siruta):
 
 
 def match_and_describe(question):
-    from jellyfish import jaro_winkler
-
     with questions.open_resource('placenames/prahova.json', 'r') as f:
         local_names = flask.json.load(f)
-    virgil = models.Person.query.filter_by(cdep_id=159).first()
-    text_tokens = [token for token in tokenize(question.text)]
-    matches = []
-    for token in text_tokens:
-        for name in local_names:
-            distance = jaro_winkler(name, token.text.lower())
-            if distance > .90:
-                matches.append({
-                    'distance': distance,
-                    'name': name,
-                    'token': token,
-                })
+
+    matches = match_names(question.text, local_names)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
                          reverse=True)[:5]
