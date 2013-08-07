@@ -106,20 +106,6 @@ def ocr_all(number=None):
     logger.info("enqueued %d jobs", count)
 
 
-def get_county_names(county_siruta):
-    from sirutalib import SirutaDatabase
-    siruta = SirutaDatabase()
-
-    def walk_siruta(code):
-        name = siruta.get_name(code, prefix=False)
-        yield name
-        for thing in siruta.get_inf_codes(code):
-            yield from walk_siruta(thing)
-
-    names = set(walk_siruta(county_siruta))
-    return sorted(names)
-
-
 def match_and_describe(question):
     local_names = get_placenames(question.person.county.geonames_code)
 
