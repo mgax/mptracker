@@ -21,7 +21,9 @@ word_pattern = re.compile(r'\b' + ANY_PUNCTUATION +
 name_normalization_map = [
     ('-', ' '),
     ('ș', 's'),
+    ('ş', 's'),
     ('ț', 't'),
+    ('ţ', 't'),
     ('ă', 'a'),
     ('â', 'a'),
     ('î', 'i'),
