@@ -4,6 +4,7 @@ import csv
 import logging
 from collections import namedtuple
 from collections import defaultdict
+from functools import lru_cache
 import flask
 from flask.ext.script import Manager
 from path import path
@@ -115,3 +116,11 @@ def load_placenames():
             f.write('\n')
         logger.info("Saved county %s (%s) with %d names",
                     county['name'], county['code'], len(county['place_names']))
+
+
+@lru_cache(100)
+def get_placenames(code):
+    json_name = '%02d.json' % code
+    json_path = path(flask.current_app.root_path) / 'placenames' / json_name
+    with json_path.open('r', encoding='utf-8') as f:
+        return flask.json.load(f)['place_names']

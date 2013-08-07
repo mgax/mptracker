@@ -8,7 +8,7 @@ from path import path
 from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
-from mptracker.nlp import match_names
+from mptracker.nlp import match_names, get_placenames
 
 
 logger = logging.getLogger(__name__)
@@ -121,8 +121,7 @@ def get_county_names(county_siruta):
 
 
 def match_and_describe(question):
-    with questions.open_resource('placenames/prahova.json', 'r') as f:
-        local_names = flask.json.load(f)
+    local_names = get_placenames(30)
 
     mp_info = {
         'name': question.person.name,
