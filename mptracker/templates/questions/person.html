@@ -12,6 +12,7 @@
     <thead>
       <th>Titlu</th>
       <th>Dată</th>
+      <th>Scor</th>
     </thead>
 
   {% for question in questions %}
@@ -21,6 +22,7 @@
         <a href="{{ url }}">{{ question.title|truncate(80) }}</a>
       </td>
       <td>{{ question.date }}</td>
+      <td>{{ question.score }}</td>
     </tr>
   {% endfor %}
   </table>

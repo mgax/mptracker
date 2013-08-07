@@ -173,9 +173,18 @@ def person_index():
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
     person = models.Person.query.get_or_404(person_id)
+    questions = list(person.questions)
+    questions = [{
+            'id': q.id,
+            'title': q.title,
+            'date': q.date,
+            'score': (len(flask.json.loads(q.match_data)['top_matches'])
+                      if q.match_data else 0),
+        } for q in person.questions]
+    questions.sort(key=lambda q: q['score'], reverse=True)
     return flask.render_template('questions/person.html', **{
         'person': person,
-        'questions': list(person.questions),
+        'questions': questions,
     })
 
 
