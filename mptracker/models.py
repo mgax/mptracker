@@ -56,6 +56,7 @@ class Person(db.Model):
 class County(db.Model):
     id = uuid_column()
     name = db.Column(db.String)
+    geonames_code = db.Column(db.Integer)
 
     def __str__(self):
         return self.name
