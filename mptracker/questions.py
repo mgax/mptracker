@@ -106,25 +106,23 @@ def ocr_all(number=None):
     logger.info("enqueued %d jobs", count)
 
 
-def match_and_describe(question):
+def match_question(question):
     local_names = get_placenames(question.person.county.geonames_code)
 
-    mp_info = {
-        'name': question.person.name,
-    }
+    mp_info = {'name': question.person.name}
     matches = match_names(question.text, local_names, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
                          reverse=True)[:10]
-
-    return {
-        'question': question,
-        'top_matches': top_matches,
-    }
+    return {'top_matches': top_matches}
 
 
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
+    def match_and_describe(question):
+        rv = match_question(question)
+        rv['question'] = question
+        return rv
     person = models.Person.query.get_or_404(person_id)
     question_matches = [match_and_describe(q) for q in person.questions]
     return flask.render_template('person_questions.html', **{
