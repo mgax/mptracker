@@ -141,7 +141,10 @@ def match_and_describe(question):
     with questions.open_resource('placenames/prahova.json', 'r') as f:
         local_names = flask.json.load(f)
 
-    matches = match_names(question.text, local_names)
+    mp_info = {
+        'name': question.person.name,
+    }
+    matches = match_names(question.text, local_names, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
                          reverse=True)[:5]

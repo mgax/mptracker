@@ -20,9 +20,12 @@ def tokenize(text):
         yield Token(word, match.start('word'), match.end('word'))
 
 
-def match_names(text, name_list):
+def match_names(text, name_list, mp_info={}):
+    MP_TITLE_LOOKBEHIND_TOKENS = 7
+
     matches = []
-    for token in tokenize(text):
+    tokens = list(tokenize(text))
+    for idx, token in enumerate(tokens):
         token_matches = []
         for name in name_list:
             distance = jaro_winkler(name, token.text.lower())
@@ -35,6 +38,14 @@ def match_names(text, name_list):
 
         if not token_matches:
             continue
+
+        if mp_info.get('name'):
+            mp_name_bits = [t.text.lower() for t in tokenize(mp_info['name'])]
+            recent_tokens = tokens[:idx][- MP_TITLE_LOOKBEHIND_TOKENS:]
+            recent_text_bits = set(t.text.lower() for t in recent_tokens)
+            expected_mp_title_bits = set(mp_name_bits)
+            if expected_mp_title_bits.issubset(recent_text_bits):
+                continue
 
         token_matches.sort(key=lambda m: m['distance'])
         matches.append(token_matches[-1])
