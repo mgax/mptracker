@@ -2,32 +2,13 @@
 
 
 {% block content %}
-  {%- from 'calendar.html' import calendar with context %}
-
   <h1>Openpolitics.ro MP Tracker</h1>
 
-  <div class="home-row">
-    <article class="home-box">
-      <h2>Stenograme</h2>
+  <p>
+    <a href="{{ url_for('.person_index') }}">Toate persoanele</a>
+  </p>
 
-      <div class="calendar">
-        {{ calendar() }}
-      </div>
-    </article>
-  </div>
-
-  <div class="home-row">
-    <article class="home-box people">
-      <h2>Persoane</h2>
-
-      <ul>
-      {% for person in people %}
-        <li>
-          {% set url = url_for('.person', person_id=person.id) %}
-          <a href="{{ url }}">{{ person.name }}</a>
-        </li>
-      {% endfor %}
-      </ul>
-    </article>
-  </div>
+  <p>
+    <a href="{{ url_for('.steno_index') }}">Toate stenogramele</a>
+  </p>
 {% endblock %}

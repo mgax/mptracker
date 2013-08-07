@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'calendar.html' import calendar with context %}
+
+  <h1>Stenograme</h1>
+
+  <div class="calendar">
+    {{ calendar() }}
+  </div>
+{% endblock %}

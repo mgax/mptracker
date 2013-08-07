@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Persoane</h1>
+
+  <article class="people">
+    <ul>
+    {% for person in people %}
+      <li>
+        {% set url = url_for('.person', person_id=person.id) %}
+        <a href="{{ url }}">{{ person.name }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+  </article>
+{% endblock %}
