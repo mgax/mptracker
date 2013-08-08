@@ -123,6 +123,7 @@ def analyze_question(question_id):
     question = models.Question.query.get(question_id)
     result = match_question(question)
     question.match_data = flask.json.dumps(result)
+    question.match_score = len(result['top_matches'])
     models.db.session.commit()
 
 
@@ -180,8 +181,7 @@ def person_questions(person_id):
             'id': q.id,
             'title': q.title,
             'date': q.date,
-            'score': (len(flask.json.loads(q.match_data)['top_matches'])
-                      if q.match_data else 0),
+            'score': q.match_score,
         } for q in person.questions]
     questions.sort(key=lambda q: q['score'], reverse=True)
     return flask.render_template('questions/person.html', **{
