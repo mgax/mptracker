@@ -259,10 +259,10 @@ def load(name, columns=None, update_only=False):
         def filter_record(r):
             return {k: r[k] for k in r if k in columns}
     else:
-        filter_record = lambda x: x
+        filter_record = lambda r: r
     loader = TableLoader(name)
     patcher = TablePatcher(loader.model, db.session, key_columns=['id'])
-    records = (loader.decode_dict(flask.json.loads(line))
+    records = (filter_record(loader.decode_dict(flask.json.loads(line)))
                for line in sys.stdin)
     patcher.update(records, create=not update_only)
 
