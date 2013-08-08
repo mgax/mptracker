@@ -118,6 +118,7 @@ def match_question(question):
 
 
 @job
+@questions_manager.command
 def analyze_question(question_id):
     question = models.Question.query.get(question_id)
     result = match_question(question)
