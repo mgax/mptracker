@@ -39,7 +39,10 @@ class Person(db.Model):
         backref=db.backref('people', lazy='dynamic'))
 
     def __str__(self):
-        return "<{p.name}>".format(p=self)
+        return "{p.name}".format(p=self)
+
+    def __repr__(self):
+        return "<%s>" % self
 
     @classmethod
     def get_or_create_non_mp(cls, name):
@@ -60,6 +63,9 @@ class County(db.Model):
 
     def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return "<%s>" % self
 
 
 class StenoChapter(db.Model):
@@ -104,7 +110,10 @@ class Question(db.Model):
         backref=db.backref('questions', lazy='dynamic'))
 
     def __str__(self):
-        return "<{q.number}/{q.date}>".format(q=self)
+        return "{q.number}/{q.date}".format(q=self)
+
+    def __repr__(self):
+        return "<%s>" % self
 
 
 class User(db.Model, UserMixin):

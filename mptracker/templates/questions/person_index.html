@@ -14,7 +14,10 @@
     <tbody>
     {% for person in people %}
       <tr>
-        <td>{{ person.name }}</td>
+        <td>
+          {% set url = url_for('pages.person', person_id=person.id) %}
+          <a href="{{ url }}">{{ person.name }}</a>
+        </td>
         <td>{{ person.county_name }}</td>
         <td>
           {% set url = url_for('.person_questions', person_id=person.id) %}
