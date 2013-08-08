@@ -1,4 +1,4 @@
--e git+https://github.com/mgax/chaussette.git@301e4baa2b5251e780a66b37c4478d4b51776c80#egg=chaussette-dev
+-e git+https://github.com/mgax/chaussette.git@da52e054937582a74e903eb05e3ea035a0fb8911#egg=chaussette-dev
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
 -e git+https://github.com/mgax/raven-python.git@0b3a3e74ee6a21291d2fa59bcc6ee161d25c0b27#egg=raven-dev
 -e git+https://github.com/mgax/rq.git@328e7611d39ad989435e3fa6c1aa32879185c515#egg=rq-dev
