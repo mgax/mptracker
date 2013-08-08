@@ -56,7 +56,9 @@ class QuestionScraper(Scraper):
                 'Informaţii privind interpelarea')
 
         question.pdf_url = None
-        question.addressee = None
+        question.addressee = []
+
+        label_text = None
 
         for row in rows:
             norm_text = self.normalize_space(row.text())
@@ -66,7 +68,12 @@ class QuestionScraper(Scraper):
                 break
 
             [label, value] = [pq(el) for el in row[0]]
-            label_text = label.text()
+            new_label_text = label.text()
+            if new_label_text:
+                label_text = new_label_text
+            else:
+                if label_text != 'Destinatari:':
+                    continue
 
             if label_text == 'Nr.înregistrare:':
                 question.number = value.text()
@@ -74,9 +81,9 @@ class QuestionScraper(Scraper):
                 question.date = self.parse_date_dmy(value.text())
             elif label_text == 'Mod adresare:':
                 question.address_method = value.text()
-            elif label_text == 'Destinatar:':
+            elif label_text in ['Destinatar:', 'Destinatari:']:
                 ministry_el = list(pqitems(value, 'b'))[0]
-                question.addressee = ministry_el.text()
+                question.addressee.append(ministry_el.text())
             elif label_text == 'Adresant:' or label_text == 'Adresanţi:':
                 (question.person_name, question.person_cdep_id) = \
                     self.person_from_td(value)

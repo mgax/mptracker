@@ -27,7 +27,7 @@ def questions():
             'title':     question.title,
             'url':       question.url,
             'pdf_url':   question.pdf_url,
-            'addressee': question.addressee,
+            'addressee': '; '.join(question.addressee),
             'date':      question.date,
             'person':    person,
         }
