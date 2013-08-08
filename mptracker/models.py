@@ -1,12 +1,15 @@
 import sys
+import os
 import logging
 import uuid
 import argparse
+from datetime import datetime
 import flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.login import UserMixin
-from mptracker.common import parse_date, TablePatcher
+from path import path
+from mptracker.common import parse_date, TablePatcher, temp_dir
 
 
 logger = logging.getLogger(__name__)
@@ -222,7 +225,7 @@ class TableLoader:
 
 
 @db_manager.command
-def dump(name, columns=None, number=None, filter=None):
+def dump(name, columns=None, number=None, filter=None, _file=sys.stdout):
     if columns:
         columns = columns.split(',')
     loader = TableLoader(name)
@@ -239,11 +242,14 @@ def dump(name, columns=None, number=None, filter=None):
                 query = query.filter(getattr(loader.model, name) != None)
 
     for row in query.order_by('id'):
-        print(flask.json.dumps(loader.to_dict(row, columns), sort_keys=True))
+        flask.json.dump(loader.to_dict(row, columns), _file, sort_keys=True)
+        _file.write('\n')
         count += 1
         if number is not None:
             if count >= int(number):
                 break
+
+    return count
 
 
 @db_manager.command
@@ -253,3 +259,31 @@ def load(name, update_only=False):
     records = (loader.decode_dict(flask.json.loads(line))
                for line in sys.stdin)
     patcher.update(records, create=not update_only)
+
+
+def create_backup(backup_path):
+    import zipfile
+    model_map = get_model_map()
+    with temp_dir() as tmp:
+        zip_path = tmp / 'dump.zip'
+        zip_archive = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
+        for name in model_map:
+            print(name, end=' ... ')
+            file_name = '%s.json' % name
+            file_path = tmp / file_name
+            with open(file_path, 'w', encoding='utf-8') as table_fd:
+                count = dump(name, _file=table_fd)
+            print(count, 'rows')
+            zip_archive.write(file_path, file_name)
+            file_path.unlink()
+        zip_archive.close()
+        zip_path.rename(backup_path)
+
+
+@db_manager.command
+def backup():
+    backup_dir = path(os.environ['BACKUP_DIR'])
+    backup_name = datetime.utcnow().strftime('backup-%Y-%m-%d-%H%M%S.zip')
+    backup_path = backup_dir / backup_name
+    create_backup(backup_path)
+    print("Backup at %s (%d bytes)" % (backup_path, backup_path.size))
