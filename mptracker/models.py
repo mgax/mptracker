@@ -104,6 +104,7 @@ class Question(db.Model):
     url = db.Column(db.String)
     pdf_url = db.Column(db.String)
     type = db.Column(db.String)
+    method = db.Column(db.String)
     addressee = db.Column(db.String)
     text = db.Column(db.Text)
     match_data = db.Column(db.Text)
