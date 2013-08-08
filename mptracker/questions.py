@@ -183,7 +183,7 @@ def person_questions(person_id):
             'date': q.date,
             'score': q.match_score,
         } for q in person.questions]
-    questions.sort(key=lambda q: q['score'], reverse=True)
+    questions.sort(key=lambda q: q['score'] or 0, reverse=True)
     return flask.render_template('questions/person.html', **{
         'person': person,
         'questions': questions,
