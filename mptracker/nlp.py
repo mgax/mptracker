@@ -61,9 +61,15 @@ def match_names(text, name_list, mp_info={}):
 
     matches = []
     tokens = list(tokenize(text))
-    for idx, token in enumerate(tokens):
+    for idx in range(len(tokens)):
         token_matches = []
         for name in name_list:
+            name_words = name.split()
+            if idx + len(name_words) > len(tokens):
+                continue
+            token_window = tokens[idx : idx + len(name_words)]
+            token = join_tokens(token_window)
+
             distance = jaro_winkler(normalize(name), normalize(token.text))
             if distance >= DISTANCE_THRESHOLD:
                 token_matches.append({
