@@ -21,3 +21,7 @@ def test_join_tokens():
     assert big_token.text == 'there world'
     assert big_token.start == 9
     assert big_token.end == 21
+
+
+def test_split_at_hyphen():
+    assert [t.text for t in tokenize("cluj-napoca")] == ['cluj', 'napoca']

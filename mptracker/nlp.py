@@ -64,7 +64,7 @@ def match_names(text, name_list, mp_info={}):
     for idx in range(len(tokens)):
         token_matches = []
         for name in name_list:
-            name_words = name.split()
+            name_words = [t.text for t in tokenize(name)]
             if idx + len(name_words) > len(tokens):
                 continue
             token_window = tokens[idx : idx + len(name_words)]

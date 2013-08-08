@@ -39,3 +39,10 @@ def test_match_multiple_words():
     assert match[0]['token'].text == "complicated bit"
     assert match[0]['token'].start == 14
     assert match[0]['token'].end == 29
+
+
+def test_match_words_with_hyphen():
+    text = "something fishy at cluj-napoca today"
+    match = match_names(text, ["Cluj-Napoca"])
+    assert [m['name'] for m in match] == ["Cluj-Napoca"]
+    assert match[0]['token'].text == "cluj napoca"
