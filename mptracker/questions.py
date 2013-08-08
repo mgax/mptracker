@@ -18,6 +18,18 @@ questions = flask.Blueprint('questions', __name__)
 
 questions_manager = Manager()
 
+other_phrases = [
+    'memoriu',
+    'memoriul',
+    'petiție',
+    'petiția',
+    'audiență',
+    'audiențe',
+    'cabinet parlamentar',
+    'cabinetul parlamentar',
+    'cabinetul meu parlamentar',
+]
+
 
 @job
 def ocr_question(question_id):
@@ -65,9 +77,10 @@ def ocr_all(number=None):
 
 def match_question(question):
     local_names = get_placenames(question.person.county.geonames_code)
+    all_names = local_names + other_phrases
 
     mp_info = {'name': question.person.name}
-    matches = match_names(question.text, local_names, mp_info=mp_info)
+    matches = match_names(question.text, all_names, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
                          reverse=True)[:10]
