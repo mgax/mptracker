@@ -29,6 +29,14 @@ name_normalization_map = [
     ('î', 'i'),
 ]
 
+stop_words = set([
+    'romani',
+    'valea',
+    'langa',
+    'lege',
+    'legii',
+])
+
 nlp_manager = Manager()
 
 
@@ -64,6 +72,8 @@ def match_names(text, name_list, mp_info={}):
     for idx in range(len(tokens)):
         token_matches = []
         for name in name_list:
+            if name in stop_words:
+                continue
             name_words = [t.text for t in tokenize(name)]
             if idx + len(name_words) > len(tokens):
                 continue
