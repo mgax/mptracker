@@ -100,11 +100,11 @@ class QuestionScraper(Scraper):
 
 def scrape_question_list():
     import csv
-    steno_scraper = QuestionScraper(get_cached_session())
+    questions_scraper = QuestionScraper(get_cached_session())
     out = csv.writer(sys.stdout)
     out.writerow(['person_name', 'person_cdep_id', 'number', 'date', 'type',
                   'title', 'url', 'pdf_url', 'addressee'])
-    for question in steno_scraper.run():
+    for question in questions_scraper.run():
         out.writerow([
             question.person_name,
             question.person_cdep_id,
