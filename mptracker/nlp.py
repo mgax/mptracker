@@ -26,6 +26,14 @@ stop_words = set([
     'legii',
 ])
 
+signature_stop_words = [
+    'circuscripția',
+    'uninominal',
+    'deputat',
+    'deputatul',
+    'electorală',
+]
+
 
 def normalize(name):
     name = name.lower()
@@ -78,16 +86,21 @@ def match_names(text, name_list, mp_info={}):
         if not token_matches:
             continue
 
-        if mp_info.get('name'):
-            mp_name_bits = [normalize(t.text)
-                            for t in tokenize(mp_info['name'])]
+        token_matches.sort(key=lambda m: m['distance'])
+        top_match = token_matches[-1]
+
+        if (normalize(top_match['name']) ==
+                normalize(mp_info.get('county_name') or '')):
+            mp_name_bits = [t.text for t in tokenize(mp_info.get('name', ''))]
+            signature_bits = set(normalize(word) for word in
+                                 mp_name_bits + signature_stop_words)
+
             recent_tokens = tokens[:idx][- MP_TITLE_LOOKBEHIND_TOKENS:]
             recent_text_bits = set(normalize(t.text) for t in recent_tokens)
-            expected_mp_title_bits = set(mp_name_bits)
-            if len(expected_mp_title_bits & recent_text_bits) >= 2:
+
+            if len(signature_bits & recent_text_bits) > 0:
                 continue
 
-        token_matches.sort(key=lambda m: m['distance'])
-        matches.append(token_matches[-1])
+        matches.append(top_match)
 
     return matches

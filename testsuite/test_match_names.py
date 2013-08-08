@@ -17,11 +17,20 @@ def test_match_single_name_per_token():
     assert [m['name'] for m in match] == ['theer']
 
 
-def test_ignore_mp_constituency():
+def test_ignore_signature_because_of_mp_name():
     text = ("foo bar baz blah blah blah Domnul VIRGIL GURAN, Deputat PNL "
             "Prahova Obiectul întrebării Modificarea Legii Sinaia foo bar")
     match = match_names(text, ['prahova', 'sinaia'],
-                        mp_info={'name': "Guran Virgil"})
+                        mp_info={'name': "Guran Virgil",
+                                 'county_name': "Prahova"})
+    assert [m['name'] for m in match] == ['sinaia']
+
+
+def test_ignore_signature_because_of_stop_words():
+    text = ("Domnul VIRGIL GURAN, foo bar baz blah blah blah Deputat PNL "
+            "Prahova Obiectul întrebării Modificarea Legii Sinaia foo bar")
+    match = match_names(text, ['prahova', 'sinaia'],
+                        mp_info={'county_name': "Prahova"})
     assert [m['name'] for m in match] == ['sinaia']
 
 

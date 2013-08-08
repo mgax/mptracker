@@ -7,7 +7,7 @@ from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
 from mptracker.nlp import match_names
-from mptracker.placenames import get_placenames
+from mptracker.placenames import get_county_data
 
 
 logger = logging.getLogger(__name__)
@@ -75,10 +75,14 @@ def ocr_all(number=None):
 
 
 def match_question(question):
-    local_names = get_placenames(question.person.county.geonames_code)
+    county_data = get_county_data(question.person.county.geonames_code)
+    local_names = county_data['place_names']
     all_names = local_names + other_phrases
 
-    mp_info = {'name': question.person.name}
+    mp_info = {
+        'name': question.person.name,
+        'county_name': county_data['name'],
+    }
     matches = match_names(question.text, all_names, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],

@@ -50,9 +50,9 @@ def load_placenames():
 
 
 @lru_cache(100)
-def get_placenames(code):
+def get_county_data(code):
     json_name = '%02d.json' % code
     json_path = (path(flask.current_app.root_path) /
                  'placename_data' / json_name)
     with json_path.open('r', encoding='utf-8') as f:
-        return flask.json.load(f)['place_names']
+        return flask.json.load(f)
