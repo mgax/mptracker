@@ -1,0 +1,7 @@
+{% extends 'admin/model/list.html' %}
+
+
+{% block list_row_actions %}
+  {% set url = url_for('questions.question_detail', question_id=row.id) %}
+  <a href="{{ url }}">view</a>
+{% endblock %}

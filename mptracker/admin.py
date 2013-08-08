@@ -31,5 +31,6 @@ admin.add_view(PersonView(models.Person, models.db.session))
 class QuestionView(AuthView):
 
     column_searchable_list = ['title', 'text']
+    list_template = 'questions/admin_list.html'
 
 admin.add_view(QuestionView(models.Question, models.db.session))
