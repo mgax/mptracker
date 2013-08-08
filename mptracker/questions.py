@@ -1,14 +1,13 @@
-import csv
 import logging
 import subprocess
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
-from path import path
 from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
-from mptracker.nlp import match_names, get_placenames
+from mptracker.nlp import match_names
+from mptracker.placenames import get_placenames
 
 
 logger = logging.getLogger(__name__)
