@@ -75,7 +75,8 @@ class QuestionScraper(Scraper):
             elif label_text == 'Mod adresare:':
                 question.address_method = value.text()
             elif label_text == 'Destinatar:':
-                question.addressee = value.text()
+                ministry_el = list(pqitems(value, 'b'))[0]
+                question.addressee = ministry_el.text()
             elif label_text == 'Adresant:' or label_text == 'Adresanţi:':
                 (question.person_name, question.person_cdep_id) = \
                     self.person_from_td(value)
