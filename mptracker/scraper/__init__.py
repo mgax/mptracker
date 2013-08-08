@@ -24,6 +24,7 @@ def questions():
         q_data = {
             'number':    question.number,
             'type':      question.q_type,
+            'method':    question.method,
             'title':     question.title,
             'url':       question.url,
             'pdf_url':   question.pdf_url,

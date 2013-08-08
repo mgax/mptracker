@@ -57,6 +57,7 @@ class QuestionScraper(Scraper):
 
         question.pdf_url = None
         question.addressee = []
+        question.method = None
 
         label_text = None
 
@@ -80,7 +81,7 @@ class QuestionScraper(Scraper):
             elif label_text == 'Data înregistrarii:':
                 question.date = self.parse_date_dmy(value.text())
             elif label_text == 'Mod adresare:':
-                question.address_method = value.text()
+                question.method = value.text()
             elif label_text in ['Destinatar:', 'Destinatari:']:
                 ministry_el = list(pqitems(value, 'b'))[0]
                 question.addressee.append(ministry_el.text())
