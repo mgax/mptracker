@@ -127,12 +127,13 @@ def analyze_question(question_id):
 
 
 @questions_manager.command
-def analyze_all(number=None):
+def analyze_all(number=None, force=False):
     n_jobs = n_skip = n_ok = 0
     for question in models.Question.query:
-        if question.match_data is not None:
-            n_ok += 1
-            continue
+        if not force:
+            if question.match_data is not None:
+                n_ok += 1
+                continue
         county = question.person.county
         if (question.text is None or
             county is None or
