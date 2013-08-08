@@ -4,6 +4,9 @@
 {% block content %}
   <h1>{{ person.name }} – întrebări și interpelări</h1>
   <p>{{ question.title }} ({{ question.date }})</p>
+  <p>
+    <a href="{{ question.url }}">{{ question.url }}</a>
+  </p>
 
   <section class="question-analysis">
     <div class="question-analysis-heading">
