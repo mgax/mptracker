@@ -261,21 +261,33 @@ def load(name, update_only=False):
     patcher.update(records, create=not update_only)
 
 
+@db_manager.command
+def dump_tables(folder_path, xclude=None):
+    if xclude:
+        exclude = xclude.split(',')
+    else:
+        exclude = []
+    folder_path = path(folder_path)
+    model_map = get_model_map()
+    for name in model_map:
+        if name in exclude:
+            continue
+        print(name, end=' ... ')
+        file_name = '%s.json' % name
+        file_path = folder_path / file_name
+        with open(file_path, 'w', encoding='utf-8') as table_fd:
+            count = dump(name, _file=table_fd)
+        print(count, 'rows')
+
+
 def create_backup(backup_path):
     import zipfile
-    model_map = get_model_map()
     with temp_dir() as tmp:
         zip_path = tmp / 'dump.zip'
         zip_archive = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
-        for name in model_map:
-            print(name, end=' ... ')
-            file_name = '%s.json' % name
-            file_path = tmp / file_name
-            with open(file_path, 'w', encoding='utf-8') as table_fd:
-                count = dump(name, _file=table_fd)
-            print(count, 'rows')
+        dump_tables(tmp)
+        for file_path in tmp.listdir():
             zip_archive.write(file_path, file_name)
-            file_path.unlink()
         zip_archive.close()
         zip_path.rename(backup_path)
 
