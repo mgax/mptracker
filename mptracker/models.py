@@ -189,16 +189,6 @@ def drop(names):
         table.drop(engine, checkfirst=True)
 
 
-@db_manager.command
-def flush_steno(no_create=False):
-    engine = db.get_engine(flask.current_app)
-    for model in [StenoChapter, StenoParagraph]:
-        table = model.__table__
-        table.drop(engine, checkfirst=True)
-        if not no_create:
-            table.create(engine)
-
-
 def get_model_map():
     reg = db.Model._decl_class_registry
     models = [reg[k] for k in reg if not k.startswith('_')]
