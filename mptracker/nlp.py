@@ -52,7 +52,7 @@ def tokenize(text):
 
 def match_names(text, name_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
-    DISTANCE_THRESHOLD = .95
+    DISTANCE_THRESHOLD = .97
 
     matches = []
     tokens = list(tokenize(text))

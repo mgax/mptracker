@@ -2,13 +2,13 @@ from mptracker.nlp import match_names
 
 
 def test_match_string_in_text():
-    text = "hello theer world"
-    match = match_names(text, ['foo', 'there', 'bar'])
+    text = "hello somethingtheer world"
+    match = match_names(text, ['foo', 'somethingthere', 'bar'])
     assert len(match) == 1
-    assert 0.95 < match[0]['distance'] < 0.96
-    assert match[0]['name'] == 'there'
+    assert 0.98 < match[0]['distance'] < 0.99
+    assert match[0]['name'] == 'somethingthere'
     assert match[0]['token'].start == 6
-    assert match[0]['token'].end == 11
+    assert match[0]['token'].end == 20
 
 
 def test_match_single_name_per_token():
