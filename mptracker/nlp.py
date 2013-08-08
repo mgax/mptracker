@@ -76,7 +76,7 @@ def match_names(text, name_list, mp_info={}):
             recent_tokens = tokens[:idx][- MP_TITLE_LOOKBEHIND_TOKENS:]
             recent_text_bits = set(normalize(t.text) for t in recent_tokens)
             expected_mp_title_bits = set(mp_name_bits)
-            if expected_mp_title_bits.issubset(recent_text_bits):
+            if len(expected_mp_title_bits & recent_text_bits) >= 2:
                 continue
 
         token_matches.sort(key=lambda m: m['distance'])
