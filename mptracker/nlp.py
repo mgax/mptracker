@@ -50,6 +50,11 @@ def tokenize(text):
         yield Token(word, match.start('word'), match.end('word'))
 
 
+def join_tokens(tokens):
+    text = ' '.join(t.text for t in tokens)
+    return Token(text, tokens[0].start, tokens[-1].end)
+
+
 def match_names(text, name_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
     DISTANCE_THRESHOLD = .97
