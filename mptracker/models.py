@@ -199,14 +199,17 @@ def flush_steno(no_create=False):
             table.create(engine)
 
 
-class TableLoader:
+def get_model_map():
+    reg = db.Model._decl_class_registry
+    models = [reg[k] for k in reg if not k.startswith('_')]
+    return {m.__tablename__: m for m in models}
 
-    model_map = {model.__tablename__: model for model in
-                 [Person, County, StenoParagraph, StenoChapter, Question]}
+
+class TableLoader:
 
     def __init__(self, name):
         self.table_name = name
-        self.model = self.model_map[name]
+        self.model = get_model_map()[name]
         self.columns = []
         self.encoder = {}
         self.decoder = {}
