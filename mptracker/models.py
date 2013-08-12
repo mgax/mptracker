@@ -164,6 +164,7 @@ db_manager = Manager()
 @db_manager.command
 def sync():
     db.create_all()
+    alembic(['stamp', 'head'])
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
