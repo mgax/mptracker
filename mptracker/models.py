@@ -34,7 +34,7 @@ db = SQLAlchemy()
 
 class Person(db.Model):
     id = uuid_column()
-    name = db.Column(db.String)
+    name = db.Column(db.Text)
     cdep_id = db.Column(db.Integer)
 
     county_id = db.Column(uuid_type(), db.ForeignKey('county.id'))
@@ -61,7 +61,7 @@ class Person(db.Model):
 
 class County(db.Model):
     id = uuid_column()
-    name = db.Column(db.String)
+    name = db.Column(db.Text)
     geonames_code = db.Column(db.Integer)
 
     def __str__(self):
@@ -74,8 +74,8 @@ class County(db.Model):
 class StenoChapter(db.Model):
     id = uuid_column()
     date = db.Column(db.Date, index=True)
-    headline = db.Column(db.String)
-    serial = db.Column(db.String, index=True)
+    headline = db.Column(db.Text)
+    serial = db.Column(db.Text, index=True)
 
     @property
     def serial_number(self):
@@ -85,7 +85,7 @@ class StenoChapter(db.Model):
 class StenoParagraph(db.Model):
     id = uuid_column()
     text = db.Column(db.Text)
-    serial = db.Column(db.String, index=True)
+    serial = db.Column(db.Text, index=True)
 
     chapter_id = db.Column(uuid_type(), db.ForeignKey('steno_chapter.id'))
     chapter = db.relationship('StenoChapter',
@@ -98,14 +98,14 @@ class StenoParagraph(db.Model):
 
 class Question(db.Model):
     id = uuid_column()
-    number = db.Column(db.String)
+    number = db.Column(db.Text)
     date = db.Column(db.Date, index=True)
-    title = db.Column(db.String)
-    url = db.Column(db.String)
-    pdf_url = db.Column(db.String)
-    type = db.Column(db.String)
-    method = db.Column(db.String)
-    addressee = db.Column(db.String)
+    title = db.Column(db.Text)
+    url = db.Column(db.Text)
+    pdf_url = db.Column(db.Text)
+    type = db.Column(db.Text)
+    method = db.Column(db.Text)
+    addressee = db.Column(db.Text)
     text = db.Column(db.Text)
     match_data = db.Column(db.Text)
     match_score = db.Column(db.Float)
@@ -123,7 +123,7 @@ class Question(db.Model):
 
 class User(db.Model, UserMixin):
     id = uuid_column()
-    email = db.Column(db.String)
+    email = db.Column(db.Text)
 
     @classmethod
     def get_or_create(cls, email, autosave=True):
