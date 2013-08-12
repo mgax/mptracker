@@ -57,6 +57,15 @@ def worker():
 
 
 @manager.command
+def requeue_failed():
+    from rq import get_failed_queue
+    from flask.ext.rq import get_connection
+    failed = get_failed_queue(get_connection())
+    for job in failed.get_jobs():
+        failed.requeue(job.id)
+
+
+@manager.command
 def import_people():
     from mptracker.scraper.common import get_cached_session
     from mptracker.scraper.people import PersonScraper
