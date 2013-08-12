@@ -2,10 +2,10 @@ from mptracker.nlp import match_names
 
 
 def test_match_string_in_text():
-    text = "hello somethingtheer world"
+    text = "hello soemthingthere world"
     match = match_names(text, ['foo', 'somethingthere', 'bar'])
     assert len(match) == 1
-    assert 0.98 < match[0]['distance'] < 0.99
+    assert 0.97 < match[0]['distance'] < 0.99
     assert match[0]['name'] == 'somethingthere'
     assert match[0]['token'].start == 6
     assert match[0]['token'].end == 20
