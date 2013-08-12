@@ -132,7 +132,7 @@ def person_index():
             .group_by(models.Question.person_id)
     )
     people_rows = (models.Person.query
-                .filter(models.Person.cdep_id)
+                .filter(models.Person.cdep_id != None)
                 .options(subqueryload(models.Person.county)))
     people = [{
                 'id': p.id,
