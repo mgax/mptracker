@@ -1,5 +1,5 @@
+-e git+https://github.com/getsentry/raven-python.git@89156e835bd46ea32b4743b7e5d95db043af6c11#egg=raven-dev
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
--e git+https://github.com/mgax/raven-python.git@0b3a3e74ee6a21291d2fa59bcc6ee161d25c0b27#egg=raven-dev
 -e git+https://github.com/mgax/rq.git@328e7611d39ad989435e3fa6c1aa32879185c515#egg=rq-dev
 -e git+https://github.com/mgax/SIRUTA.git@b9d3a5e0af36a60e450cdc14e6417614df92ed68#egg=SIRUTAlib-dev
 -e git+https://github.com/mitsuhiko/flask-sqlalchemy.git@2edb3f14931eefde4bf467e88f7373704ce1ecd3#egg=Flask_SQLAlchemy-dev
