@@ -10,19 +10,15 @@ from flask.ext.script import Manager
 from flask.ext.login import UserMixin
 from path import path
 from mptracker.common import parse_date, TablePatcher, temp_dir
+from sqlalchemy.dialects.postgresql import UUID
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def uuid_type():
-    return db.CHAR(32)
-
-
 def uuid_column():
-    return db.Column(uuid_type(), primary_key=True,
-                     default=lambda: str(uuid.uuid4()))
+    return db.Column(UUID, primary_key=True)
 
 
 def identity(v):
@@ -37,7 +33,7 @@ class Person(db.Model):
     name = db.Column(db.Text)
     cdep_id = db.Column(db.Integer)
 
-    county_id = db.Column(uuid_type(), db.ForeignKey('county.id'))
+    county_id = db.Column(UUID, db.ForeignKey('county.id'))
     county = db.relationship('County',
         backref=db.backref('people', lazy='dynamic'))
 
@@ -87,11 +83,11 @@ class StenoParagraph(db.Model):
     text = db.Column(db.Text)
     serial = db.Column(db.Text, index=True)
 
-    chapter_id = db.Column(uuid_type(), db.ForeignKey('steno_chapter.id'))
+    chapter_id = db.Column(UUID, db.ForeignKey('steno_chapter.id'))
     chapter = db.relationship('StenoChapter',
         backref=db.backref('paragraphs', lazy='dynamic'))
 
-    person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
+    person_id = db.Column(UUID, db.ForeignKey('person.id'))
     person = db.relationship('Person',
         backref=db.backref('steno_paragraphs', lazy='dynamic'))
 
@@ -110,7 +106,7 @@ class Question(db.Model):
     match_data = db.Column(db.Text)
     match_score = db.Column(db.Float)
 
-    person_id = db.Column(uuid_type(), db.ForeignKey('person.id'))
+    person_id = db.Column(UUID, db.ForeignKey('person.id'))
     person = db.relationship('Person',
         backref=db.backref('questions', lazy='dynamic'))
 
