@@ -20,6 +20,7 @@ lxml==3.2.1
 Mako==0.8.1
 MarkupSafe==0.18
 path.py==4.3
+psycopg2==2.5.1
 pyquery==1.2.4
 python-dateutil==2.1
 pytz==2013b
