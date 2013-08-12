@@ -55,3 +55,9 @@ def test_match_words_with_hyphen():
     match = match_names(text, ["Cluj-Napoca"])
     assert [m['name'] for m in match] == ["Cluj-Napoca"]
     assert match[0]['token'].text == "cluj napoca"
+
+
+def test_match_stemmed_name():
+    text = "azi argeșenele se revoltă"
+    match = match_names(text, ['Argeș'])
+    assert [m['name'] for m in match] == ['Argeș']

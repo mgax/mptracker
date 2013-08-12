@@ -1,6 +1,7 @@
 import re
 from collections import namedtuple
 from jellyfish import jaro_winkler
+from Stemmer import Stemmer
 
 Token = namedtuple('Token', ['text', 'start', 'end'])
 ANY_PUNCTUATION = r'[.,;!?\-()]*'
@@ -34,11 +35,31 @@ signature_stop_words = [
     'electorală',
 ]
 
+extra_stem_suffixes = [
+    'ean', # argeșean
+    'eană', # argeșeană
+    'eni', # argeșeni
+    'ene', # argeșene
+    'en', # ro_stemmer.stemWord('argeșenele') -> argeșen
+]
+
+ro_stemmer = Stemmer('romanian')
+
+
+def stem(word):
+    word = ro_stemmer.stemWord(word)
+    for suffix in extra_stem_suffixes:
+        if word.endswith(suffix):
+            word = word[:-len(suffix)]
+            break
+    return word
+
 
 def normalize(name):
     name = name.lower()
     for ch, new_ch in name_normalization_map:
         name = name.replace(ch, new_ch)
+    name = ' '.join(stem(w) for w in name.split())
     return name
 
 
