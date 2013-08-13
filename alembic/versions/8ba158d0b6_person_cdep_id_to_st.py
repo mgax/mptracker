@@ -32,7 +32,7 @@ def upgrade():
 
     def stringify_cdep_id(row):
         if row.cdep_id_int is not None:
-            return {'cdep_id': '2008-%03d' % row.cdep_id_int}
+            return {'cdep_id': '2012-%03d' % row.cdep_id_int}
 
     migrate_data(table=get_table_definition(),
                  conn=op.get_bind(),
@@ -47,7 +47,7 @@ def downgrade():
 
     def integer_cdep_id(row):
         if row.cdep_id is not None:
-            assert row.cdep_id.startswith('2008-')
+            assert row.cdep_id.startswith('2012-')
             return {'cdep_id_int': int(row.cdep_id.split('-')[1])}
 
     migrate_data(table=get_table_definition(),
