@@ -4,11 +4,10 @@
 {% block content %}
   <h1>{{ person.name }}</h1>
 
-  {% if person.cdep_id %}
+  {% set cdep_url = person.get_cdep_url() %}
+  {% if cdep_url %}
     <p>
-        {% set url = ("http://www.cdep.ro/pls/parlam/structura.mp?idm=" +
-                      person.cdep_id|string + "&cam=2&leg=2012") %}
-        <a href="{{ url }}">{{ url }}</a>
+        <a href="{{ cdep_url }}">{{ cdep_url }}</a>
     </p>
   {% endif %}
 

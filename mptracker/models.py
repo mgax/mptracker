@@ -54,6 +54,14 @@ class Person(db.Model):
             db.session.flush()
             return row
 
+    def get_cdep_url(self):
+        if self.cdep_id is None:
+            return None
+        year, number = self.cdep_id.split('-')
+        return ("http://www.cdep.ro/pls/parlam/structura.mp"
+                "?idm={number}&cam=2&leg={year}"
+                .format(year=int(year), number=int(number)))
+
 
 class County(db.Model):
     id = uuid_column()
