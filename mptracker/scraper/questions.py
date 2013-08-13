@@ -28,7 +28,9 @@ class Question:
 
 class QuestionScraper(Scraper):
 
-    title_pattern = re.compile(r'^(?P<type>Întrebarea|Interpelarea) nr\.')
+    title_pattern = re.compile(r'^(?P<type>Întrebarea|Interpelarea) '
+                               r'(adresată .*)?'
+                               r'nr\.')
     types = {
         'Întrebarea': 'question',
         'Interpelarea': 'interpelation',

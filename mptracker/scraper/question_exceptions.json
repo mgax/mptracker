@@ -1,5 +1,9 @@
 {
   "patch": {
+    "2004-03-22-1918A": {
+      "person_name": "Gheorghe-Eugen Nicolăescu",
+      "person_cdep_id": "2000-215"
+    },
     "2008-02-12-4145A": {
       "person_name": "Diana Maria Buşoi",
       "person_cdep_id": "2004-358"
@@ -18,6 +22,8 @@
   "url_skip": [
     "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=17275&idl=1",
     "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=17669&idl=1",
-    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=13100&idl=1"
+    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=13100&idl=1",
+    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=17313&idl=1",
+    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=18299&idl=1"
   ]
 }
