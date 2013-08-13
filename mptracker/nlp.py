@@ -36,7 +36,7 @@ signature_stop_words = [
 
 stem_suffixes = [
     'ean', # argeșean
-    'eană', # argeșeană
+    'eana', # argeșeană
     'eni', # argeșeni
     'ene', # argeșene
     'enii', # argeșenii
@@ -54,11 +54,12 @@ def simple_stem(word):
     return word
 
 
-def normalize(name):
+def normalize(name, stem=False):
     name = name.lower()
     for ch, new_ch in name_normalization_map:
         name = name.replace(ch, new_ch)
-    name = ' '.join(simple_stem(w) for w in name.split())
+    if stem:
+        name = ' '.join(simple_stem(w) for w in name.split())
     return name
 
 
@@ -95,13 +96,15 @@ def match_names(text, name_list, mp_info={}):
             token_window = tokens[idx : idx + len(name_words)]
             token = join_tokens(token_window)
 
-            distance = jaro_winkler(normalize(name), normalize(token.text))
-            if distance >= DISTANCE_THRESHOLD:
-                token_matches.append({
-                    'distance': distance,
-                    'name': name,
-                    'token': token,
-                })
+            for stem in [False, True]:
+                distance = jaro_winkler(normalize(name),
+                                        normalize(token.text, stem=stem))
+                if distance >= DISTANCE_THRESHOLD:
+                    token_matches.append({
+                        'distance': distance,
+                        'name': name,
+                        'token': token,
+                    })
 
         if not token_matches:
             continue
