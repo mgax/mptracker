@@ -19,7 +19,7 @@ def questions():
     questions_scraper = QuestionScraper(get_cached_session())
     for question in questions_scraper.run():
         person = person_matcher.get_person(question.person_name,
-                                           int(question.person_cdep_id),
+                                           question.person_cdep_id,
                                            strict=True)
         q_data = {
             'number':    question.number,

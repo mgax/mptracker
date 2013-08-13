@@ -47,5 +47,4 @@ def pqitems(ob, selector=None):
 def get_cdep_id(href):
     qs = parse_qs(urlparse(href).query)
     assert qs['cam'] == ['2']
-    assert qs['leg'] == ['2012']
-    return int(qs['idm'][0])
+    return '%s-%03d' % (int(qs['leg'][0]), int(qs['idm'][0]))
