@@ -12,6 +12,7 @@ from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
 
 with open(path(__file__).parent / 'question_exceptions.json') as f:
     exceptions = json.load(f)
+    url_skip = set(exceptions['url_skip'])
 
 
 class Question:
@@ -100,7 +101,7 @@ class QuestionScraper(Scraper):
                 question.pdf_url = link.attr('href')
 
         question_id = '{q.date}-{q.number}'.format(q=question)
-        patch = exceptions.get(question_id, {})
+        patch = exceptions['patch'].get(question_id, {})
         for k in patch:
             setattr(question, k, patch[k])
 
@@ -112,6 +113,8 @@ class QuestionScraper(Scraper):
                                .format(year=year))
         for link in pqitems(index, '#pageContent table a'):
             href = link.attr('href')
+            if href in url_skip:
+                continue
             assert href.startswith('http://www.cdep.ro/pls/'
                                    'parlam/interpelari.detalii')
 

@@ -1,8 +1,23 @@
 {
-  "2013-04-16-743A": {
-    "addressee": ["Primul Ministru"]
+  "patch": {
+    "2008-02-12-4145A": {
+      "person_name": "Diana Maria Buşoi",
+      "person_cdep_id": "2004-358"
+    },
+    "2011-03-16-6003A": {
+      "person_name": "Călin Potor",
+      "person_cdep_id": "2008-251"
+    },
+    "2013-04-16-743A": {
+      "addressee": ["Primul Ministru"]
+    },
+    "2013-06-18-525B": {
+      "addressee": ["Ministerul Mediului \u015fi Schimb\u0103rilor Climatice"]
+    }
   },
-  "2013-06-18-525B": {
-    "addressee": ["Ministerul Mediului \u015fi Schimb\u0103rilor Climatice"]
-  }
+  "url_skip": [
+    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=17275&idl=1",
+    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=17669&idl=1",
+    "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=13100&idl=1"
+  ]
 }
