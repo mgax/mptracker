@@ -18,7 +18,7 @@ logger.setLevel(logging.INFO)
 
 
 def uuid_column():
-    return db.Column(UUID, primary_key=True)
+    return db.Column(UUID, primary_key=True, default=lambda: str(uuid.uuid4()))
 
 
 def identity(v):
