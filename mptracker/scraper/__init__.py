@@ -1,8 +1,8 @@
 import logging
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session
-from mptracker.scraper.questions import QuestionScraper
 from mptracker import models
+from mptracker.common import TablePatcher
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -12,6 +12,8 @@ scraper_manager = Manager()
 
 @scraper_manager.command
 def questions():
+    from mptracker.scraper.questions import QuestionScraper
+
     existing = {(q.number, q.date): q for q in models.Question.query}
     person_matcher = models.PersonMatcher()
     n_add = n_update = n_ok = 0
@@ -50,3 +52,16 @@ def questions():
 
     logger.info("Created %d, updated %d, found ok %d.", n_add, n_update, n_ok)
     models.db.session.commit()
+
+
+@scraper_manager.command
+def people(year='2012'):
+    from mptracker.scraper.people import PersonScraper
+
+    patcher = TablePatcher(models.Person,
+                           models.db.session,
+                           key_columns=['cdep_id'])
+
+    records = PersonScraper(get_cached_session()).fetch_people(year)
+
+    patcher.update(records)
