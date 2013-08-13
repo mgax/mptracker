@@ -106,9 +106,10 @@ class QuestionScraper(Scraper):
 
         return question
 
-    def run(self):
+    def run(self, year):
         index = self.fetch_url('http://www.cdep.ro/pls/parlam/'
-                               'interpelari.lista?tip=&dat=2013&idl=1')
+                               'interpelari.lista?tip=&dat={year}&idl=1'
+                               .format(year=year))
         for link in pqitems(index, '#pageContent table a'):
             href = link.attr('href')
             assert href.startswith('http://www.cdep.ro/pls/'
@@ -123,7 +124,7 @@ def scrape_question_list():
     out = csv.writer(sys.stdout)
     out.writerow(['person_name', 'person_cdep_id', 'number', 'date', 'type',
                   'title', 'url', 'pdf_url', 'addressee'])
-    for question in questions_scraper.run():
+    for question in questions_scraper.run(2013):
         out.writerow([
             question.person_name,
             question.person_cdep_id,

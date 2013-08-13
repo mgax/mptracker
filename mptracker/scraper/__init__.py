@@ -11,7 +11,7 @@ scraper_manager = Manager()
 
 
 @scraper_manager.command
-def questions():
+def questions(year='2013'):
     from mptracker.scraper.questions import QuestionScraper
 
     patcher = TablePatcher(models.Question,
@@ -22,7 +22,7 @@ def questions():
 
     def get_questions():
         questions_scraper = QuestionScraper(get_cached_session())
-        for question in questions_scraper.run():
+        for question in questions_scraper.run(year):
             person = person_matcher.get_person(question.person_name,
                                                question.person_cdep_id,
                                                strict=True)
