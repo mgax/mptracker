@@ -31,7 +31,7 @@ db = SQLAlchemy()
 class Person(db.Model):
     id = uuid_column()
     name = db.Column(db.Text)
-    cdep_id = db.Column(db.Integer)
+    cdep_id = db.Column(db.Text)
 
     county_id = db.Column(UUID, db.ForeignKey('county.id'))
     county = db.relationship('County',
