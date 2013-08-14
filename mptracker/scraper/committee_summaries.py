@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
 from flask import json
@@ -30,6 +31,8 @@ class SummaryScraper(Scraper):
             for tr in table_rows:
                 empty_page = False
                 [pdf_link] = pqitems(tr, 'a[target=PDF]')
+                col3 = list(pqitems(tr, 'td'))[2]
+                date_value = datetime.strptime(col3.text(), '%d.%m.%Y').date()
                 col5 = list(pqitems(tr, 'td'))[4]
                 pdf_url = pdf_link.attr('href')
                 pdf_url_m = self.pdf_url_pattern.search(pdf_url)
@@ -39,6 +42,7 @@ class SummaryScraper(Scraper):
                 yield {
                     'committee': committee_code,
                     'pdf_url': pdf_url,
+                    'date': date_value,
                 }
 
             if empty_page:
