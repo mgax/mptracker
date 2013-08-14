@@ -31,6 +31,33 @@
       </ul>
     </div>
 
+    {% set is_bug_values = [
+          (None, "nu"),
+          (True, "da"),
+        ] %}
+    {% set is_bug_current_value = question_flags.is_bug %}
+
+    <div class="question-flags-dropdown" data-name="is_bug">
+      <button type="button"
+              class="question-flags-menubutton"
+              data-toggle="dropdown">
+        Bug:
+        {% for value, label in is_bug_values %}
+          {%- if value == is_bug_current_value %}{{ label }}{% endif %}
+        {%- endfor %}
+
+        <span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu question-flags-menu">
+      {% for value, label in is_bug_values %}
+        <li>
+          <a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+
     {% set url = url_for('.question_save_flags', question_id=question_id) %}
     <form action="{{ url }}" method="post">
       <input type="hidden" name="question_id" value="{{ question_id }}">
