@@ -53,3 +53,12 @@ def people(year='2012'):
     records = PersonScraper(get_cached_session()).fetch_people(year)
 
     patcher.update(records)
+
+
+@scraper_manager.command
+def committee_summaries(year=2013):
+    from mptracker.scraper.committee_summaries import SummaryScraper
+
+    records = SummaryScraper(get_cached_session()).fetch_summaries(year)
+    for record in records:
+        print(record)
