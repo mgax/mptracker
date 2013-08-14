@@ -33,6 +33,8 @@ class SummaryScraper(Scraper):
                 [pdf_link] = pqitems(tr, 'a[target=PDF]')
                 col3 = list(pqitems(tr, 'td'))[2]
                 date_value = datetime.strptime(col3.text(), '%d.%m.%Y').date()
+                col4 = list(pqitems(tr, 'td'))[3]
+                title = col4.text()
                 col5 = list(pqitems(tr, 'td'))[4]
                 pdf_url = pdf_link.attr('href')
                 pdf_url_m = self.pdf_url_pattern.search(pdf_url)
@@ -43,6 +45,7 @@ class SummaryScraper(Scraper):
                     'committee': committee_code,
                     'pdf_url': pdf_url,
                     'date': date_value,
+                    'title': title,
                 }
 
             if empty_page:
