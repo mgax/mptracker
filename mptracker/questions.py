@@ -8,6 +8,7 @@ from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
 from mptracker.nlp import match_names
 from mptracker.placenames import get_county_data
+from mptracker.auth import require_privilege
 
 
 logger = logging.getLogger(__name__)
@@ -177,6 +178,7 @@ def question_detail(question_id):
 
 
 @questions.route('/questions/<question_id>/save_flags', methods=['POST'])
+@require_privilege
 def question_save_flags(question_id):
     question = models.Question.query.get_or_404(question_id)
     for name in ['is_local_topic', 'is_bug']:
