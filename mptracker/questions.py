@@ -30,6 +30,8 @@ other_phrases = [
     'cabinetul meu parlamentar',
 ]
 
+MAX_OCR_PAGES = 3
+
 
 @job
 def ocr_question(question_id):
@@ -43,7 +45,7 @@ def ocr_question(question_id):
         with pdf_path.open('wb') as f:
             f.write(pdf_data)
         subprocess.check_call(['pdfimages', pdf_path, tmp / 'img'])
-        for image_path in sorted(tmp.listdir('img-*'))[:10]:
+        for image_path in sorted(tmp.listdir('img-*'))[:MAX_OCR_PAGES]:
             subprocess.check_call(['tesseract',
                                    image_path, image_path,
                                    '-l', 'ron'],
