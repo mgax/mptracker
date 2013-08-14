@@ -19,6 +19,7 @@ admin.add_view(AuthView(models.StenoChapter, models.db.session))
 admin.add_view(AuthView(models.StenoParagraph, models.db.session))
 admin.add_view(AuthView(models.User, models.db.session))
 admin.add_view(AuthView(models.County, models.db.session))
+admin.add_view(AuthView(models.CommitteeSummary, models.db.session))
 
 
 class PersonView(AuthView):
