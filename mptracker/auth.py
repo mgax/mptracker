@@ -45,6 +45,11 @@ def is_privileged():
     return False
 
 
+@auth.app_context_processor
+def inject_is_privileged():
+    return {'current_user_is_privileged': is_privileged()}
+
+
 def require_privilege(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

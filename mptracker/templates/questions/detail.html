@@ -73,9 +73,11 @@
     <a href="{{ question.url }}">{{ question.url }}</a>
   </p>
 
+  {% if current_user_is_privileged %}
   <p>
     {{ question_flag_buttons(question.id, question.flags) }}
   </p>
+  {% endif %}
 
   <section class="question-analysis">
     <div class="question-analysis-heading">
