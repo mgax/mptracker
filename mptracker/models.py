@@ -38,7 +38,7 @@ class Person(db.Model):
         backref=db.backref('people', lazy='dynamic'))
 
     def __str__(self):
-        return "{p.name}".format(p=self)
+        return "{p.name} ({p.year})".format(p=self)
 
     def __repr__(self):
         return "<%s>" % self
@@ -61,6 +61,10 @@ class Person(db.Model):
         return ("http://www.cdep.ro/pls/parlam/structura.mp"
                 "?idm={number}&cam=2&leg={year}"
                 .format(year=int(year), number=int(number)))
+
+    @property
+    def year(self):
+        return self.cdep_id.split('-')[0] if self.cdep_id else None
 
 
 class County(db.Model):

@@ -9,7 +9,7 @@
     {% for person in people %}
       <li>
         {% set url = url_for('.person', person_id=person.id) %}
-        <a href="{{ url }}">{{ person.name }}</a>
+        <a href="{{ url }}">{{ person }}</a>
       </li>
     {% endfor %}
     </ul>

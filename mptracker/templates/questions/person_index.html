@@ -16,7 +16,7 @@
       <tr>
         <td>
           {% set url = url_for('pages.person', person_id=person.id) %}
-          <a href="{{ url }}">{{ person.name }}</a>
+          <a href="{{ url }}">{{ person.str }}</a>
         </td>
         <td>{{ person.county_name }}</td>
         <td>

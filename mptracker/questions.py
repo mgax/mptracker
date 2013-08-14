@@ -136,7 +136,7 @@ def person_index():
                 .options(subqueryload(models.Person.county)))
     people = [{
                 'id': p.id,
-                'name': p.name,
+                'str': str(p),
                 'county_name': p.county.name if p.county else '',
                 'question_count': question_count_for_person.get(p.id, 0),
             } for p in people_rows]
