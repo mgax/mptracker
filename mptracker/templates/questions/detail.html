@@ -15,13 +15,18 @@
       {% for value, label in values %}
         {%- if value == current_value %}{{ label }}{% endif %}
       {%- endfor %}
+
       <span class="caret"></span>
     </button>
+
     <ul class="dropdown-menu question-flags-menu">
     {% for value, label in values %}
-      <li><a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a></li>
+      <li>
+        <a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a>
+      </li>
     {% endfor %}
     </ul>
+
     {% set url = url_for('.question_save_flags', question_id=question_id) %}
     <form action="{{ url }}" method="post">
       <input type="hidden" name="question_id" value="{{ question_id }}">
