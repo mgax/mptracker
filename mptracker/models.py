@@ -128,6 +128,14 @@ class Question(db.Model):
     def __repr__(self):
         return "<%s>" % self
 
+    flags_row = db.relationship('QuestionFlags', lazy='eager', uselist=False)
+
+    @property
+    def flags(self):
+        if self.flags_row is None:
+            self.flags_row = QuestionFlags()
+        return self.flags_row
+
 
 class QuestionFlags(db.Model):
     id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
