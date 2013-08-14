@@ -59,20 +59,21 @@ def ocr_question(question_id):
 
 
 @questions_manager.command
-def ocr_all(number=None):
-    count = 0
+def ocr_all(number=None, force=False):
+    n_jobs = n_skip = n_ok = 0
     for question in models.Question.query:
         if not question.pdf_url:
             logger.info("Skipping %s, no URL", question)
+            n_skip += 1
             continue
-        if question.text:
-            logger.info("Skipping %s, already done OCR", question)
+        if question.text and not force:
+            n_ok += 1
             continue
         ocr_question.delay(question.id)
-        count += 1
-        if number and count >= int(number):
+        n_jobs += 1
+        if number and n_jobs >= int(number):
             break
-    logger.info("enqueued %d jobs", count)
+    logger.info("enqueued %d jobs, skipped %d, ok %d", n_jobs, n_skip, n_ok)
 
 
 def match_question(question):
