@@ -12,24 +12,22 @@ from path import path
 from mptracker.common import parse_date, TablePatcher, temp_dir
 from sqlalchemy.dialects.postgresql import UUID
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+db = SQLAlchemy()
 
-def uuid_column():
-    return db.Column(UUID, primary_key=True, default=lambda: str(uuid.uuid4()))
+
+def random_uuid():
+    return str(uuid.uuid4())
 
 
 def identity(v):
     return v
 
 
-db = SQLAlchemy()
-
-
 class Person(db.Model):
-    id = uuid_column()
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     cdep_id = db.Column(db.Text)
 
@@ -68,7 +66,7 @@ class Person(db.Model):
 
 
 class County(db.Model):
-    id = uuid_column()
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     geonames_code = db.Column(db.Integer)
 
@@ -80,7 +78,7 @@ class County(db.Model):
 
 
 class StenoChapter(db.Model):
-    id = uuid_column()
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
     date = db.Column(db.Date, index=True)
     headline = db.Column(db.Text)
     serial = db.Column(db.Text, index=True)
@@ -91,7 +89,7 @@ class StenoChapter(db.Model):
 
 
 class StenoParagraph(db.Model):
-    id = uuid_column()
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
     text = db.Column(db.Text)
     serial = db.Column(db.Text, index=True)
 
@@ -105,7 +103,7 @@ class StenoParagraph(db.Model):
 
 
 class Question(db.Model):
-    id = uuid_column()
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
     number = db.Column(db.Text)
     date = db.Column(db.Date, index=True)
     title = db.Column(db.Text)
@@ -144,7 +142,7 @@ class QuestionFlags(db.Model):
 
 
 class User(db.Model, UserMixin):
-    id = uuid_column()
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
 
     @classmethod
