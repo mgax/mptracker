@@ -2,36 +2,38 @@
 
 
 {% macro question_flag_buttons(question_id, question_flags) %}
-  {% set values = [
-        (None, "auto"),
-        (True, "da"),
-        (False, "nu"),
-      ] %}
-  {% set current_value = question_flags.is_local_topic %}
   <div class="question-flags">
-    <button type="button"
-            class="question-flags-menubutton"
-            data-toggle="dropdown">
-      Probleme locale:
-      {% for value, label in values %}
-        {%- if value == current_value %}{{ label }}{% endif %}
-      {%- endfor %}
+    {% set is_local_topic_values = [
+          (None, "auto"),
+          (True, "da"),
+          (False, "nu"),
+        ] %}
+    {% set is_local_topic_current_value = question_flags.is_local_topic %}
 
-      <span class="caret"></span>
-    </button>
+    <div class="question-flags-dropdown" data-name="is_local_topic">
+      <button type="button"
+              class="question-flags-menubutton"
+              data-toggle="dropdown">
+        Probleme locale:
+        {% for value, label in is_local_topic_values %}
+          {%- if value == is_local_topic_current_value %}{{ label }}{% endif %}
+        {%- endfor %}
 
-    <ul class="dropdown-menu question-flags-menu">
-    {% for value, label in values %}
-      <li>
-        <a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a>
-      </li>
-    {% endfor %}
-    </ul>
+        <span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu question-flags-menu">
+      {% for value, label in is_local_topic_values %}
+        <li>
+          <a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
 
     {% set url = url_for('.question_save_flags', question_id=question_id) %}
     <form action="{{ url }}" method="post">
       <input type="hidden" name="question_id" value="{{ question_id }}">
-      <input type="hidden" name="is_local_topic">
     </form>
   </div>
 {% endmacro %}
@@ -87,17 +89,27 @@
 $(document).ready(function() {
   "use strict";
 
-  var button = $('.question-flags-menubutton');
-  var items = $('.question-flags-menu li a');
   var form = $('.question-flags form');
 
-  items.click(function(evt) {
-    evt.preventDefault();
-    var value = $(evt.target).data('value');
-    button.addClass('disabled');
-    button.text('saving ...');
-    form.find('[name=is_local_topic]').val(JSON.stringify(value));
-    form.submit();
+  $('.question-flags-dropdown').map(function(i, el) {
+    var box = $(el);
+    var name = box.data('name');
+    var button = box.find('.question-flags-menubutton');
+    var items = box.find('.question-flags-menu li a');
+
+    items.click(function(evt) {
+      evt.preventDefault();
+      var value = $(evt.target).data('value');
+      button.addClass('disabled');
+      button.text('saving ...');
+      var input = $('<input>').attr({
+        type: 'hidden',
+        name: name,
+        value: JSON.stringify(value)
+      });
+      form.append(input);
+      form.submit();
+    });
   });
 });
 </script>

@@ -176,11 +176,13 @@ def question_detail(question_id):
     })
 
 
-@questions.route('/questions/<question_id>/is_local_topic', methods=['POST'])
+@questions.route('/questions/<question_id>/save_flags', methods=['POST'])
 def question_save_flags(question_id):
     question = models.Question.query.get_or_404(question_id)
-    is_local_topic = flask.json.loads(flask.request.form['is_local_topic'])
-    question.flags.is_local_topic = is_local_topic
+    for name in ['is_local_topic', 'is_bug']:
+        if name in flask.request.form:
+            value = flask.json.loads(flask.request.form[name])
+            setattr(question.flags, name, value)
     models.db.session.commit()
     url = flask.url_for('.question_detail', question_id=question_id)
     return flask.redirect(url)
