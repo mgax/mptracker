@@ -147,6 +147,7 @@ class CommitteeSummary(db.Model):
     date = db.Column(db.Date)
     committee = db.Column(db.Text)
     pdf_url = db.Column(db.Text)
+    text = db.Column(db.Text)
 
 
 class User(db.Model, UserMixin):
