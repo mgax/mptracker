@@ -1,3 +1,4 @@
+-e git+https://github.com/gawel/pyquery.git@62d9db3af7f434ef99b2f6ac22413272fb201843#egg=pyquery-dev
 -e git+https://github.com/getsentry/raven-python.git@89156e835bd46ea32b4743b7e5d95db043af6c11#egg=raven-dev
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
 -e git+https://github.com/mgax/rq.git@328e7611d39ad989435e3fa6c1aa32879185c515#egg=rq-dev
@@ -16,12 +17,11 @@ Flask-WTF==0.8.4
 itsdangerous==0.22
 jellyfish==0.2.0
 Jinja2==2.7
-lxml==3.2.1
+lxml==3.2.3
 Mako==0.8.1
 MarkupSafe==0.18
 path.py==4.3
 psycopg2==2.5.1
-pyquery==1.2.4
 python-dateutil==2.1
 pytz==2013b
 redis==2.7.6
