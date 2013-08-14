@@ -1,3 +1,4 @@
+from functools import wraps
 import flask
 from flask.ext.login import LoginManager, current_user
 from flask.ext.browserid import BrowserID
@@ -42,3 +43,12 @@ def is_privileged():
         return True
 
     return False
+
+
+def require_privilege(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not is_privileged():
+            return flask.redirect(flask.url_for('auth.login'))
+        return func(*args, **kwargs)
+    return wrapper
