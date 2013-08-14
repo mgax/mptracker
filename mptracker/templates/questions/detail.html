@@ -12,7 +12,10 @@
     <button type="button"
             class="question-flags-menubutton"
             data-toggle="dropdown">
-      {{ current_value|tojson|safe }} <span class="caret"></span>
+      {% for value, label in values %}
+        {%- if value == current_value %}{{ label }}{% endif %}
+      {%- endfor %}
+      <span class="caret"></span>
     </button>
     <ul class="dropdown-menu question-flags-menu">
     {% for value, label in values %}
