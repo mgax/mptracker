@@ -63,6 +63,8 @@ def committee_summaries(year=2013):
                            models.db.session,
                            key_columns=['pdf_url'])
 
-    records = SummaryScraper(get_cached_session()).fetch_summaries(year)
+    summary_scraper = SummaryScraper(get_cached_session(),
+                                     get_cached_session('question-pdf'))
+    records = summary_scraper.fetch_summaries(year, get_pdf_text=True)
 
     patcher.update(records)

@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+import subprocess
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
 from flask import json
@@ -11,13 +12,26 @@ with (path(__file__).parent / 'committee_names.json').open('rb') as f:
     committee_names = json.loads(f.read().decode('utf-8'))
 
 
+def pdf_to_text(pdf_bytes):
+    """ run pdftotext from poppler """
+    p = subprocess.Popen(['pdftotext', '-enc', 'UTF-8', '-', '-'],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE)
+    outs, errs = p.communicate(pdf_bytes, timeout=10)
+    return outs.decode('utf-8')
+
+
 class SummaryScraper(Scraper):
 
     listing_page_url = ('http://www.cdep.ro/pls/proiecte/upl_com.lista'
                         '?nrc={offset}&an={year}&tip=1&sz=1')
     pdf_url_pattern = re.compile(r'cdep\.ro/comisii/(?P<committee>[^/]+)/pdf/')
 
-    def fetch_summaries(self, year=2013):
+    def __init__(self, session=None, pdf_session=None):
+        super().__init__(session)
+        self.pdf_session = pdf_session or self.session
+
+    def fetch_summaries(self, year=2013, get_pdf_text=False):
         from collections import defaultdict
         for p in range(50):
             page_url = self.listing_page_url.format(offset=100*p, year=year)
@@ -41,12 +55,19 @@ class SummaryScraper(Scraper):
                 assert pdf_url_m is not None, "can't parse url: %r" % pdf_url
                 committee_code = pdf_url_m.group('committee')
                 assert committee_names[committee_code] == col5.text()
-                yield {
+                row = {
                     'committee': committee_code,
                     'pdf_url': pdf_url,
                     'date': date_value,
                     'title': title,
                 }
+
+                if get_pdf_text:
+                    pdf_data = self.pdf_session.get(pdf_url).content
+                    text = pdf_to_text(pdf_data)
+                    row['text'] = text
+
+                yield row
 
             if empty_page:
                 break
