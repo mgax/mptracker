@@ -1,11 +1,42 @@
 {% extends 'layout.html' %}
 
 
+{% macro question_flag_buttons(question_id, question_flags) %}
+  {% set values = [
+        (None, "auto"),
+        (True, "yes"),
+        (False, "no"),
+      ] %}
+  {% set current_value = question_flags.is_local_topic %}
+  <div class="btn-group question-flags">
+    <button type="button"
+            class="btn btn-default btn-xs dropdown-toggle question-flags-menubutton"
+            data-toggle="dropdown">
+      {{ current_value|tojson|safe }} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu question-flags-menu">
+    {% for value, label in values %}
+      <li><a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a></li>
+    {% endfor %}
+    </ul>
+    {% set url = url_for('.question_save_flags', question_id=question_id) %}
+    <form action="{{ url }}" method="post">
+      <input type="hidden" name="question_id" value="{{ question_id }}">
+      <input type="hidden" name="is_local_topic">
+    </form>
+  </div>
+{% endmacro %}
+
+
 {% block content %}
   <h1>{{ person.name }} – întrebări și interpelări</h1>
   <p>{{ question.title }} ({{ question.date }})</p>
   <p>
     <a href="{{ question.url }}">{{ question.url }}</a>
+  </p>
+
+  <p>
+    {{ question_flag_buttons(question.id, question.flags) }}
   </p>
 
   <section class="question-analysis">
@@ -39,4 +70,26 @@
     </p>
   </section>
 
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+  "use strict";
+
+  var button = $('.question-flags-menubutton');
+  var items = $('.question-flags-menu li a');
+  var form = $('.question-flags form');
+
+  items.click(function(evt) {
+    evt.preventDefault();
+    var value = $(evt.target).data('value');
+    button.addClass('disabled');
+    button.text('saving ...');
+    form.find('[name=is_local_topic]').val(JSON.stringify(value));
+    form.submit();
+  });
+});
+</script>
 {% endblock %}
