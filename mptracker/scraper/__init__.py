@@ -59,6 +59,10 @@ def people(year='2012'):
 def committee_summaries(year=2013):
     from mptracker.scraper.committee_summaries import SummaryScraper
 
+    patcher = TablePatcher(models.CommitteeSummary,
+                           models.db.session,
+                           key_columns=['pdf_url'])
+
     records = SummaryScraper(get_cached_session()).fetch_summaries(year)
-    for record in records:
-        print(record)
+
+    patcher.update(records)
