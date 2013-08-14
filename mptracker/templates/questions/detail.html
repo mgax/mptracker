@@ -8,9 +8,9 @@
         (False, "no"),
       ] %}
   {% set current_value = question_flags.is_local_topic %}
-  <div class="btn-group question-flags">
+  <div class="question-flags">
     <button type="button"
-            class="btn btn-default btn-xs dropdown-toggle question-flags-menubutton"
+            class="question-flags-menubutton"
             data-toggle="dropdown">
       {{ current_value|tojson|safe }} <span class="caret"></span>
     </button>
