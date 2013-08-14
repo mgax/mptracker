@@ -129,6 +129,10 @@ class Question(db.Model):
         return "<%s>" % self
 
 
+class QuestionFlags(db.Model):
+    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+
+
 class User(db.Model, UserMixin):
     id = uuid_column()
     email = db.Column(db.Text)
