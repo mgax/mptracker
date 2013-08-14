@@ -131,6 +131,7 @@ class Question(db.Model):
 
 class QuestionFlags(db.Model):
     id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+    is_local_topic = db.Column(db.Boolean)
 
 
 class User(db.Model, UserMixin):
