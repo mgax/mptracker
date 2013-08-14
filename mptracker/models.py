@@ -141,6 +141,14 @@ class QuestionFlags(db.Model):
     is_bug = db.Column(db.Boolean)
 
 
+class CommitteeSummary(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    title = db.Column(db.Text)
+    date = db.Column(db.Date)
+    committee = db.Column(db.Text)
+    pdf_url = db.Column(db.Text)
+
+
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
