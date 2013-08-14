@@ -4,14 +4,15 @@
 {% macro question_flag_buttons(question_id, question_flags) %}
   {% set values = [
         (None, "auto"),
-        (True, "yes"),
-        (False, "no"),
+        (True, "da"),
+        (False, "nu"),
       ] %}
   {% set current_value = question_flags.is_local_topic %}
   <div class="question-flags">
     <button type="button"
             class="question-flags-menubutton"
             data-toggle="dropdown">
+      Probleme locale:
       {% for value, label in values %}
         {%- if value == current_value %}{{ label }}{% endif %}
       {%- endfor %}
