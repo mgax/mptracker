@@ -67,7 +67,7 @@ def ocr_all(number=None, force=False):
         if not question.pdf_url:
             n_skip += 1
             continue
-        if question.text and not force:
+        if question.text is not None and not force:
             n_ok += 1
             continue
         ocr_question.delay(question.id)
