@@ -25,5 +25,10 @@
     "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=13100&idl=1",
     "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=17313&idl=1",
     "http://www.cdep.ro/pls/parlam/interpelari.detalii?idi=18299&idl=1"
+  ],
+  "pdf_url_skip": [
+    "http://www.cdep.ro/interpel/2009/i330A.pdf",
+    "http://www.cdep.ro/interpel/2008/i4165B.pdf",
+    "http://www.cdep.ro/interpel/2008/i4289B.pdf"
   ]
 }

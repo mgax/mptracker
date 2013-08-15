@@ -13,6 +13,7 @@ from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
 with open(path(__file__).parent / 'question_exceptions.json') as f:
     exceptions = json.load(f)
     url_skip = set(exceptions['url_skip'])
+    pdf_url_skip = set(exceptions['pdf_url_skip'])
 
 
 class Question:
@@ -100,7 +101,9 @@ class QuestionScraper(Scraper):
             elif label_text == 'Textul intervenţiei:':
                 link = list(pqitems(value, 'a'))[-1]
                 assert link.text() == "fişier PDF"
-                question.pdf_url = link.attr('href')
+                pdf_url = link.attr('href')
+                if pdf_url not in pdf_url_skip:
+                    question.pdf_url = pdf_url
 
         question_id = '{q.date}-{q.number}'.format(q=question)
         patch = exceptions['patch'].get(question_id, {})
