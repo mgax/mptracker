@@ -65,7 +65,6 @@ def ocr_all(number=None, force=False):
     n_jobs = n_skip = n_ok = 0
     for question in models.Question.query:
         if not question.pdf_url:
-            logger.info("Skipping %s, no URL", question)
             n_skip += 1
             continue
         if question.text and not force:
