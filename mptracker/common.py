@@ -12,6 +12,11 @@ def parse_date(date_str):
     return datetime.strptime(date_str, '%Y-%m-%d').date()
 
 
+def fix_local_chars(txt):
+    return (txt.replace("ş", "ș").replace("Ş", "Ș")
+               .replace("ţ", "ț").replace("Ţ", "Ț"))
+
+
 @contextmanager
 def temp_dir():
     tmp = path(tempfile.mkdtemp())

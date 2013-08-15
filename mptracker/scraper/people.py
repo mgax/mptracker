@@ -1,4 +1,5 @@
 from urllib.parse import urlparse, parse_qs
+from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
                                       get_cdep_id)
 
@@ -15,9 +16,14 @@ class PersonScraper(Scraper):
                 if 'structura.mp' in href:
                     name = a.text()
                     cdep_id = get_cdep_id(href)
+                    td = a.parents('tr')[2]
+                    county_name = pq(td[3]).text()
+                    if county_name in ["Mino.", "Minoritati"]:
+                        county_name = None
                     yield {
                         'cdep_id': cdep_id,
                         'name': name,
+                        'county_name': county_name,
                     }
 
 

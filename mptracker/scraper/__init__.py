@@ -2,7 +2,7 @@ import logging
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session
 from mptracker import models
-from mptracker.common import TablePatcher
+from mptracker.common import TablePatcher, fix_local_chars
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -50,9 +50,23 @@ def people(year='2012'):
                            models.db.session,
                            key_columns=['cdep_id'])
 
-    records = PersonScraper(get_cached_session()).fetch_people(year)
+    def get_people():
+        person_scraper = PersonScraper(get_cached_session())
+        for row in person_scraper.fetch_people(year):
+            county_name = row.pop('county_name')
+            if county_name:
+                ok_name = fix_local_chars(county_name.title())
+                if ok_name == "Bistrița-Năsăud":
+                    ok_name = "Bistrița Năsăud"
+                county = models.County.query.filter_by(name=ok_name).first()
+                if county is None:
+                    logger.warn("Can't match county name %r", ok_name)
+                else:
+                    row['county'] = county
 
-    patcher.update(records)
+            yield row
+
+    patcher.update(get_people())
 
 
 @scraper_manager.command
