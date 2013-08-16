@@ -11,9 +11,12 @@
       ] %}
   {{ breadcrumbs(breadcrumb_links) }}
 
-  <h1>{{ person }}</h1>
+  <h1>{{ person.name }}</h1>
 
   <dl class="dl-horizontal">
+    <dt>Legislatura</dt>
+    <dd>{{ person.year }}</dd>
+
     {% if person.county %}
       <dt>Circumscripție:</dt>
       <dd>{{ person.county }}</dd>
