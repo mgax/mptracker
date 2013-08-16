@@ -113,7 +113,6 @@ class Question(db.Model):
     type = db.Column(db.Text)
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
-    text = db.Column(db.Text)
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'))
     person = db.relationship('Person',
@@ -124,6 +123,21 @@ class Question(db.Model):
 
     def __repr__(self):
         return "<%s>" % self
+
+    text_row = db.relationship('QuestionText', lazy='eager', uselist=False)
+
+    def _get_text_row(self):
+        if self.text_row is None:
+            self.text_row = QuestionText()
+        return self.text_row
+
+    @property
+    def text(self):
+        return self._get_text_row().text
+
+    @text.setter
+    def text(self, value):
+        self._get_text_row().text = value
 
     match_row = db.relationship('QuestionMatch', lazy='eager', uselist=False)
 
@@ -140,6 +154,11 @@ class Question(db.Model):
         if self.flags_row is None:
             self.flags_row = QuestionFlags()
         return self.flags_row
+
+
+class QuestionText(db.Model):
+    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+    text = db.Column(db.Text)
 
 
 class QuestionMatch(db.Model):
