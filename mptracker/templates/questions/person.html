@@ -25,7 +25,13 @@
         <a href="{{ url }}">{{ question.title|truncate(80) }}</a>
       </td>
       <td>{{ question.date }}</td>
-      <td>{{ question.score }}</td>
+      <td>
+        {%- if question.is_local_topic_flag -%}
+          manual
+        {%- else -%}
+          {{ question.score }}
+        {%- endif -%}
+      </td>
     </tr>
   {% endfor %}
   </table>

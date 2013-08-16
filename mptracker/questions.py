@@ -158,9 +158,15 @@ def person_questions(person_id):
             'id': q.id,
             'title': q.title,
             'date': q.date,
-            'score': q.match_score,
+            'is_local_topic_flag': q.flags.is_local_topic,
+            'score': q.match_score or 0,
         } for q in person.questions]
-    questions.sort(key=lambda q: q['score'] or 0, reverse=True)
+    def sort_key(question):
+        if question['is_local_topic_flag']:
+            return 11.0
+        else:
+            return question['score'] or 0
+    questions.sort(key=sort_key, reverse=True)
     return flask.render_template('questions/person.html', **{
         'person': person,
         'questions': questions,
