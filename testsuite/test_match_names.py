@@ -2,10 +2,9 @@ from mptracker.nlp import match_names
 
 
 def test_match_string_in_text():
-    text = "hello soemthingthere world"
+    text = "hello somethingthere world"
     match = match_names(text, ['foo', 'somethingthere', 'bar'])
     assert len(match) == 1
-    assert 0.97 < match[0]['distance'] < 0.99
     assert match[0]['name'] == 'somethingthere'
     assert match[0]['token'].start == 6
     assert match[0]['token'].end == 20
@@ -42,9 +41,9 @@ def test_match_regardless_of_diacritics():
 
 def test_match_multiple_words():
     text = "let's match a complicated bit of text"
-    match = match_names(text, ["compicated bit"])
-    assert [m['name'] for m in match] == ['compicated bit']
-    assert match[0]['name'] == "compicated bit"
+    match = match_names(text, ["complicated bit"])
+    assert [m['name'] for m in match] == ['complicated bit']
+    assert match[0]['name'] == "complicated bit"
     assert match[0]['token'].text == "complicated bit"
     assert match[0]['token'].start == 14
     assert match[0]['token'].end == 29

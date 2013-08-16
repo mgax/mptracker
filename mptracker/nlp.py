@@ -97,9 +97,8 @@ def match_names(text, name_list, mp_info={}):
             token = join_tokens(token_window)
 
             for stem in [False, True]:
-                distance = jaro_winkler(normalize(name),
-                                        normalize(token.text, stem=stem))
-                if distance >= DISTANCE_THRESHOLD:
+                if normalize(name) == normalize(token.text, stem=stem):
+                    distance = 1.0
                     token_matches.append({
                         'distance': distance,
                         'name': name,
