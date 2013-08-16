@@ -1,5 +1,6 @@
 import logging
 import subprocess
+from collections import defaultdict
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -161,14 +162,23 @@ def person_index():
 @questions.route('/person/<person_id>/questions')
 def person_questions(person_id):
     person = models.Person.query.get_or_404(person_id)
-    questions = list(person.questions)
-    questions = [{
+    addressee_count = defaultdict(int)
+    questions = []
+    for q in person.questions:
+        questions.append({
             'id': q.id,
             'title': q.title,
             'date': q.date,
             'is_local_topic_flag': q.flags.is_local_topic,
             'score': q.match.score or 0,
-        } for q in person.questions]
+            'addressee': q.addressee,
+        })
+        for name in q.addressee.split(';'):
+            addressee_count[name.strip()] += 1
+
+    addressee_top = sorted(((n, name) for name, n in addressee_count.items()),
+                           reverse=True)[:5]
+
     def sort_key(question):
         if question['is_local_topic_flag']:
             return 11.0
@@ -178,6 +188,7 @@ def person_questions(person_id):
     return flask.render_template('questions/person.html', **{
         'person': person,
         'questions': questions,
+        'addressee_top': addressee_top,
     })
 
 

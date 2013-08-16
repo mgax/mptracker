@@ -83,6 +83,8 @@
     <a href="{{ question.url }}">{{ question.url }}</a>
   </p>
 
+  <p>Destinatar: {{ question.addressee }}</p>
+
   {% if current_user_is_privileged %}
   <p>
     {{ question_flag_buttons(question.id, question.flags) }}

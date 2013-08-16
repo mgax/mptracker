@@ -11,9 +11,24 @@
       ] %}
   {{ breadcrumbs(breadcrumb_links) }}
 
+  <table class="person-addressee-top">
+    <thead>
+      <th>Top destinatari</th>
+      <th>procent de întrebări</th>
+    </thead>
+
+  {% for count, name in addressee_top %}
+    <tr>
+      <td>{{ name }}</td>
+      <td>{{ "%.0f%%"|format(100 * count / questions|length) }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
   <table class="person-questions">
     <thead>
       <th>Titlu</th>
+      <th>Destinatar</th>
       <th>Dată</th>
       <th>Scor</th>
     </thead>
@@ -24,6 +39,7 @@
         {% set url = url_for('.question_detail', question_id=question.id) %}
         <a href="{{ url }}">{{ question.title|truncate(80) }}</a>
       </td>
+      <td>{{ question.addressee }}</td>
       <td>{{ question.date }}</td>
       <td>
         {%- if question.is_local_topic_flag -%}
