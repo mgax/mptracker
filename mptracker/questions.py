@@ -86,7 +86,8 @@ def match_question(question):
         'name': question.person.name,
         'county_name': county_data['name'],
     }
-    matches = match_names(question.text, all_names, mp_info=mp_info)
+    text = question.title + ' ' + question.text
+    matches = match_names(text, all_names, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
                          reverse=True)[:10]
