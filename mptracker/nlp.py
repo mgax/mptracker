@@ -1,6 +1,5 @@
 import re
 from collections import namedtuple
-from jellyfish import jaro_winkler
 
 Token = namedtuple('Token', ['text', 'start', 'end'])
 ANY_PUNCTUATION = r'[.,;!?\-()]*'
@@ -81,7 +80,6 @@ def join_tokens(tokens):
 
 def match_names(text, name_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
-    DISTANCE_THRESHOLD = .97
 
     matches = []
     tokens = list(tokenize(text))
