@@ -2,6 +2,15 @@
 
 
 {% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("deputați",
+            url_for('.person_index')),
+        (person.cdep_id,
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
   <h1>{{ person }}</h1>
 
   {% set cdep_url = person.get_cdep_url() %}
