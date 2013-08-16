@@ -7,7 +7,7 @@ from mptracker import models
 from mptracker.common import temp_dir
 from mptracker.scraper.common import get_cached_session
 from mptracker.nlp import match_names
-from mptracker.placenames import get_county_data
+from mptracker.placenames import get_county_data, get_minority_names
 from mptracker.auth import require_privilege
 
 
@@ -78,8 +78,11 @@ def ocr_all(number=None, force=False):
 
 
 def match_question(question):
-    county_data = get_county_data(question.person.county.geonames_code)
-    local_names = county_data['place_names']
+    if question.person.minority:
+        local_names = get_minority_names()['search_names']
+    else:
+        county_data = get_county_data(question.person.county.geonames_code)
+        local_names = county_data['place_names']
     all_names = local_names + other_phrases
 
     mp_info = {
