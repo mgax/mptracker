@@ -78,17 +78,18 @@ def ocr_all(number=None, force=False):
 
 
 def match_question(question):
+    mp_info = {'name': question.person.name}
+
     if question.person.minority:
         local_names = get_minority_names()['search_names']
+
     else:
         county_data = get_county_data(question.person.county.geonames_code)
         local_names = county_data['place_names']
+        mp_info['county_name'] = county_data['name']
+
     all_names = local_names + other_phrases
 
-    mp_info = {
-        'name': question.person.name,
-        'county_name': county_data['name'],
-    }
     text = question.title + ' ' + question.text
     matches = match_names(text, all_names, mp_info=mp_info)
     top_matches = sorted(matches,
@@ -108,7 +109,7 @@ def analyze_question(question_id):
 
 
 @questions_manager.command
-def analyze_all(number=None, force=False):
+def analyze_all(number=None, force=False, minority_only=False):
     n_jobs = n_skip = n_ok = 0
     for question in models.Question.query:
         if not force:
@@ -120,7 +121,8 @@ def analyze_all(number=None, force=False):
             continue
         if not question.person.minority:
             county = question.person.county
-            if (county is None or
+            if (minority_only or
+                county is None or
                 county.geonames_code is None):
                 n_skip += 1
                 continue
