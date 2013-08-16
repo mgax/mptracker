@@ -115,12 +115,15 @@ def analyze_all(number=None, force=False):
             if question.match.data is not None:
                 n_ok += 1
                 continue
-        county = question.person.county
-        if (question.text is None or
-            county is None or
-            county.geonames_code is None):
+        if question.text is None:
             n_skip += 1
             continue
+        if not question.person.minority:
+            county = question.person.county
+            if (county is None or
+                county.geonames_code is None):
+                n_skip += 1
+                continue
         analyze_question.delay(question.id)
         n_jobs += 1
         if number and n_jobs >= int(number):
