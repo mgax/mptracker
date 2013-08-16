@@ -9,8 +9,9 @@ project_root = path(__file__).abspath().parent.parent.parent
 
 class Scraper(object):
 
-    def __init__(self, session=None):
+    def __init__(self, session=None, use_cdep_opener=True):
         self.session = session or requests.Session()
+        self.use_cdep_opener = use_cdep_opener
 
     def fetch_url(self, url, args=None):
         if args:
@@ -19,12 +20,15 @@ class Scraper(object):
             elif url[-1] not in ['?', '&']:
                 url += '&'
             url += urlencode(args)
-        def opener(url):
-            resp = self.session.get(url)
-            text = resp.content.decode('iso-8859-2')
-            # we use utf-16 because the parser's autodetect works fine with it
-            return text.encode('utf-16')
-        page = pq(url, opener=opener, parser='html')
+        kwargs = {'parser': 'html'}
+        if self.use_cdep_opener:
+            def opener(url):
+                resp = self.session.get(url)
+                text = resp.content.decode('iso-8859-2')
+                # we use utf-16 because the parser's autodetect works fine with it
+                return text.encode('utf-16')
+            kwargs['opener'] = opener
+        page = pq(url, **kwargs)
         page.make_links_absolute()
         return page
 
