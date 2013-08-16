@@ -28,6 +28,12 @@ def strip_prefix(name):
         return name
 
 
+stop_words = [
+    "agenția",
+    "ministerul",
+]
+
+
 class SirutaLoader:
 
     def __init__(self):
@@ -65,6 +71,8 @@ def load_placenames():
     for row in reader:
         adm1_code = int(row['admin1 code']) if row['admin1 code'] else None
         name = strip_prefix(fix_comma_below(row['name']))
+        if any(w in name.lower() for w in stop_words):
+            continue
         county_place_names = place_names_by_county[adm1_code]
         county_place_names.add(name)
 
