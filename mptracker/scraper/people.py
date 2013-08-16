@@ -18,12 +18,16 @@ class PersonScraper(Scraper):
                     cdep_id = get_cdep_id(href)
                     td = a.parents('tr')[2]
                     county_name = pq(td[3]).text()
+                    minority = False
                     if county_name in ["Mino.", "Minoritati"]:
                         county_name = None
+                        minority = True
+
                     yield {
                         'cdep_id': cdep_id,
                         'name': name,
                         'county_name': county_name,
+                        'minority': minority,
                     }
 
 
