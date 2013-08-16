@@ -39,6 +39,9 @@ def create_app():
     app.register_blueprint(questions)
     admin.init_app(app)
     app._logger = logger
+    if app.debug:
+        from werkzeug.debug import DebuggedApplication
+        app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
     return app
 
 
