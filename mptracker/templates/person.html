@@ -14,6 +14,11 @@
   <h1>{{ person }}</h1>
 
   <dl class="dl-horizontal">
+    {% if person.county %}
+      <dt>Circumscripție:</dt>
+      <dd>{{ person.county }}</dd>
+    {% endif %}
+
     {% set cdep_url = person.get_cdep_url() %}
     {% if cdep_url %}
       <dt>cdep.ro:</dt>
