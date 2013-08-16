@@ -1,5 +1,5 @@
 import re
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 Token = namedtuple('Token', ['text', 'start', 'end'])
 ANY_PUNCTUATION = r'[.,;!?\-()]*'
@@ -78,28 +78,40 @@ def join_tokens(tokens):
     return Token(text, tokens[0].start, tokens[-1].end)
 
 
+def prepare_names(name_list):
+    out = defaultdict(dict)
+    for name in name_list:
+        norm_name = normalize(name)
+        if norm_name in stop_words:
+            continue
+        name_words = [t.text for t in tokenize(norm_name)]
+        word_count = len(name_words)
+        out[word_count][norm_name] = name
+    return sorted(out.items())
+
+
 def match_names(text, name_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
+
+    name_data = prepare_names(name_list)
 
     matches = []
     tokens = list(tokenize(text))
     for idx in range(len(tokens)):
         token_matches = []
-        for name in name_list:
-            if name in stop_words:
+        for word_count, counted_name_list in name_data:
+            if idx + word_count > len(tokens):
                 continue
-            name_words = [t.text for t in tokenize(name)]
-            if idx + len(name_words) > len(tokens):
-                continue
-            token_window = tokens[idx : idx + len(name_words)]
+            token_window = tokens[idx : idx + word_count]
             token = join_tokens(token_window)
 
             for stem in [False, True]:
-                if normalize(name) == normalize(token.text, stem=stem):
+                norm_token = normalize(token.text, stem=stem)
+                if norm_token in counted_name_list:
                     distance = 1.0
                     token_matches.append({
                         'distance': distance,
-                        'name': name,
+                        'name': counted_name_list[norm_token],
                         'token': token,
                     })
 
