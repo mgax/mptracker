@@ -2,11 +2,14 @@
 
 
 {% block content %}
-  <h1>
-    {% set url = url_for('pages.person', person_id=person.id) %}
-    <a href="{{ url }}">{{ person }}</a>
-    – întrebări și interpelări
-  </h1>
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        (person|string,
+            url_for('pages.person', person_id=person.id)),
+        ("întrebări și interpelări",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
 
   <table class="person-questions">
     <thead>
