@@ -48,7 +48,9 @@ class TablePatcher:
     def update(self, data, create=True):
         n_add = n_update = n_ok = 0
 
-        for record in data:
+        for n, record in enumerate(data):
+            if n % 1000 == 0:
+                self.session.flush()
             key = self.dict_key(record)
             row = self.existing.get(key)
 
