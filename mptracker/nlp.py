@@ -108,7 +108,7 @@ def match_names(text, name_list, mp_info={}):
         if not token_matches:
             continue
 
-        token_matches.sort(key=lambda m: m['distance'])
+        token_matches.sort(key=lambda m: len(m['name']))
         top_match = token_matches[-1]
 
         if (normalize(top_match['name']) ==
