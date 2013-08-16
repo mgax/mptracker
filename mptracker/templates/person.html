@@ -13,23 +13,22 @@
 
   <h1>{{ person }}</h1>
 
-  {% set cdep_url = person.get_cdep_url() %}
-  {% if cdep_url %}
-    <p>
-        <a href="{{ cdep_url }}">{{ cdep_url }}</a>
-    </p>
-  {% endif %}
+  <dl class="dl-horizontal">
+    {% set cdep_url = person.get_cdep_url() %}
+    {% if cdep_url %}
+      <dt>cdep.ro:</dt>
+      <dd><a href="{{ cdep_url }}">{{ cdep_url }}</a></dd>
+    {% endif %}
 
-  <p>
-    luări de cuvânt: {{ paragraphs_count }}
-    în {{ steno_data|length }} zile
-  </p>
+    <dt>luări de cuvânt:</dt>
+    <dd>{{ paragraphs_count }} în {{ steno_data|length }} zile</d>
 
-  <p>
-    întrebări și interpelări:
-    {% set url = url_for('questions.person_questions', person_id=person.id) %}
-    <a href="{{ url }}">{{ questions_count }}</a>
-  </p>
+    <dt>întrebări și interpelări:</dt>
+    <dd>
+      {% set url = url_for('questions.person_questions', person_id=person.id) %}
+      <a href="{{ url }}">{{ questions_count }}</a>
+    </d>
+  </dl>
 
   {% for date, paragraphs in steno_data %}
   <h3>{{ date }}</h3>
