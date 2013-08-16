@@ -48,16 +48,10 @@ def person_index():
 @pages.route('/person/<person_id>')
 def person(person_id):
     person = models.Person.query.get_or_404(person_id)
-
-    steno_data = defaultdict(list)
-    for paragraph in person.steno_paragraphs.order_by('serial'):
-        steno_data[paragraph.chapter.date].append(paragraph)
-
     return flask.render_template('person.html', **{
         'person': person,
         'questions_count': person.questions.count(),
-        'paragraphs_count': sum(len(p) for p in steno_data.values()),
-        'steno_data': sorted(steno_data.items()),
+        'paragraphs_count': person.steno_paragraphs.count(),
     })
 
 

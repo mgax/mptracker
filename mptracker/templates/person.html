@@ -26,7 +26,7 @@
     {% endif %}
 
     <dt>luări de cuvânt:</dt>
-    <dd>{{ paragraphs_count }} în {{ steno_data|length }} zile</d>
+    <dd>{{ paragraphs_count }}</d>
 
     <dt>întrebări și interpelări:</dt>
     <dd>
@@ -34,23 +34,5 @@
       <a href="{{ url }}">{{ questions_count }}</a>
     </d>
   </dl>
-
-  {% for date, paragraphs in steno_data %}
-  <h3>{{ date }}</h3>
-
-  <ul>
-  {% for p in paragraphs %}
-    <li>
-      {% set chapter = p.chapter %}
-      {% set url = url_for('.steno_chapter',
-                           date_str=chapter.date.isoformat(),
-                           chapter_serial_number=chapter.serial_number) %}
-      [<a href="{{ url }}">{{ chapter.serial }}</a>]
-
-      {{ p.text }}
-    </li>
-  {% endfor %}
-  </ul>
-  {% endfor %}
 
 {% endblock %}
