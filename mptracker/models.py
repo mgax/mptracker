@@ -30,6 +30,7 @@ class Person(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     cdep_id = db.Column(db.Text)
+    minority = db.Column(db.Boolean)
 
     county_id = db.Column(UUID, db.ForeignKey('county.id'))
     county = db.relationship('County',
