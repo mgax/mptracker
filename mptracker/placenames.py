@@ -105,3 +105,30 @@ def get_county_data(code):
                  'placename_data' / json_name)
     with json_path.open('r', encoding='utf-8') as f:
         return flask.json.load(f)
+
+
+@placenames_manager.command
+def expand_minority_names():
+    from mptracker.scraper.common import Scraper, get_cached_session, pqitems
+    scraper = Scraper(get_cached_session(), use_cdep_opener=False)
+    doc = get_minority_names()
+    roots = doc['root_names']
+    names = set()
+    for root in roots:
+        url = ('http://dexonline.ro/definitie'
+               '/{root}/paradigma'.format(root=root))
+        page = scraper.fetch_url(url)
+        for td in pqitems(page, 'table.lexem td.form'):
+            names.add(td.text().replace(' ', ''))
+    if '—' in names:
+        names.remove('—')
+    doc['search_names'] = sorted(names)
+    print(flask.json.dumps(doc, indent=2, sort_keys=True))
+
+
+@lru_cache()
+def get_minority_names():
+    json_path = (path(flask.current_app.root_path) /
+                 'placename_data' / 'minority.json')
+    with json_path.open('r', encoding='utf-8') as f:
+        return flask.json.load(f)
