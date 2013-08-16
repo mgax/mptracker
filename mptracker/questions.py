@@ -99,8 +99,8 @@ def match_question(question):
 def analyze_question(question_id):
     question = models.Question.query.get(question_id)
     result = match_question(question)
-    question.match_data = flask.json.dumps(result)
-    question.match_score = len(result['top_matches'])
+    question.match.data = flask.json.dumps(result)
+    question.match.score = len(result['top_matches'])
     models.db.session.commit()
 
 
@@ -109,7 +109,7 @@ def analyze_all(number=None, force=False):
     n_jobs = n_skip = n_ok = 0
     for question in models.Question.query:
         if not force:
-            if question.match_data is not None:
+            if question.match.data is not None:
                 n_ok += 1
                 continue
         county = question.person.county
@@ -159,7 +159,7 @@ def person_questions(person_id):
             'title': q.title,
             'date': q.date,
             'is_local_topic_flag': q.flags.is_local_topic,
-            'score': q.match_score or 0,
+            'score': q.match.score or 0,
         } for q in person.questions]
     def sort_key(question):
         if question['is_local_topic_flag']:
@@ -176,8 +176,8 @@ def person_questions(person_id):
 @questions.route('/questions/<question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
-    match_result = (flask.json.loads(question.match_data)
-                    if question.match_data else None)
+    match_result = (flask.json.loads(question.match.data)
+                    if question.match.data else None)
 
     return flask.render_template('questions/detail.html', **{
         'person': question.person,

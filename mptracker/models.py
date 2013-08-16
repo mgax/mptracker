@@ -113,8 +113,6 @@ class Question(db.Model):
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
     text = db.Column(db.Text)
-    match_data = db.Column(db.Text)
-    match_score = db.Column(db.Float)
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'))
     person = db.relationship('Person',
@@ -126,6 +124,14 @@ class Question(db.Model):
     def __repr__(self):
         return "<%s>" % self
 
+    match_row = db.relationship('QuestionMatch', lazy='eager', uselist=False)
+
+    @property
+    def match(self):
+        if self.match_row is None:
+            self.match_row = QuestionMatch()
+        return self.match_row
+
     flags_row = db.relationship('QuestionFlags', lazy='eager', uselist=False)
 
     @property
@@ -133,6 +139,12 @@ class Question(db.Model):
         if self.flags_row is None:
             self.flags_row = QuestionFlags()
         return self.flags_row
+
+
+class QuestionMatch(db.Model):
+    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+    data = db.Column(db.Text)
+    score = db.Column(db.Float)
 
 
 class QuestionFlags(db.Model):
