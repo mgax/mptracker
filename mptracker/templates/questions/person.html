@@ -13,14 +13,13 @@
 
   <table class="person-addressee-top">
     <thead>
-      <th>Top destinatari</th>
-      <th>procent de întrebări</th>
+      <th colspan="2">Top destinatari</th>
     </thead>
 
   {% for count, name in addressee_top %}
     <tr>
-      <td>{{ name }}</td>
       <td>{{ "%.0f%%"|format(100 * count / questions|length) }}</td>
+      <td>{{ name }}</td>
     </tr>
   {% endfor %}
   </table>
