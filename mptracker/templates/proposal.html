@@ -4,4 +4,17 @@
 {% block content %}
   <h1>Propunerea {{ proposal.cdep_serial }}</h1>
   <p>{{ proposal.title }}</p>
+
+ {% if sponsors %}
+  <h2>Sponsori</h2>
+
+  <ul>
+   {% for person in sponsors %}
+    <li>
+      {% set url = url_for('pages.person', person_id=person.id) %}
+      <a href="{{ url }}">{{ person }}</a>
+    </li>
+   {% endfor %}
+  </ul>
+ {% endif %}
 {% endblock %}

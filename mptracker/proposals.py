@@ -18,4 +18,5 @@ def proposal(proposal_id):
     proposal = models.Proposal.query.get_or_404(proposal_id)
     return flask.render_template('proposal.html', **{
         'proposal': proposal,
+        'sponsors': list(proposal.sponsors),
     })
