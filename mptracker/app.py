@@ -10,7 +10,7 @@ from mptracker.auth import auth
 from mptracker.admin import admin
 from mptracker.placenames import placenames_manager
 from mptracker.scraper import scraper_manager
-from mptracker.proposals import proposals
+from mptracker.proposals import proposals, proposals_manager
 
 
 logger = logging.getLogger(__name__)
@@ -53,6 +53,7 @@ manager.add_command('db', models.db_manager)
 manager.add_command('questions', questions_manager)
 manager.add_command('placenames', placenames_manager)
 manager.add_command('scraper', scraper_manager)
+manager.add_command('proposals', proposals_manager)
 
 
 @manager.command
