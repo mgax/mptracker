@@ -27,7 +27,7 @@ class ProposalScraper(Scraper):
     def fetch_proposal_details(self, url):
         page = self.fetch_url(url)
         out = {
-            'headline': pq('.headline', page).text(),
+            'title': pq('.headline', page).text(),
             'url': url,
         }
 

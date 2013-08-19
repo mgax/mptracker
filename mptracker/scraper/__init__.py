@@ -91,5 +91,15 @@ def proposals():
     proposal_scraper = ProposalScraper(get_cached_session())
 
     records = proposal_scraper.fetch_proposals()
-    for row in records:
-        print(row)
+
+    proposal_patcher = TablePatcher(models.Proposal,
+                                    models.db.session,
+                                    key_columns=['cdep_serial'])
+
+    with proposal_patcher.process(autoflush=1000) as add:
+        for record in records:
+            if record.pop('sponsored_by') == 'cdep':
+                cdep_sponsors = record.pop('cdep_sponsors')
+            else:
+                cdep_sponsors = []
+            result = add(record)
