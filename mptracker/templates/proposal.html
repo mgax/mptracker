@@ -3,6 +3,9 @@
 
 {% block content %}
   <h1>Propunerea {{ proposal.cdep_serial }}</h1>
+
+  <p><a href="{{ proposal.url }}">{{ proposal.url }}</a></p>
+
   <p>{{ proposal.title }}</p>
 
  {% if sponsors %}
