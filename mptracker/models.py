@@ -125,11 +125,12 @@ class Question(db.Model):
     def __repr__(self):
         return "<%s>" % self
 
-    text_row = db.relationship('QuestionText', lazy='eager', uselist=False)
+    text_row = db.relationship('QuestionText', lazy='eager', uselist=False,
+                    primaryjoin='Question.id==foreign(QuestionText.id)')
 
     def _get_text_row(self):
         if self.text_row is None:
-            self.text_row = QuestionText()
+            self.text_row = QuestionText(parent='question')
         return self.text_row
 
     @property
@@ -158,7 +159,8 @@ class Question(db.Model):
 
 
 class QuestionText(db.Model):
-    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+    id = db.Column(UUID, primary_key=True)
+    parent = db.Column(db.Text, nullable=False)
     text = db.Column(db.Text)
 
 
