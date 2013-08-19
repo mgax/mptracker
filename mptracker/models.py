@@ -182,12 +182,21 @@ class CommitteeSummary(db.Model):
     text = db.Column(db.Text)
 
 
+sponsors = db.Table('sponsors',
+    db.Column('person_id', UUID, db.ForeignKey('person.id')),
+    db.Column('proposal_id', UUID, db.ForeignKey('proposal.id'))
+)
+
+
 class Proposal(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     title = db.Column(db.Text)
     url = db.Column(db.Text)
     cdep_serial = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
+
+    sponsors = db.relationship('Person', secondary=sponsors,
+        backref=db.backref('proposals', lazy='dynamic'))
 
 
 class User(db.Model, UserMixin):
