@@ -7,6 +7,7 @@ from sqlalchemy import sql
 
 
 def upgrade():
+    op.drop_constraint('question_text_id_fkey', 'question_text')
     op.add_column('question_text', sa.Column('parent', sa.Text()))
 
     question_text = sql.table('question_text',
@@ -22,3 +23,5 @@ def upgrade():
 
 def downgrade():
     op.drop_column('question_text', 'parent')
+    op.create_foreign_key('question_text_id_fkey',
+        'question_text', 'question', ['id'], ['id'])
