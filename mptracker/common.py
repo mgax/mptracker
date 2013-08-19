@@ -81,24 +81,35 @@ class TablePatcher:
 
         return AddResult(row, is_new, is_changed)
 
-    def update(self, data, create=True):
-        n_add = n_update = n_ok = 0
+    @contextmanager
+    def process(self, autoflush=None):
+        counters = {'n_add': 0, 'n_update': 0, 'n_ok': 0, 'total': 0}
 
-        for n, record in enumerate(data):
-            if n % 1000 == 0:
-                self.session.flush()
-
+        def add(record, create=True):
             result = self.add(record, create=create)
 
+            counters['total'] += 0
+            if autoflush and counters['total'] % autoflush == 0:
+                self.session.flush()
+
             if result.is_new:
-                n_add += 1
+                counters['n_add'] += 1
 
             elif result.is_changed:
-                n_update += 1
+                counters['n_update'] += 1
 
             else:
-                n_ok += 1
+                counters['n_ok'] += 1
+
+            return result
+
+        yield add
 
         self.session.commit()
         logger.info("Created %d, updated %d, found ok %d.",
-                    n_add, n_update, n_ok)
+                    counters['n_add'], counters['n_update'], counters['n_ok'])
+
+    def update(self, data, create=True):
+        with self.process(autoflush=1000) as add:
+            for record in data:
+                add(record, create=create)
