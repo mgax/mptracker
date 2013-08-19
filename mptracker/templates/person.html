@@ -35,7 +35,12 @@
     <dd>
       {% set url = url_for('questions.person_questions', person_id=person.id) %}
       <a href="{{ url }}">{{ questions_count }}</a>
-    </d>
+    </dd>
+
+    <dt>propuneri legislative:</dt>
+    <dd>
+      {{ proposals_count }}
+    </dd>
   </dl>
 
 {% endblock %}
