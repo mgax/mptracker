@@ -202,6 +202,22 @@ class Proposal(db.Model):
     sponsors = db.relationship('Person', secondary=sponsors,
         backref=db.backref('proposals', lazy='dynamic'))
 
+    text_row = db.relationship('OcrText', lazy='eager', uselist=False,
+                    primaryjoin='Proposal.id==foreign(OcrText.id)')
+
+    def _get_text_row(self):
+        if self.text_row is None:
+            self.text_row = OcrText(parent='proposal')
+        return self.text_row
+
+    @property
+    def text(self):
+        return self._get_text_row().text
+
+    @text.setter
+    def text(self, value):
+        self._get_text_row().text = value
+
 
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
