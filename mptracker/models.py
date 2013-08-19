@@ -193,6 +193,7 @@ class Proposal(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     title = db.Column(db.Text)
     url = db.Column(db.Text)
+    pdf_url = db.Column(db.Text)
     cdep_serial = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
 
