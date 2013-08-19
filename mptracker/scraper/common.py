@@ -45,7 +45,7 @@ def pqitems(ob, selector=None):
         found = ob
     else:
         found = ob(selector)
-    return (cls(el) for el in found)
+    return [cls(el) for el in found]
 
 
 def get_cdep_id(href):

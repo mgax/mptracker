@@ -9,11 +9,11 @@ class ProposalScraper(Scraper):
 
     def fetch_proposals(self):
         page = self.fetch_url(self.proposals_url)
-        the_table = list(pqitems(page, 'table table table table table'))[-1]
-        rows = pqitems(the_table, 'tr')
+        the_table = pqitems(page, 'table table table table table')[-1]
+        rows = iter(pqitems(the_table, 'tr'))
         assert next(rows).text() == "Numar Titlu Stadiu"
         for row in rows:
-            tr_1 = list(pqitems(row, 'td'))[1]
+            tr_1 = pqitems(row, 'td')[1]
             url = pq('a', tr_1).attr('href')
             assert url.startswith('http://www.cdep.ro/pls/proiecte'
                                   '/upl_pck.proiect?cam=2&idp=')
