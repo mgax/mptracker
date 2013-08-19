@@ -125,12 +125,12 @@ class Question(db.Model):
     def __repr__(self):
         return "<%s>" % self
 
-    text_row = db.relationship('QuestionText', lazy='eager', uselist=False,
-                    primaryjoin='Question.id==foreign(QuestionText.id)')
+    text_row = db.relationship('OcrText', lazy='eager', uselist=False,
+                    primaryjoin='Question.id==foreign(OcrText.id)')
 
     def _get_text_row(self):
         if self.text_row is None:
-            self.text_row = QuestionText(parent='question')
+            self.text_row = OcrText(parent='question')
         return self.text_row
 
     @property
@@ -158,7 +158,7 @@ class Question(db.Model):
         return self.flags_row
 
 
-class QuestionText(db.Model):
+class OcrText(db.Model):
     id = db.Column(UUID, primary_key=True)
     parent = db.Column(db.Text, nullable=False)
     text = db.Column(db.Text)
