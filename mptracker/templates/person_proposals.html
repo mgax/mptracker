@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        (person|string,
+            url_for('pages.person', person_id=person.id)),
+        ("propuneri legislative",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <ul>
+  {% for proposal in proposals %}
+    <li>
+      {{ proposal.title|truncate(160) }}
+    </li>
+  {% endfor %}
+  </ul>
+
+{% endblock %}

@@ -39,7 +39,8 @@
 
     <dt>propuneri legislative:</dt>
     <dd>
-      {{ proposals_count }}
+      {% set url = url_for('proposals.person_proposals', person_id=person.id) %}
+      <a href="{{ url }}">{{ proposals_count }}</a>
     </dd>
   </dl>
 
