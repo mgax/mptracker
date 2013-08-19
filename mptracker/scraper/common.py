@@ -48,7 +48,13 @@ def pqitems(ob, selector=None):
     return [cls(el) for el in found]
 
 
-def get_cdep_id(href):
+def get_cdep_id(href, fail='raise'):
     qs = parse_qs(urlparse(href).query)
-    assert qs['cam'] == ['2']
+    if qs.get('cam') != ['2']:
+        if fail == 'raise':
+            raise ValueError("cam != 2 (href=%r)" % href)
+        elif fail == 'none':
+            return None
+        else:
+            raise RuntimeError("Don't know what fail=%r means" % fail)
     return '%s-%03d' % (int(qs['leg'][0]), int(qs['idm'][0]))
