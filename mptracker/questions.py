@@ -35,17 +35,17 @@ MAX_OCR_PAGES = 3
 
 
 @job
-def ocr_question(question_id):
-    question = models.Question.query.get(question_id)
+def ocr_url(url, max_pages=MAX_OCR_PAGES):
     http_session = get_cached_session('question-pdf')
 
-    pages = []
     with temp_dir() as tmp:
-        pdf_data = http_session.get(question.pdf_url).content
+        pdf_data = http_session.get(url).content
         pdf_path = tmp / 'document.pdf'
         with pdf_path.open('wb') as f:
             f.write(pdf_data)
         subprocess.check_call(['pdfimages', pdf_path, tmp / 'img'])
+
+        pages = []
         for image_path in sorted(tmp.listdir('img-*'))[:MAX_OCR_PAGES]:
             subprocess.check_call(['tesseract',
                                    image_path, image_path,
@@ -54,6 +54,15 @@ def ocr_question(question_id):
             text = (image_path + '.txt').text()
             pages.append(text)
 
+        return pages
+
+
+@job
+def ocr_question(question_id):
+    question = models.Question.query.get(question_id)
+    http_session = get_cached_session('question-pdf')
+
+    pages = ocr_url(question.pdf_url)
     question.text = '\n\n'.join(pages)
 
     models.db.session.add(question)
