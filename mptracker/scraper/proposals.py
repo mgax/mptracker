@@ -68,4 +68,13 @@ class ProposalScraper(Scraper):
                     raise RuntimeError("Can't parse sponsorship: %r"
                                        % val_td.html())
 
+            elif label == "Consultati:":
+                for tr in pqitems(val_td, 'tr'):
+                    if tr.text() == "Forma iniţiatorului":
+                        [a] = pqitems(tr, 'a')
+                        href = a.attr('href')
+                        assert href.startswith(
+                            'http://www.cdep.ro/proiecte/2013/')
+                        out['pdf_url'] = href
+
         return out
