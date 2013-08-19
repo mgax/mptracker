@@ -45,14 +45,27 @@ class ProposalScraper(Scraper):
                 out['proposal_type'] = val_td.text()
 
             elif label == "Initiator:":
-                sponsors = []
+                cdep_sponsors = []
                 for a in val_td('a').items():
                     cdep_id = get_cdep_id(a.attr('href'), fail='none')
                     if cdep_id is not None:
-                        sponsors.append({
+                        cdep_sponsors.append({
                             'cdep_id': cdep_id,
                             'name': self.fix_name(a.text()),
                         })
-                out['sponsors'] = sponsors
+
+                if len(cdep_sponsors) > 0:
+                    out['cdep_sponsors'] = cdep_sponsors
+                    out['sponsored_by'] = 'cdep'
+
+                elif val_td.text() == "Guvern":
+                    out['sponsored_by'] = 'govt'
+
+                elif 'senator' in val_td.text():
+                    out['sponsored_by'] = 'senate'
+
+                else:
+                    raise RuntimeError("Can't parse sponsorship: %r"
+                                       % val_td.html())
 
         return out
