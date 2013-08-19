@@ -82,3 +82,14 @@ def committee_summaries(year=2013):
     records = summary_scraper.fetch_summaries(year, get_pdf_text=True)
 
     patcher.update(records)
+
+
+@scraper_manager.command
+def proposals():
+    from mptracker.scraper.proposals import ProposalScraper
+
+    proposal_scraper = ProposalScraper(get_cached_session())
+
+    records = proposal_scraper.fetch_proposals()
+    for row in records:
+        print(row)
