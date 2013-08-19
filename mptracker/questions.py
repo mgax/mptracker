@@ -192,6 +192,18 @@ def person_questions(person_id):
     })
 
 
+@questions.route('/questions/bugs')
+def question_bugs():
+    Question = models.Question
+    questions = (Question.query
+                         .join(Question.flags_row)
+                            .filter(models.QuestionFlags.is_bug == True)
+                         .join(Question.person))
+    return flask.render_template('questions/bugs.html', **{
+        'questions': questions,
+    })
+
+
 @questions.route('/questions/<question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
