@@ -96,6 +96,8 @@ def proposals():
                                     models.db.session,
                                     key_columns=['cdep_serial'])
 
+    person_matcher = models.PersonMatcher()
+
     with proposal_patcher.process(autoflush=1000) as add:
         for record in records:
             if record.pop('sponsored_by') == 'cdep':
@@ -103,3 +105,23 @@ def proposals():
             else:
                 cdep_sponsors = []
             result = add(record)
+            row = result.row
+
+            new_people = set()
+            for sponsor_info in cdep_sponsors:
+                person = person_matcher.get_person(sponsor_info['name'],
+                                                   sponsor_info['cdep_id'],
+                                                   strict=True)
+                new_people.add(person)
+
+            existing_people = set(row.sponsors)
+            to_remove = set(existing_people) - set(new_people)
+            to_add = set(new_people) - set(existing_people)
+            if to_remove:
+                logger.info("Removing sponsors: %r",
+                            [p.cdep_id for p in to_remove])
+            if to_add:
+                logger.info("Adding sponsors: %r",
+                            [p.cdep_id for p in to_add])
+
+            row.sponsors = list(new_people)

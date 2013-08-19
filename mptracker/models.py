@@ -9,7 +9,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.login import UserMixin
 from path import path
-from mptracker.common import parse_date, TablePatcher, temp_dir
+from mptracker.common import (parse_date, TablePatcher, temp_dir,
+                              fix_local_chars)
 from sqlalchemy.dialects.postgresql import UUID
 
 logger = logging.getLogger(__name__)
@@ -223,7 +224,7 @@ class PersonMatcher:
         self.cdep_person = {p.cdep_id: p for p in Person.query}
 
     def name_bits(self, name):
-        return set(name.replace('-', ' ').split())
+        return set(fix_local_chars(name).replace('-', ' ').split())
 
     def get_person(self, name, cdep_id, strict=False):
         if cdep_id is not None:
