@@ -70,3 +70,9 @@ def test_twin_natural_key(patcher_twin_key):
     records[0]['name'] = "Annette"
     patcher_twin_key.update(records)
     assert sorted([t.name for t in Thing.query]) == ["Annette", "Bob"]
+
+
+def test_patcher_add_returns_row(patcher):
+    row1 = patcher.add({'code': 'an', 'name': "Anne"}).row
+    row2 = patcher.add({'code': 'an', 'name': "Annette"}).row
+    assert row1 == row2

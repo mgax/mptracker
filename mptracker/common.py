@@ -1,5 +1,6 @@
 from datetime import datetime
 from contextlib import contextmanager
+from collections import namedtuple
 import logging
 import tempfile
 from path import path
@@ -30,6 +31,9 @@ class RowNotFound(Exception):
     """ Could not find row to match key. """
 
 
+AddResult = namedtuple('AddResult', ['row', 'is_new', 'is_changed'])
+
+
 class TablePatcher:
 
     def __init__(self, model, session, key_columns):
@@ -45,41 +49,55 @@ class TablePatcher:
     def dict_key(self, record):
         return tuple(record.get(k) for k in self.key_columns)
 
+    def add(self, record, create=True):
+        key = self.dict_key(record)
+        row = self.existing.get(key)
+        is_new = is_changed = False
+
+        if row is None:
+            if create:
+                row = self.model()
+                logger.info("Adding %r", key)
+                is_new = is_changed = True
+                self.session.add(row)
+                self.existing[key] = row
+
+            else:
+                raise RowNotFound("Could not find row with key=%r" % key)
+
+        else:
+            for k in record:
+                if getattr(row, k) != record[k]:
+                    logger.info("Updating %r", key)
+                    is_changed = True
+                    break
+
+            else:
+                logger.info("Not touching %r", key)
+
+        if is_changed:
+            for k in record:
+                setattr(row, k, record[k])
+
+        return AddResult(row, is_new, is_changed)
+
     def update(self, data, create=True):
         n_add = n_update = n_ok = 0
 
         for n, record in enumerate(data):
             if n % 1000 == 0:
                 self.session.flush()
-            key = self.dict_key(record)
-            row = self.existing.get(key)
 
-            if row is None:
-                if create:
-                    row = self.model()
-                    logger.info("Adding %r", key)
-                    n_add += 1
+            result = self.add(record, create=create)
 
-                else:
-                    raise RowNotFound("Could not find row with key=%r" % key)
+            if result.is_new:
+                n_add += 1
+
+            elif result.is_changed:
+                n_update += 1
 
             else:
-                for k in record:
-                    if getattr(row, k) != record[k]:
-                        logger.info("Updating %r", key)
-                        n_update += 1
-                        break
-
-                else:
-                    logger.info("Not touching %r", key)
-                    n_ok += 1
-                    continue  # all fields are equal
-
-            for k in record:
-                setattr(row, k, record[k])
-
-            self.session.add(row)
-            self.existing[key] = row
+                n_ok += 1
 
         self.session.commit()
         logger.info("Created %d, updated %d, found ok %d.",
