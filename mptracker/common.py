@@ -1,12 +1,16 @@
 from datetime import datetime
 from contextlib import contextmanager
 from collections import namedtuple
+import subprocess
 import logging
 import tempfile
+from flask.ext.rq import job
 from path import path
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+MAX_OCR_PAGES = 3
 
 
 def parse_date(date_str):
@@ -113,3 +117,27 @@ class TablePatcher:
         with self.process(autoflush=1000) as add:
             for record in data:
                 add(record, create=create)
+
+
+@job
+def ocr_url(url, max_pages=MAX_OCR_PAGES):
+    from mptracker.scraper.common import get_cached_session
+    http_session = get_cached_session('question-pdf')
+
+    with temp_dir() as tmp:
+        pdf_data = http_session.get(url).content
+        pdf_path = tmp / 'document.pdf'
+        with pdf_path.open('wb') as f:
+            f.write(pdf_data)
+        subprocess.check_call(['pdfimages', pdf_path, tmp / 'img'])
+
+        pages = []
+        for image_path in sorted(tmp.listdir('img-*'))[:MAX_OCR_PAGES]:
+            subprocess.check_call(['tesseract',
+                                   image_path, image_path,
+                                   '-l', 'ron'],
+                                  stderr=subprocess.DEVNULL)
+            text = (image_path + '.txt').text()
+            pages.append(text)
+
+        return pages

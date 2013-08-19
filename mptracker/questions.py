@@ -1,12 +1,10 @@
 import logging
-import subprocess
 from collections import defaultdict
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
 from mptracker import models
-from mptracker.common import temp_dir
-from mptracker.scraper.common import get_cached_session
+from mptracker.common import ocr_url
 from mptracker.nlp import match_names
 from mptracker.placenames import get_county_data, get_minority_names
 from mptracker.auth import require_privilege
@@ -31,36 +29,10 @@ other_phrases = [
     'cabinetul meu parlamentar',
 ]
 
-MAX_OCR_PAGES = 3
-
-
-@job
-def ocr_url(url, max_pages=MAX_OCR_PAGES):
-    http_session = get_cached_session('question-pdf')
-
-    with temp_dir() as tmp:
-        pdf_data = http_session.get(url).content
-        pdf_path = tmp / 'document.pdf'
-        with pdf_path.open('wb') as f:
-            f.write(pdf_data)
-        subprocess.check_call(['pdfimages', pdf_path, tmp / 'img'])
-
-        pages = []
-        for image_path in sorted(tmp.listdir('img-*'))[:MAX_OCR_PAGES]:
-            subprocess.check_call(['tesseract',
-                                   image_path, image_path,
-                                   '-l', 'ron'],
-                                  stderr=subprocess.DEVNULL)
-            text = (image_path + '.txt').text()
-            pages.append(text)
-
-        return pages
-
 
 @job
 def ocr_question(question_id):
     question = models.Question.query.get(question_id)
-    http_session = get_cached_session('question-pdf')
 
     pages = ocr_url(question.pdf_url)
     question.text = '\n\n'.join(pages)
