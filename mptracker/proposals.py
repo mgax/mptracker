@@ -11,3 +11,11 @@ def person_proposals(person_id):
         'person': person,
         'proposals': list(person.proposals),
     })
+
+
+@proposals.route('/proposals/<proposal_id>')
+def proposal(proposal_id):
+    proposal = models.Proposal.query.get_or_404(proposal_id)
+    return flask.render_template('proposal.html', **{
+        'proposal': proposal,
+    })

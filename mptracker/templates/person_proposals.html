@@ -14,7 +14,8 @@
   <ul>
   {% for proposal in proposals %}
     <li>
-      {{ proposal.title|truncate(160) }}
+      {% set url = url_for('.proposal', proposal_id=proposal.id) %}
+      <a href="{{ url }}">{{ proposal.title|truncate(160) }}</a>
     </li>
   {% endfor %}
   </ul>
