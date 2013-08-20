@@ -2,6 +2,9 @@
 
 
 {% block list_row_actions %}
-  {% set url = url_for('questions.question_detail', question_id=row.id) %}
-  <a href="{{ url }}">view</a>
+  {#% set url = url_for('questions.question_detail', question_id=row.id) %#}
+  {%- set url = admin_view.get_view_url(row) %}
+  {%- if url -%}
+    <a href="{{ url }}">view</a>
+  {%- endif %}
 {% endblock %}
