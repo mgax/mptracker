@@ -189,11 +189,15 @@ class CommitteeSummary(db.Model):
 
 
 class Sponsorship(db.Model):
-    __table__ = db.Table('sponsorship',
-        db.Column('id', UUID, primary_key=True, default=random_uuid),
-        db.Column('person_id', UUID, db.ForeignKey('person.id')),
-        db.Column('proposal_id', UUID, db.ForeignKey('proposal.id'))
-    )
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    person_id = db.Column(UUID, db.ForeignKey('person.id'))
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
+
+    proposal = db.relationship('Proposal', lazy='eager',
+        backref=db.backref('sponsorships', lazy='dynamic'))
+
+    person = db.relationship('Person', lazy='eager',
+        backref=db.backref('sponsorships', lazy='dynamic'))
 
 
 class Proposal(db.Model):
@@ -204,9 +208,6 @@ class Proposal(db.Model):
     cdep_serial = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
     sponsored_by = db.Column(db.Text)
-
-    sponsors = db.relationship('Person', secondary=Sponsors.__table__,
-        backref=db.backref('proposals', lazy='dynamic'))
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
                     primaryjoin='Proposal.id==foreign(OcrText.id)')

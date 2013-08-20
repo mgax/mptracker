@@ -12,7 +12,8 @@
   {{ breadcrumbs(breadcrumb_links) }}
 
   <ul>
-  {% for proposal in proposals %}
+  {% for sp in sponsorships %}
+    {% set proposal = sp.proposal %}
     <li>
       {% set url = url_for('.proposal', proposal_id=proposal.id) %}
       <a href="{{ url }}">{{ proposal.title|truncate(160) }}</a>

@@ -52,7 +52,7 @@ def person(person_id):
         'person': person,
         'questions_count': person.questions.count(),
         'paragraphs_count': person.steno_paragraphs.count(),
-        'proposals_count': person.proposals.count(),
+        'sponsorships_count': person.sponsorships.count(),
     })
 
 

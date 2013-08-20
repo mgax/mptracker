@@ -18,7 +18,7 @@ def person_proposals(person_id):
     person = models.Person.query.get_or_404(person_id)
     return flask.render_template('person_proposals.html', **{
         'person': person,
-        'proposals': list(person.proposals),
+        'sponsorships': list(person.sponsorships),
     })
 
 
@@ -27,7 +27,7 @@ def proposal(proposal_id):
     proposal = models.Proposal.query.get_or_404(proposal_id)
     return flask.render_template('proposal.html', **{
         'proposal': proposal,
-        'sponsors': list(proposal.sponsors),
+        'sponsorships': list(proposal.sponsorships),
     })
 
 

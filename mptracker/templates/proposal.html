@@ -8,11 +8,12 @@
 
   <p>{{ proposal.title }}</p>
 
- {% if sponsors %}
+ {% if sponsorships %}
   <h2>Sponsori</h2>
 
   <ul>
-   {% for person in sponsors %}
+   {% for sp in sponsorships %}
+    {% set person = sp.person %}
     <li>
       {% set url = url_for('pages.person', person_id=person.id) %}
       <a href="{{ url }}">{{ person }}</a>
