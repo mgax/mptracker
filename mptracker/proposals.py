@@ -18,7 +18,7 @@ proposals_manager = Manager()
 @proposals.route('/person/<person_id>/proposals')
 def person_proposals(person_id):
     person = models.Person.query.get_or_404(person_id)
-    return flask.render_template('person_proposals.html', **{
+    return flask.render_template('proposals/person.html', **{
         'person': person,
         'sponsorships': list(person.sponsorships),
     })
@@ -27,7 +27,7 @@ def person_proposals(person_id):
 @proposals.route('/proposals/<proposal_id>')
 def proposal(proposal_id):
     proposal = models.Proposal.query.get_or_404(proposal_id)
-    return flask.render_template('proposal.html', **{
+    return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'sponsorships': list(proposal.sponsorships),
     })
@@ -37,7 +37,7 @@ def proposal(proposal_id):
 def proposals_relevant():
     sponsorships = [s for s in models.Sponsorship.query if s.match.score]
     sponsorships.sort(key=lambda s: s.match.score or 0, reverse=True)
-    return flask.render_template('proposals_relevant.html', **{
+    return flask.render_template('proposals/relevant.html', **{
         'sponsorships': sponsorships,
     })
 
