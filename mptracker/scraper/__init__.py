@@ -100,7 +100,7 @@ def proposals():
 
     with proposal_patcher.process(autoflush=1000) as add:
         for record in records:
-            if record.pop('sponsored_by') == 'cdep':
+            if record['sponsored_by'] == 'cdep':
                 cdep_sponsors = record.pop('cdep_sponsors')
             else:
                 cdep_sponsors = []
