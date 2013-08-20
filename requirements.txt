@@ -1,7 +1,6 @@
 -e git+https://github.com/gawel/pyquery.git@62d9db3af7f434ef99b2f6ac22413272fb201843#egg=pyquery-dev
 -e git+https://github.com/getsentry/raven-python.git@89156e835bd46ea32b4743b7e5d95db043af6c11#egg=raven-dev
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
--e git+https://github.com/mgax/rq.git@328e7611d39ad989435e3fa6c1aa32879185c515#egg=rq-dev
 -e git+https://github.com/mgax/SIRUTA.git@b9d3a5e0af36a60e450cdc14e6417614df92ed68#egg=SIRUTAlib-dev
 -e git+https://github.com/mitsuhiko/flask-sqlalchemy.git@2edb3f14931eefde4bf467e88f7373704ce1ecd3#egg=Flask_SQLAlchemy-dev
 -e git+https://github.com/mitsuhiko/flask.git@2e17ad7fd42d8575f308af9c17496d38ceb72b5e#egg=Flask-dev
@@ -27,6 +26,7 @@ pytz==2013b
 redis==2.7.6
 requests-cache==0.4.0
 requests==1.2.3
+rq==0.3.10
 simplejson==3.3.0
 six==1.3.0
 SQLAlchemy==0.8.3-f085167dev
