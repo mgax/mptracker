@@ -199,6 +199,15 @@ class Sponsorship(db.Model):
     person = db.relationship('Person', lazy='eager',
         backref=db.backref('sponsorships', lazy='dynamic'))
 
+    match_row = db.relationship('Match', lazy='eager', uselist=False,
+                    primaryjoin='Sponsorship.id==foreign(Match.id)')
+
+    @property
+    def match(self):
+        if self.match_row is None:
+            self.match_row = Match(parent='sponsorship')
+        return self.match_row
+
 
 class Proposal(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)

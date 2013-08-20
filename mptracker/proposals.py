@@ -2,8 +2,10 @@ from time import sleep
 import logging
 import flask
 from flask.ext.script import Manager
+from flask.ext.rq import job
 from mptracker import models
 from mptracker.common import ocr_url
+from mptracker.nlp import match_text_for_person
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -77,3 +79,40 @@ def ocr_all(number=None, force=False):
                 del job_map[proposal_id]
             logger.info("saved %d, failed %d, remaining %d",
                         len(done), len(failed), len(job_map))
+
+
+@job
+@proposals_manager.command
+def analyze_sponsorship(sponsorship_id):
+    sponsorship = models.Sponsorship.query.get(sponsorship_id)
+    proposal = sponsorship.proposal
+    text = proposal.title + ' ' + proposal.text
+    result = match_text_for_person(sponsorship.person, text)
+    sponsorship.match.data = flask.json.dumps(result)
+    sponsorship.match.score = len(result['top_matches'])
+    models.db.session.commit()
+
+
+@proposals_manager.command
+def analyze_all(number=None, force=False, minority_only=False):
+    n_jobs = n_skip = n_ok = 0
+    for sponsorship in models.Sponsorship.query:
+        if not force:
+            if sponsorship.match.data is not None:
+                n_ok += 1
+                continue
+        if sponsorship.proposal.text is None:
+            n_skip += 1
+            continue
+        if not sponsorship.person.minority:
+            county = sponsorship.person.county
+            if (minority_only or
+                county is None or
+                county.geonames_code is None):
+                n_skip += 1
+                continue
+        analyze_sponsorship.delay(sponsorship.id)
+        n_jobs += 1
+        if number and n_jobs >= int(number):
+            break
+    logger.info("enqueued %d jobs, skipped %d, ok %d", n_jobs, n_skip, n_ok)
