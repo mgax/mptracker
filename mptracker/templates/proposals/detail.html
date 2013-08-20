@@ -13,7 +13,7 @@
 
   <ul>
    {% for sp in sponsorships %}
-    {% set person = sp.person %}
+    {% set person = sp['person'] %}
     <li>
       {% set url = url_for('pages.person', person_id=person.id) %}
       <a href="{{ url }}">{{ person }}</a>
@@ -21,6 +21,29 @@
    {% endfor %}
   </ul>
  {% endif %}
+
+ {% for sp in sponsorships %}
+  <section class="analysisresult">
+    <div class="analysisresult-heading">
+      <h3>Rezultatul analizei – {{ sp['person'] }}</h3>
+    </div>
+
+    {% if sp['match_data'].top_matches %}
+      <ul>
+      {% for match in sp['match_data'].top_matches %}
+        <li>
+          {{ proposal.text[:match.token.start][-40:] }}
+          <strong class="qmatch-highlight">{{ match.token.text }}</strong>
+          {{ proposal.text[match.token.end:][:40] }}
+          ({{ match.name }} {{ (match.distance * 100)|int }}%)
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nu am găsit corespondențe.</p>
+    {% endif %}
+  </section>
+ {% endfor %}
 
   <section class="originaltext">
     <div class="originaltext-heading">

@@ -29,7 +29,9 @@ def proposal(proposal_id):
     proposal = models.Proposal.query.get_or_404(proposal_id)
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
-        'sponsorships': list(proposal.sponsorships),
+        'sponsorships': [{'person': sp.person,
+                          'match_data': flask.json.loads(sp.match.data)}
+                         for sp in proposal.sponsorships],
     })
 
 
