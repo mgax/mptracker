@@ -33,6 +33,15 @@ def proposal(proposal_id):
     })
 
 
+@proposals.route('/proposals/relevant')
+def proposals_relevant():
+    sponsorships = [s for s in models.Sponsorship.query if s.match.score]
+    sponsorships.sort(key=lambda s: s.match.score or 0, reverse=True)
+    return flask.render_template('proposals_relevant.html', **{
+        'sponsorships': sponsorships,
+    })
+
+
 @proposals_manager.command
 def ocr_all(number=None, force=False):
     job_map = {}

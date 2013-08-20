@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Relevant proposals</h1>
+
+  <table class="person-questions">
+    <thead>
+      <th>Titlu</th>
+      <th>Deputat</th>
+      <th>Scor</th>
+    </thead>
+
+   {% for sp in sponsorships %}
+    {% set proposal = sp.proposal %}
+    {% set person = sp.person %}
+    {% set match = sp.match %}
+    <tr>
+      <td>
+        {% set url = url_for('.proposal', proposal_id=proposal.id) %}
+        <a href="{{ url }}">{{ proposal.title|truncate(80) }}</a>
+      </td>
+      <td>{{ person }}</td>
+      <td>{{ proposal.date }}</td>
+      <td>{{ match.score }}</td>
+    </tr>
+   {% endfor %}
+  </table>
+{% endblock %}
