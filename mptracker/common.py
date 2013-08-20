@@ -76,9 +76,6 @@ class TablePatcher:
                     is_changed = True
                     break
 
-            else:
-                logger.info("Not touching %r", key)
-
         if is_changed:
             for k in record:
                 setattr(row, k, record[k])
