@@ -188,8 +188,8 @@ class CommitteeSummary(db.Model):
 
 
 
-class Sponsors(db.Model):
-    __table__ = db.Table('sponsors',
+class Sponsorship(db.Model):
+    __table__ = db.Table('sponsorship',
         db.Column('id', UUID, primary_key=True, default=random_uuid),
         db.Column('person_id', UUID, db.ForeignKey('person.id')),
         db.Column('proposal_id', UUID, db.ForeignKey('proposal.id'))
