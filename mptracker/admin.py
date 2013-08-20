@@ -37,9 +37,11 @@ admin.add_view(ModelView(models.StenoChapter))
 admin.add_view(ModelView(models.StenoParagraph))
 admin.add_view(ModelView(models.User))
 admin.add_view(ModelView(models.County))
-admin.add_view(ModelView(models.Proposal))
+admin.add_view(ModelView(models.Proposal,
+                         view_route='proposals.proposal:proposal_id'))
 admin.add_view(ModelView(models.CommitteeSummary))
 admin.add_view(ModelView(models.Question,
                          view_route='questions.question_detail:question_id'))
 admin.add_view(ModelView(models.Person,
+                         view_route='pages.person:person_id',
                          column_searchable_list=['name']))
