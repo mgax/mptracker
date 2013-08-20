@@ -5,8 +5,7 @@ from flask.ext.script import Manager
 from flask.ext.rq import job
 from mptracker import models
 from mptracker.common import ocr_url
-from mptracker.nlp import match_names
-from mptracker.placenames import get_county_data, get_minority_names
+from mptracker.nlp import match_text_for_person
 from mptracker.auth import require_privilege
 
 
@@ -16,18 +15,6 @@ logger.setLevel(logging.INFO)
 questions = flask.Blueprint('questions', __name__)
 
 questions_manager = Manager()
-
-other_phrases = [
-    'memoriu',
-    'memoriul',
-    'petiție',
-    'petiția',
-    'audiență',
-    'audiențe',
-    'cabinet parlamentar',
-    'cabinetul parlamentar',
-    'cabinetul meu parlamentar',
-]
 
 
 @job
@@ -59,32 +46,12 @@ def ocr_all(number=None, force=False):
     logger.info("enqueued %d jobs, skipped %d, ok %d", n_jobs, n_skip, n_ok)
 
 
-def match_question(question):
-    mp_info = {'name': question.person.name}
-
-    if question.person.minority:
-        local_names = get_minority_names()['search_names']
-
-    else:
-        county_data = get_county_data(question.person.county.geonames_code)
-        local_names = county_data['place_names']
-        mp_info['county_name'] = county_data['name']
-
-    all_names = local_names + other_phrases
-
-    text = question.title + ' ' + question.text
-    matches = match_names(text, all_names, mp_info=mp_info)
-    top_matches = sorted(matches,
-                         key=lambda m: m['distance'],
-                         reverse=True)[:10]
-    return {'top_matches': top_matches}
-
-
 @job
 @questions_manager.command
 def analyze_question(question_id):
     question = models.Question.query.get(question_id)
-    result = match_question(question)
+    text = question.title + ' ' + question.text
+    result = match_text_for_person(question.person, text)
     question.match.data = flask.json.dumps(result)
     question.match.score = len(result['top_matches'])
     models.db.session.commit()

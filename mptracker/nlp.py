@@ -1,5 +1,6 @@
 import re
 from collections import namedtuple, defaultdict
+from mptracker.placenames import get_county_data, get_minority_names
 
 Token = namedtuple('Token', ['text', 'start', 'end'])
 ANY_PUNCTUATION = r'[.,;!?\-()]*'
@@ -31,6 +32,18 @@ signature_stop_words = [
     'deputat',
     'deputatul',
     'electorală',
+]
+
+other_phrases = [
+    'memoriu',
+    'memoriul',
+    'petiție',
+    'petiția',
+    'audiență',
+    'audiențe',
+    'cabinet parlamentar',
+    'cabinetul parlamentar',
+    'cabinetul meu parlamentar',
 ]
 
 stem_suffixes = [
@@ -136,3 +149,23 @@ def match_names(text, name_list, mp_info={}):
         matches.append(top_match)
 
     return matches
+
+
+def match_text_for_person(person, text):
+    mp_info = {'name': person.name}
+
+    if person.minority:
+        local_names = get_minority_names()['search_names']
+
+    else:
+        county_data = get_county_data(person.county.geonames_code)
+        local_names = county_data['place_names']
+        mp_info['county_name'] = county_data['name']
+
+    all_names = local_names + other_phrases
+
+    matches = match_names(text, all_names, mp_info=mp_info)
+    top_matches = sorted(matches,
+                         key=lambda m: m['distance'],
+                         reverse=True)[:10]
+    return {'top_matches': top_matches}
