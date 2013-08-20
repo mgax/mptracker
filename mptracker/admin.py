@@ -13,7 +13,7 @@ class ModelView(ModelView_base):
     can_edit = False
     can_delete = False
 
-    list_template = 'questions/admin_list.html'
+    list_template = 'admin_list.html'
     view_route = None
 
     def __init__(self, model, **kwargs):
