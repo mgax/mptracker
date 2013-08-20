@@ -281,6 +281,11 @@ def upgrade(revision='head'):
 
 
 @db_manager.command
+def downgrade(revision):
+    return alembic(['downgrade', revision])
+
+
+@db_manager.command
 def revision(message=None):
     if message is None:
         message = input('revision name: ')
