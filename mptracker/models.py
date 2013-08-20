@@ -185,10 +185,13 @@ class CommitteeSummary(db.Model):
     text = db.Column(db.Text)
 
 
-sponsors = db.Table('sponsors',
-    db.Column('person_id', UUID, db.ForeignKey('person.id')),
-    db.Column('proposal_id', UUID, db.ForeignKey('proposal.id'))
-)
+
+class Sponsors(db.Model):
+    __table__ = db.Table('sponsors',
+        db.Column('id', UUID, primary_key=True, default=random_uuid),
+        db.Column('person_id', UUID, db.ForeignKey('person.id')),
+        db.Column('proposal_id', UUID, db.ForeignKey('proposal.id'))
+    )
 
 
 class Proposal(db.Model):
@@ -199,7 +202,7 @@ class Proposal(db.Model):
     cdep_serial = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
 
-    sponsors = db.relationship('Person', secondary=sponsors,
+    sponsors = db.relationship('Person', secondary=Sponsors.__table__,
         backref=db.backref('proposals', lazy='dynamic'))
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
@@ -295,7 +298,7 @@ def drop(names):
 def get_model_map():
     reg = db.Model._decl_class_registry
     models = [reg[k] for k in reg if not k.startswith('_')]
-    return {m.__tablename__: m for m in models}
+    return {m.__table__.name: m for m in models}
 
 
 class TableLoader:
