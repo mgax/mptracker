@@ -389,7 +389,11 @@ def load(name, columns=None, update_only=False):
 
 
 @db_manager.command
-def dump_tables(folder_path, xclude=None):
+def dump_tables(folder_path=None, xclude=None):
+    if folder_path is None:
+        folder_path = os.environ['MPTRACKER_DUMP_TABLES_FOLDER']
+    if xclude is None:
+        xclude = os.environ.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
     if xclude:
         exclude = xclude.split(',')
     else:
