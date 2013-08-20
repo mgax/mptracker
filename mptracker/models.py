@@ -141,12 +141,13 @@ class Question(db.Model):
     def text(self, value):
         self._get_text_row().text = value
 
-    match_row = db.relationship('QuestionMatch', lazy='eager', uselist=False)
+    match_row = db.relationship('Match', lazy='eager', uselist=False,
+                    primaryjoin='Question.id==foreign(Match.id)')
 
     @property
     def match(self):
         if self.match_row is None:
-            self.match_row = QuestionMatch()
+            self.match_row = Match(parent='question')
         return self.match_row
 
     flags_row = db.relationship('QuestionFlags', lazy='eager', uselist=False)
@@ -164,8 +165,9 @@ class OcrText(db.Model):
     text = db.Column(db.Text)
 
 
-class QuestionMatch(db.Model):
-    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+class Match(db.Model):
+    id = db.Column(UUID, primary_key=True)
+    parent = db.Column(db.Text, nullable=False)
     data = db.Column(db.Text)
     score = db.Column(db.Float)
 
