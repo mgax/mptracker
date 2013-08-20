@@ -201,6 +201,7 @@ class Proposal(db.Model):
     pdf_url = db.Column(db.Text)
     cdep_serial = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
+    sponsored_by = db.Column(db.Text)
 
     sponsors = db.relationship('Person', secondary=Sponsors.__table__,
         backref=db.backref('proposals', lazy='dynamic'))
