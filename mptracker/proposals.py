@@ -73,7 +73,7 @@ def ocr_all(number=None, force=False):
         session.commit()
 
         if done or failed:
-            for question_id in done | failed:
-                del job_map[question_id]
+            for proposal_id in done | failed:
+                del job_map[proposal_id]
             logger.info("saved %d, failed %d, remaining %d",
                         len(done), len(failed), len(job_map))
