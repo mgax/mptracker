@@ -62,3 +62,18 @@
   </table>
 
 {% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='lib/datatables/js/jquery.dataTables.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+  "use strict";
+
+  var table = $('.person-questions').dataTable();
+  app.fixup_table(table);
+});
+</script>
+{% endblock %}
