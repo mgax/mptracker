@@ -346,6 +346,13 @@ class TableLoader:
 
 
 @db_manager.command
+def empty(name):
+    model = get_model_map()[name]
+    model.query.delete()
+    db.session.commit()
+
+
+@db_manager.command
 def dump(name, columns=None, number=None, filter=None, _file=sys.stdout):
     if columns:
         columns = columns.split(',')
