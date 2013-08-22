@@ -128,7 +128,7 @@ def person_questions(person_id):
         cols = ['id', 'title', 'date', 'is_local_topic_flag',
                 'score', 'addressee']
         return flask.Response(csv_lines(cols, questions),
-                              mimetype='text/plain')
+                              mimetype='text/csv')
 
     addressee_top = sorted(((n, name) for name, n in addressee_count.items()),
                            reverse=True)[:5]
