@@ -2,6 +2,7 @@ from collections import defaultdict
 import calendar
 import flask
 from sqlalchemy.orm import joinedload
+from path import path
 from mptracker import models
 from mptracker.common import parse_date
 
@@ -86,6 +87,16 @@ def committee_summary(summary_id):
     return flask.render_template('committee_summary.html', **{
         'summary': summary,
     })
+
+@pages.app_url_defaults
+def bust_cache(endpoint, values):
+    if endpoint == 'static':
+        filename = values['filename']
+        file_path = path(flask.current_app.static_folder) / filename
+        if file_path.exists():
+            mtime = file_path.stat().st_mtime
+            key = ('%x' % mtime)[-6:]
+            values['t'] = key
 
 
 @pages.context_processor
