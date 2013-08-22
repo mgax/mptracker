@@ -80,6 +80,14 @@ def steno_chapter(date_str, chapter_serial_number):
     })
 
 
+@pages.route('/committee-summary/<summary_id>')
+def committee_summary(summary_id):
+    summary = models.CommitteeSummary.query.get_or_404(summary_id)
+    return flask.render_template('committee_summary.html', **{
+        'summary': summary,
+    })
+
+
 @pages.context_processor
 def inject_calendar():
     return {
