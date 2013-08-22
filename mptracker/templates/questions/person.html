@@ -11,18 +11,22 @@
       ] %}
   {{ breadcrumbs(breadcrumb_links) }}
 
-  <table class="person-addressee-top">
-    <thead>
-      <th colspan="2">Top destinatari</th>
-    </thead>
+  <div class="row">
+    <div class="topaddressee">
+      <table>
+        <thead>
+          <th colspan="2">Top destinatari</th>
+        </thead>
 
-  {% for count, name in addressee_top %}
-    <tr>
-      <td>{{ "%.0f%%"|format(100 * count / questions|length) }}</td>
-      <td>{{ name }}</td>
-    </tr>
-  {% endfor %}
-  </table>
+       {% for count, name in addressee_top %}
+        <tr>
+          <td>{{ "%.0f%%"|format(100 * count / questions|length) }}</td>
+          <td>{{ name }}</td>
+        </tr>
+       {% endfor %}
+      </table>
+    </div>
+  </div>
 
   <table class="person-questions">
     <thead>
