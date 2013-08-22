@@ -126,7 +126,8 @@ class Question(db.Model):
         return "<%s>" % self
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
-                    primaryjoin='Question.id==foreign(OcrText.id)')
+                    primaryjoin='Question.id==foreign(OcrText.id)',
+                    cascade='delete')
 
     def _get_text_row(self):
         if self.text_row is None:
@@ -142,7 +143,8 @@ class Question(db.Model):
         self._get_text_row().text = value
 
     match_row = db.relationship('Match', lazy='eager', uselist=False,
-                    primaryjoin='Question.id==foreign(Match.id)')
+                    primaryjoin='Question.id==foreign(Match.id)',
+                    cascade='delete')
 
     @property
     def match(self):
@@ -200,7 +202,8 @@ class Sponsorship(db.Model):
         backref=db.backref('sponsorships', lazy='dynamic'))
 
     match_row = db.relationship('Match', lazy='eager', uselist=False,
-                    primaryjoin='Sponsorship.id==foreign(Match.id)')
+                    primaryjoin='Sponsorship.id==foreign(Match.id)',
+                    cascade='delete')
 
     @property
     def match(self):
@@ -219,7 +222,8 @@ class Proposal(db.Model):
     sponsored_by = db.Column(db.Text)
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
-                    primaryjoin='Proposal.id==foreign(OcrText.id)')
+                    primaryjoin='Proposal.id==foreign(OcrText.id)',
+                    cascade='delete')
 
     def _get_text_row(self):
         if self.text_row is None:
