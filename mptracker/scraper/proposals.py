@@ -1,7 +1,12 @@
 import re
+import logging
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import Scraper, pqitems, get_cdep_id
 from mptracker.common import fix_local_chars
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class ProposalScraper(Scraper):
@@ -76,5 +81,8 @@ class ProposalScraper(Scraper):
                         assert href.startswith(
                             'http://www.cdep.ro/proiecte/2013/')
                         out['pdf_url'] = href
+
+        if not out.get('cdep_serial'):
+            logger.warn("Missing cdep_serial for %s", out['url'])
 
         return out
