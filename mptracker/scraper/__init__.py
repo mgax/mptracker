@@ -90,7 +90,7 @@ def proposals():
 
     proposal_scraper = ProposalScraper(get_cached_session())
 
-    records = proposal_scraper.fetch_proposals()
+    records = proposal_scraper.fetch_all_proposals()
 
     proposal_patcher = TablePatcher(models.Proposal,
                                     models.db.session,
@@ -98,8 +98,25 @@ def proposals():
 
     person_matcher = models.PersonMatcher()
 
+    seen_cdep_serials = {}
+
     with proposal_patcher.process(autoflush=1000) as add:
         for record in records:
+            from_cdep_listing = record.pop('from_cdep_listing')
+            if 'cdep_serial' not in record:
+                # senate scraping, probably didn't reach cdep yet. moving on.
+                assert not from_cdep_listing
+                continue
+            serial = record['cdep_serial']
+            url = record['url']
+            if serial in seen_cdep_serials:
+                # cdep scraping is run before senate scraping, so we
+                # probably already got the interestingn information
+                # for this proposal. moving on.
+                assert not from_cdep_listing
+                continue
+            seen_cdep_serials[serial] = url
+
             if record['sponsored_by'] == 'cdep':
                 cdep_sponsors = record.pop('cdep_sponsors')
             else:

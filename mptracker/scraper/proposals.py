@@ -11,14 +11,22 @@ logger.setLevel(logging.INFO)
 
 class ProposalScraper(Scraper):
 
-    proposals_url = ('http://www.cdep.ro/pls/proiecte/upl_pck.lista'
-                     '?cam=2&anp=2013')
+    proposal_listings = [
+        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=2&anp=2013',
+        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=2&anb=2013',
+        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=1&anp=2013',
+        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=1&anb=2013',
+    ]
 
     def fix_name(self, name):
         return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
 
-    def fetch_proposals(self):
-        page = self.fetch_url(self.proposals_url)
+    def fetch_all_proposals(self):
+        for listing_url in self.proposal_listings:
+            yield from self.fetch_proposals(listing_url)
+
+    def fetch_proposals(self, listing_url):
+        page = self.fetch_url(listing_url)
         the_table = pqitems(page, 'table table table table table')[-1]
         rows = iter(pqitems(the_table, 'tr'))
         assert next(rows).text() == "Numar Titlu Stadiu"
@@ -26,7 +34,7 @@ class ProposalScraper(Scraper):
             tr_1 = pqitems(row, 'td')[1]
             url = pq('a', tr_1).attr('href')
             assert url.startswith('http://www.cdep.ro/pls/proiecte'
-                                  '/upl_pck.proiect?cam=2&idp=')
+                                  '/upl_pck.proiect?'), url
             yield self.fetch_proposal_details(url)
 
     def fetch_proposal_details(self, url):
@@ -35,6 +43,11 @@ class ProposalScraper(Scraper):
             'title': pq('.headline', page).text(),
             'url': url,
         }
+        if '?cam=2&' in url:
+            out['from_cdep_listing'] = True
+        else:
+            assert '?cam=1&' in url
+            out['from_cdep_listing'] = False
 
         [hook_td] = pqitems(page, ':contains("Nr. înregistrare")')
         metadata_table = pq(hook_td.parents('table')[-1])
@@ -78,11 +91,6 @@ class ProposalScraper(Scraper):
                     if tr.text() == "Forma iniţiatorului":
                         [a] = pqitems(tr, 'a')
                         href = a.attr('href')
-                        assert href.startswith(
-                            'http://www.cdep.ro/proiecte/2013/')
                         out['pdf_url'] = href
-
-        if not out.get('cdep_serial'):
-            logger.warn("Missing cdep_serial for %s", out['url'])
 
         return out
