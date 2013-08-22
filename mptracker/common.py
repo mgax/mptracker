@@ -4,6 +4,9 @@ from collections import namedtuple
 import subprocess
 import logging
 import tempfile
+import csv
+from io import StringIO
+from itertools import chain
 from flask.ext.rq import job
 from path import path
 
@@ -138,3 +141,13 @@ def ocr_url(url, max_pages=MAX_OCR_PAGES):
             pages.append(text)
 
         return pages
+
+
+def csv_lines(cols, rows):
+    out = StringIO()
+    writer = csv.DictWriter(out, cols)
+    header = dict(zip(cols, cols))
+    for r in chain([header], rows):
+        writer.writerow(r)
+        yield out.getvalue()
+        out.seek(out.truncate(0))
