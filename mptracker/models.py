@@ -385,18 +385,18 @@ def dump(name, columns=None, number=None, filter=None, _file=sys.stdout):
 
 
 @db_manager.command
-def load(name, columns=None, update_only=False):
-    if columns:
-        columns = set(columns.split(','))
+def load(name, include_columns=None, create=True, remove=False):
+    if include_columns:
+        include_columns = set(include_columns.split(','))
         def filter_record(r):
-            return {k: r[k] for k in r if k in columns}
+            return {k: r[k] for k in r if k in include_columns}
     else:
         filter_record = lambda r: r
     loader = TableLoader(name)
     patcher = TablePatcher(loader.model, db.session, key_columns=['id'])
     records = (filter_record(loader.decode_dict(flask.json.loads(line)))
                for line in sys.stdin)
-    patcher.update(records, create=not update_only)
+    patcher.update(records, create=create, remove=remove)
 
 
 @db_manager.command
