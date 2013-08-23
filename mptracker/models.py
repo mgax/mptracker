@@ -218,6 +218,7 @@ class Proposal(db.Model):
     url = db.Column(db.Text)
     pdf_url = db.Column(db.Text)
     cdep_serial = db.Column(db.Text)
+    combined_id = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
     sponsored_by = db.Column(db.Text)
 
