@@ -49,6 +49,7 @@ class TablePatcher:
         self.key_columns = key_columns
         self.existing = {self.row_key(row): row
                          for row in self.model.query}
+        self.seen = set()
 
     def row_key(self, row):
         return tuple(getattr(row, k) for k in self.key_columns)
@@ -83,11 +84,14 @@ class TablePatcher:
             for k in record:
                 setattr(row, k, record[k])
 
+        self.seen.add(key)
+
         return AddResult(row, is_new, is_changed)
 
     @contextmanager
-    def process(self, autoflush=None):
-        counters = {'n_add': 0, 'n_update': 0, 'n_ok': 0, 'total': 0}
+    def process(self, autoflush=None, remove=False):
+        counters = {'n_add': 0, 'n_update': 0,
+                    'n_remove': 0, 'n_ok': 0, 'total': 0}
 
         def add(record, create=True):
             result = self.add(record, create=create)
@@ -107,14 +111,23 @@ class TablePatcher:
 
             return result
 
+        self.seen.clear()
+
         yield add
 
-        self.session.commit()
-        logger.info("Created %d, updated %d, found ok %d.",
-                    counters['n_add'], counters['n_update'], counters['n_ok'])
+        if remove:
+            for key in set(self.existing) - self.seen:
+                self.session.delete(self.existing[key])
+                logger.info("Removing %r", key)
+                counters['n_remove'] += 1
 
-    def update(self, data, create=True):
-        with self.process(autoflush=1000) as add:
+        self.session.commit()
+        logger.info("Created %d, updated %d, removed %d, found ok %d.",
+                    counters['n_add'], counters['n_update'],
+                    counters['n_remove'], counters['n_ok'])
+
+    def update(self, data, create=True, remove=False):
+        with self.process(autoflush=1000, remove=remove) as add:
             for record in data:
                 add(record, create=create)
 

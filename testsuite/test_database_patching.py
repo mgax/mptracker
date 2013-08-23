@@ -56,6 +56,14 @@ def test_update_existing_records(patcher):
     assert sorted([t.name for t in Thing.query]) == ["Annette", "Bob"]
 
 
+def test_remove_extra_records(patcher):
+    records = [{'code': 'an', 'name': "Anne"},
+               {'code': 'bo', 'name': "Bob"}]
+    patcher.update(records)
+    patcher.update(records[:1], remove=True)
+    assert sorted([t.name for t in Thing.query]) == ["Anne"]
+
+
 def test_refuse_to_create_records(patcher):
     from mptracker.common import RowNotFound
     records = [{'code': 'an', 'name': "Anne"}]
