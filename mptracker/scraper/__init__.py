@@ -108,7 +108,6 @@ def proposals():
             if not record.get('cdep_serial'):
                 continue # for now
             sponsorships = record.pop('_sponsorships')
-            combined_id = record.pop('combined_id')
             url = record['url']
 
             result = add(record)
