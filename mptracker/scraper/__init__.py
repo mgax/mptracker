@@ -105,8 +105,6 @@ def proposals():
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add:
         for record in proposals:
-            if not record.get('cdep_serial'):
-                continue # for now
             sponsorships = record.pop('_sponsorships')
             url = record['url']
 
