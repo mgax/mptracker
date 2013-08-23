@@ -97,7 +97,7 @@ def proposals():
 
     proposal_patcher = TablePatcher(models.Proposal,
                                     models.db.session,
-                                    key_columns=['cdep_serial'])
+                                    key_columns=['combined_id'])
 
     person_matcher = models.PersonMatcher()
 
