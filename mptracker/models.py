@@ -220,7 +220,6 @@ class Proposal(db.Model):
     cdep_serial = db.Column(db.Text)
     combined_id = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
-    sponsored_by = db.Column(db.Text)
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
                     primaryjoin='Proposal.id==foreign(OcrText.id)',
