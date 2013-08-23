@@ -192,8 +192,8 @@ class CommitteeSummary(db.Model):
 
 class Sponsorship(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
-    person_id = db.Column(UUID, db.ForeignKey('person.id'))
-    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
 
     proposal = db.relationship('Proposal', lazy='eager',
         backref=db.backref('sponsorships', lazy='dynamic'))
