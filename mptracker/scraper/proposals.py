@@ -11,31 +11,51 @@ logger.setLevel(logging.INFO)
 
 class ProposalScraper(Scraper):
 
-    proposal_listings = [
-        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=2&anp=2013',
-        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=2&anb=2013',
-        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=1&anp=2013',
-        'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam=1&anb=2013',
-    ]
+    person_proposal_url = ('http://www.cdep.ro/pls/parlam/structura.mp?'
+                           'idm={idm}&leg={leg}&cam=2&pag=2&idl=1&prn=0&par=')
 
     def fix_name(self, name):
         return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
 
-    def fetch_all_proposals(self):
-        for listing_url in self.proposal_listings:
-            yield from self.fetch_proposals(listing_url)
+    def fetch_from_mp_pages(self, person_cdep_id_list):
+        proposals = {}
+        for person_cdep_id in person_cdep_id_list:
+            for combined_id, proposal_url in \
+                    self.fetch_mp_proposals(person_cdep_id):
+                if combined_id in proposals:
+                    proposal_data = proposals[combined_id]
+                    assert proposal_data['url'] == proposal_url
+                else:
+                    proposal_data = self.fetch_proposal_details(proposal_url)
+                    assert proposal_data['url'] == proposal_url
+                    proposal_data['combined_id'] = combined_id
+                    proposal_data['_sponsorships'] = []
+                    proposals[combined_id] = proposal_data
+                proposal_data['_sponsorships'].append(person_cdep_id)
+        return list(proposals.values())
 
-    def fetch_proposals(self, listing_url):
-        page = self.fetch_url(listing_url)
-        the_table = pqitems(page, 'table table table table table')[-1]
-        rows = iter(pqitems(the_table, 'tr'))
-        assert next(rows).text() == "Numar Titlu Stadiu"
+    def fetch_mp_proposals(self, cdep_id):
+        (leg, idm) = cdep_id.split('-')
+        url = self.person_proposal_url.format(leg=leg, idm=idm)
+        page = self.fetch_url(url)
+        headline = pqitems(page, ':contains("PL înregistrat la")')
+        if not headline:
+            return  # no proposals here
+        table = pq(headline[0].parents('table')[-1])
+        rows = iter(pqitems(table, 'tr'))
+        assert "PL înregistrat la" in next(rows).text()
+        assert "Camera Deputaţilor" in next(rows).text()
         for row in rows:
-            tr_1 = pqitems(row, 'td')[1]
-            url = pq('a', tr_1).attr('href')
-            assert url.startswith('http://www.cdep.ro/pls/proiecte'
-                                  '/upl_pck.proiect?'), url
-            yield self.fetch_proposal_details(url)
+            cols = pqitems(row, 'td')
+            cdep_code = cols[1].text()
+            senate_code = cols[2].text()
+            combined_id = 'cdep=%s senate=%s' % (cdep_code, senate_code)
+            link = pqitems(row, 'a')[0]
+            url = link.attr('href')
+            if 'cam=' not in url:
+                assert '?' in url
+                url = url.replace('?', '?cam=2&')
+            yield combined_id, url
 
     def fetch_proposal_details(self, url):
         page = self.fetch_url(url)
@@ -43,11 +63,6 @@ class ProposalScraper(Scraper):
             'title': pq('.headline', page).text(),
             'url': url,
         }
-        if '?cam=2&' in url:
-            out['from_cdep_listing'] = True
-        else:
-            assert '?cam=1&' in url
-            out['from_cdep_listing'] = False
 
         [hook_td] = pqitems(page, ':contains("Nr. înregistrare")')
         metadata_table = pq(hook_td.parents('table')[-1])
@@ -61,30 +76,6 @@ class ProposalScraper(Scraper):
 
             elif label == "Tip initiativa:":
                 out['proposal_type'] = val_td.text()
-
-            elif label == "Initiator:":
-                cdep_sponsors = []
-                for a in val_td('a').items():
-                    cdep_id = get_cdep_id(a.attr('href'), fail='none')
-                    if cdep_id is not None:
-                        cdep_sponsors.append({
-                            'cdep_id': cdep_id,
-                            'name': self.fix_name(a.text()),
-                        })
-
-                if len(cdep_sponsors) > 0:
-                    out['cdep_sponsors'] = cdep_sponsors
-                    out['sponsored_by'] = 'cdep'
-
-                elif val_td.text() == "Guvern":
-                    out['sponsored_by'] = 'govt'
-
-                elif 'senator' in val_td.text():
-                    out['sponsored_by'] = 'senate'
-
-                else:
-                    raise RuntimeError("Can't parse sponsorship: %r"
-                                       % val_td.html())
 
             elif label == "Consultati:":
                 for tr in pqitems(val_td, 'tr'):

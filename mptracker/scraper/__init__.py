@@ -90,7 +90,10 @@ def proposals():
 
     proposal_scraper = ProposalScraper(get_cached_session())
 
-    records = proposal_scraper.fetch_all_proposals()
+    by_cdep_id = {p.cdep_id: p
+                  for p in models.Person.query
+                  if p.year == '2012'}
+    proposals = proposal_scraper.fetch_from_mp_pages(set(by_cdep_id.keys()))
 
     proposal_patcher = TablePatcher(models.Proposal,
                                     models.db.session,
@@ -98,50 +101,39 @@ def proposals():
 
     person_matcher = models.PersonMatcher()
 
-    seen_cdep_serials = {}
+    sp_updates = sp_added = sp_removed = 0
 
     with proposal_patcher.process(autoflush=1000) as add:
-        for record in records:
-            from_cdep_listing = record.pop('from_cdep_listing')
-            if 'cdep_serial' not in record:
-                # senate scraping, probably didn't reach cdep yet. moving on.
-                assert not from_cdep_listing
-                continue
-            serial = record['cdep_serial']
+        for record in proposals:
+            if not record.get('cdep_serial'):
+                continue # for now
+            sponsorships = record.pop('_sponsorships')
+            combined_id = record.pop('combined_id')
             url = record['url']
-            if serial in seen_cdep_serials:
-                # cdep scraping is run before senate scraping, so we
-                # probably already got the interestingn information
-                # for this proposal. moving on.
-                assert not from_cdep_listing
-                continue
-            seen_cdep_serials[serial] = url
 
-            if record['sponsored_by'] == 'cdep':
-                cdep_sponsors = record.pop('cdep_sponsors')
-            else:
-                cdep_sponsors = []
             result = add(record)
             row = result.row
 
-            new_people = set()
-            for sponsor_info in cdep_sponsors:
-                person = person_matcher.get_person(sponsor_info['name'],
-                                                   sponsor_info['cdep_id'],
-                                                   strict=True)
-                new_people.add(person)
-
+            new_people = set(by_cdep_id[ci] for ci in sponsorships)
             existing_sponsorships = {sp.person: sp for sp in row.sponsorships}
             to_remove = set(existing_sponsorships) - set(new_people)
             to_add = set(new_people) - set(existing_sponsorships)
             if to_remove:
                 logger.info("Removing sponsors: %r",
                             [p.cdep_id for p in to_remove])
+                sp_removed += 1
                 for p in to_remove:
                     sp = existing_sponsorships[p]
                     models.db.session.delete(sp)
             if to_add:
                 logger.info("Adding sponsors: %r",
                             [p.cdep_id for p in to_add])
+                sp_added += 1
                 for p in to_add:
                     row.sponsorships.append(models.Sponsorship(person=p))
+
+            if to_remove or to_add:
+                sp_updates += 1
+
+    logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
+                sp_updates, sp_added, sp_removed)
