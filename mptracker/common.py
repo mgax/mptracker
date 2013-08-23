@@ -47,8 +47,11 @@ class TablePatcher:
         self.model = model
         self.session = session
         self.key_columns = key_columns
-        self.existing = {self.row_key(row): row
-                         for row in self.model.query}
+        self.existing = {}
+        for row in self.model.query:
+            key = self.row_key(row)
+            assert key not in self.existing, "Duplicate key %r" % key
+            self.existing[key] = row
         self.seen = set()
 
     def row_key(self, row):
