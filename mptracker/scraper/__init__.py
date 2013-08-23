@@ -103,7 +103,7 @@ def proposals():
 
     sp_updates = sp_added = sp_removed = 0
 
-    with proposal_patcher.process(autoflush=1000) as add:
+    with proposal_patcher.process(autoflush=1000, remove=True) as add:
         for record in proposals:
             if not record.get('cdep_serial'):
                 continue # for now
