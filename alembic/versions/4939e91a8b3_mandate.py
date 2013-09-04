@@ -43,3 +43,33 @@ def downgrade():
     op.drop_column('question', 'mandate_id')
 
     op.drop_table('mandate')
+
+
+def create_mandates():
+    """
+    Run once manually before removing the columns from the 'person'
+    table and 'person_id' foreign keys in other tables.
+    """
+    from sqlalchemy.orm import subqueryload
+    from mptracker.models import db, Person, Mandate, Chamber
+    cdep = Chamber.query.filter_by(slug='cdep').first()
+    assert cdep is not None
+    for person in (Person.query
+                         .filter(Person.cdep_id != None)
+                         .order_by('cdep_id')):
+        year, cdep_number = person.cdep_id.split('-')
+        print(year, cdep_number)
+        mandate = Mandate(year=int(year),
+                          cdep_number=int(cdep_number),
+                          minority=person.minority,
+                          person=person,
+                          chamber=cdep,
+                          county=person.county)
+        db.session.add(mandate)
+        for question in person.questions:
+            question.mandate = mandate
+        for sponsorship in person.sponsorships:
+            sponsorship.mandate = mandate
+        for steno_paragraph in person.steno_paragraphs:
+            steno_paragraph.mandate = mandate
+    db.session.flush()
