@@ -62,7 +62,7 @@ class Mandate(db.Model):
 
     def get_cdep_url(self):
         return ("http://www.cdep.ro/pls/parlam/structura.mp"
-                "?idm={m.number}&cam=2&leg={m.year}".format(m=self))
+                "?idm={m.cdep_number}&cam=2&leg={m.year}".format(m=self))
 
 
 class County(db.Model):

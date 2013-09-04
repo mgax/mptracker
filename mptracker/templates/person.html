@@ -13,35 +13,40 @@
 
   <h1>{{ person.name }}</h1>
 
-  <dl class="dl-horizontal">
-    <dt>Legislatura</dt>
-    <dd>{{ person.year }}</dd>
+ {% for mandate in mandates %}
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        {{ mandate.chamber_name }}
+        {{ mandate.year }} &mdash;
+        {{ mandate.county_name }}
+      </h3>
+    </div>
 
-    {% if person.county %}
-      <dt>Circumscripție:</dt>
-      <dd>{{ person.county }}</dd>
-    {% endif %}
+    <dl class="dl-horizontal">
+      {% if mandate.cdep_url %}
+        <dt>cdep.ro:</dt>
+        <dd><a href="{{ mandate.cdep_url }}">{{ mandate.cdep_url }}</a></dd>
+      {% endif %}
 
-    {% set cdep_url = person.get_cdep_url() %}
-    {% if cdep_url %}
-      <dt>cdep.ro:</dt>
-      <dd><a href="{{ cdep_url }}">{{ cdep_url }}</a></dd>
-    {% endif %}
+      <dt>luări de cuvânt:</dt>
+      <dd>{{ mandate.paragraphs_count }}</d>
 
-    <dt>luări de cuvânt:</dt>
-    <dd>{{ paragraphs_count }}</d>
+      <dt>întrebări și interpelări:</dt>
+      <dd>
+        {% set url = url_for('questions.person_questions',
+                             person_id=person.id) %}
+        <a href="{{ url }}">{{ mandate.questions_count }}</a>
+      </dd>
 
-    <dt>întrebări și interpelări:</dt>
-    <dd>
-      {% set url = url_for('questions.person_questions', person_id=person.id) %}
-      <a href="{{ url }}">{{ questions_count }}</a>
-    </dd>
-
-    <dt>propuneri legislative:</dt>
-    <dd>
-      {% set url = url_for('proposals.person_proposals', person_id=person.id) %}
-      <a href="{{ url }}">{{ sponsorships_count }}</a>
-    </dd>
-  </dl>
+      <dt>propuneri legislative:</dt>
+      <dd>
+        {% set url = url_for('proposals.person_proposals',
+                             person_id=person.id) %}
+        <a href="{{ url }}">{{ mandate.sponsorships_count }}</a>
+      </dd>
+    </dl>
+  </section>
+ {% endfor %}
 
 {% endblock %}

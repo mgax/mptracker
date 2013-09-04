@@ -49,11 +49,22 @@ def person_index():
 @pages.route('/person/<uuid:person_id>')
 def person(person_id):
     person = models.Person.query.get_or_404(person_id)
+    mandates = [{
+            'id': m.id,
+            'cdep_url': m.get_cdep_url(),
+            'year': m.year,
+            'county_name': m.county.name,
+            'chamber_name': m.chamber.name,
+            'questions_count': m.questions.count(),
+            'paragraphs_count': m.steno_paragraphs.count(),
+            'sponsorships_count': m.sponsorships.count(),
+        } for m in person.mandates
+                         .join(models.Mandate.county)
+                         .join(models.Mandate.chamber)
+                         .order_by('year')]
     return flask.render_template('person.html', **{
         'person': person,
-        'questions_count': person.questions.count(),
-        'paragraphs_count': person.steno_paragraphs.count(),
-        'sponsorships_count': person.sponsorships.count(),
+        'mandates': mandates,
     })
 
 
