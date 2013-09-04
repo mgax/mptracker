@@ -84,4 +84,13 @@ class ProposalScraper(Scraper):
                         href = a.attr('href')
                         out['pdf_url'] = href
 
+            elif label == "Camera decizionala:":
+                txt = val_td.text()
+                if txt == 'Camera Deputatilor':
+                    out['decision_chamber'] = 'cdep'
+                elif txt == 'Senatul':
+                    out['decision_chamber'] = 'senat'
+                else:
+                    logger.warn("Unknown decision_chamber %r", txt)
+
         return out

@@ -27,6 +27,12 @@ def identity(v):
     return v
 
 
+class Chamber(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    slug = db.Column(db.Text, index=True)
+    name = db.Column(db.Text)
+
+
 class Person(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
@@ -220,6 +226,9 @@ class Proposal(db.Model):
     cdep_serial = db.Column(db.Text)
     combined_id = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
+
+    decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
+    decision_chamber = db.relationship('Chamber')
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
                     primaryjoin='Proposal.id==foreign(OcrText.id)',

@@ -26,7 +26,10 @@ def person_proposals(person_id):
 
 @proposals.route('/proposals/<uuid:proposal_id>')
 def proposal(proposal_id):
-    proposal = models.Proposal.query.get_or_404(proposal_id)
+    proposal = (models.Proposal.query
+                    .filter_by(id=proposal_id)
+                    .join(models.Chamber)
+                    .first_or_404())
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'sponsorships': [{
@@ -37,7 +40,7 @@ def proposal(proposal_id):
 
 
 @proposals.route('/proposals/relevant')
-def proposals_relevant():
+def relevant():
     sponsorships = [s for s in models.Sponsorship.query if s.match.score]
     sponsorships.sort(key=lambda s: s.match.score or 0, reverse=True)
     return flask.render_template('proposals/relevant.html', **{
