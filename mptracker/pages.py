@@ -40,7 +40,9 @@ def steno_index():
 
 @pages.route('/person/')
 def person_index():
-    people = models.Person.query.order_by('name')
+    people = (models.Person.query
+                           .join(models.Mandate)
+                           .order_by('name'))
     return flask.render_template('person_index.html', **{
         'people': people,
     })
