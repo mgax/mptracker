@@ -93,6 +93,9 @@ def proposals():
     by_cdep_id = {p.cdep_id: p
                   for p in models.Person.query
                   if p.year == '2012'}
+
+    chamber_by_slug = {c.slug: c for c in models.Chamber.query}
+
     proposals = proposal_scraper.fetch_from_mp_pages(set(by_cdep_id.keys()))
 
     proposal_patcher = TablePatcher(models.Proposal,
@@ -105,6 +108,10 @@ def proposals():
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add:
         for record in proposals:
+            if 'decision_chamber' in record:
+                slug = record.pop('decision_chamber')
+                record['decision_chamber'] = chamber_by_slug[slug]
+
             sponsorships = record.pop('_sponsorships')
             url = record['url']
 
