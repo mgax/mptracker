@@ -27,6 +27,12 @@ def identity(v):
     return v
 
 
+class Chamber(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    slug = db.Column(db.Text, index=True)
+    name = db.Column(db.Text)
+
+
 class Person(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
