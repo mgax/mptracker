@@ -46,7 +46,7 @@ def person_index():
     })
 
 
-@pages.route('/person/<person_id>')
+@pages.route('/person/<uuid:person_id>')
 def person(person_id):
     person = models.Person.query.get_or_404(person_id)
     return flask.render_template('person.html', **{
@@ -81,7 +81,7 @@ def steno_chapter(date_str, chapter_serial_number):
     })
 
 
-@pages.route('/committee-summary/<summary_id>')
+@pages.route('/committee-summary/<uuid:summary_id>')
 def committee_summary(summary_id):
     summary = models.CommitteeSummary.query.get_or_404(summary_id)
     return flask.render_template('committee_summary.html', **{

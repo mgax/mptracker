@@ -107,7 +107,7 @@ def person_index():
     })
 
 
-@questions.route('/person/<person_id>/questions')
+@questions.route('/person/<uuid:person_id>/questions')
 def person_questions(person_id):
     person = models.Person.query.get_or_404(person_id)
     addressee_count = defaultdict(int)
@@ -158,7 +158,7 @@ def question_bugs():
     })
 
 
-@questions.route('/questions/<question_id>')
+@questions.route('/questions/<uuid:question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
     match_result = (flask.json.loads(question.match.data)
@@ -171,7 +171,7 @@ def question_detail(question_id):
     })
 
 
-@questions.route('/questions/<question_id>/save_flags', methods=['POST'])
+@questions.route('/questions/<uuid:question_id>/save_flags', methods=['POST'])
 @require_privilege
 def question_save_flags(question_id):
     question = models.Question.query.get_or_404(question_id)

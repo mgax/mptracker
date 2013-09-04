@@ -15,7 +15,7 @@ proposals = flask.Blueprint('proposals', __name__)
 proposals_manager = Manager()
 
 
-@proposals.route('/person/<person_id>/proposals')
+@proposals.route('/person/<uuid:person_id>/proposals')
 def person_proposals(person_id):
     person = models.Person.query.get_or_404(person_id)
     return flask.render_template('proposals/person.html', **{
@@ -24,7 +24,7 @@ def person_proposals(person_id):
     })
 
 
-@proposals.route('/proposals/<proposal_id>')
+@proposals.route('/proposals/<uuid:proposal_id>')
 def proposal(proposal_id):
     proposal = models.Proposal.query.get_or_404(proposal_id)
     return flask.render_template('proposals/detail.html', **{
