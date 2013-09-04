@@ -26,7 +26,10 @@ def person_proposals(person_id):
 
 @proposals.route('/proposals/<uuid:proposal_id>')
 def proposal(proposal_id):
-    proposal = models.Proposal.query.get_or_404(proposal_id)
+    proposal = (models.Proposal.query
+                    .filter_by(id=proposal_id)
+                    .join(models.Chamber)
+                    .first_or_404())
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'sponsorships': [{
