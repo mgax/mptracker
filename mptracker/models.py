@@ -73,6 +73,27 @@ class Person(db.Model):
         return self.cdep_id.split('-')[0] if self.cdep_id else None
 
 
+class Mandate(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    year = db.Column(db.Integer)
+    cdep_number = db.Column(db.Integer)
+    minority = db.Column(db.Boolean)
+
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    person = db.relationship('Person',
+        backref=db.backref('mandates', lazy='dynamic'))
+
+    chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'), nullable=False)
+    chamber = db.relationship('Chamber')
+
+    county_id = db.Column(UUID, db.ForeignKey('county.id'))
+    county = db.relationship('County')
+
+    def get_cdep_url(self):
+        return ("http://www.cdep.ro/pls/parlam/structura.mp"
+                "?idm={m.number}&cam=2&leg={m.year}".format(m=self))
+
+
 class County(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
@@ -109,6 +130,10 @@ class StenoParagraph(db.Model):
     person = db.relationship('Person',
         backref=db.backref('steno_paragraphs', lazy='dynamic'))
 
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
+    mandate = db.relationship('Mandate',
+        backref=db.backref('steno_paragraphs', lazy='dynamic'))
+
 
 class Question(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
@@ -123,6 +148,10 @@ class Question(db.Model):
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'))
     person = db.relationship('Person',
+        backref=db.backref('questions', lazy='dynamic'))
+
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
+    mandate = db.relationship('Mandate',
         backref=db.backref('questions', lazy='dynamic'))
 
     def __str__(self):
@@ -198,13 +227,17 @@ class CommitteeSummary(db.Model):
 
 class Sponsorship(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
-    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
-    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
 
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
     proposal = db.relationship('Proposal', lazy='eager',
         backref=db.backref('sponsorships', lazy='dynamic'))
 
+    person_id = db.Column(UUID, db.ForeignKey('person.id'))
     person = db.relationship('Person', lazy='eager',
+        backref=db.backref('sponsorships', lazy='dynamic'))
+
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
+    mandate = db.relationship('Mandate',
         backref=db.backref('sponsorships', lazy='dynamic'))
 
     match_row = db.relationship('Match', lazy='eager', uselist=False,
