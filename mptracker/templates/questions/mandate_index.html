@@ -12,16 +12,16 @@
     </thead>
 
     <tbody>
-    {% for person in people %}
+    {% for mandate in mandates %}
       <tr>
         <td>
-          {% set url = url_for('pages.person', person_id=person.id) %}
-          <a href="{{ url }}">{{ person.str }}</a>
+          {% set url = url_for('pages.person', person_id=mandate.person_id) %}
+          <a href="{{ url }}">{{ mandate.person }}</a>
         </td>
-        <td>{{ person.county_name }}</td>
+        <td>{{ mandate.county_name }}</td>
         <td>
-          {% set url = url_for('.person_questions', person_id=person.id) %}
-          <a href="{{ url }}">{{ person.question_count }}</a>
+          {% set url = url_for('.mandate_questions', mandate_id=mandate.id) %}
+          <a href="{{ url }}">{{ mandate.question_count }}</a>
         </td>
       </tr>
     {% endfor %}

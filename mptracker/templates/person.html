@@ -34,8 +34,8 @@
 
       <dt>întrebări și interpelări:</dt>
       <dd>
-        {% set url = url_for('questions.person_questions',
-                             person_id=person.id) %}
+        {% set url = url_for('questions.mandate_questions',
+                             mandate_id=mandate.id) %}
         <a href="{{ url }}">{{ mandate.questions_count }}</a>
       </dd>
 
