@@ -227,6 +227,9 @@ class Proposal(db.Model):
     combined_id = db.Column(db.Text)
     proposal_type = db.Column(db.Text)
 
+    decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
+    decision_chamber = db.relationship('Chamber')
+
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
                     primaryjoin='Proposal.id==foreign(OcrText.id)',
                     cascade='all')
