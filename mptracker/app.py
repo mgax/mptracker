@@ -4,6 +4,7 @@ import flask
 from flask.ext.script import Manager
 from path import path
 from mptracker import models
+from mptracker.common import common
 from mptracker.questions import questions, questions_manager
 from mptracker.pages import pages, parse_date
 from mptracker.auth import auth
@@ -35,6 +36,7 @@ def create_app():
     app = flask.Flask(__name__)
     configure(app)
     models.db.init_app(app)
+    app.register_blueprint(common)
     app.register_blueprint(auth)
     app.register_blueprint(pages)
     app.register_blueprint(questions)

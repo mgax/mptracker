@@ -5,8 +5,11 @@ import subprocess
 import logging
 import tempfile
 import csv
+import re
 from io import StringIO
 from itertools import chain
+import flask
+from werkzeug.routing import BaseConverter, ValidationError
 from flask.ext.rq import job
 from path import path
 
@@ -14,6 +17,23 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 MAX_OCR_PAGES = 3
+
+common = flask.Blueprint('common', __name__)
+
+
+class UuidConverter(BaseConverter):
+
+    def to_python(self, value):
+        if re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-'
+                    r'[0-9a-f]{4}-[0-9a-f]{12}$', value) is None:
+            raise ValidationError
+        return value
+
+
+@common.record
+def register_url_converters(state):
+    app = state.app
+    app.url_map.converters['uuid'] = UuidConverter
 
 
 def parse_date(date_str):
