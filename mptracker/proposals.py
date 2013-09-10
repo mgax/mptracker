@@ -15,12 +15,12 @@ proposals = flask.Blueprint('proposals', __name__)
 proposals_manager = Manager()
 
 
-@proposals.route('/person/<uuid:person_id>/proposals')
-def person_proposals(person_id):
-    person = models.Person.query.get_or_404(person_id)
-    return flask.render_template('proposals/person.html', **{
-        'person': person,
-        'sponsorships': list(person.sponsorships),
+@proposals.route('/mandate/<uuid:mandate_id>/proposals')
+def mandate_proposals(mandate_id):
+    mandate = models.Mandate.query.get_or_404(mandate_id)
+    return flask.render_template('proposals/mandate.html', **{
+        'mandate': mandate,
+        'sponsorships': list(mandate.sponsorships),
     })
 
 
@@ -28,12 +28,11 @@ def person_proposals(person_id):
 def proposal(proposal_id):
     proposal = (models.Proposal.query
                     .filter_by(id=proposal_id)
-                    .join(models.Chamber)
                     .first_or_404())
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'sponsorships': [{
-                'person': sp.person,
+                'mandate': sp.mandate,
                 'match_data': flask.json.loads(sp.match.data or '{}'),
             } for sp in proposal.sponsorships],
     })
