@@ -95,7 +95,7 @@ class MpCommitteeMembership(db.Model):
     mp_committee_id = db.Column(UUID, db.ForeignKey('mp_committee.id'),
                                 nullable=False)
     mp_committee = db.relationship('MpCommittee',
-        backref=db.backref('committee_memberships', lazy='dynamic'))
+        backref=db.backref('memberships', lazy='dynamic'))
 
 
 class Mandate(db.Model):

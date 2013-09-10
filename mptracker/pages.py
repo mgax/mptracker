@@ -83,6 +83,18 @@ def person(person_id):
     })
 
 
+@pages.route('/committee/<uuid:committee_id>')
+def committee(committee_id):
+    committee = models.MpCommittee.query.get_or_404(committee_id)
+    return flask.render_template('committee.html', **{
+        'committee': committee,
+        'memberships': (committee.memberships
+                                    .join(models.Mandate)
+                                    .join(models.Person)
+                                    .all()),
+    })
+
+
 @pages.route('/steno/<date_str>')
 def steno_contents(date_str):
     date_value = parse_date(date_str)

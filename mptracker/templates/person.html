@@ -115,7 +115,9 @@
         <dt>comisii:</dt>
         {% for membership in mandate.committee_memberships %}
           <dd>
-          {{ membership.mp_committee.name }}
+          {% set url = url_for('.committee',
+              committee_id=membership.mp_committee_id) %}
+          <a href="{{ url }}">{{ membership.mp_committee.name }}</a>
           {% if membership.role %}({{ membership.role }}){% endif %}
           </dd>
         {% endfor %}
