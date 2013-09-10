@@ -68,8 +68,8 @@ class MpGroup(db.Model):
 class MpGroupMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
 
-    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
-    person = db.relationship('Person',
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
         backref=db.backref('group_memberships', lazy='dynamic'))
 
     mp_group_id = db.Column(UUID, db.ForeignKey('mp_group.id'), nullable=False)
@@ -85,8 +85,8 @@ class MpCommittee(db.Model):
 class MpCommitteeMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
 
-    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
-    person = db.relationship('Person',
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
         backref=db.backref('committee_memberships', lazy='dynamic'))
 
     mp_committee_id = db.Column(UUID, db.ForeignKey('mp_committee.id'),
