@@ -95,7 +95,11 @@
 
       {% if mandate.votes %}
         <dt>voturi:</dt>
-        <dd>{{ mandate.votes }} ({{ mandate.votes_percent|int }}%)</dd>
+        <dd>
+          {{ mandate.votes }}
+          ({{ mandate.votes_percent|int }}%)
+          {{ mandate.candidate_party }}
+        </dd>
       {% endif %}
     </dl>
   </section>

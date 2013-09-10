@@ -66,6 +66,7 @@ def person(person_id):
             'address': m.address,
             'votes': m.votes,
             'votes_percent': m.votes_percent,
+            'candidate_party': m.candidate_party,
         } for m in person.mandates
                          .join(models.Mandate.county)
                          .join(models.Mandate.chamber)

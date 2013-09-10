@@ -67,6 +67,8 @@ def read_person_xls(xls_path):
                 'votes_percent': Decimal(row['% Voturi obtinute']),
                 'address': txtval(row['Adresa birou parlamentar']),
                 'phone': txtval(row['Telefon birou parlamentar']),
+                'candidate_party': txtval(
+                    row['Partid pentru care a candidat 2012']),
                 'person_data': {
                     'year_born': int(row['Anul nasterii']),
                     'education': txtval(row['Educatie']),
