@@ -106,6 +106,7 @@ class Mandate(db.Model):
     college = db.Column(db.Integer)
     votes = db.Column(db.Integer)
     votes_percent = db.Column(db.Numeric)
+    candidate_party = db.Column(db.Text)
     address = db.Column(db.Text)
     phone = db.Column(db.Text)
 
