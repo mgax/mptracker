@@ -12,12 +12,12 @@
   {% for paragraph in chapter.paragraphs %}
     <li>
       <h4>
-        {% set person = paragraph.person %}
-        {% if person.cdep_id %}
-          {% set url = url_for('.person', person_id=person.id) %}
-          <a href="{{ url }}">{{ person.name }}</a>
+        {% set mandate = paragraph.mandate %}
+        {% if mandate %}
+          {% set url = url_for('.person', person_id=mandate.person_id) %}
+          <a href="{{ url }}">{{ mandate.person.name }}</a>
         {% else %}
-          {{ person.name }}
+          (altcineva)
         {% endif %}
       </h4>
       <p>{{ paragraph.text }}</p>
