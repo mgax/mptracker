@@ -67,6 +67,12 @@ def person(person_id):
             'votes': m.votes,
             'votes_percent': m.votes_percent,
             'candidate_party': m.candidate_party,
+            'committee_memberships': (m.committee_memberships
+                                            .join(models.MpCommittee)
+                                            .all()),
+            'group_membership': (m.group_memberships
+                                        .join(models.MpGroup)
+                                        .first()),
         } for m in person.mandates
                          .join(models.Mandate.county)
                          .join(models.Mandate.chamber)

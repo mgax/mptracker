@@ -87,6 +87,15 @@
         <a href="{{ url }}">{{ mandate.sponsorships_count }}</a>
       </dd>
 
+      {% if mandate.group_membership %}
+        {% set membership = mandate.group_membership %}
+        <dt>grup parlamentar:</dt>
+        <dd>
+          {{ membership.mp_group.short_name }}
+          {% if membership.role %}({{ membership.role }}){% endif %}
+        </dd>
+      {% endif %}
+
       {% if mandate.phone or mandate.address %}
         <dt>birou parlamentar:</dt>
         {% if mandate.phone %}<dd>telefon: {{ mandate.phone }}</dd>{% endif %}
@@ -100,6 +109,16 @@
           ({{ mandate.votes_percent|int }}%)
           {{ mandate.candidate_party }}
         </dd>
+      {% endif %}
+
+      {% if mandate.committee_memberships %}
+        <dt>comisii:</dt>
+        {% for membership in mandate.committee_memberships %}
+          <dd>
+          {{ membership.mp_committee.name }}
+          {% if membership.role %}({{ membership.role }}){% endif %}
+          </dd>
+        {% endfor %}
       {% endif %}
     </dl>
   </section>
