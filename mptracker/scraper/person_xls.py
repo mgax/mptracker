@@ -13,6 +13,14 @@ def txtval(val):
         return val
 
 
+def emailval(val):
+    val = txtval(val)
+    if not val:
+        return None
+    else:
+        return ' '.join([v.strip(',;') for v in val.split()])
+
+
 def read_person_xls(xls_path):
     with open(xls_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -52,4 +60,13 @@ def read_person_xls(xls_path):
                 'votes_percent': Decimal(row['% Voturi obtinute']),
                 'address': txtval(row['Adresa birou parlamentar']),
                 'phone': txtval(row['Telefon birou parlamentar']),
+                'person_data': {
+                    'year_born': int(row['Anul nasterii']),
+                    'education': txtval(row['Educatie']),
+                    'website_url': txtval(row['Website ']),
+                    'blog_url': txtval(row['Blog']),
+                    'email_value': emailval(row['Email']),
+                    'facebook_url': txtval(row['Facebook']),
+                    'twitter_url': txtval(row['Twitter']),
+                },
             }

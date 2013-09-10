@@ -146,9 +146,10 @@ def proposals():
 @scraper_manager.command
 def import_person_xls(xls_path):
     from mptracker.scraper.person_xls import read_person_xls
-    logging.getLogger('mptracker.common').setLevel(logging.DEBUG)
 
     mandate_lookup = models.MandateLookup()
+
+    people_data = []
 
     mandate_patcher = TablePatcher(models.Mandate,
                                    models.db.session,
@@ -157,4 +158,14 @@ def import_person_xls(xls_path):
         for record in read_person_xls(xls_path):
             mandate = mandate_lookup.find(record.pop('name'), record['year'],
                                           record['cdep_number'])
+            person_data = record.pop('person_data')
+            person_data['id'] = mandate.person_id
+            people_data.append(person_data)
             add(record)
+
+    person_patcher = TablePatcher(models.Person,
+                                  models.db.session,
+                                  key_columns=['id'])
+    with person_patcher.process() as add:
+        for person_data in people_data:
+            add(person_data)
