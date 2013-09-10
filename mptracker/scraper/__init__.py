@@ -152,6 +152,8 @@ def import_person_xls(xls_path):
     people_data = []
     committees = {}
     committee_memberships = []
+    groups = {}
+    group_memberships = []
 
     mandate_patcher = TablePatcher(models.Mandate,
                                    models.db.session,
@@ -164,11 +166,15 @@ def import_person_xls(xls_path):
             person_data['id'] = mandate.person_id
             people_data.append(person_data)
             mandate_committees = record.pop('committees')
+            mp_group = record.pop('mp_group')
             mandate = add(record).row
             for data in mandate_committees:
                 committees[data['name']] = None
                 committee_memberships.append(
                     (mandate.id, data['name'], data['role']))
+            groups[mp_group['short_name']] = None
+            group_memberships.append(
+                    (mandate.id, mp_group['short_name'], mp_group['role']))
 
     person_patcher = TablePatcher(models.Person,
                                   models.db.session,
@@ -192,5 +198,23 @@ def import_person_xls(xls_path):
             add({
                 'mandate_id': mandate_id,
                 'mp_committee_id': committees[name],
+                'role': role,
+            })
+
+    mp_group_patcher = TablePatcher(models.MpGroup,
+                                    models.db.session,
+                                    key_columns=['short_name'])
+    with mp_group_patcher.process() as add:
+        for short_name in list(groups):
+            mp_group = add({'short_name': short_name}).row
+            groups[short_name] = mp_group.id
+
+    mp_group_membership_patcher = TablePatcher(models.MpGroupMembership,
+            models.db.session, key_columns=['mandate_id', 'mp_group_id'])
+    with mp_group_membership_patcher.process() as add:
+        for mandate_id, name, role in group_memberships:
+            add({
+                'mandate_id': mandate_id,
+                'mp_group_id': groups[name],
                 'role': role,
             })

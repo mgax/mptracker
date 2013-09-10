@@ -79,4 +79,8 @@ def read_person_xls(xls_path):
                     'twitter_url': txtval(row['Twitter']),
                 },
                 'committees': committees,
+                'mp_group': {
+                    'short_name': txtval(row['Grup parlamentar']),
+                    'role': txtval(row['Functie in grupul parlamentar']),
+                },
             }
