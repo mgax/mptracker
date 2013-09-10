@@ -4,9 +4,9 @@
 {% block content %}
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
-        (person|string,
-            url_for('pages.person', person_id=person.id)),
-        ("întrebări și interpelări",
+        (mandate.person|string,
+            url_for('pages.person', person_id=mandate.person.id)),
+        ("întrebări și interpelări " + mandate.year|string,
             None),
       ] %}
   {{ breadcrumbs(breadcrumb_links) }}

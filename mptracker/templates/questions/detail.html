@@ -71,8 +71,8 @@
   {%- set breadcrumb_links = [
         (person|string,
             url_for('pages.person', person_id=person.id)),
-        ("întrebări și interpelări",
-            url_for('.person_questions', person_id=person.id)),
+        ("întrebări și interpelări " + mandate.year|string,
+            url_for('.mandate_questions', mandate_id=mandate.id)),
         ("%s-%s"|format(question.date, question.number),
             None),
       ] %}

@@ -83,36 +83,40 @@ def analyze_all(number=None, force=False, minority_only=False):
 
 
 @questions.route('/questions/')
-def person_index():
+def mandate_index():
     from sqlalchemy import func
     from sqlalchemy.orm import subqueryload
-    question_count_for_person = dict(
+    question_count_for_mandate = dict(
         models.db.session
-            .query(models.Question.person_id,
-                   func.count(models.Question.person_id))
-            .group_by(models.Question.person_id)
+            .query(models.Question.mandate_id,
+                   func.count(models.Question.mandate_id))
+            .group_by(models.Question.mandate_id)
     )
-    people_rows = (models.Person.query
-                .filter(models.Person.cdep_id != None)
-                .options(subqueryload(models.Person.county)))
-    people = [{
-                'id': p.id,
-                'str': str(p),
-                'county_name': p.county.name if p.county else '',
-                'question_count': question_count_for_person.get(p.id, 0),
-            } for p in people_rows]
-    people.sort(key=lambda p: p['question_count'], reverse=True)
-    return flask.render_template('questions/person_index.html', **{
-        'people': people,
+    mandate_rows = (models.Mandate.query
+                        .options(subqueryload(models.Mandate.county))
+                        .options(subqueryload(models.Mandate.person)))
+    mandates = [{
+            'id': m.id,
+            'person_id': m.person.id,
+            'person': str(m.person),
+            'county_name': m.county.name if m.county else '',
+            'question_count': question_count_for_mandate.get(m.id, 0),
+        } for m in mandate_rows]
+    mandates.sort(key=lambda m: m['question_count'], reverse=True)
+    return flask.render_template('questions/mandate_index.html', **{
+        'mandates': mandates,
     })
 
 
-@questions.route('/person/<uuid:person_id>/questions')
-def person_questions(person_id):
-    person = models.Person.query.get_or_404(person_id)
+@questions.route('/mandate/<uuid:mandate_id>/questions')
+def mandate_questions(mandate_id):
+    mandate = (models.Mandate.query
+                     .filter_by(id=mandate_id)
+                     .join(models.Mandate.person)
+                     .first_or_404())
     addressee_count = defaultdict(int)
     questions = []
-    for q in person.questions:
+    for q in mandate.questions:
         questions.append({
             'id': q.id,
             'title': q.title,
@@ -139,8 +143,8 @@ def person_questions(person_id):
         else:
             return question['score'] or 0
     questions.sort(key=sort_key, reverse=True)
-    return flask.render_template('questions/person.html', **{
-        'person': person,
+    return flask.render_template('questions/mandate.html', **{
+        'mandate': mandate,
         'questions': questions,
         'addressee_top': addressee_top,
     })
@@ -165,7 +169,8 @@ def question_detail(question_id):
                     if question.match.data else None)
 
     return flask.render_template('questions/detail.html', **{
-        'person': question.person,
+        'mandate': question.mandate,
+        'person': question.mandate.person,
         'question': question,
         'match_result': match_result,
     })

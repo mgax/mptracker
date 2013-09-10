@@ -15,10 +15,10 @@
 
   <ul>
    {% for sp in sponsorships %}
-    {% set person = sp['person'] %}
+    {% set mandate = sp['mandate'] %}
     <li>
-      {% set url = url_for('pages.person', person_id=person.id) %}
-      <a href="{{ url }}">{{ person }}</a>
+      {% set url = url_for('pages.person', person_id=mandate.person_id) %}
+      <a href="{{ url }}">{{ mandate.person }}</a>
     </li>
    {% endfor %}
   </ul>
@@ -27,7 +27,7 @@
  {% for sp in sponsorships %}
   <section class="analysisresult">
     <div class="analysisresult-heading">
-      <h3>Rezultatul analizei – {{ sp['person'] }}</h3>
+      <h3>Rezultatul analizei – {{ sp['mandate'].person }}</h3>
     </div>
 
     {% if sp['match_data'].top_matches %}

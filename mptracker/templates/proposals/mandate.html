@@ -4,8 +4,8 @@
 {% block content %}
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
-        (person|string,
-            url_for('pages.person', person_id=person.id)),
+        (mandate|string,
+            url_for('pages.person', person_id=mandate.person_id)),
         ("propuneri legislative",
             None),
       ] %}

@@ -36,41 +36,33 @@ class Chamber(db.Model):
 class Person(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
-    cdep_id = db.Column(db.Text)
-    minority = db.Column(db.Boolean)
-
-    county_id = db.Column(UUID, db.ForeignKey('county.id'))
-    county = db.relationship('County',
-        backref=db.backref('people', lazy='dynamic'))
 
     def __str__(self):
-        return "{p.name} ({p.year})".format(p=self)
+        return self.name
 
     def __repr__(self):
         return "<%s>" % self
 
-    @classmethod
-    def get_or_create_non_mp(cls, name):
-        for row in cls.query.filter_by(name=name, cdep_id=None):
-            return row
-        else:
-            logger.info('Creating non-MP %s %r', cls.__name__, name)
-            row = cls(name=name)
-            db.session.add(row)
-            db.session.flush()
-            return row
+
+class Mandate(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    year = db.Column(db.Integer)
+    cdep_number = db.Column(db.Integer)
+    minority = db.Column(db.Boolean)
+
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    person = db.relationship('Person',
+        backref=db.backref('mandates', lazy='dynamic'))
+
+    chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'), nullable=False)
+    chamber = db.relationship('Chamber')
+
+    county_id = db.Column(UUID, db.ForeignKey('county.id'))
+    county = db.relationship('County')
 
     def get_cdep_url(self):
-        if self.cdep_id is None:
-            return None
-        year, number = self.cdep_id.split('-')
         return ("http://www.cdep.ro/pls/parlam/structura.mp"
-                "?idm={number}&cam=2&leg={year}"
-                .format(year=int(year), number=int(number)))
-
-    @property
-    def year(self):
-        return self.cdep_id.split('-')[0] if self.cdep_id else None
+                "?idm={m.cdep_number}&cam=2&leg={m.year}".format(m=self))
 
 
 class County(db.Model):
@@ -105,8 +97,8 @@ class StenoParagraph(db.Model):
     chapter = db.relationship('StenoChapter',
         backref=db.backref('paragraphs', lazy='dynamic'))
 
-    person_id = db.Column(UUID, db.ForeignKey('person.id'))
-    person = db.relationship('Person',
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
+    mandate = db.relationship('Mandate',
         backref=db.backref('steno_paragraphs', lazy='dynamic'))
 
 
@@ -121,8 +113,8 @@ class Question(db.Model):
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
 
-    person_id = db.Column(UUID, db.ForeignKey('person.id'))
-    person = db.relationship('Person',
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
+    mandate = db.relationship('Mandate',
         backref=db.backref('questions', lazy='dynamic'))
 
     def __str__(self):
@@ -198,13 +190,13 @@ class CommitteeSummary(db.Model):
 
 class Sponsorship(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
-    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
-    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
 
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
     proposal = db.relationship('Proposal', lazy='eager',
         backref=db.backref('sponsorships', lazy='dynamic'))
 
-    person = db.relationship('Person', lazy='eager',
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
         backref=db.backref('sponsorships', lazy='dynamic'))
 
     match_row = db.relationship('Match', lazy='eager', uselist=False,
