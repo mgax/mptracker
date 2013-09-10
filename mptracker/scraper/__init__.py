@@ -150,6 +150,8 @@ def import_person_xls(xls_path):
     mandate_lookup = models.MandateLookup()
 
     people_data = []
+    committees = {}
+    committee_memberships = []
 
     mandate_patcher = TablePatcher(models.Mandate,
                                    models.db.session,
@@ -161,7 +163,11 @@ def import_person_xls(xls_path):
             person_data = record.pop('person_data')
             person_data['id'] = mandate.person_id
             people_data.append(person_data)
-            add(record)
+            mandate_committees = record.pop('committees')
+            mandate = add(record).row
+            for name in mandate_committees:
+                committees[name] = None
+                committee_memberships.append((mandate.id, name))
 
     person_patcher = TablePatcher(models.Person,
                                   models.db.session,
@@ -169,3 +175,20 @@ def import_person_xls(xls_path):
     with person_patcher.process() as add:
         for person_data in people_data:
             add(person_data)
+
+    committee_patcher = TablePatcher(models.MpCommittee,
+                                     models.db.session,
+                                     key_columns=['name'])
+    with committee_patcher.process() as add:
+        for name in list(committees):
+            mp_committee = add({'name': name}).row
+            committees[name] = mp_committee.id
+
+    committee_membership_patcher = TablePatcher(models.MpCommitteeMembership,
+            models.db.session, key_columns=['mandate_id', 'mp_committee_id'])
+    with committee_membership_patcher.process() as add:
+        for mandate_id, name in committee_memberships:
+            add({
+                'mandate_id': mandate_id,
+                'mp_committee_id': committees[name],
+            })

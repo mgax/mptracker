@@ -50,6 +50,12 @@ def read_person_xls(xls_path):
                 if row['Telefon birou parlamentar'] == '0':
                     continue
 
+            committees = []
+            for k in ['Comisia Permanenta 1', 'Comisia Permanenta 2']:
+                committee_name = txtval(row[k])
+                if committee_name:
+                    committees.append(committee_name)
+
             yield {
                 'name': name,
                 'year': year,
@@ -69,4 +75,5 @@ def read_person_xls(xls_path):
                     'facebook_url': txtval(row['Facebook']),
                     'twitter_url': txtval(row['Twitter']),
                 },
+                'committees': committees,
             }
