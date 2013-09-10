@@ -44,6 +44,23 @@ class Person(db.Model):
         return "<%s>" % self
 
 
+class MpGroup(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    name = db.Column(db.Text)
+
+
+class MpGroupMembership(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    person = db.relationship('Person',
+        backref=db.backref('group_memberships', lazy='dynamic'))
+
+    mp_group_id = db.Column(UUID, db.ForeignKey('mp_group.id'), nullable=False)
+    mp_group = db.relationship('MpGroup',
+        backref=db.backref('group_memberships', lazy='dynamic'))
+
+
 class Mandate(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     year = db.Column(db.Integer)
