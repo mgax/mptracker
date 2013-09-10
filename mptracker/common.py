@@ -97,11 +97,18 @@ class TablePatcher:
                 raise RowNotFound("Could not find row with key=%r" % key)
 
         else:
+            changes = []
             for k in record:
-                if getattr(row, k) != record[k]:
-                    logger.info("Updating %r", key)
-                    is_changed = True
-                    break
+                old_val = getattr(row, k)
+                new_val = record[k]
+                if old_val != new_val:
+                    logger.debug("Value change for %r: %s %r != %r",
+                                 key, k, old_val, new_val)
+                    changes.append(k)
+
+            if changes:
+                logger.info("Updating %r %s", key, ','.join(changes))
+                is_changed = True
 
         if is_changed:
             for k in record:
