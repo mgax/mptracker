@@ -141,3 +141,20 @@ def proposals():
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
+
+
+@scraper_manager.command
+def import_person_xls(xls_path):
+    from mptracker.scraper.person_xls import read_person_xls
+    logging.getLogger('mptracker.common').setLevel(logging.DEBUG)
+
+    mandate_lookup = models.MandateLookup()
+
+    mandate_patcher = TablePatcher(models.Mandate,
+                                   models.db.session,
+                                   key_columns=['year', 'cdep_number'])
+    with mandate_patcher.process() as add:
+        for record in read_person_xls(xls_path):
+            mandate = mandate_lookup.find(record.pop('name'), record['year'],
+                                          record['cdep_number'])
+            add(record)
