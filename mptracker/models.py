@@ -50,8 +50,8 @@ class Person(db.Model):
 
     @emails.setter
     def emails(self, values):
-        assert not isinstance(values, str), "Please supply a list of emails"
-        self.emails = ' '.join(values)
+        assert isinstance(values, list), "Please supply a list of emails"
+        self.email_value = ' '.join(values) if value else None
 
     def __str__(self):
         return self.name
