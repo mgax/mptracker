@@ -67,6 +67,7 @@ class MpGroup(db.Model):
 
 class MpGroupMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
+    role = db.Column(db.Text)
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
@@ -84,6 +85,7 @@ class MpCommittee(db.Model):
 
 class MpCommitteeMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
+    role = db.Column(db.Text)
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
