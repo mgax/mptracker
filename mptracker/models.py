@@ -76,7 +76,7 @@ class MpGroupMembership(db.Model):
 
     mp_group_id = db.Column(UUID, db.ForeignKey('mp_group.id'), nullable=False)
     mp_group = db.relationship('MpGroup',
-        backref=db.backref('group_memberships', lazy='dynamic'))
+        backref=db.backref('memberships', lazy='dynamic'))
 
 
 class MpCommittee(db.Model):

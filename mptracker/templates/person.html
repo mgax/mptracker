@@ -91,7 +91,8 @@
         {% set membership = mandate.group_membership %}
         <dt>grup parlamentar:</dt>
         <dd>
-          {{ membership.mp_group.short_name }}
+          {% set url = url_for('.group', group_id=membership.mp_group_id) %}
+          <a href="{{ url }}">{{ membership.mp_group.short_name }}</a>
           {% if membership.role %}({{ membership.role }}){% endif %}
         </dd>
       {% endif %}

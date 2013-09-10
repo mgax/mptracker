@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("grupuri parlamentare",
+            None),
+        (group.short_name,
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <h1>Grupul parlamentar {{ group.short_name }}</h1>
+
+  <ul>
+  {% for m in memberships %}
+    {% set person = m.mandate.person %}
+    {% set url = url_for('.person', person_id=person.id) %}
+    <li>
+      <a href="{{ url }}">{{ person }}</a>
+      {% if m.role %}
+        &mdash; {{ m.role }}
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

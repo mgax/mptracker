@@ -95,6 +95,18 @@ def committee(committee_id):
     })
 
 
+@pages.route('/group/<uuid:group_id>')
+def group(group_id):
+    group = models.MpGroup.query.get_or_404(group_id)
+    return flask.render_template('group.html', **{
+        'group': group,
+        'memberships': (group.memberships
+                                .join(models.Mandate)
+                                .join(models.Person)
+                                .all()),
+    })
+
+
 @pages.route('/steno/<date_str>')
 def steno_contents(date_str):
     date_value = parse_date(date_str)
