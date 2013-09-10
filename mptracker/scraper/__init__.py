@@ -165,9 +165,10 @@ def import_person_xls(xls_path):
             people_data.append(person_data)
             mandate_committees = record.pop('committees')
             mandate = add(record).row
-            for name in mandate_committees:
-                committees[name] = None
-                committee_memberships.append((mandate.id, name))
+            for data in mandate_committees:
+                committees[data['name']] = None
+                committee_memberships.append(
+                    (mandate.id, data['name'], data['role']))
 
     person_patcher = TablePatcher(models.Person,
                                   models.db.session,
@@ -187,8 +188,9 @@ def import_person_xls(xls_path):
     committee_membership_patcher = TablePatcher(models.MpCommitteeMembership,
             models.db.session, key_columns=['mandate_id', 'mp_committee_id'])
     with committee_membership_patcher.process() as add:
-        for mandate_id, name in committee_memberships:
+        for mandate_id, name, role in committee_memberships:
             add({
                 'mandate_id': mandate_id,
                 'mp_committee_id': committees[name],
+                'role': role,
             })

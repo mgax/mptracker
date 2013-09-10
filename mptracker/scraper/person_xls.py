@@ -54,7 +54,8 @@ def read_person_xls(xls_path):
             for k in ['Comisia Permanenta 1', 'Comisia Permanenta 2']:
                 committee_name = txtval(row[k])
                 if committee_name:
-                    committees.append(committee_name)
+                    committees.append({'name': committee_name,
+                                       'role': txtval(row['Functie in ' + k])})
 
             yield {
                 'name': name,
