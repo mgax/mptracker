@@ -46,3 +46,5 @@ admin.add_view(ModelView(models.Question,
 admin.add_view(ModelView(models.Person,
                          view_route='pages.person:person_id',
                          column_searchable_list=['name']))
+admin.add_view(ModelView(models.Mandate,
+                         column_searchable_list=['cdep_number']))

@@ -1,5 +1,6 @@
 from collections import defaultdict
 import calendar
+from datetime import datetime
 import flask
 from sqlalchemy.orm import joinedload
 from path import path
@@ -60,10 +61,15 @@ def person(person_id):
             'questions_count': m.questions.count(),
             'paragraphs_count': m.steno_paragraphs.count(),
             'sponsorships_count': m.sponsorships.count(),
+            'college': m.college,
+            'phone': m.phone,
+            'address': m.address,
+            'votes': m.votes,
+            'votes_percent': m.votes_percent,
         } for m in person.mandates
                          .join(models.Mandate.county)
                          .join(models.Mandate.chamber)
-                         .order_by('year')]
+                         .order_by('-year')]
     return flask.render_template('person.html', **{
         'person': person,
         'mandates': mandates,
@@ -116,4 +122,5 @@ def bust_cache(endpoint, values):
 def inject_calendar():
     return {
         'calendar_tool_factory': calendar.Calendar,
+        'current_year': datetime.today().year,
     }

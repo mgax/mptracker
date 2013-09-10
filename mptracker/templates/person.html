@@ -13,6 +13,46 @@
 
   <h1>{{ person.name }}</h1>
 
+  <dl class="dl-horizontal">
+    {% if person.website_url %}
+      <dt>Website:</dt>
+      <dd>{{ person.website_url|urlize }}</dd>
+    {% endif %}
+
+    {% if person.blog_url %}
+      <dt>Blog:</dt>
+      <dd>{{ person.blog_url|urlize }}</dd>
+    {% endif %}
+
+    {% if person.twitter_url %}
+      <dt>Twitter:</dt>
+      <dd>{{ person.twitter_url|urlize }}</dd>
+    {% endif %}
+
+    {% if person.facebook_url %}
+      <dt>Facebook:</dt>
+      <dd>{{ person.facebook_url|urlize }}</dd>
+    {% endif %}
+
+    {% if person.emails %}
+      <dt>Email:</dt>
+      {% for email in person.emails %}
+        <dd>{{ email|urlize }}</dd>
+      {% endfor %}
+    {% endif %}
+
+    {% if person.year_born %}
+      <dt>Anul nașterii:</dt>
+      <dd>{{ person.year_born }}
+          ({{ current_year - person.year_born }} ani)</dd>
+    {% endif %}
+
+    {% if person.education %}
+      <dt>Educație:</dt>
+      <dd>{{ person.education }}</dd>
+    {% endif %}
+  </dl>
+
  {% for mandate in mandates %}
   <section class="panel panel-default">
     <div class="panel-heading">
@@ -20,6 +60,7 @@
         {{ mandate.chamber_name }}
         {{ mandate.year }} &mdash;
         {{ mandate.county_name }}
+        {% if mandate.college %}(colegiul {{ mandate.college }}){% endif %}
       </h3>
     </div>
 
@@ -45,6 +86,17 @@
                              mandate_id=mandate.id) %}
         <a href="{{ url }}">{{ mandate.sponsorships_count }}</a>
       </dd>
+
+      {% if mandate.phone or mandate.address %}
+        <dt>birou parlamentar:</dt>
+        {% if mandate.phone %}<dd>telefon: {{ mandate.phone }}</dd>{% endif %}
+        {% if mandate.address %}<dd>adresă: {{ mandate.address }}</dd>{% endif %}
+      {% endif %}
+
+      {% if mandate.votes %}
+        <dt>voturi:</dt>
+        <dd>{{ mandate.votes }} ({{ mandate.votes_percent|int }}%)</dd>
+      {% endif %}
     </dl>
   </section>
  {% endfor %}
