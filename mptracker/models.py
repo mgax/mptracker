@@ -36,6 +36,22 @@ class Chamber(db.Model):
 class Person(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
+    year_born = db.Column(db.Integer)
+    education = db.Column(db.Text)
+    website_url = db.Column(db.Text)
+    blog_url = db.Column(db.Text)
+    email_value = db.Column(db.Text)
+    facebook_url = db.Column(db.Text)
+    twitter_url = db.Column(db.Text)
+
+    @property
+    def emails(self):
+        return (self.email_value or '').split()
+
+    @emails.setter
+    def emails(self, values):
+        assert not isinstance(values, str), "Please supply a list of emails"
+        self.emails = ' '.join(values)
 
     def __str__(self):
         return self.name
@@ -84,6 +100,12 @@ class Mandate(db.Model):
     year = db.Column(db.Integer)
     cdep_number = db.Column(db.Integer)
     minority = db.Column(db.Boolean)
+    constituency = db.Column(db.Integer)
+    college = db.Column(db.Integer)
+    votes = db.Column(db.Integer)
+    votes_percent = db.Column(db.Numeric)
+    address = db.Column(db.Text)
+    phone = db.Column(db.Text)
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
     person = db.relationship('Person',
