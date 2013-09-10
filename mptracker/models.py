@@ -61,6 +61,24 @@ class MpGroupMembership(db.Model):
         backref=db.backref('group_memberships', lazy='dynamic'))
 
 
+class MpCommittee(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    name = db.Column(db.Text)
+
+
+class MpCommitteeMembership(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    person = db.relationship('Person',
+        backref=db.backref('committee_memberships', lazy='dynamic'))
+
+    mp_committee_id = db.Column(UUID, db.ForeignKey('mp_committee.id'),
+                                nullable=False)
+    mp_committee = db.relationship('MpCommittee',
+        backref=db.backref('committee_memberships', lazy='dynamic'))
+
+
 class Mandate(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     year = db.Column(db.Integer)
