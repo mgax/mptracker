@@ -1,3 +1,4 @@
+import time
 from urllib.parse import urlencode, urlparse, parse_qs
 from path import path
 import requests
@@ -33,10 +34,32 @@ class Scraper(object):
         return page
 
 
+def create_throttle(seconds):
+    def hook(response):
+        if not getattr(response, 'from_cache', False):
+            # logger.debug("Throttle: %s", seconds)
+            time.sleep(seconds)
+        return response
+    return hook
+
+
+def create_session(cache_name=None, throttle=None):
+    if cache_name:
+        import requests_cache
+        cache_path = project_root / '_data' / cache_name
+        session = requests_cache.CachedSession(cache_path)
+
+    else:
+        session = requests.Session()
+
+    if throttle:
+        session.hooks = {'response': create_throttle(throttle)}
+
+    return session
+
+
 def get_cached_session(name='page-cache'):
-    import requests_cache
-    cache_path = project_root / '_data' / name
-    return requests_cache.CachedSession(cache_path)
+    return create_session(name)
 
 
 def pqitems(ob, selector=None):
