@@ -102,6 +102,13 @@ def committee(committee_id):
     })
 
 
+@pages.route('/group/')
+def group_index():
+    return flask.render_template('group_index.html', **{
+        'group_list': models.MpGroup.query.order_by('short_name').all(),
+    })
+
+
 @pages.route('/group/<uuid:group_id>')
 def group(group_id):
     group = models.MpGroup.query.get_or_404(group_id)

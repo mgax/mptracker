@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("grupuri",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <h1>Grupuri parlamentare</h1>
+
+  <ul>
+  {%- for group in group_list %}
+    <li>
+      {%- set url = url_for('.group', group_id=group.id) %}
+      <a href="{{ url }}">{{ group.short_name }}</a>
+    </li>
+  {%- endfor %}
+  </ul>
+{% endblock %}
