@@ -118,14 +118,14 @@ def proposals(dry_run=False):
             to_remove = set(existing_sponsorships) - set(new_people)
             to_add = set(new_people) - set(existing_sponsorships)
             if to_remove:
-                logger.info("Removing sponsors: %r",
+                logger.info("Removing sponsors %s: %r", row.combined_id,
                             [cdep_id(m) for m in to_remove])
                 sp_removed += 1
                 for m in to_remove:
                     sp = existing_sponsorships[m]
                     models.db.session.delete(sp)
             if to_add:
-                logger.info("Adding sponsors: %r",
+                logger.info("Adding sponsors %s: %r", row.combined_id,
                             [cdep_id(m) for m in to_add])
                 sp_added += 1
                 for m in to_add:
