@@ -7,24 +7,13 @@ from path import path
 from flask import json
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
-                                      get_cdep_id)
+                                      parse_cdep_id)
 
 
 with open(path(__file__).parent / 'question_exceptions.json') as f:
     exceptions = json.load(f)
     url_skip = set(exceptions['url_skip'])
     pdf_url_skip = set(exceptions['pdf_url_skip'])
-
-
-class Question:
-
-    def __str__(self):
-        return ("<Question type={o.q_type}"
-                         " number={o.number!r}"
-                         " date={o.date_record}"
-                         " person_name={o.person_name!r}"
-                         " person_cdep_id={o.person_cdep_id}"
-                         ">").format(o=self)
 
 
 class QuestionScraper(Scraper):
@@ -48,26 +37,27 @@ class QuestionScraper(Scraper):
             href = link.attr('href')
             if href.startswith('http://www.cdep.ro/pls/'
                                'parlam/structura.mp?'):
-                return link.text(), get_cdep_id(href)
+                (year, number) = parse_cdep_id(href)
+                return (link.text(), year, number)
 
     def get_question(self, href):
         page = self.fetch_url(href)
         heading = page('#pageHeader .pageHeaderLinks').text()
         heading_m = self.title_pattern.match(heading)
         assert heading_m is not None, "Could not parse heading %r" % heading
-        question = Question()
-        question.q_type = self.types[heading_m.group('type')]
+        question = {}
+        question['type'] = self.types[heading_m.group('type')]
 
-        question.url = href
-        question.title = page('.headline').text()
+        question['url'] = href
+        question['title'] = page('.headline').text()
 
-        rows = pqitems(page, '#pageContent > dd > table > tr')
+        rows = iter(pqitems(page, '#pageContent > dd > table > tr'))
         assert (self.normalize_space(next(rows).text()) ==
                 'Informaţii privind interpelarea')
 
-        question.pdf_url = None
-        question.addressee = []
-        question.method = None
+        question['pdf_url'] = None
+        question['addressee'] = []
+        question['method'] = None
 
         label_text = None
 
@@ -87,29 +77,26 @@ class QuestionScraper(Scraper):
                     continue
 
             if label_text == 'Nr.înregistrare:':
-                question.number = value.text()
+                question['number'] = value.text()
             elif label_text == 'Data înregistrarii:':
-                question.date = self.parse_date_dmy(value.text())
+                question['date'] = self.parse_date_dmy(value.text())
             elif label_text == 'Mod adresare:':
-                question.method = value.text()
+                question['method'] = value.text()
             elif label_text in ['Destinatar:', 'Destinatari:']:
                 ministry_el = list(pqitems(value, 'b'))[0]
-                question.addressee.append(ministry_el.text())
+                question['addressee'].append(ministry_el.text())
             elif label_text == 'Adresant:' or label_text == 'Adresanţi:':
-                (question.person_name, question.person_cdep_id) = \
-                    self.person_from_td(value)
+                question['person'] = self.person_from_td(value)
             elif label_text == 'Textul intervenţiei:':
                 link = list(pqitems(value, 'a'))[-1]
                 assert link.text() == "fişier PDF"
                 pdf_url = link.attr('href')
                 if pdf_url not in pdf_url_skip:
-                    question.pdf_url = pdf_url
+                    question['pdf_url'] = pdf_url
 
-        question_id = '{q.date}-{q.number}'.format(q=question)
+        question_id = '{q[date]}-{q[number]}'.format(q=question)
         patch = exceptions['patch'].get(question_id, {})
-        for k in patch:
-            setattr(question, k, patch[k])
-
+        question.update(patch)
         return question
 
     def run(self, year):

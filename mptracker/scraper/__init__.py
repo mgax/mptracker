@@ -14,32 +14,21 @@ scraper_manager = Manager()
 def questions(year='2013'):
     from mptracker.scraper.questions import QuestionScraper
 
-    patcher = TablePatcher(models.Question,
-                           models.db.session,
-                           key_columns=['number', 'date'])
+    mandate_lookup = models.MandateLookup()
 
-    person_matcher = models.PersonMatcher()
+    question_patcher = TablePatcher(models.Question,
+                                    models.db.session,
+                                    key_columns=['number', 'date'])
 
-    def get_questions():
-        questions_scraper = QuestionScraper(get_cached_session())
+    questions_scraper = QuestionScraper(get_cached_session())
+
+    with question_patcher.process() as add:
         for question in questions_scraper.run(year):
-            person = person_matcher.get_person(question.person_name,
-                                               question.person_cdep_id,
-                                               strict=True)
-            q_data = {
-                'number':    question.number,
-                'type':      question.q_type,
-                'method':    question.method,
-                'title':     question.title,
-                'url':       question.url,
-                'pdf_url':   question.pdf_url,
-                'addressee': '; '.join(question.addressee),
-                'date':      question.date,
-                'person_id': person.id,
-            }
-            yield q_data
-
-    patcher.update(get_questions())
+            name, person_year, person_number = question.pop('person')
+            mandate = mandate_lookup.find(name, person_year, person_number)
+            question['mandate_id'] = mandate.id
+            question['addressee'] = '; '.join(question['addressee'])
+            add(question)
 
 
 @scraper_manager.command
