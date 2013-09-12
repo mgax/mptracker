@@ -21,4 +21,14 @@
     {% set url = url_for('proposals.relevant') %}
     <a href="{{ url }}">Propuneri legislative</a>
   </p>
+
+  <p>
+    {% set url = url_for('.committee_index') %}
+    <a href="{{ url }}">Comisii</a>
+  </p>
+
+  <p>
+    {% set url = url_for('.group_index') %}
+    <a href="{{ url }}">Grupuri parlamentare</a>
+  </p>
 {% endblock %}
