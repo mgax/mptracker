@@ -262,11 +262,11 @@ class Sponsorship(db.Model):
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
     proposal = db.relationship('Proposal', lazy='eager',
-        backref=db.backref('sponsorships', lazy='dynamic'))
+        backref=db.backref('sponsorships', lazy='dynamic', cascade='all'))
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
-        backref=db.backref('sponsorships', lazy='dynamic'))
+        backref=db.backref('sponsorships', lazy='dynamic', cascade='all'))
 
     match_row = db.relationship('Match', lazy='eager', uselist=False,
                     primaryjoin='Sponsorship.id==foreign(Match.id)',
