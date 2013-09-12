@@ -11,17 +11,17 @@ logger.setLevel(logging.INFO)
 
 class ProposalScraper(Scraper):
 
-    person_proposal_url = ('http://www.cdep.ro/pls/parlam/structura.mp?'
-                           'idm={idm}&leg={leg}&cam=2&pag=2&idl=1&prn=0&par=')
+    mandate_proposal_url = ('http://www.cdep.ro/pls/parlam/structura.mp?'
+                            'idm={idm}&leg={leg}&cam=2&pag=2&idl=1&prn=0&par=')
 
     def fix_name(self, name):
         return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
 
-    def fetch_from_mp_pages(self, person_cdep_id_list):
+    def fetch_from_mp_pages(self, mandate_cdep_id_list):
         proposals = {}
-        for person_cdep_id in person_cdep_id_list:
+        for mandate_cdep_id in mandate_cdep_id_list:
             for combined_id, proposal_url in \
-                    self.fetch_mp_proposals(person_cdep_id):
+                    self.fetch_mp_proposals(mandate_cdep_id):
                 if combined_id in proposals:
                     proposal_data = proposals[combined_id]
                     assert proposal_data['url'] == proposal_url
@@ -31,12 +31,12 @@ class ProposalScraper(Scraper):
                     proposal_data['combined_id'] = combined_id
                     proposal_data['_sponsorships'] = []
                     proposals[combined_id] = proposal_data
-                proposal_data['_sponsorships'].append(person_cdep_id)
+                proposal_data['_sponsorships'].append(mandate_cdep_id)
         return list(proposals.values())
 
     def fetch_mp_proposals(self, cdep_id):
-        (leg, idm) = cdep_id.split('-')
-        url = self.person_proposal_url.format(leg=leg, idm=idm)
+        (leg, idm) = cdep_id
+        url = self.mandate_proposal_url.format(leg=leg, idm=idm)
         page = self.fetch_url(url)
         headline = pqitems(page, ':contains("PL înregistrat la")')
         if not headline:

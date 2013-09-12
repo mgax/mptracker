@@ -78,14 +78,18 @@ def committee_summaries(year=2013):
 
 
 @scraper_manager.command
-def proposals():
+def proposals(dry_run=False):
     from mptracker.scraper.proposals import ProposalScraper
 
-    proposal_scraper = ProposalScraper(get_cached_session())
+    proposal_scraper = ProposalScraper(create_session(cache_name='page-cache',
+                                                      throttle=0.5))
 
-    by_cdep_id = {p.cdep_id: p
-                  for p in models.Person.query
-                  if p.year == '2012'}
+    def cdep_id(mandate):
+        return (mandate.year, mandate.cdep_number)
+
+    by_cdep_id = {cdep_id(m): m
+                  for m in models.Mandate.query
+                  if m.year == 2012}
 
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
@@ -94,8 +98,6 @@ def proposals():
     proposal_patcher = TablePatcher(models.Proposal,
                                     models.db.session,
                                     key_columns=['combined_id'])
-
-    person_matcher = models.PersonMatcher()
 
     sp_updates = sp_added = sp_removed = 0
 
@@ -112,25 +114,28 @@ def proposals():
             row = result.row
 
             new_people = set(by_cdep_id[ci] for ci in sponsorships)
-            existing_sponsorships = {sp.person: sp for sp in row.sponsorships}
+            existing_sponsorships = {sp.mandate: sp for sp in row.sponsorships}
             to_remove = set(existing_sponsorships) - set(new_people)
             to_add = set(new_people) - set(existing_sponsorships)
             if to_remove:
                 logger.info("Removing sponsors: %r",
-                            [p.cdep_id for p in to_remove])
+                            [cdep_id(m) for m in to_remove])
                 sp_removed += 1
-                for p in to_remove:
-                    sp = existing_sponsorships[p]
+                for m in to_remove:
+                    sp = existing_sponsorships[m]
                     models.db.session.delete(sp)
             if to_add:
                 logger.info("Adding sponsors: %r",
-                            [p.cdep_id for p in to_add])
+                            [cdep_id(m) for m in to_add])
                 sp_added += 1
-                for p in to_add:
-                    row.sponsorships.append(models.Sponsorship(person=p))
+                for m in to_add:
+                    row.sponsorships.append(models.Sponsorship(mandate=m))
 
             if to_remove or to_add:
                 sp_updates += 1
+
+        if dry_run:
+            models.db.session.rollback()
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
