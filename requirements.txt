@@ -5,6 +5,7 @@
 -e git+https://github.com/mitsuhiko/flask.git@2e17ad7fd42d8575f308af9c17496d38ceb72b5e#egg=Flask-dev
 -e git+https://github.com/mozilla-services/chaussette.git@32eadd004e1ff775ddbbb9c6b55e0de71efadd49#egg=chaussette-dev
 -e git+https://github.com/mrjoes/flask-admin.git@ecaa5d2c49aa63a12f40fa50186aa36b3b8712ab#egg=Flask_Admin-dev
+-e git+https://github.com/reclosedev/requests-cache.git@d9ddec5e0b6ceabbfc29e662fa8f54f0317ed3bb#egg=requests_cache-dev
 -e git+https://github.com/techniq/flask-script.git@6e47afcea25e2ad26a9c32371b3ebe34f3704b12#egg=Flask_Script-dev
 -f http://grep.ro/quickpub/pypkg/
 alembic==0.6.0
@@ -24,7 +25,6 @@ psycopg2==2.5.1
 python-dateutil==2.1
 pytz==2013b
 redis==2.7.6
-requests-cache==0.4.0
 requests==1.2.3
 rq==0.3.10
 simplejson==3.3.0
