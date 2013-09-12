@@ -3,11 +3,15 @@
 import sys
 import re
 from datetime import datetime
+import logging
 from path import path
 from flask import json
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
-                                      parse_cdep_id)
+                                      parse_cdep_id, never)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 with open(path(__file__).parent / 'question_exceptions.json') as f:
@@ -25,6 +29,10 @@ class QuestionScraper(Scraper):
         'Întrebarea': 'question',
         'Interpelarea': 'interpelation',
     }
+
+    def __init__(self, skip=never, **kwargs):
+        self.skip = skip
+        return super().__init__(**kwargs)
 
     def normalize_space(self, text):
         return re.sub(r'\s+', ' ', text)
@@ -110,4 +118,7 @@ class QuestionScraper(Scraper):
             assert href.startswith('http://www.cdep.ro/pls/'
                                    'parlam/interpelari.detalii')
 
-            yield self.get_question(href)
+            if self.skip(href):
+                logger.debug('skipping %r', href)
+            else:
+                yield self.get_question(href)

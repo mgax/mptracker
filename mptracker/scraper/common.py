@@ -89,3 +89,7 @@ def parse_cdep_id(href):
     year = int(qs['leg'][0])
     number = int(qs['idm'][0])
     return (year, number)
+
+
+def never(*args, **kwargs):
+    return False

@@ -1,6 +1,6 @@
 import logging
 from flask.ext.script import Manager
-from mptracker.scraper.common import get_cached_session
+from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
 from mptracker.common import TablePatcher, fix_local_chars
 
@@ -14,16 +14,20 @@ scraper_manager = Manager()
 def questions(year='2013'):
     from mptracker.scraper.questions import QuestionScraper
 
+    known_urls = set(q.url for q in models.Question.query)
+    def skip_question(url):
+        return url in known_urls
+    questions_scraper = QuestionScraper(session=create_session(throttle=0.5),
+                                        skip=skip_question)
+
     mandate_lookup = models.MandateLookup()
 
     question_patcher = TablePatcher(models.Question,
                                     models.db.session,
                                     key_columns=['number', 'date'])
 
-    questions_scraper = QuestionScraper(get_cached_session())
-
     with question_patcher.process() as add:
-        for question in questions_scraper.run(year):
+        for question in questions_scraper.run(int(year)):
             name, person_year, person_number = question.pop('person')
             mandate = mandate_lookup.find(name, person_year, person_number)
             question['mandate_id'] = mandate.id
