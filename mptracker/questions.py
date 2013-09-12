@@ -31,12 +31,17 @@ def ocr_question(question_id):
 
 @questions_manager.command
 def ocr_all(number=None, force=False):
+    text_row_ids = models.OcrText.all_ids_for('question')
+    def has_text(question):
+        return question.id in text_row_ids
+
     n_jobs = n_skip = n_ok = 0
+
     for question in models.Question.query:
         if not question.pdf_url:
             n_skip += 1
             continue
-        if question.text is not None and not force:
+        if has_text(question) and not force:
             n_ok += 1
             continue
         ocr_question.delay(question.id)

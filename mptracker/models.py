@@ -225,6 +225,10 @@ class OcrText(db.Model):
     parent = db.Column(db.Text, nullable=False)
     text = db.Column(db.Text)
 
+    @classmethod
+    def all_ids_for(cls, parent):
+        return set(row.id for row in cls.query.filter_by(parent=parent))
+
 
 class Match(db.Model):
     id = db.Column(UUID, primary_key=True)
