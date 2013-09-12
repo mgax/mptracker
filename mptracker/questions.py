@@ -5,7 +5,7 @@ from flask.ext.script import Manager
 from flask.ext.rq import job
 from mptracker import models
 from mptracker.common import ocr_url, csv_lines
-from mptracker.nlp import match_text_for_person
+from mptracker.nlp import match_text_for_mandate
 from mptracker.auth import require_privilege
 
 
@@ -56,7 +56,7 @@ def ocr_all(number=None, force=False):
 def analyze_question(question_id):
     question = models.Question.query.get(question_id)
     text = question.title + ' ' + question.text
-    result = match_text_for_person(question.person, text)
+    result = match_text_for_mandate(question.mandate, text)
     question.match.data = flask.json.dumps(result)
     question.match.score = len(result['top_matches'])
     models.db.session.commit()
@@ -64,17 +64,26 @@ def analyze_question(question_id):
 
 @questions_manager.command
 def analyze_all(number=None, force=False, minority_only=False):
+    text_row_ids = models.OcrText.all_ids_for('question')
+    def has_text(question):
+        return question.id in text_row_ids
+
+    match_row_ids = models.Match.all_ids_for('question')
+    def has_match(question):
+        return question.id in match_row_ids
+
     n_jobs = n_skip = n_ok = 0
     for question in models.Question.query:
         if not force:
-            if question.match.data is not None:
+            if has_match(question):
                 n_ok += 1
                 continue
-        if question.text is None:
+        if not has_text(question):
             n_skip += 1
             continue
-        if not question.person.minority:
-            county = question.person.county
+        mandate = question.mandate
+        if not mandate.minority:
+            county = mandate.county
             if (minority_only or
                 county is None or
                 county.geonames_code is None):

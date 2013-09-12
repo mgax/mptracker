@@ -236,6 +236,10 @@ class Match(db.Model):
     data = db.Column(db.Text)
     score = db.Column(db.Float)
 
+    @classmethod
+    def all_ids_for(cls, parent):
+        return set(row.id for row in cls.query.filter_by(parent=parent))
+
 
 class QuestionFlags(db.Model):
     id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)

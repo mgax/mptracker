@@ -5,7 +5,7 @@ from flask.ext.script import Manager
 from flask.ext.rq import job
 from mptracker import models
 from mptracker.common import ocr_url
-from mptracker.nlp import match_text_for_person
+from mptracker.nlp import match_text_for_mandate
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -101,7 +101,7 @@ def analyze_sponsorship(sponsorship_id):
     sponsorship = models.Sponsorship.query.get(sponsorship_id)
     proposal = sponsorship.proposal
     text = proposal.title + ' ' + proposal.text
-    result = match_text_for_person(sponsorship.person, text)
+    result = match_text_for_mandate(sponsorship.mandate, text)
     sponsorship.match.data = flask.json.dumps(result)
     sponsorship.match.score = len(result['top_matches'])
     models.db.session.commit()

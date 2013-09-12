@@ -151,14 +151,14 @@ def match_names(text, name_list, mp_info={}):
     return matches
 
 
-def match_text_for_person(person, text):
-    mp_info = {'name': person.name}
+def match_text_for_mandate(mandate, text):
+    mp_info = {'name': mandate.person.name}
 
-    if person.minority:
+    if mandate.minority:
         local_names = get_minority_names()['search_names']
 
     else:
-        county_data = get_county_data(person.county.geonames_code)
+        county_data = get_county_data(mandate.county.geonames_code)
         local_names = county_data['place_names']
         mp_info['county_name'] = county_data['name']
 
