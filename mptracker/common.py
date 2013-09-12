@@ -164,8 +164,10 @@ class TablePatcher:
 
 @job
 def ocr_url(url, max_pages=MAX_OCR_PAGES):
-    from mptracker.scraper.common import get_cached_session
-    http_session = get_cached_session('question-pdf')
+    from mptracker.scraper.common import create_session
+
+    pdf_cache_name = flask.current_app.config.get('MPTRACKER_PDF_CACHE')
+    http_session = create_session(cache_name=pdf_cache_name, throttle=0.5)
 
     with temp_dir() as tmp:
         pdf_data = http_session.get(url).content
