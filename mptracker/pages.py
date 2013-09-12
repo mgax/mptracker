@@ -152,6 +152,21 @@ def committee_summary(summary_id):
         'summary': summary,
     })
 
+
+@pages.route('/debug')
+def debug():
+    args = flask.request.args
+    do = args.get('do')
+    if do == 'search-mandate':
+        mandate = models.Mandate.query.filter_by(
+                        year=int(args['year']),
+                        cdep_number=int(args['cdep_number'])).first_or_404()
+        url = flask.url_for('.person', person_id=mandate.person_id)
+        return flask.redirect(url)
+
+    return flask.render_template('debug.html')
+
+
 @pages.app_url_defaults
 def bust_cache(endpoint, values):
     if endpoint == 'static':

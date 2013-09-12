@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Debug</h1>
+
+  <form>
+    <input type="hidden" name="do" value="search-mandate">
+    <input name="year" placeholder="year">
+    <input name="cdep_number" placeholder="cdep_number">
+    <button type="submit">go</button>
+  </form>
+
+{% endblock %}
