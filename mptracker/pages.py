@@ -83,6 +83,13 @@ def person(person_id):
     })
 
 
+@pages.route('/committee/')
+def committee_index():
+    return flask.render_template('committee_index.html', **{
+        'committee_list': models.MpCommittee.query.order_by('name').all(),
+    })
+
+
 @pages.route('/committee/<uuid:committee_id>')
 def committee(committee_id):
     committee = models.MpCommittee.query.get_or_404(committee_id)

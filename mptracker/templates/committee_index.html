@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("comisii",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <h1>Comisii</h1>
+
+  <ul>
+  {%- for committee in committee_list %}
+    <li>
+      {%- set url = url_for('.committee', committee_id=committee.id) %}
+      <a href="{{ url }}">{{ committee.name }}</a>
+    </li>
+  {%- endfor %}
+  </ul>
+{% endblock %}

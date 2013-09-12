@@ -5,7 +5,7 @@
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
         ("comisii",
-            None),
+            url_for('.committee_index')),
         (committee.name|truncate(80),
             None),
       ] %}
