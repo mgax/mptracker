@@ -35,7 +35,7 @@ class Scraper(object):
 
 
 def create_throttle(seconds):
-    def hook(response):
+    def hook(response, **extra):
         if not getattr(response, 'from_cache', False):
             # logger.debug("Throttle: %s", seconds)
             time.sleep(seconds)
