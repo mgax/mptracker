@@ -18,17 +18,15 @@ Requirements:
 * Python 3.3
 * PostgreSQL
 
-It's a good idea to use virtualenv_ to keep the dependencies separate
-from other projects on the system.
-
-Install dependencies::
+Install dependencies (consider using virtualenv_, it makes life easier
+when working with multiple projects)::
 
     $ pip install -r requirements-dev.txt
 
 Configure the application. Here's a sample ``settings.py`` (it should be
 in the same folder as ``manage.py``)::
 
-    DEBUG=on
+    DEBUG = True
     SECRET_KEY = 'foo'
     DATABASE = 'postgresql:///mptracker'
 
