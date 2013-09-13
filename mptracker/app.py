@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 def configure(app):
     project_root = path(__file__).abspath().parent.parent
     app.config['DATA_DIR'] = str(project_root / '_data')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE']
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE')
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     app.config['PRIVILEGED_EMAILS'] = \
         os.environ.get('PRIVILEGED_EMAILS', '').split()
@@ -30,6 +30,7 @@ def configure(app):
     if sentry_dsn:
         from raven.contrib.flask import Sentry
         Sentry(app, dsn=sentry_dsn)
+    app.config.from_pyfile('../settings.py', silent=True)
 
 
 def create_app():
