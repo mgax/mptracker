@@ -10,6 +10,7 @@ def main():
     app = create_app()
 
     logging.getLogger('werkzeug').setLevel(logging.INFO)
+    logging.getLogger('alembic').setLevel(logging.INFO)
     if app.config.get('SQL_DEBUG'):
         logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
