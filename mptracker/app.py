@@ -1,7 +1,6 @@
 import os
 import logging
 import flask
-from flask.ext.script import Manager
 from path import path
 from mptracker import models
 from mptracker.common import common
@@ -55,49 +54,6 @@ def create_app():
     return app
 
 
-manager = Manager(create_app)
-
-manager.add_command('db', models.db_manager)
-manager.add_command('questions', questions_manager)
-manager.add_command('placenames', placenames_manager)
-manager.add_command('scraper', scraper_manager)
-manager.add_command('proposals', proposals_manager)
-
-
-@manager.command
-def worker():
-    from flask.ext.rq import get_worker
-    get_worker().work()
-
-
-@manager.command
-def requeue_failed():
-    from rq import get_failed_queue
-    from flask.ext.rq import get_connection
-    failed = get_failed_queue(get_connection())
-    for job in failed.get_jobs():
-        failed.requeue(job.id)
-
-
-@manager.command
-def import_people():
-    from mptracker.scraper.common import get_cached_session
-    from mptracker.scraper.people import PersonScraper
-    ps = PersonScraper(get_cached_session())
-    existing_cdep_ids = set(p.cdep_id for p in models.Person.query)
-    new_people = 0
-    session = models.db.session
-    for person_info in ps.fetch_people():
-        if person_info['cdep_id'] not in existing_cdep_ids:
-            print('adding person:', person_info)
-            p = models.Person(**person_info)
-            session.add(p)
-            existing_cdep_ids.add(p.cdep_id)
-            new_people += 1
-    print('added', new_people, 'people')
-    session.commit()
-
-
 def import_steno_day(day):
     from mptracker.scraper.common import get_cached_session
     from mptracker.scraper.steno import StenogramScraper
@@ -127,20 +83,68 @@ def import_steno_day(day):
     session.commit()
 
 
-@manager.command
-def import_steno(day=None, stdin=False):
-    if stdin:
-        import sys
-        days = [line.strip() for line in sys.stdin]
-    elif day is not None:
-        days = [day]
-    else:
-        raise RuntimeError("Need day or stdin")
+def create_manager(app):
+    from flask.ext.script import Manager
 
-    for day in days:
-        try:
-            import_steno_day(parse_date(day))
-            print(day, "ok")
-        except Exception as e:
-            models.db.session.rollback()
-            print(day, "fail", e)
+    manager = Manager(app)
+
+    manager.add_command('db', models.db_manager)
+    manager.add_command('questions', questions_manager)
+    manager.add_command('placenames', placenames_manager)
+    manager.add_command('scraper', scraper_manager)
+    manager.add_command('proposals', proposals_manager)
+
+
+    @manager.command
+    def worker():
+        from flask.ext.rq import get_worker
+        get_worker().work()
+
+
+    @manager.command
+    def requeue_failed():
+        from rq import get_failed_queue
+        from flask.ext.rq import get_connection
+        failed = get_failed_queue(get_connection())
+        for job in failed.get_jobs():
+            failed.requeue(job.id)
+
+
+    @manager.command
+    def import_people():
+        from mptracker.scraper.common import get_cached_session
+        from mptracker.scraper.people import PersonScraper
+        ps = PersonScraper(get_cached_session())
+        existing_cdep_ids = set(p.cdep_id for p in models.Person.query)
+        new_people = 0
+        session = models.db.session
+        for person_info in ps.fetch_people():
+            if person_info['cdep_id'] not in existing_cdep_ids:
+                print('adding person:', person_info)
+                p = models.Person(**person_info)
+                session.add(p)
+                existing_cdep_ids.add(p.cdep_id)
+                new_people += 1
+        print('added', new_people, 'people')
+        session.commit()
+
+
+    @manager.command
+    def import_steno(day=None, stdin=False):
+        if stdin:
+            import sys
+            days = [line.strip() for line in sys.stdin]
+        elif day is not None:
+            days = [day]
+        else:
+            raise RuntimeError("Need day or stdin")
+
+        for day in days:
+            try:
+                import_steno_day(parse_date(day))
+                print(day, "ok")
+            except Exception as e:
+                models.db.session.rollback()
+                print(day, "fail", e)
+
+    return manager
