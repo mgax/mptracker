@@ -25,6 +25,11 @@ def configure(app):
     app.config['PRIVILEGED_EMAILS'] = \
         os.environ.get('PRIVILEGED_EMAILS', '').split()
     app.config['RQ_DEFAULT_URL'] = os.environ.get('REDIS_DSN')
+    app.config['MPTRACKER_DUMP_TABLES_FOLDER'] = \
+        os.environ.get('MPTRACKER_DUMP_TABLES_FOLDER')
+    app.config['MPTRACKER_DUMP_TABLES_EXCLUDE'] = \
+        os.environ.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
+
     app.debug = (os.environ.get('DEBUG') == 'on')
     sentry_dsn = os.environ.get('SENTRY_DSN')
     if sentry_dsn:

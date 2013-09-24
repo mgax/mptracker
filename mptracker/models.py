@@ -1,5 +1,4 @@
 import sys
-import os
 import logging
 import uuid
 import argparse
@@ -470,9 +469,10 @@ def load(name, include_columns=None, create=True, remove=False):
 @db_manager.command
 def dump_tables(folder_path=None, xclude=None):
     if folder_path is None:
-        folder_path = os.environ['MPTRACKER_DUMP_TABLES_FOLDER']
+        folder_path = app.config['MPTRACKER_DUMP_TABLES_FOLDER']
+        assert folder_path
     if xclude is None:
-        xclude = os.environ.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
+        xclude = app.config.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
     if xclude:
         exclude = xclude.split(',')
     else:
@@ -504,7 +504,7 @@ def create_backup(backup_path):
 
 @db_manager.command
 def backup():
-    backup_dir = path(os.environ['BACKUP_DIR'])
+    backup_dir = path(app.config['BACKUP_DIR'])
     backup_name = datetime.utcnow().strftime('backup-%Y-%m-%d-%H%M%S.zip')
     backup_path = backup_dir / backup_name
     create_backup(backup_path)
