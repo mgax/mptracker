@@ -29,7 +29,7 @@ in the same folder as ``manage.py``)::
 
     DEBUG = True
     SECRET_KEY = 'foo'
-    DATABASE = 'postgresql:///mptracker'
+    SQLALCHEMY_DATABASE_URI = 'postgresql:///mptracker'
 
 Set up the database::
 
