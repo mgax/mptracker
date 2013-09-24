@@ -173,10 +173,6 @@ class Question(db.Model):
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
 
-    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
-    mandate = db.relationship('Mandate',
-        backref=db.backref('questions', lazy='dynamic'))
-
     def __str__(self):
         return "{q.number}/{q.date}".format(q=self)
 
@@ -200,22 +196,34 @@ class Question(db.Model):
     def text(self, value):
         self._get_text_row().text = value
 
+
+class Ask(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+
+    question_id = db.Column(UUID, db.ForeignKey('question.id'), nullable=False)
+    question = db.relationship('Question', lazy='eager',
+        backref=db.backref('asked', lazy='dynamic', cascade='all'))
+
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
+        backref=db.backref('asked', lazy='dynamic', cascade='all'))
+
     match_row = db.relationship('Match', lazy='eager', uselist=False,
-                    primaryjoin='Question.id==foreign(Match.id)',
+                    primaryjoin='Ask.id==foreign(Match.id)',
                     cascade='all')
 
     @property
     def match(self):
         if self.match_row is None:
-            self.match_row = Match(parent='question')
+            self.match_row = Match(parent='ask')
         return self.match_row
 
-    flags_row = db.relationship('QuestionFlags', lazy='eager', uselist=False)
+    flags_row = db.relationship('AskFlags', lazy='eager', uselist=False)
 
     @property
     def flags(self):
         if self.flags_row is None:
-            self.flags_row = QuestionFlags()
+            self.flags_row = AskFlags()
         return self.flags_row
 
 
@@ -240,8 +248,8 @@ class Match(db.Model):
         return set(row.id for row in cls.query.filter_by(parent=parent))
 
 
-class QuestionFlags(db.Model):
-    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
+class AskFlags(db.Model):
+    id = db.Column(UUID, db.ForeignKey('ask.id'), primary_key=True)
     is_local_topic = db.Column(db.Boolean)
     is_bug = db.Column(db.Boolean)
 
