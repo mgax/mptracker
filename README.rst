@@ -17,6 +17,7 @@ Requirements:
 
 * Python 3.3
 * PostgreSQL
+* libxml, libxslt (debian/ubuntu: ``apt-get install libxml2-dev libxslt-dev``)
 
 Install dependencies (consider using virtualenv_, it makes life easier
 when working with multiple projects)::
