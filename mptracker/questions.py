@@ -187,7 +187,7 @@ def question_detail(question_id):
                 'id': ask.id,
                 'mandate': ask.mandate,
                 'match_data': flask.json.loads(ask.match.data or '{}'),
-                'flags': {m.key: m.value for m in ask.meta.values()},
+                'flags': ask.get_meta_dict(),
             } for ask in question.asked],
     })
 

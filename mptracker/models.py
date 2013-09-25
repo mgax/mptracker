@@ -241,6 +241,9 @@ class Ask(db.Model):
         else:
             row.value = value
 
+    def get_meta_dict(self):
+        return {m.key: m.value for m in self.meta.values()}
+
 
 class OcrText(db.Model):
     id = db.Column(UUID, primary_key=True)
