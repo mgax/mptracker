@@ -58,6 +58,10 @@
       </ul>
     </div>
 
+    {% if ask_flags['new-ask'] %}
+      <span class="label label-info">nou</span>
+    {% endif %}
+
     {% set url = url_for('.ask_save_flags', ask_id=ask_id) %}
     <form action="{{ url }}" method="post"></form>
   </div>
