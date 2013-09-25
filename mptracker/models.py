@@ -229,9 +229,10 @@ class Ask(db.Model):
                     cascade='all, delete-orphan')
 
     def get_meta(self, key):
-        row = self.meta[key]
-        if row:
-            return row.value
+        if key in self.meta:
+            return self.meta[key].value
+        else:
+            return None
 
     def set_meta(self, key, value):
         row = self.meta.setdefault(key, Meta(key=key))
