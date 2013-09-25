@@ -1,14 +1,14 @@
 {% extends 'layout.html' %}
 
 
-{% macro question_flag_buttons(question_id, question_flags) %}
+{% macro question_flag_buttons(ask_id, ask_flags) %}
   <div class="question-flags">
     {% set is_local_topic_values = [
           (None, "auto"),
           (True, "da"),
           (False, "nu"),
         ] %}
-    {% set is_local_topic_current_value = question_flags.is_local_topic %}
+    {% set is_local_topic_current_value = ask_flags.is_local_topic %}
 
     <div class="question-flags-dropdown" data-name="is_local_topic">
       <button type="button"
@@ -35,7 +35,7 @@
           (None, "nu"),
           (True, "da"),
         ] %}
-    {% set is_bug_current_value = question_flags.is_bug %}
+    {% set is_bug_current_value = ask_flags.is_bug %}
 
     <div class="question-flags-dropdown" data-name="is_bug">
       <button type="button"
@@ -58,10 +58,8 @@
       </ul>
     </div>
 
-    {% set url = url_for('.question_save_flags', question_id=question_id) %}
-    <form action="{{ url }}" method="post">
-      <input type="hidden" name="question_id" value="{{ question_id }}">
-    </form>
+    {% set url = url_for('.ask_save_flags', ask_id=ask_id) %}
+    <form action="{{ url }}" method="post"></form>
   </div>
 {% endmacro %}
 
@@ -69,10 +67,8 @@
 {% block content %}
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
-        (person|string,
-            url_for('pages.person', person_id=person.id)),
-        ("întrebări și interpelări " + mandate.year|string,
-            url_for('.mandate_questions', mandate_id=mandate.id)),
+        ("întrebări și interpelări ",
+            url_for('.mandate_index')),
         ("%s-%s"|format(question.date, question.number),
             None),
       ] %}
@@ -85,20 +81,20 @@
 
   <p>Destinatar: {{ question.addressee }}</p>
 
-  {% if current_user_is_privileged %}
-  <p>
-    {{ question_flag_buttons(question.id, question.flags) }}
-  </p>
-  {% endif %}
+  {% for ask in asked %}
+    <section class="analysisresult">
+      <div class="analysisresult-heading">
+        <h3>Rezultatul analizei – {{ ask['mandate'].person }}</h3>
 
-  <section class="analysisresult">
-    <div class="analysisresult-heading">
-      <h3>Rezultatul analizei</h3>
-    </div>
+        {% if current_user_is_privileged %}
+          {{ question_flag_buttons(ask.id, ask.flags) }}
+        {% endif %}
+      </div>
+    </section>
 
-    {% if match_result.top_matches %}
+    {% if ask['match_data'].top_matches %}
       <ul>
-      {% for match in match_result.top_matches %}
+      {% for match in ask['match_data'].top_matches %}
         <li>
           {{ question.text[:match.token.start][-40:] }}
           <strong class="qmatch-highlight">{{ match.token.text }}</strong>
@@ -110,7 +106,7 @@
     {% else %}
       <p>Nu am găsit corespondențe.</p>
     {% endif %}
-  </section>
+  {% endfor %}
 
   <section class="originaltext">
     <div class="originaltext-heading">

@@ -102,9 +102,9 @@ def mandate_index():
     from sqlalchemy.orm import subqueryload
     question_count_for_mandate = dict(
         models.db.session
-            .query(models.Question.mandate_id,
-                   func.count(models.Question.mandate_id))
-            .group_by(models.Question.mandate_id)
+            .query(models.Ask.mandate_id,
+                   func.count(models.Ask.mandate_id))
+            .group_by(models.Ask.mandate_id)
     )
     mandate_rows = (models.Mandate.query
                         .options(subqueryload(models.Mandate.county))
@@ -130,14 +130,15 @@ def mandate_questions(mandate_id):
                      .first_or_404())
     addressee_count = defaultdict(int)
     questions = []
-    for q in mandate.questions:
+    for ask in mandate.asked.join(models.Question):
+        q = ask.question
         questions.append({
             'id': q.id,
             'title': q.title,
             'date': q.date,
-            'is_local_topic_flag': q.flags.is_local_topic,
-            'score': q.match.score or 0,
             'addressee': q.addressee,
+            'is_local_topic_flag': ask.flags.is_local_topic,
+            'score': ask.match.score or 0,
         })
         for name in q.addressee.split(';'):
             addressee_count[name.strip()] += 1
@@ -179,25 +180,25 @@ def question_bugs():
 @questions.route('/questions/<uuid:question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
-    match_result = (flask.json.loads(question.match.data)
-                    if question.match.data else None)
-
     return flask.render_template('questions/detail.html', **{
-        'mandate': question.mandate,
-        'person': question.mandate.person,
         'question': question,
-        'match_result': match_result,
+        'asked': [{
+                'id': ask.id,
+                'mandate': ask.mandate,
+                'match_data': flask.json.loads(ask.match.data or '{}'),
+                'flags': ask.flags,
+            } for ask in question.asked],
     })
 
 
-@questions.route('/questions/<uuid:question_id>/save_flags', methods=['POST'])
+@questions.route('/questions/ask_flags/<uuid:ask_id>', methods=['POST'])
 @require_privilege
-def question_save_flags(question_id):
-    question = models.Question.query.get_or_404(question_id)
+def ask_save_flags(ask_id):
+    ask = models.Ask.query.get_or_404(ask_id)
     for name in ['is_local_topic', 'is_bug']:
         if name in flask.request.form:
             value = flask.json.loads(flask.request.form[name])
-            setattr(question.flags, name, value)
+            setattr(ask.flags, name, value)
     models.db.session.commit()
-    url = flask.url_for('.question_detail', question_id=question_id)
+    url = flask.url_for('.question_detail', question_id=ask.question_id)
     return flask.redirect(url)

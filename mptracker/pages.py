@@ -58,7 +58,7 @@ def person(person_id):
             'year': m.year,
             'county_name': m.county.name,
             'chamber_name': m.chamber.name,
-            'questions_count': m.questions.count(),
+            'questions_count': m.asked.count(),
             'paragraphs_count': m.steno_paragraphs.count(),
             'sponsorships_count': m.sponsorships.count(),
             'college': m.college,
