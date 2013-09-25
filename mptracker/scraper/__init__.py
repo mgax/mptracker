@@ -49,7 +49,7 @@ def questions(year='2013', reimport_existing=False):
                 else:
                     ask = models.Ask(mandate=mandate)
                     q.asked.append(ask)
-                    ask.set_meta('new-ask', True)
+                    ask.set_meta('new', True)
                     logger.info("Adding ask for %s: %s", q, mandate)
                     new_ask_rows += 1
 
