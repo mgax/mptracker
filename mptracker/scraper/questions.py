@@ -66,6 +66,7 @@ class QuestionScraper(Scraper):
         question['pdf_url'] = None
         question['addressee'] = []
         question['method'] = None
+        question['person'] = []
 
         label_text = None
 
@@ -81,7 +82,7 @@ class QuestionScraper(Scraper):
             if new_label_text:
                 label_text = new_label_text
             else:
-                if label_text != 'Destinatari:':
+                if label_text not in ['Adresanţi:', 'Destinatari:']:
                     continue
 
             if label_text == 'Nr.înregistrare:':
@@ -94,7 +95,7 @@ class QuestionScraper(Scraper):
                 ministry_el = list(pqitems(value, 'b'))[0]
                 question['addressee'].append(ministry_el.text())
             elif label_text == 'Adresant:' or label_text == 'Adresanţi:':
-                question['person'] = self.person_from_td(value)
+                question['person'].append(self.person_from_td(value))
             elif label_text == 'Textul intervenţiei:':
                 link = list(pqitems(value, 'a'))[-1]
                 assert link.text() == "fişier PDF"

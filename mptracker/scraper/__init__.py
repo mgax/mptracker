@@ -11,14 +11,20 @@ scraper_manager = Manager()
 
 
 @scraper_manager.command
-def questions(year='2013'):
+def questions(year='2013', reimport_existing=False):
     from mptracker.scraper.questions import QuestionScraper
 
-    known_urls = set(q.url for q in models.Question.query)
+    if reimport_existing:
+        known_urls = set()
+    else:
+        known_urls = set(q.url for q in models.Question.query)
+
     def skip_question(url):
         return url in known_urls
-    questions_scraper = QuestionScraper(session=create_session(throttle=0.5),
-                                        skip=skip_question)
+
+    questions_scraper = QuestionScraper(
+            session=create_session(cache_name='page-cache', throttle=0.5),
+            skip=skip_question)
 
     mandate_lookup = models.MandateLookup()
 
@@ -26,13 +32,31 @@ def questions(year='2013'):
                                     models.db.session,
                                     key_columns=['number', 'date'])
 
+    new_ask_rows = 0
+
     with question_patcher.process() as add:
         for question in questions_scraper.run(int(year)):
-            name, person_year, person_number = question.pop('person')
-            mandate = mandate_lookup.find(name, person_year, person_number)
-            question['mandate_id'] = mandate.id
+            person_list = question.pop('person')
             question['addressee'] = '; '.join(question['addressee'])
-            add(question)
+            q = add(question).row
+
+            old_asked = {ask.mandate_id: ask for ask in q.asked}
+            for name, person_year, person_number in person_list:
+                mandate = mandate_lookup.find(name, person_year, person_number)
+                if mandate.id in old_asked:
+                    old_asked.pop(mandate.id)
+
+                else:
+                    ask = models.Ask(mandate=mandate)
+                    q.asked.append(ask)
+                    ask.set_meta('new-ask', True)
+                    logger.info("Adding ask for %s: %s", q, mandate)
+                    new_ask_rows += 1
+
+            assert not old_asked
+
+    if new_ask_rows:
+        logger.info("Added %d ask records", new_ask_rows)
 
 
 @scraper_manager.command
