@@ -8,7 +8,7 @@
           (True, "da"),
           (False, "nu"),
         ] %}
-    {% set is_local_topic_current_value = ask_flags.is_local_topic %}
+    {% set is_local_topic_current_value = ask_flags.get('is_local_topic') %}
 
     <div class="question-flags-dropdown" data-name="is_local_topic">
       <button type="button"
@@ -35,7 +35,7 @@
           (None, "nu"),
           (True, "da"),
         ] %}
-    {% set is_bug_current_value = ask_flags.is_bug %}
+    {% set is_bug_current_value = ask_flags.get('is_bug') %}
 
     <div class="question-flags-dropdown" data-name="is_bug">
       <button type="button"
