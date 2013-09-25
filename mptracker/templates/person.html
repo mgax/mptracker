@@ -54,7 +54,7 @@
   </dl>
 
  {% for mandate in mandates %}
-  <section class="panel panel-default">
+  <section class="panel panel-default" data-mandate-id="{{ mandate.id }}">
     <div class="panel-heading">
       <h3 class="panel-title">
         {{ mandate.chamber_name }}
