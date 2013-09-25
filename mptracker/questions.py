@@ -137,7 +137,7 @@ def mandate_questions(mandate_id):
             'title': q.title,
             'date': q.date,
             'addressee': q.addressee,
-            'is_local_topic_flag': ask.flags.is_local_topic,
+            'is_local_topic_flag': ask.get_meta('is_local_topic'),
             'score': ask.match.score or 0,
         })
         for name in q.addressee.split(';'):
@@ -167,6 +167,7 @@ def mandate_questions(mandate_id):
 
 @questions.route('/questions/bugs')
 def question_bugs():
+    raise RuntimeError('broken')
     Question = models.Question
     questions = (Question.query
                          .join(Question.flags_row)
@@ -186,7 +187,7 @@ def question_detail(question_id):
                 'id': ask.id,
                 'mandate': ask.mandate,
                 'match_data': flask.json.loads(ask.match.data or '{}'),
-                'flags': ask.flags,
+                'flags': {m.key: m.value for m in ask.meta.values()},
             } for ask in question.asked],
     })
 
@@ -198,7 +199,7 @@ def ask_save_flags(ask_id):
     for name in ['is_local_topic', 'is_bug']:
         if name in flask.request.form:
             value = flask.json.loads(flask.request.form[name])
-            setattr(ask.flags, name, value)
+            ask.set_meta(name, value)
     models.db.session.commit()
     url = flask.url_for('.question_detail', question_id=ask.question_id)
     return flask.redirect(url)
