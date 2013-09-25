@@ -53,12 +53,12 @@ def ocr_all(number=None, force=False):
 
 @job
 @questions_manager.command
-def analyze_question(question_id):
-    question = models.Question.query.get(question_id)
-    text = question.title + ' ' + question.text
-    result = match_text_for_mandate(question.mandate, text)
-    question.match.data = flask.json.dumps(result)
-    question.match.score = len(result['top_matches'])
+def analyze(ask_id):
+    ask = models.Ask.query.get(ask_id)
+    text = ask.question.title + ' ' + ask.question.text
+    result = match_text_for_mandate(ask.mandate, text)
+    ask.match.data = flask.json.dumps(result)
+    ask.match.score = len(result['top_matches'])
     models.db.session.commit()
 
 
@@ -68,20 +68,20 @@ def analyze_all(number=None, force=False, minority_only=False):
     def has_text(question):
         return question.id in text_row_ids
 
-    match_row_ids = models.Match.all_ids_for('question')
-    def has_match(question):
-        return question.id in match_row_ids
+    match_row_ids = models.Match.all_ids_for('ask')
+    def has_match(ask):
+        return ask.id in match_row_ids
 
     n_jobs = n_skip = n_ok = 0
-    for question in models.Question.query:
+    for ask in models.Ask.query.join(models.Ask.question):
         if not force:
-            if has_match(question):
+            if has_match(ask):
                 n_ok += 1
                 continue
-        if not has_text(question):
+        if not has_text(ask.question):
             n_skip += 1
             continue
-        mandate = question.mandate
+        mandate = ask.mandate
         if not mandate.minority:
             county = mandate.county
             if (minority_only or
@@ -89,7 +89,7 @@ def analyze_all(number=None, force=False, minority_only=False):
                 county.geonames_code is None):
                 n_skip += 1
                 continue
-        analyze_question.delay(question.id)
+        analyze.delay(ask.id)
         n_jobs += 1
         if number and n_jobs >= int(number):
             break
