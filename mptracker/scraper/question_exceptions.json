@@ -1,16 +1,19 @@
 {
   "patch": {
     "2004-03-22-1918A": {
-      "person_name": "Gheorghe-Eugen Nicolăescu",
-      "person_cdep_id": "2000-215"
+      "person": [
+          ["Gheorghe-Eugen Nicolăescu", 2000, 215]
+      ]
     },
     "2008-02-12-4145A": {
-      "person_name": "Diana Maria Buşoi",
-      "person_cdep_id": "2004-358"
+      "person": [
+          ["Diana Maria Buşoi", 2004, 358]
+      ]
     },
     "2011-03-16-6003A": {
-      "person_name": "Călin Potor",
-      "person_cdep_id": "2008-251"
+      "person": [
+          ["Călin Potor", 2008, 251]
+      ]
     },
     "2013-04-16-743A": {
       "addressee": ["Primul Ministru"]
