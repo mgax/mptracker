@@ -126,6 +126,9 @@ class Mandate(db.Model):
         return ("http://www.cdep.ro/pls/parlam/structura.mp"
                 "?idm={m.cdep_number}&cam=2&leg={m.year}".format(m=self))
 
+    def __str__(self):
+        return "{m.person} ({m.year})".format(m=self)
+
 
 class County(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
