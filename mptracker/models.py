@@ -225,6 +225,18 @@ class Ask(db.Model):
                     primaryjoin='Ask.id == foreign(Meta.object_id)',
                     cascade='all, delete-orphan')
 
+    def get_meta(self, key):
+        row = self.meta[key]
+        if row:
+            return row.value
+
+    def set_meta(self, key, value):
+        row = self.meta.setdefault(key, Meta(key=key))
+        if value is None:
+            del self.meta[key]
+        else:
+            row.value = value
+
 
 class OcrText(db.Model):
     id = db.Column(UUID, primary_key=True)
