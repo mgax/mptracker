@@ -10,7 +10,9 @@ from flask.ext.login import UserMixin
 from path import path
 from mptracker.common import (parse_date, TablePatcher, temp_dir,
                               fix_local_chars)
+from mptracker.dbutil import JsonString
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm.collections import attribute_mapped_collection
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -218,13 +220,10 @@ class Ask(db.Model):
             self.match_row = Match(parent='ask')
         return self.match_row
 
-    flags_row = db.relationship('AskFlags', lazy='eager', uselist=False)
-
-    @property
-    def flags(self):
-        if self.flags_row is None:
-            self.flags_row = AskFlags()
-        return self.flags_row
+    meta = db.relationship('Meta',
+                    collection_class=attribute_mapped_collection('key'),
+                    primaryjoin='Ask.id == foreign(Meta.object_id)',
+                    cascade='all, delete-orphan')
 
 
 class OcrText(db.Model):
@@ -248,10 +247,11 @@ class Match(db.Model):
         return set(row.id for row in cls.query.filter_by(parent=parent))
 
 
-class AskFlags(db.Model):
-    id = db.Column(UUID, db.ForeignKey('ask.id'), primary_key=True)
-    is_local_topic = db.Column(db.Boolean)
-    is_bug = db.Column(db.Boolean)
+class Meta(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    object_id = db.Column(UUID, index=True)
+    key = db.Column(db.Text)
+    value = db.Column(JsonString)
 
 
 class CommitteeSummary(db.Model):
