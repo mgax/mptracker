@@ -8,16 +8,16 @@
           (True, "da"),
           (False, "nu"),
         ] %}
-    {% set is_local_topic_current_value = ask_flags.get('is_local_topic') %}
+    {% set loc_value = ask_flags.get('is_local_topic') %}
 
     <div class="question-flags-dropdown" data-name="is_local_topic">
-      {% set cls = 'btn-default' if is_local_topic_current_value == None else 'btn-info' %}
+      {% set cls = 'btn-default' if loc_value == None else 'btn-info' %}
       <button type="button"
               class="btn {{ cls }} btn-xs"
               data-toggle="dropdown">
         Probleme locale:
         {% for value, label in is_local_topic_values %}
-          {%- if value == is_local_topic_current_value %}{{ label }}{% endif %}
+          {%- if value == loc_value %}{{ label }}{% endif %}
         {%- endfor %}
 
         <span class="caret"></span>
@@ -32,27 +32,27 @@
       </ul>
     </div>
 
-    {% set is_bug_values = [
+    {% set bug_values = [
           (None, "nu"),
           (True, "da"),
         ] %}
-    {% set is_bug_current_value = ask_flags.get('is_bug') %}
+    {% set bug_value = ask_flags.get('is_bug') %}
 
     <div class="question-flags-dropdown" data-name="is_bug">
-      {% set cls = 'btn-warning' if is_bug_current_value else 'btn-default' %}
+      {% set cls = 'btn-warning' if bug_value else 'btn-default' %}
       <button type="button"
               class="btn {{ cls }} btn-xs"
               data-toggle="dropdown">
         Bug:
-        {% for value, label in is_bug_values %}
-          {%- if value == is_bug_current_value %}{{ label }}{% endif %}
+        {% for value, label in bug_values %}
+          {%- if value == bug_value %}{{ label }}{% endif %}
         {%- endfor %}
 
         <span class="caret"></span>
       </button>
 
       <ul class="dropdown-menu question-flags-menu">
-      {% for value, label in is_bug_values %}
+      {% for value, label in bug_values %}
         <li>
           <a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a>
         </li>
