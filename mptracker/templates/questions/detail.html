@@ -11,8 +11,9 @@
     {% set is_local_topic_current_value = ask_flags.get('is_local_topic') %}
 
     <div class="question-flags-dropdown" data-name="is_local_topic">
+      {% set cls = 'btn-default' if is_local_topic_current_value == None else 'btn-info' %}
       <button type="button"
-              class="question-flags-menubutton"
+              class="btn {{ cls }} btn-xs"
               data-toggle="dropdown">
         Probleme locale:
         {% for value, label in is_local_topic_values %}
@@ -38,8 +39,9 @@
     {% set is_bug_current_value = ask_flags.get('is_bug') %}
 
     <div class="question-flags-dropdown" data-name="is_bug">
+      {% set cls = 'btn-warning' if is_bug_current_value else 'btn-default' %}
       <button type="button"
-              class="question-flags-menubutton"
+              class="btn {{ cls }} btn-xs"
               data-toggle="dropdown">
         Bug:
         {% for value, label in is_bug_values %}
@@ -141,7 +143,7 @@ $(document).ready(function() {
     $(el).find('.question-flags-dropdown').map(function(i, el) {
       var box = $(el);
       var name = box.data('name');
-      var button = box.find('.question-flags-menubutton');
+      var button = box.find('button');
       var items = box.find('.question-flags-menu li a');
 
       items.click(function(evt) {
