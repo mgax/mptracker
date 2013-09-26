@@ -26,7 +26,11 @@ def ping():
 
 @pages.route('/')
 def home():
-    return flask.render_template('home.html')
+    from mptracker import questions
+    return flask.render_template('home.html', **{
+        'new_count': questions.new_query().count(),
+        'bugs_count': questions.bugs_query().count(),
+    })
 
 
 @pages.route('/steno/')
