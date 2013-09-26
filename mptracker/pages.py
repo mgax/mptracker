@@ -26,10 +26,9 @@ def ping():
 
 @pages.route('/')
 def home():
-    from mptracker import questions
     return flask.render_template('home.html', **{
-        'new_count': questions.new_query().count(),
-        'bugs_count': questions.bugs_query().count(),
+        'new_count': models.Question.query_by_key('new').count(),
+        'bugs_count': models.Question.query_by_key('is_bug').count(),
     })
 
 

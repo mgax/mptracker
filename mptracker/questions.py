@@ -1,5 +1,6 @@
 import logging
 from collections import defaultdict
+from sqlalchemy import func
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -165,29 +166,17 @@ def mandate_questions(mandate_id):
     })
 
 
-bugs_query = lambda: (models.Ask.query
-                            .join(models.Ask.question)
-                            .join(models.Ask.meta)
-                            .filter(models.Meta.key == 'is_bug'))
-
-
 @questions.route('/questions/bugs')
 def bugs():
     return flask.render_template('questions/bugs.html', **{
-        'questions': set(a.question for a in bugs_query()),
+        'questions': iter(models.Question.query_by_key('is_bug')),
     })
-
-
-new_query = lambda: (models.Ask.query
-                           .join(models.Ask.question)
-                           .join(models.Ask.meta)
-                           .filter(models.Meta.key == 'new'))
 
 
 @questions.route('/questions/new')
 def new():
     return flask.render_template('questions/new.html', **{
-        'questions': set(a.question for a in new_query()),
+        'questions': iter(models.Question.query_by_key('new')),
     })
 
 

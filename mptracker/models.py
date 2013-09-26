@@ -201,6 +201,14 @@ class Question(db.Model):
     def text(self, value):
         self._get_text_row().text = value
 
+    @classmethod
+    def query_by_key(cls, key):
+        return (cls.query
+                   .join(Ask)
+                   .join(Ask.meta)
+                   .filter(Meta.key == key)
+                   .group_by(cls.id))
+
 
 class Ask(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
