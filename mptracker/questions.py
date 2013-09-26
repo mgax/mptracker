@@ -198,7 +198,7 @@ def question_detail(question_id):
 @require_privilege
 def ask_save_flags(ask_id):
     ask = models.Ask.query.get_or_404(ask_id)
-    for name in ['is_local_topic', 'is_bug']:
+    for name in ['is_local_topic', 'is_bug', 'new']:
         if name in flask.request.form:
             value = flask.json.loads(flask.request.form[name])
             ask.set_meta(name, value)

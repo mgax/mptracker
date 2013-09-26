@@ -60,9 +60,32 @@
       </ul>
     </div>
 
-    {% if ask_flags.get('new') %}
-      <span class="label label-info">nou</span>
-    {% endif %}
+    {% set new_values = [
+          (None, "văzut"),
+          (True, "nou"),
+        ] %}
+    {% set new_value = ask_flags.get('new') %}
+
+    <div class="question-flags-dropdown" data-name="new">
+      {% set cls = 'btn-success' if new_value else 'btn-default' %}
+      <button type="button"
+              class="btn {{ cls }} btn-xs"
+              data-toggle="dropdown">
+        {% for value, label in new_values %}
+          {%- if value == new_value %}{{ label }}{% endif %}
+        {%- endfor %}
+
+        <span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu question-flags-menu">
+      {% for value, label in new_values %}
+        <li>
+          <a href="#" data-value="{{ value|tojson|safe }}">{{ label }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
 
     {% set url = url_for('.ask_save_flags', ask_id=ask_id) %}
     <form action="{{ url }}" method="post"></form>
