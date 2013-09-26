@@ -17,6 +17,8 @@ def upgrade():
         sa.PrimaryKeyConstraint('id')
     )
 
+    op.execute('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
+
     op.execute("INSERT INTO ask (id, question_id, mandate_id) "
                  "SELECT uuid_generate_v4(), id, mandate_id "
                  "FROM question")
