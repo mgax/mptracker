@@ -167,14 +167,12 @@ def mandate_questions(mandate_id):
 
 @questions.route('/questions/bugs')
 def question_bugs():
-    raise RuntimeError('broken')
-    Question = models.Question
-    questions = (Question.query
-                         .join(Question.flags_row)
-                            .filter(models.QuestionFlags.is_bug == True)
-                         .join(Question.person))
+    asked = (models.Ask.query
+                       .join(models.Ask.question)
+                       .join(models.Ask.meta)
+                       .filter(models.Meta.key == 'is_bug'))
     return flask.render_template('questions/bugs.html', **{
-        'questions': questions,
+        'questions': set(a.question for a in asked),
     })
 
 
