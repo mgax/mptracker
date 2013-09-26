@@ -2,7 +2,7 @@
 
 
 {% macro question_flag_buttons(ask_id, ask_flags) %}
-  <div class="question-flags">
+  <div class="question-flags pull-right">
     {% set is_local_topic_values = [
           (None, "auto"),
           (True, "da"),
@@ -33,8 +33,8 @@
     </div>
 
     {% set bug_values = [
-          (None, "nu"),
-          (True, "da"),
+          (None, "ok"),
+          (True, "bug"),
         ] %}
     {% set bug_value = ask_flags.get('is_bug') %}
 
@@ -43,7 +43,6 @@
       <button type="button"
               class="btn {{ cls }} btn-xs"
               data-toggle="dropdown">
-        Bug:
         {% for value, label in bug_values %}
           {%- if value == bug_value %}{{ label }}{% endif %}
         {%- endfor %}
@@ -113,16 +112,16 @@
   {% for ask in asked %}
     <section class="analysisresult">
       <div class="analysisresult-heading">
+        {% if current_user_is_privileged %}
+          {{ question_flag_buttons(ask.id, ask.flags) }}
+        {% endif %}
+
         <h3>
           {%- set person = ask['mandate'].person %}
           {%- set url = url_for('pages.person', person_id=person.id) %}
           Rezultatul analizei –
           <a href="{{ url }}">{{ person }}</a>
         </h3>
-
-        {% if current_user_is_privileged %}
-          {{ question_flag_buttons(ask.id, ask.flags) }}
-        {% endif %}
       </div>
     </section>
 
