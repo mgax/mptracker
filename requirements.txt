@@ -1,4 +1,4 @@
--e git+https://github.com/gawel/pyquery.git@62d9db3af7f434ef99b2f6ac22413272fb201843#egg=pyquery-dev
+-e git+https://github.com/gawel/pyquery.git@6068f28935e229136465110e2bdf039eb600672a#egg=pyquery-dev
 -e git+https://github.com/getsentry/raven-python.git@89156e835bd46ea32b4743b7e5d95db043af6c11#egg=raven-dev
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
 -e git+https://github.com/mgax/SIRUTA.git@b9d3a5e0af36a60e450cdc14e6417614df92ed68#egg=SIRUTAlib-dev
@@ -6,17 +6,17 @@
 -e git+https://github.com/mozilla-services/chaussette.git@32eadd004e1ff775ddbbb9c6b55e0de71efadd49#egg=chaussette-dev
 -e git+https://github.com/mrjoes/flask-admin.git@ecaa5d2c49aa63a12f40fa50186aa36b3b8712ab#egg=Flask_Admin-dev
 -e git+https://github.com/reclosedev/requests-cache.git@d9ddec5e0b6ceabbfc29e662fa8f54f0317ed3bb#egg=requests_cache-dev
--e git+https://github.com/techniq/flask-script.git@6e47afcea25e2ad26a9c32371b3ebe34f3704b12#egg=Flask_Script-dev
 -f http://grep.ro/quickpub/pypkg/
 alembic==0.6.0
 blinker==1.3
 cssselect==0.8
 Flask-Login==0.2.6
 Flask-RQ==0.2
+Flask-Script==0.6.2
 Flask-SQLAlchemy==1.0
 Flask-WTF==0.8.4
-itsdangerous==0.22
-Jinja2==2.7
+itsdangerous==0.23
+Jinja2==2.7.1
 lxml==3.2.3
 Mako==0.8.1
 MarkupSafe==0.18
@@ -32,5 +32,5 @@ six==1.3.0
 SQLAlchemy==0.8.3-f085167dev
 times==0.6.2
 waitress==0.8.5
-Werkzeug==0.9.2
+Werkzeug==0.9.4
 WTForms==1.0.4

@@ -1,5 +1,6 @@
 import logging
 from collections import defaultdict
+from sqlalchemy import func
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -53,12 +54,12 @@ def ocr_all(number=None, force=False):
 
 @job
 @questions_manager.command
-def analyze_question(question_id):
-    question = models.Question.query.get(question_id)
-    text = question.title + ' ' + question.text
-    result = match_text_for_mandate(question.mandate, text)
-    question.match.data = flask.json.dumps(result)
-    question.match.score = len(result['top_matches'])
+def analyze(ask_id):
+    ask = models.Ask.query.get(ask_id)
+    text = ask.question.title + ' ' + ask.question.text
+    result = match_text_for_mandate(ask.mandate, text)
+    ask.match.data = flask.json.dumps(result)
+    ask.match.score = len(result['top_matches'])
     models.db.session.commit()
 
 
@@ -68,20 +69,20 @@ def analyze_all(number=None, force=False, minority_only=False):
     def has_text(question):
         return question.id in text_row_ids
 
-    match_row_ids = models.Match.all_ids_for('question')
-    def has_match(question):
-        return question.id in match_row_ids
+    match_row_ids = models.Match.all_ids_for('ask')
+    def has_match(ask):
+        return ask.id in match_row_ids
 
     n_jobs = n_skip = n_ok = 0
-    for question in models.Question.query:
+    for ask in models.Ask.query.join(models.Ask.question):
         if not force:
-            if has_match(question):
+            if has_match(ask):
                 n_ok += 1
                 continue
-        if not has_text(question):
+        if not has_text(ask.question):
             n_skip += 1
             continue
-        mandate = question.mandate
+        mandate = ask.mandate
         if not mandate.minority:
             county = mandate.county
             if (minority_only or
@@ -89,7 +90,7 @@ def analyze_all(number=None, force=False, minority_only=False):
                 county.geonames_code is None):
                 n_skip += 1
                 continue
-        analyze_question.delay(question.id)
+        analyze.delay(ask.id)
         n_jobs += 1
         if number and n_jobs >= int(number):
             break
@@ -102,9 +103,9 @@ def mandate_index():
     from sqlalchemy.orm import subqueryload
     question_count_for_mandate = dict(
         models.db.session
-            .query(models.Question.mandate_id,
-                   func.count(models.Question.mandate_id))
-            .group_by(models.Question.mandate_id)
+            .query(models.Ask.mandate_id,
+                   func.count(models.Ask.mandate_id))
+            .group_by(models.Ask.mandate_id)
     )
     mandate_rows = (models.Mandate.query
                         .options(subqueryload(models.Mandate.county))
@@ -130,14 +131,15 @@ def mandate_questions(mandate_id):
                      .first_or_404())
     addressee_count = defaultdict(int)
     questions = []
-    for q in mandate.questions:
+    for ask in mandate.asked.join(models.Question):
+        q = ask.question
         questions.append({
             'id': q.id,
             'title': q.title,
             'date': q.date,
-            'is_local_topic_flag': q.flags.is_local_topic,
-            'score': q.match.score or 0,
             'addressee': q.addressee,
+            'is_local_topic_flag': ask.get_meta('is_local_topic'),
+            'score': ask.match.score or 0,
         })
         for name in q.addressee.split(';'):
             addressee_count[name.strip()] += 1
@@ -165,39 +167,41 @@ def mandate_questions(mandate_id):
 
 
 @questions.route('/questions/bugs')
-def question_bugs():
-    Question = models.Question
-    questions = (Question.query
-                         .join(Question.flags_row)
-                            .filter(models.QuestionFlags.is_bug == True)
-                         .join(Question.person))
+def bugs():
     return flask.render_template('questions/bugs.html', **{
-        'questions': questions,
+        'questions': iter(models.Question.query_by_key('is_bug')),
+    })
+
+
+@questions.route('/questions/new')
+def new():
+    return flask.render_template('questions/new.html', **{
+        'questions': iter(models.Question.query_by_key('new')),
     })
 
 
 @questions.route('/questions/<uuid:question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
-    match_result = (flask.json.loads(question.match.data)
-                    if question.match.data else None)
-
     return flask.render_template('questions/detail.html', **{
-        'mandate': question.mandate,
-        'person': question.mandate.person,
         'question': question,
-        'match_result': match_result,
+        'asked': [{
+                'id': ask.id,
+                'mandate': ask.mandate,
+                'match_data': flask.json.loads(ask.match.data or '{}'),
+                'flags': ask.get_meta_dict(),
+            } for ask in question.asked],
     })
 
 
-@questions.route('/questions/<uuid:question_id>/save_flags', methods=['POST'])
+@questions.route('/questions/ask_flags/<uuid:ask_id>', methods=['POST'])
 @require_privilege
-def question_save_flags(question_id):
-    question = models.Question.query.get_or_404(question_id)
-    for name in ['is_local_topic', 'is_bug']:
+def ask_save_flags(ask_id):
+    ask = models.Ask.query.get_or_404(ask_id)
+    for name in ['is_local_topic', 'is_bug', 'new']:
         if name in flask.request.form:
             value = flask.json.loads(flask.request.form[name])
-            setattr(question.flags, name, value)
+            ask.set_meta(name, value)
     models.db.session.commit()
-    url = flask.url_for('.question_detail', question_id=question_id)
+    url = flask.url_for('.question_detail', question_id=ask.question_id)
     return flask.redirect(url)

@@ -26,7 +26,10 @@ def ping():
 
 @pages.route('/')
 def home():
-    return flask.render_template('home.html')
+    return flask.render_template('home.html', **{
+        'new_count': models.Question.query_by_key('new').count(),
+        'bugs_count': models.Question.query_by_key('is_bug').count(),
+    })
 
 
 @pages.route('/steno/')
@@ -58,7 +61,7 @@ def person(person_id):
             'year': m.year,
             'county_name': m.county.name,
             'chamber_name': m.chamber.name,
-            'questions_count': m.questions.count(),
+            'questions_count': m.asked.count(),
             'paragraphs_count': m.steno_paragraphs.count(),
             'sponsorships_count': m.sponsorships.count(),
             'college': m.college,

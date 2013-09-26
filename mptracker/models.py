@@ -12,7 +12,9 @@ from flask.ext.login import UserMixin
 from path import path
 from mptracker.common import (parse_date, TablePatcher, temp_dir,
                               fix_local_chars)
+from mptracker.dbutil import JsonString
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm.collections import attribute_mapped_collection
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -126,6 +128,9 @@ class Mandate(db.Model):
         return ("http://www.cdep.ro/pls/parlam/structura.mp"
                 "?idm={m.cdep_number}&cam=2&leg={m.year}".format(m=self))
 
+    def __str__(self):
+        return "{m.person} ({m.year})".format(m=self)
+
 
 class County(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
@@ -175,10 +180,6 @@ class Question(db.Model):
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
 
-    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
-    mandate = db.relationship('Mandate',
-        backref=db.backref('questions', lazy='dynamic'))
-
     def __str__(self):
         return "{q.number}/{q.date}".format(q=self)
 
@@ -202,23 +203,56 @@ class Question(db.Model):
     def text(self, value):
         self._get_text_row().text = value
 
+    @classmethod
+    def query_by_key(cls, key):
+        return (cls.query
+                   .join(Ask)
+                   .join(Ask.meta)
+                   .filter(Meta.key == key)
+                   .group_by(cls.id))
+
+
+class Ask(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+
+    question_id = db.Column(UUID, db.ForeignKey('question.id'), nullable=False)
+    question = db.relationship('Question', lazy='eager',
+        backref=db.backref('asked', lazy='dynamic', cascade='all'))
+
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
+        backref=db.backref('asked', lazy='dynamic', cascade='all'))
+
     match_row = db.relationship('Match', lazy='eager', uselist=False,
-                    primaryjoin='Question.id==foreign(Match.id)',
+                    primaryjoin='Ask.id==foreign(Match.id)',
                     cascade='all')
 
     @property
     def match(self):
         if self.match_row is None:
-            self.match_row = Match(parent='question')
+            self.match_row = Match(parent='ask')
         return self.match_row
 
-    flags_row = db.relationship('QuestionFlags', lazy='eager', uselist=False)
+    meta = db.relationship('Meta',
+                    collection_class=attribute_mapped_collection('key'),
+                    primaryjoin='Ask.id == foreign(Meta.object_id)',
+                    cascade='all, delete-orphan')
 
-    @property
-    def flags(self):
-        if self.flags_row is None:
-            self.flags_row = QuestionFlags()
-        return self.flags_row
+    def get_meta(self, key):
+        if key in self.meta:
+            return self.meta[key].value
+        else:
+            return None
+
+    def set_meta(self, key, value):
+        row = self.meta.setdefault(key, Meta(key=key))
+        if value is None:
+            del self.meta[key]
+        else:
+            row.value = value
+
+    def get_meta_dict(self):
+        return {m.key: m.value for m in self.meta.values()}
 
 
 class OcrText(db.Model):
@@ -242,10 +276,11 @@ class Match(db.Model):
         return set(row.id for row in cls.query.filter_by(parent=parent))
 
 
-class QuestionFlags(db.Model):
-    id = db.Column(UUID, db.ForeignKey('question.id'), primary_key=True)
-    is_local_topic = db.Column(db.Boolean)
-    is_bug = db.Column(db.Boolean)
+class Meta(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    object_id = db.Column(UUID, index=True)
+    key = db.Column(db.Text)
+    value = db.Column(JsonString)
 
 
 class CommitteeSummary(db.Model):
