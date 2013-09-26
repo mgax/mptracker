@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import sys
 import logging
 import uuid
@@ -341,6 +343,27 @@ class MandateLookup:
             "Names don't match: %r != %r, %r-%r" \
             % (name, mandate.person.name, year, cdep_number)
         return mandate
+
+
+def init_app(app):
+    db.init_app(app)
+    if app.config.get('READONLY'):
+
+        class DatabaseReadonly(RuntimeError):
+            pass
+
+        def abort_readonly(*args, **kwargs):
+            raise DatabaseReadonly
+
+
+        if not app.debug:
+            @app.errorhandler(DatabaseReadonly)
+            def handle_database_readonly(error):
+                return (u"Modificările sunt dezactivate "
+                        u"temporar. Lucrăm la site.")
+
+        from flask.ext.sqlalchemy import _SignallingSession
+        _SignallingSession.commit = abort_readonly
 
 
 db_manager = Manager()

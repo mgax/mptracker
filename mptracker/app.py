@@ -40,7 +40,7 @@ def configure(app):
 def create_app():
     app = flask.Flask(__name__)
     configure(app)
-    models.db.init_app(app)
+    models.init_app(app)
     app.register_blueprint(common)
     app.register_blueprint(auth)
     app.register_blueprint(pages)
