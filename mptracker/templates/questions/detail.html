@@ -135,26 +135,28 @@
 $(document).ready(function() {
   "use strict";
 
-  var form = $('.question-flags form');
+  $('.question-flags').map(function(i, el) {
+    var form = $(el).find('form');
 
-  $('.question-flags-dropdown').map(function(i, el) {
-    var box = $(el);
-    var name = box.data('name');
-    var button = box.find('.question-flags-menubutton');
-    var items = box.find('.question-flags-menu li a');
+    $(el).find('.question-flags-dropdown').map(function(i, el) {
+      var box = $(el);
+      var name = box.data('name');
+      var button = box.find('.question-flags-menubutton');
+      var items = box.find('.question-flags-menu li a');
 
-    items.click(function(evt) {
-      evt.preventDefault();
-      var value = $(evt.target).data('value');
-      button.addClass('disabled');
-      button.text('saving ...');
-      var input = $('<input>').attr({
-        type: 'hidden',
-        name: name,
-        value: JSON.stringify(value)
+      items.click(function(evt) {
+        evt.preventDefault();
+        var value = $(evt.target).data('value');
+        button.addClass('disabled');
+        button.text('saving ...');
+        var input = $('<input>').attr({
+          type: 'hidden',
+          name: name,
+          value: JSON.stringify(value)
+        });
+        form.append(input);
+        form.submit();
       });
-      form.append(input);
-      form.submit();
     });
   });
 });
