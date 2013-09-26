@@ -176,6 +176,17 @@ def question_bugs():
     })
 
 
+@questions.route('/questions/new')
+def question_new():
+    asked = (models.Ask.query
+                       .join(models.Ask.question)
+                       .join(models.Ask.meta)
+                       .filter(models.Meta.key == 'new'))
+    return flask.render_template('questions/new.html', **{
+        'questions': set(a.question for a in asked),
+    })
+
+
 @questions.route('/questions/<uuid:question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
