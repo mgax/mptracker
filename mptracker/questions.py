@@ -137,6 +137,7 @@ def mandate_questions(mandate_id):
             'id': q.id,
             'title': q.title,
             'date': q.date,
+            'question_type': q.type,
             'addressee': q.addressee,
             'is_local_topic_flag': ask.get_meta('is_local_topic'),
             'score': ask.match.score or 0,
@@ -145,7 +146,7 @@ def mandate_questions(mandate_id):
             addressee_count[name.strip()] += 1
 
     if flask.request.args.get('format') == 'csv':
-        cols = ['id', 'title', 'date', 'is_local_topic_flag',
+        cols = ['id', 'title', 'date', 'question_type', 'is_local_topic_flag',
                 'score', 'addressee']
         return flask.Response(csv_lines(cols, questions),
                               mimetype='text/csv')
