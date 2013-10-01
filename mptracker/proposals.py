@@ -119,8 +119,8 @@ def analyze_all(number=None, force=False, minority_only=False):
         if sponsorship.proposal.text is None:
             n_skip += 1
             continue
-        if not sponsorship.person.minority:
-            county = sponsorship.person.county
+        if not sponsorship.mandate.minority:
+            county = sponsorship.mandate.county
             if (minority_only or
                 county is None or
                 county.geonames_code is None):
