@@ -24,41 +24,43 @@
   </ul>
  {% endif %}
 
- {% for sp in sponsorships %}
-  <section class="analysisresult">
-    <div class="analysisresult-heading">
-        <h3>
-          {%- set person = sp['mandate'].person %}
-          {%- set url = url_for('pages.person', person_id=person.id) %}
-          Rezultatul analizei –
-          <a href="{{ url }}">{{ person }}</a>
-        </h3>
+  {% for sp in sponsorships %}
+    <section class="panel panel-default">
+      <div class="panel-heading">
+          <h3 class="panel-title">
+            {%- set person = sp['mandate'].person %}
+            {%- set url = url_for('pages.person', person_id=person.id) %}
+            Rezultatul analizei –
+            <a href="{{ url }}">{{ person }}</a>
+          </h3>
+      </div>
+
+      <div class="panel-body">
+        {% if sp['match_data'].top_matches %}
+          <ul>
+          {% for match in sp['match_data'].top_matches %}
+            <li>
+              {{ proposal.text[:match.token.start][-40:] }}
+              <strong class="qmatch-highlight">{{ match.token.text }}</strong>
+              {{ proposal.text[match.token.end:][:40] }}
+              ({{ match.name }} {{ (match.distance * 100)|int }}%)
+            </li>
+          {% endfor %}
+          </ul>
+        {% else %}
+          <p>Nu am găsit corespondențe.</p>
+        {% endif %}
+      </div>
+    </section>
+  {% endfor %}
+
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Textul original</h3>
     </div>
 
-    {% if sp['match_data'].top_matches %}
-      <ul>
-      {% for match in sp['match_data'].top_matches %}
-        <li>
-          {{ proposal.text[:match.token.start][-40:] }}
-          <strong class="qmatch-highlight">{{ match.token.text }}</strong>
-          {{ proposal.text[match.token.end:][:40] }}
-          ({{ match.name }} {{ (match.distance * 100)|int }}%)
-        </li>
-      {% endfor %}
-      </ul>
-    {% else %}
-      <p>Nu am găsit corespondențe.</p>
-    {% endif %}
-  </section>
- {% endfor %}
-
-  <section class="originaltext">
-    <div class="originaltext-heading">
-      <h3>Textul original</h3>
-    </div>
-
-    <p>
+    <blockquote class="panel-body">
       {{- proposal.text -}}
-    </p>
+    </blockquote>
   </section>
 {% endblock %}

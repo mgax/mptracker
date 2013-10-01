@@ -2,6 +2,11 @@
 @import "lib/font-awesome-3.2.1/less/font-awesome.less";
 
 
+blockquote.panel-body {
+    white-space: pre;
+}
+
+
 //////////////////
 // mixins
 .css3-columns(@column-size) {
@@ -87,45 +92,6 @@
             .btn;
             .btn-primary;
         }
-    }
-}
-
-
-//////////////////
-// analysisresult
-.analysisresult {
-    .analysisresult-heading {
-        .panel-heading;
-        h3 {
-            .panel-title;
-            > a {
-                color: @link-color;
-            }
-        }
-    }
-
-    .panel;
-
-    p {
-        white-space: pre;
-    }
-}
-
-
-//////////////////
-// originaltext
-.originaltext {
-    .originaltext-heading {
-        .panel-heading;
-        h3 {
-            .panel-title;
-        }
-    }
-
-    .panel;
-
-    p {
-        white-space: pre;
     }
 }
 

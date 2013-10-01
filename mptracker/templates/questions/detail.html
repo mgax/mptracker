@@ -110,45 +110,47 @@
   <p>Destinatar: {{ question.addressee }}</p>
 
   {% for ask in asked %}
-    <section class="analysisresult">
-      <div class="analysisresult-heading">
+    <section class="panel panel-default">
+      <div class="panel-heading">
         {% if current_user_is_privileged %}
           {{ question_flag_buttons(ask.id, ask.flags) }}
         {% endif %}
 
-        <h3>
+        <h3 class="panel-title">
           {%- set person = ask['mandate'].person %}
           {%- set url = url_for('pages.person', person_id=person.id) %}
           Rezultatul analizei –
           <a href="{{ url }}">{{ person }}</a>
         </h3>
       </div>
-    </section>
 
-    {% if ask['match_data'].top_matches %}
-      <ul>
-      {% for match in ask['match_data'].top_matches %}
-        <li>
-          {{ question.text[:match.token.start][-40:] }}
-          <strong class="qmatch-highlight">{{ match.token.text }}</strong>
-          {{ question.text[match.token.end:][:40] }}
-          ({{ match.name }} {{ (match.distance * 100)|int }}%)
-        </li>
-      {% endfor %}
-      </ul>
-    {% else %}
-      <p>Nu am găsit corespondențe.</p>
-    {% endif %}
+      <div class="panel-body">
+        {% if ask['match_data'].top_matches %}
+          <ul>
+          {% for match in ask['match_data'].top_matches %}
+            <li>
+              {{ question.text[:match.token.start][-40:] }}
+              <strong class="qmatch-highlight">{{ match.token.text }}</strong>
+              {{ question.text[match.token.end:][:40] }}
+              ({{ match.name }} {{ (match.distance * 100)|int }}%)
+            </li>
+          {% endfor %}
+          </ul>
+        {% else %}
+          <p>Nu am găsit corespondențe.</p>
+        {% endif %}
+      </div>
+    </section>
   {% endfor %}
 
-  <section class="originaltext">
-    <div class="originaltext-heading">
-      <h3>Textul original</h3>
+  <section class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Textul original</h3>
     </div>
 
-    <p>
+    <blockquote class="panel-body">
       {{- question.text -}}
-    </p>
+    </blockquote>
   </section>
 
 {% endblock %}
