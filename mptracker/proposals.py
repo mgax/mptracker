@@ -111,12 +111,13 @@ def analyze_sponsorship(sponsorship_id):
 @proposals_manager.command
 def analyze_all(number=None, force=False, minority_only=False):
     n_jobs = n_skip = n_ok = 0
+    text_row_ids = models.OcrText.all_ids_for('proposal')
     for sponsorship in models.Sponsorship.query:
         if not force:
             if sponsorship.match.data is not None:
                 n_ok += 1
                 continue
-        if sponsorship.proposal.text is None:
+        if sponsorship.proposal_id not in text_row_ids:
             n_skip += 1
             continue
         if not sponsorship.mandate.minority:
