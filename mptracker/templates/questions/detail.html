@@ -112,6 +112,8 @@
   {% for ask in asked %}
     <section class="panel panel-default">
       <div class="panel-heading">
+        <div class="panel-heading-id">{{ ask.id }}</div>
+
         {% if current_user_is_privileged %}
           {{ question_flag_buttons(ask.id, ask.flags) }}
         {% endif %}

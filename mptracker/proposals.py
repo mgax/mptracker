@@ -32,6 +32,7 @@ def proposal(proposal_id):
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'sponsorships': [{
+                'id': sp.id,
                 'mandate': sp.mandate,
                 'match_data': flask.json.loads(sp.match.data or '{}'),
             } for sp in proposal.sponsorships],
