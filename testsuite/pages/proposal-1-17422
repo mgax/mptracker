@@ -1,0 +1,231 @@
+<html lang="ro"><head><title>URMARIREA PROCESULUI LEGISLATIV</title><meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-2" /><link rel="stylesheet" href="/stylesheets/general.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/general_roz.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/home.css" type="text/css" /></head><body style="background: url(/img/banners/body101.gif) #f3f3f3 fixed no-repeat 0px 100%;">
+    <script type='text/javascript' src='/js/hv_menu_conf_1.js'></script>
+    <script type="text/javascript">
+    var NoOffFirstLineMenus=4;			                      // Number of first level items
+  	var LowBgColor="#c7c7c7";			          // Background color when mouse is not over
+  	var LowSubBgColor="#c7c7c7";			        // Background color when mouse is not over on subs
+  	var HighBgColor="#730A48";			          // Background color when mouse is over
+  	var HighSubBgColor="#730A48";			      // Background color when mouse is over on subs
+  	var FontLowColor="#730A48";			                      // Font color when mouse is not over
+  	var FontSubLowColor="#730A48";		                    // Font color subs when mouse is not over
+  	var FontHighColor="#FFFFFF";			                    // Font color when mouse is over
+  	var FontSubHighColor="#FFFFFF";		                    // Font color subs when mouse is over
+  	var BorderColor="#c7c7c7";			          // Border color
+  	var BorderSubColor="#b19477";			                    // Border color for subs
+  	var BorderWidth=1;				                            // Border width
+  	var BorderBtwnElmnts=1;				                        // Border between elements 1 or 0
+  	var FontFamily="arial,comic sans ms,technical"	      // Font family menu items
+  	var FontSize=9;				                                // Font size menu items
+  	var FontBold=0;					                              // Bold menu items 1 or 0
+  	var FontItalic=0;				                              // Italic menu items 1 or 0
+  	var MenuTextCentered="left";			                    // Item text position "left", "center" or "right"
+  	var MenuCentered="left";			                        // Menu horizontal position "left", "center" or "right"
+  	var MenuVerticalCentered="top";		                    // Menu vertical position "top", "middle","bottom" or static
+  	var ChildOverlap=.2;				                          // horizontal overlap child/ parent
+  	var ChildVerticalOverlap=.2;			                    // vertical overlap child/parent
+  	var StartTop=0;					                              // Menu offset x coordinate
+  	var StartLeft=0;				                              // Menu offset y coordinate
+  	var VerCorrect=0;				                              // Multiple frames y correction
+  	var HorCorrect=0;				                              // Multiple frames x correction
+  	var LeftPaddng=3;				                              // Left padding
+  	var TopPaddng=2;				                              // Top padding
+  	var FirstLineHorizontal=1;			                      // SET TO 1 FOR HORIZONTAL MENU, 0 FOR VERTICAL
+  	var MenuFramesVertical=1;			                        // Frames in cols or rows 1 or 0
+  	var DissapearDelay=1000;			                        // delay before menu folds in
+  	var TakeOverBgColor=1;				                        // Menu frame takes over background color subitem frame
+  	var FirstLineFrame="navig";			                      // Frame where first level appears
+  	var SecLineFrame="space";			                        // Frame where sub levels appear
+  	var DocTargetFrame="space";			                      // Frame where target documents appear
+  	var TargetLoc="MenuPos";			                        // span id for relative positioning
+  	var HideTop=0;					                              // Hide first level when loading new document 1 or 0
+  	var MenuWrap=1;					                              // enables/ disables menu wrap 1 or 0
+  	var RightToLeft=0;				                            // enables/ disables right to left unfold 1 or 0
+  	var UnfoldsOnClick=1;				                          // Level 1 unfolds onclick/ onmouseover
+  	var WebMasterCheck=0;				                          // menu tree checking on or off 1 or 0
+  	var ShowArrow=1;				                              // Uses arrow gifs when 1
+  	var KeepHilite=1;				                              // Keep selected path highligthed
+  	var Arrws=["/img/icon_link_r.gif",9,5,"",0,0,"/img/icon_link_l.gif",9,5];	// Arrow source, width and height
+    </script>
+    <script type='text/javascript' src='/js/hv_menu.js'></script>
+<table border=0 cellspacing=0 cellpadding=0 width=985>
+<tr>
+  <td><img src="/img/spacer.gif" width=40></td>
+  <td width="100%">
+    <table style="background: url(/img/banners/cd_1.gif) no-repeat" cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <tr>
+      <td height=22 width=65><a href="/"><img src="/img/spacer.gif" height=22 width=65></a></td>
+    </tr>
+    <tr>
+      <td valign=top width=65 height=51><a href="/pls/dic/site.home?idl=1"><img src="/img/spacer.gif" height=51 width=65></a></td>
+      <td valign=top width="100%" height=51>
+        <table border=0 cellspacing=0 cellpadding=0 width=550>
+        <tr>
+        <td>
+          <div id=MenuTop style="margin-top: 33px; margin-left: 0px;">
+<a href="/pls/dic/site.page?id=794">Menţiune juridică</a> |
+<a href="/pls/dic/site.page?id=709">Forum</a> | <a href="/pls/dic/site.page?den=servicii-contact&amp;idl=1">Contact</a>
+
+          </div>
+        </td>
+        <td align="right">
+          <div id=MenuTop style="margin-top: 27px;">
+          <form name="frmSearch" method="post" action="/pls/proiecte/upl_pck.cauta?cam=1">
+          <table cellSpacing=0 cellPadding=0 border=0>
+          <tr>
+            <td vAlign=middle><input type="text" name="sir" size="15" class="size1"></td>
+            <td vAlign=middle>&nbsp;<a href="#">Caută</a></td>
+          </tr>
+          </table>
+          </form>
+          </div>
+        </td>      
+        </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign=top align=left width="100%" colSpan=3 height=20><div id="MenuPos" style="position:relative; height=18; MARGIN-RIGHT: 10px; MARGIN-LEFT: 10px; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px;"></div></td>
+    </tr>
+    </table>
+<table width="100%" border=0 cellspacing=5 cellpadding=0>
+<tr valign="top">
+<td><img src="/img/spacer.gif" width=145 height=1 hspace=0 vspace=0 /><table border=0 cellpadding=0 cellspacing=0 align="center">
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td bgcolor="#ffffff" colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1359" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.home?cam=1"><B>Iniţiative legislative la Senat</B></a></td></tr><tr id="itm1360" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left">înregistrate în:<a href="upl_pck.lista?cam=1&anp=2009">2009</a>
+</td></tr><tr id="itm1356" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left">promulgate legi în:<a href="upl_pck.lista?cam=1&anl=2009">2009</a>
+</td></tr><tr id="itm1361" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=B">de trimis la comisii</a></td></tr><tr id="itm1364" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=F">la comisii</a></td></tr><tr id="itm1366" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=Z">pe ordinea de zi</a></td></tr><tr id="itm1367" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=M">în mediere</a></td></tr><tr id="itm1357" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=G">la Secretarul general</a></td></tr><tr id="itm1368" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=C">în control al constituţionalităţii</a></td></tr><tr id="itm1358" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=Pp">la promulgare</a></td></tr><tr id="itm1365" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=1&std=R">primite spre reexaminare</a></td></tr><tr id="itm1363" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.home">Iniţiative legislative la Camera Deputaţilor</a></td></tr></tbody></table></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+</td></tr>
+</table></td>
+<td width="100%">
+<table border=0 width="100%">
+   	       <tr valign="top">
+   	       <td nowrap class="cale1">Sunteti în sectiunea:</td>
+   	       <td class="cale2" width="100%"><A HREF="/">Prima pagina</A> &gt; <A HREF="/pls/dic/site.page?den=legislativ1">Proceduri parlamentare</A> &gt; <A HREF="upl_pck.home?cam=1">Proces legislativ la Senat</A> &gt; BP429/2013</td>
+<td width=50 align="right"><a href="/pls/proiecte/upl_pck.proiect?idp=17422&cam=1&prn=1" target="PRN"><img src="/img/printer0.jpg" border=0 alt="Versiunea pentru printare"></a></td>
+</tr></table>
+<p>
+<table border=0 cellspacing=0 cellpadding=5 width="100%">
+<tr valign="top">
+<td width=50><img src="/img/spacer.gif" border=0 width=40 height=8><img src="/img/bile.gif" border=0 width=38 height=10></td>
+<td class="headline" width="100%">BP429/2013<br>Propunere legislativă privind revizuirea Constituţiei României</td>
+</tr>
+</table>
+<p>
+<table border=0 cellspacing=0 cellpadding=0 width="100%"><td>
+<p><table width="100%" border=0 cellspacing=0 cellpadding=3>
+<tr valign=top><td bgcolor="dfefff">Nr. înregistrare:</td></tr>
+<tr valign=top><td bgcolor="dfefff">- Senat:</td><td width="100%"><b>BP429/25.06.2013</b></td></tr>
+<tr valign=top><td bgcolor="dfefff">Procedura legislativa:</td><td>cf. Constitutiei revizuita în 2003</td></tr>
+<tr valign=top><td bgcolor="dfefff">Camera decizionala:</td><td><b>Camera Deputatilor</b>
+</td></tr>
+<tr valign=top><td bgcolor="dfefff">Termen adoptare:</td><td><B><span class="headlinetext">45</span> zile</B> pentru Senat ca prima Camera sesizata
+</td></tr>
+<tr valign=top><td bgcolor="dfefff">Tip initiativa:</td><td>Propunere legislativa
+</td></tr>
+<tr valign=top><td bgcolor="dfefff">Caracter:</td><td>
+constitutional
+</td></tr>
+<tr valign=top><td bgcolor="dfefff" nowrap>Procedura de urgenta:</td><td>da</td></tr>
+<tr valign=top><td bgcolor="#dfefff">Stadiu:</td><td>
+ înregistrat la Senat pt. dezbatere
+</td></tr>
+<tr valign=top><td bgcolor="#dfefff">Initiator:</td><td>334 deputati+senatori, din care:<table border=0><tr valign="top"><td nowrap>deputati - PSD:</td><td><A HREF="/pls/parlam/structura.mp?idm=9&leg=2012&cam=2">Andea&nbsp;Petru</A>, <A HREF="/pls/parlam/structura.mp?idm=16&leg=2012&cam=2">Arsene&nbsp;Ionel</A>, <A HREF="/pls/parlam/structura.mp?idm=18&leg=2012&cam=2">Avram&nbsp;Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=19&leg=2012&cam=2">Axente&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=20&leg=2012&cam=2">Babuş&nbsp;Radu</A>, <A HREF="/pls/parlam/structura.mp?idm=28&leg=2012&cam=2">Bejinariu&nbsp;Eugen</A>, <A HREF="/pls/parlam/structura.mp?idm=31&leg=2012&cam=2">Birchall&nbsp;Ana</A>, <A HREF="/pls/parlam/structura.mp?idm=34&leg=2012&cam=2">Bleotu&nbsp;Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=37&leg=2012&cam=2">Bogdan&nbsp;Gheorghe-Dănuţ</A>, <A HREF="/pls/parlam/structura.mp?idm=45&leg=2012&cam=2">Bucura-Oprescu&nbsp;Simona</A>, <A HREF="/pls/parlam/structura.mp?idm=48&leg=2012&cam=2">Buicu&nbsp;Corneliu-Florin</A>, <A HREF="/pls/parlam/structura.mp?idm=55&leg=2012&cam=2">Călin&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=56&leg=2012&cam=2">Căprar&nbsp;Dorel-Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=66&leg=2012&cam=2">Ciobanu&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=68&leg=2012&cam=2">Ciocan&nbsp;Dan</A>, <A HREF="/pls/parlam/structura.mp?idm=69&leg=2012&cam=2">Ciofu&nbsp;Tamara-Dorina</A>, <A HREF="/pls/parlam/structura.mp?idm=70&leg=2012&cam=2">Ciolacu&nbsp;Ion-Marcel</A>, <A HREF="/pls/parlam/structura.mp?idm=81&leg=2012&cam=2">Cosma&nbsp;Vlad-Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=83&leg=2012&cam=2">Covaci&nbsp;Dorel</A>, <A HREF="/pls/parlam/structura.mp?idm=102&leg=2012&cam=2">Dîrzu&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=104&leg=2012&cam=2">Dobre&nbsp;Mircea-Titus</A>, <A HREF="/pls/parlam/structura.mp?idm=109&leg=2012&cam=2">Dolineaschi&nbsp;Andrei</A>, <A HREF="/pls/parlam/structura.mp?idm=111&leg=2012&cam=2">Dragnea&nbsp;Nicolae-Liviu</A>, <A HREF="/pls/parlam/structura.mp?idm=114&leg=2012&cam=2">Dragomir&nbsp;Viorel Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=115&leg=2012&cam=2">Drăghici&nbsp;Mircea-Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=116&leg=2012&cam=2">Drăghici&nbsp;Sonia-Maria</A>, <A HREF="/pls/parlam/structura.mp?idm=119&leg=2012&cam=2">Dumitrache&nbsp;Ileana Cristina</A>, <A HREF="/pls/parlam/structura.mp?idm=123&leg=2012&cam=2">Duşa&nbsp;Mircea</A>, <A HREF="/pls/parlam/structura.mp?idm=124&leg=2012&cam=2">Emacu&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=127&leg=2012&cam=2">Eparu&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=134&leg=2012&cam=2">Florea&nbsp;Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=136&leg=2012&cam=2">Frăticiu&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=140&leg=2012&cam=2">Găină&nbsp;Mihăiţă</A>, <A HREF="/pls/parlam/structura.mp?idm=147&leg=2012&cam=2">Ghiveciu&nbsp;Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=150&leg=2012&cam=2">Gliga&nbsp;Vasile Ghiorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=152&leg=2012&cam=2">Grama&nbsp;Horia</A>, <A HREF="/pls/parlam/structura.mp?idm=155&leg=2012&cam=2">Grindeanu&nbsp;Sorin Mihai</A>, <A HREF="/pls/parlam/structura.mp?idm=171&leg=2012&cam=2">Iacoban&nbsp;Sorin-Avram</A>, <A HREF="/pls/parlam/structura.mp?idm=173&leg=2012&cam=2">Iancu&nbsp;Iulian</A>, <A HREF="/pls/parlam/structura.mp?idm=175&leg=2012&cam=2">Iane&nbsp;Ovidiu-Cristian</A>, <A HREF="/pls/parlam/structura.mp?idm=182&leg=2012&cam=2">Iordache&nbsp;Florin</A>, <A HREF="/pls/parlam/structura.mp?idm=184&leg=2012&cam=2">Iriza&nbsp;Scarlat</A>, <A HREF="/pls/parlam/structura.mp?idm=186&leg=2012&cam=2">Itu&nbsp;Cornel</A>, <A HREF="/pls/parlam/structura.mp?idm=191&leg=2012&cam=2">Khraibani&nbsp;Camelia</A>, <A HREF="/pls/parlam/structura.mp?idm=198&leg=2012&cam=2">Manda&nbsp;Iulian Claudiu</A>, <A HREF="/pls/parlam/structura.mp?idm=209&leg=2012&cam=2">Martin&nbsp;Eduard-Stelian</A>, <A HREF="/pls/parlam/structura.mp?idm=213&leg=2012&cam=2">Mazilu&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=214&leg=2012&cam=2">Măduţa&nbsp;Flavius-Luigi</A>, <A HREF="/pls/parlam/structura.mp?idm=224&leg=2012&cam=2">Mitrea&nbsp;Manuela</A>, <A HREF="/pls/parlam/structura.mp?idm=226&leg=2012&cam=2">Mîrza&nbsp;Gavril</A>, <A HREF="/pls/parlam/structura.mp?idm=227&leg=2012&cam=2">Mocanu&nbsp;Adrian</A>, <A HREF="/pls/parlam/structura.mp?idm=228&leg=2012&cam=2">Mocanu&nbsp;Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=232&leg=2012&cam=2">Moldovan&nbsp;Carmen Ileana</A>, <A HREF="/pls/parlam/structura.mp?idm=237&leg=2012&cam=2">Moţ&nbsp;Constantin-Stelian-Emil</A>, <A HREF="/pls/parlam/structura.mp?idm=240&leg=2012&cam=2">Munteanu&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=244&leg=2012&cam=2">Neacşu&nbsp;Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=251&leg=2012&cam=2">Nica&nbsp;Nicolae-Ciprian</A>, <A HREF="/pls/parlam/structura.mp?idm=252&leg=2012&cam=2">Nichita&nbsp;Cristina</A>, <A HREF="/pls/parlam/structura.mp?idm=255&leg=2012&cam=2">Nicolae&nbsp;Florian</A>, <A HREF="/pls/parlam/structura.mp?idm=258&leg=2012&cam=2">Nicolicea&nbsp;Eugen</A>, <A HREF="/pls/parlam/structura.mp?idm=264&leg=2012&cam=2">Nistor&nbsp;Laurenţiu</A>, <A HREF="/pls/parlam/structura.mp?idm=266&leg=2012&cam=2">Niţă&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=267&leg=2012&cam=2">Niţă&nbsp;Emil</A>, <A HREF="/pls/parlam/structura.mp?idm=268&leg=2012&cam=2">Nosa&nbsp;Iuliu</A>, <A HREF="/pls/parlam/structura.mp?idm=270&leg=2012&cam=2">Ochi&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=283&leg=2012&cam=2">Pâslaru&nbsp;Florin-Costin</A>, <A HREF="/pls/parlam/structura.mp?idm=284&leg=2012&cam=2">Peia&nbsp;Ninel</A>, <A HREF="/pls/parlam/structura.mp?idm=285&leg=2012&cam=2">Petrache&nbsp;Adrian-Alin</A>, <A HREF="/pls/parlam/structura.mp?idm=292&leg=2012&cam=2">Podaşcă&nbsp;Gabriela-Maria</A>, <A HREF="/pls/parlam/structura.mp?idm=293&leg=2012&cam=2">Ponta&nbsp;Victor-Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=297&leg=2012&cam=2">Popeangă&nbsp;Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=306&leg=2012&cam=2">Răducanu&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=308&leg=2012&cam=2">Rădulescu&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=310&leg=2012&cam=2">Răţoi&nbsp;Neculai</A>, <A HREF="/pls/parlam/structura.mp?idm=311&leg=2012&cam=2">Resmeriţă&nbsp;Cornel-Cristian</A>, <A HREF="/pls/parlam/structura.mp?idm=314&leg=2012&cam=2">Roman&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=315&leg=2012&cam=2">Roman&nbsp;Ioan Sorin</A>, <A HREF="/pls/parlam/structura.mp?idm=318&leg=2012&cam=2">Roşca&nbsp;Lucreţia</A>, <A HREF="/pls/parlam/structura.mp?idm=323&leg=2012&cam=2">Sava&nbsp;Andrei-Valentin</A>, <A HREF="/pls/parlam/structura.mp?idm=326&leg=2012&cam=2">Săvoiu&nbsp;Ionuţ-Cristian</A>, <A HREF="/pls/parlam/structura.mp?idm=340&leg=2012&cam=2">Stanciu&nbsp;Anghel</A>, <A HREF="/pls/parlam/structura.mp?idm=341&leg=2012&cam=2">Stanciu&nbsp;Zisu</A>, <A HREF="/pls/parlam/structura.mp?idm=338&leg=2012&cam=2">Stan&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=339&leg=2012&cam=2">Stan&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=344&leg=2012&cam=2">Stănescu&nbsp;Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=346&leg=2012&cam=2">Steriu&nbsp;Valeriu-Andrei</A>, <A HREF="/pls/parlam/structura.mp?idm=349&leg=2012&cam=2">Stragea&nbsp;Sorin Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=352&leg=2012&cam=2">Sturzu&nbsp;Mihai-Răzvan</A>, <A HREF="/pls/parlam/structura.mp?idm=353&leg=2012&cam=2">Suciu&nbsp;Vasile-Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=362&leg=2012&cam=2">Ştefănescu&nbsp;Elena Cătălina</A>, <A HREF="/pls/parlam/structura.mp?idm=375&leg=2012&cam=2">Tiuch&nbsp;Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=376&leg=2012&cam=2">Tîlvăr&nbsp;Angel</A>, <A HREF="/pls/parlam/structura.mp?idm=380&leg=2012&cam=2">Traicu&nbsp;Rodin</A>, <A HREF="/pls/parlam/structura.mp?idm=382&leg=2012&cam=2">Tudorie&nbsp;Violeta</A>, <A HREF="/pls/parlam/structura.mp?idm=383&leg=2012&cam=2">Tudose&nbsp;Mihai</A>, <A HREF="/pls/parlam/structura.mp?idm=401&leg=2012&cam=2">Vlase&nbsp;Petru Gabriel</A>, <A HREF="/pls/parlam/structura.mp?idm=402&leg=2012&cam=2">Vlădoiu&nbsp;Aurel</A>, <A HREF="/pls/parlam/structura.mp?idm=403&leg=2012&cam=2">Voicu&nbsp;Mădălin-Ştefan</A>, <A HREF="/pls/parlam/structura.mp?idm=406&leg=2012&cam=2">Vulpescu&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=407&leg=2012&cam=2">Weber&nbsp;Mihai</A>, <A HREF="/pls/parlam/structura.mp?idm=408&leg=2012&cam=2">Zaharcu&nbsp;Neviser</A>, <A HREF="/pls/parlam/structura.mp?idm=410&leg=2012&cam=2">Zgonea&nbsp;Valeriu Ştefan</A></td></tr><tr valign="top"><td nowrap>deputati - PNL:</td><td><A HREF="/pls/parlam/structura.mp?idm=4&leg=2012&cam=2">Alexe&nbsp;Costel</A>, <A HREF="/pls/parlam/structura.mp?idm=5&leg=2012&cam=2">Alexe&nbsp;Florin-Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=6&leg=2012&cam=2">Almăjanu&nbsp;Marin</A>, <A HREF="/pls/parlam/structura.mp?idm=10&leg=2012&cam=2">Andronache&nbsp;Gabriel</A>, <A HREF="/pls/parlam/structura.mp?idm=13&leg=2012&cam=2">Anton&nbsp;Marin</A>, <A HREF="/pls/parlam/structura.mp?idm=14&leg=2012&cam=2">Anuşca&nbsp;Roxana-Florentina</A>, <A HREF="/pls/parlam/structura.mp?idm=23&leg=2012&cam=2">Băişanu&nbsp;Ştefan-Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=30&leg=2012&cam=2">Berci&nbsp;Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=42&leg=2012&cam=2">Bordeianu&nbsp;Dan</A>, <A HREF="/pls/parlam/structura.mp?idm=43&leg=2012&cam=2">Bot&nbsp;Octavian</A>, <A HREF="/pls/parlam/structura.mp?idm=46&leg=2012&cam=2">Budurescu&nbsp;Daniel-Stamate</A>, <A HREF="/pls/parlam/structura.mp?idm=47&leg=2012&cam=2">Buican&nbsp;Cristian</A>, <A HREF="/pls/parlam/structura.mp?idm=50&leg=2012&cam=2">Calimente&nbsp;Mihăiţă</A>, <A HREF="/pls/parlam/structura.mp?idm=52&leg=2012&cam=2">Calotă&nbsp;Florică Ică</A>, <A HREF="/pls/parlam/structura.mp?idm=54&leg=2012&cam=2">Cazan&nbsp;Mircea-Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=57&leg=2012&cam=2">Cătăniciu&nbsp;Steluţa-Gustica</A>, <A HREF="/pls/parlam/structura.mp?idm=60&leg=2012&cam=2">Cherecheş&nbsp;Florica</A>, <A HREF="/pls/parlam/structura.mp?idm=62&leg=2012&cam=2">Chirteş&nbsp;Ioan-Cristian</A>, <A HREF="/pls/parlam/structura.mp?idm=64&leg=2012&cam=2">Chiţoiu&nbsp;Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=71&leg=2012&cam=2">Ciubotaru&nbsp;Lucian-Manuel</A>, <A HREF="/pls/parlam/structura.mp?idm=74&leg=2012&cam=2">Ciurariu&nbsp;Florin</A>, <A HREF="/pls/parlam/structura.mp?idm=75&leg=2012&cam=2">Cocei&nbsp;Erland</A>, <A HREF="/pls/parlam/structura.mp?idm=82&leg=2012&cam=2">Costin&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=84&leg=2012&cam=2">Cozmanciuc&nbsp;Corneliu-Mugurel</A>, <A HREF="/pls/parlam/structura.mp?idm=88&leg=2012&cam=2">Cristian&nbsp;Horia</A>, <A HREF="/pls/parlam/structura.mp?idm=91&leg=2012&cam=2">Cupă&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=92&leg=2012&cam=2">Cupşa&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=103&leg=2012&cam=2">Doboş&nbsp;Anton</A>, <A HREF="/pls/parlam/structura.mp?idm=105&leg=2012&cam=2">Dobre&nbsp;Victor Paul</A>, <A HREF="/pls/parlam/structura.mp?idm=106&leg=2012&cam=2">Dobrinescu&nbsp;Traian</A>, <A HREF="/pls/parlam/structura.mp?idm=107&leg=2012&cam=2">Dolha&nbsp;Mircea</A>, <A HREF="/pls/parlam/structura.mp?idm=108&leg=2012&cam=2">Dolha&nbsp;Nechita-Stelian</A>, <A HREF="/pls/parlam/structura.mp?idm=110&leg=2012&cam=2">Donţu&nbsp;Mihai-Aurel</A>, <A HREF="/pls/parlam/structura.mp?idm=112&leg=2012&cam=2">Dragomir&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=118&leg=2012&cam=2">Dumbrăvanu&nbsp;Paul</A>, <A HREF="/pls/parlam/structura.mp?idm=126&leg=2012&cam=2">Enea&nbsp;Constantin-Cosmin</A>, <A HREF="/pls/parlam/structura.mp?idm=131&leg=2012&cam=2">Fenechiu&nbsp;Relu</A>, <A HREF="/pls/parlam/structura.mp?idm=137&leg=2012&cam=2">Galan&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=139&leg=2012&cam=2">Gavrilescu&nbsp;Graţiela Leocadia</A>, <A HREF="/pls/parlam/structura.mp?idm=142&leg=2012&cam=2">Gerea&nbsp;Andrei Dominic</A>, <A HREF="/pls/parlam/structura.mp?idm=148&leg=2012&cam=2">Gireadă&nbsp;Dumitru-Verginel</A>, <A HREF="/pls/parlam/structura.mp?idm=151&leg=2012&cam=2">Gorghiu&nbsp;Alina-Ştefania</A>, <A HREF="/pls/parlam/structura.mp?idm=159&leg=2012&cam=2">Guran&nbsp;Virgil</A>, <A HREF="/pls/parlam/structura.mp?idm=164&leg=2012&cam=2">Hărău&nbsp;Eleonora-Carmen</A>, <A HREF="/pls/parlam/structura.mp?idm=165&leg=2012&cam=2">Hellvig&nbsp;Eduard Raul</A>, <A HREF="/pls/parlam/structura.mp?idm=166&leg=2012&cam=2">Holban&nbsp;Titi</A>, <A HREF="/pls/parlam/structura.mp?idm=174&leg=2012&cam=2">Iane&nbsp;Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=185&leg=2012&cam=2">Ispir&nbsp;Raluca-Cristina</A>, <A HREF="/pls/parlam/structura.mp?idm=196&leg=2012&cam=2">Lupu&nbsp;Mihai</A>, <A HREF="/pls/parlam/structura.mp?idm=199&leg=2012&cam=2">Manea&nbsp;Victor-Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=203&leg=2012&cam=2">Marcu&nbsp;Nicu</A>, <A HREF="/pls/parlam/structura.mp?idm=204&leg=2012&cam=2">Marcu&nbsp;Viorica</A>, <A HREF="/pls/parlam/structura.mp?idm=223&leg=2012&cam=2">Mironescu&nbsp;Răzvan Horia</A>, <A HREF="/pls/parlam/structura.mp?idm=236&leg=2012&cam=2">Motreanu&nbsp;Dan-Ştefan</A>, <A HREF="/pls/parlam/structura.mp?idm=256&leg=2012&cam=2">Nicolăescu&nbsp;Gheorghe-Eugen</A>, <A HREF="/pls/parlam/structura.mp?idm=257&leg=2012&cam=2">Nicolescu&nbsp;Theodor-Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=259&leg=2012&cam=2">Niculae&nbsp;Aurel</A>, <A HREF="/pls/parlam/structura.mp?idm=263&leg=2012&cam=2">Nistor&nbsp;Gheorghe-Vlad</A>, <A HREF="/pls/parlam/structura.mp?idm=273&leg=2012&cam=2">Oros&nbsp;Nechita-Adrian</A>, <A HREF="/pls/parlam/structura.mp?idm=274&leg=2012&cam=2">Palaşcă&nbsp;Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=275&leg=2012&cam=2">Palăr&nbsp;Ionel</A>, <A HREF="/pls/parlam/structura.mp?idm=279&leg=2012&cam=2">Pardău&nbsp;Dumitru</A>, <A HREF="/pls/parlam/structura.mp?idm=291&leg=2012&cam=2">Pocora&nbsp;Cristina-Ancuţa</A>, <A HREF="/pls/parlam/structura.mp?idm=295&leg=2012&cam=2">Popa&nbsp;Octavian-Marius</A>, <A HREF="/pls/parlam/structura.mp?idm=302&leg=2012&cam=2">Potor&nbsp;Călin</A>, <A HREF="/pls/parlam/structura.mp?idm=319&leg=2012&cam=2">Roşca&nbsp;Mircea</A>, <A HREF="/pls/parlam/structura.mp?idm=325&leg=2012&cam=2">Săpunaru&nbsp;Nini</A>, <A HREF="/pls/parlam/structura.mp?idm=327&leg=2012&cam=2">Scarlat&nbsp;George</A>, <A HREF="/pls/parlam/structura.mp?idm=329&leg=2012&cam=2">Scutaru&nbsp;Adrian George</A>, <A HREF="/pls/parlam/structura.mp?idm=333&leg=2012&cam=2">Silaghi&nbsp;Ovidiu Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=334&leg=2012&cam=2">Simedru&nbsp;Dan Coriolan</A>, <A HREF="/pls/parlam/structura.mp?idm=345&leg=2012&cam=2">Stănişoară&nbsp;Mihai</A>, <A HREF="/pls/parlam/structura.mp?idm=350&leg=2012&cam=2">Stroe&nbsp;Ionuţ-Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=351&leg=2012&cam=2">Stroe&nbsp;Radu</A>, <A HREF="/pls/parlam/structura.mp?idm=354&leg=2012&cam=2">Surdu&nbsp;Raluca</A>, <A HREF="/pls/parlam/structura.mp?idm=355&leg=2012&cam=2">Surugiu&nbsp;Iulian-Radu</A>, <A HREF="/pls/parlam/structura.mp?idm=359&leg=2012&cam=2">Şoptică&nbsp;Costel</A>, <A HREF="/pls/parlam/structura.mp?idm=363&leg=2012&cam=2">Ştirbu&nbsp;Gigel-Sorinel</A>, <A HREF="/pls/parlam/structura.mp?idm=365&leg=2012&cam=2">Taloş&nbsp;Gheorghe-Mirel</A>, <A HREF="/pls/parlam/structura.mp?idm=367&leg=2012&cam=2">Tămâian&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=371&leg=2012&cam=2">Teju&nbsp;Sorin</A>, <A HREF="/pls/parlam/structura.mp?idm=373&leg=2012&cam=2">Teodorescu&nbsp;Ioan Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=374&leg=2012&cam=2">Thuma&nbsp;Hubert Petru Ştefan</A>, <A HREF="/pls/parlam/structura.mp?idm=378&leg=2012&cam=2">Tocuţ&nbsp;Dan-Laurenţiu</A>, <A HREF="/pls/parlam/structura.mp?idm=386&leg=2012&cam=2">Ţigăeru Roşca&nbsp;Laurenţiu</A>, <A HREF="/pls/parlam/structura.mp?idm=387&leg=2012&cam=2">Ţîmpău&nbsp;Radu Bogdan</A>, <A HREF="/pls/parlam/structura.mp?idm=390&leg=2012&cam=2">Uioreanu&nbsp;Elena-Ramona</A>, <A HREF="/pls/parlam/structura.mp?idm=396&leg=2012&cam=2">Varga&nbsp;Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=404&leg=2012&cam=2">Voicu&nbsp;Mihai Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=409&leg=2012&cam=2">Zamfir&nbsp;Daniel-Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=412&leg=2012&cam=2">Zlati&nbsp;Radu</A></td></tr><tr valign="top"><td nowrap>deputati - Mino.:</td><td><A HREF="/pls/parlam/structura.mp?idm=7&leg=2012&cam=2">Amet&nbsp;Varol</A>, <A HREF="/pls/parlam/structura.mp?idm=132&leg=2012&cam=2">Firczak&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=138&leg=2012&cam=2">Ganţ&nbsp;Ovidiu Victor</A>, <A HREF="/pls/parlam/structura.mp?idm=145&leg=2012&cam=2">Ghera&nbsp;Giureci-Slobodan</A>, <A HREF="/pls/parlam/structura.mp?idm=162&leg=2012&cam=2">Gvozdenovici&nbsp;Slavomir</A>, <A HREF="/pls/parlam/structura.mp?idm=176&leg=2012&cam=2">Ibram&nbsp;Iusein</A>, <A HREF="/pls/parlam/structura.mp?idm=177&leg=2012&cam=2">Ignat&nbsp;Miron</A>, <A HREF="/pls/parlam/structura.mp?idm=194&leg=2012&cam=2">Longher&nbsp;Ghervazen</A>, <A HREF="/pls/parlam/structura.mp?idm=201&leg=2012&cam=2">Manolescu&nbsp;Oana</A>, <A HREF="/pls/parlam/structura.mp?idm=208&leg=2012&cam=2">Marocico&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=216&leg=2012&cam=2">Merka&nbsp;Adrian-Miroslav</A>, <A HREF="/pls/parlam/structura.mp?idm=222&leg=2012&cam=2">Mircovici&nbsp;Niculae</A>, <A HREF="/pls/parlam/structura.mp?idm=277&leg=2012&cam=2">Pambuccian&nbsp;Varujan</A>, <A HREF="/pls/parlam/structura.mp?idm=342&leg=2012&cam=2">Stancu&nbsp;Ionel</A>, <A HREF="/pls/parlam/structura.mp?idm=394&leg=2012&cam=2">Vainer&nbsp;Aurel</A>, <A HREF="/pls/parlam/structura.mp?idm=411&leg=2012&cam=2">Zisopol&nbsp;Dragoş Gabriel</A></td></tr><tr valign="top"><td nowrap>deputati - PC:</td><td><A HREF="/pls/parlam/structura.mp?idm=17&leg=2012&cam=2">Avram&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=65&leg=2012&cam=2">Cioată&nbsp;Cezar</A>, <A HREF="/pls/parlam/structura.mp?idm=72&leg=2012&cam=2">Ciucă&nbsp;Liviu-Bogdan</A>, <A HREF="/pls/parlam/structura.mp?idm=77&leg=2012&cam=2">Coman&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=80&leg=2012&cam=2">Constantin&nbsp;Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=101&leg=2012&cam=2">Diniţă&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=117&leg=2012&cam=2">Drăguşanu&nbsp;Vasile-Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=120&leg=2012&cam=2">Dumitru&nbsp;Georgică</A>, <A HREF="/pls/parlam/structura.mp?idm=133&leg=2012&cam=2">Florea&nbsp;Damian</A>, <A HREF="/pls/parlam/structura.mp?idm=153&leg=2012&cam=2">Grapini&nbsp;Maria</A>, <A HREF="/pls/parlam/structura.mp?idm=180&leg=2012&cam=2">Ionescu&nbsp;Aurelian</A>, <A HREF="/pls/parlam/structura.mp?idm=183&leg=2012&cam=2">Irimie&nbsp;Vicenţiu-Mircea</A>, <A HREF="/pls/parlam/structura.mp?idm=233&leg=2012&cam=2">Moldovan&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=248&leg=2012&cam=2">Negruţ&nbsp;Cornelia</A>, <A HREF="/pls/parlam/structura.mp?idm=305&leg=2012&cam=2">Raeţchi&nbsp;Ovidiu Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=320&leg=2012&cam=2">Rotaru&nbsp;Răzvan</A>, <A HREF="/pls/parlam/structura.mp?idm=369&leg=2012&cam=2">Tănăsescu&nbsp;Claudiu-Andrei</A></td></tr><tr valign="top"><td nowrap>senatori - PSD:</td><td><A HREF="/pls/parlam/structura.mp?idm=3&leg=2012&cam=1">Andronescu&nbsp;Ecaterina</A>, <A HREF="/pls/parlam/structura.mp?idm=6&leg=2012&cam=1">Arcaş&nbsp;Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=10&leg=2012&cam=1">Badea&nbsp;Leonardo</A>, <A HREF="/pls/parlam/structura.mp?idm=15&leg=2012&cam=1">Bădălău&nbsp;Niculae</A>, <A HREF="/pls/parlam/structura.mp?idm=17&leg=2012&cam=1">Belacurencu&nbsp;Trifon</A>, <A HREF="/pls/parlam/structura.mp?idm=18&leg=2012&cam=1">Bereanu&nbsp;Neculai</A>, <A HREF="/pls/parlam/structura.mp?idm=24&leg=2012&cam=1">Bodog&nbsp;Florian Dorel</A>, <A HREF="/pls/parlam/structura.mp?idm=29&leg=2012&cam=1">Bumbu&nbsp;Octavian-Liviu</A>, <A HREF="/pls/parlam/structura.mp?idm=32&leg=2012&cam=1">Butunoi&nbsp;Ionel Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=34&leg=2012&cam=1">Calcan&nbsp;Valentin Gigel</A>, <A HREF="/pls/parlam/structura.mp?idm=36&leg=2012&cam=1">Chelaru&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=37&leg=2012&cam=1">Chiriac&nbsp;Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=41&leg=2012&cam=1">Coca&nbsp;Laurenţiu Florian</A>, <A HREF="/pls/parlam/structura.mp?idm=42&leg=2012&cam=1">Constantinescu&nbsp;Florin</A>, <A HREF="/pls/parlam/structura.mp?idm=47&leg=2012&cam=1">Creţu&nbsp;Gabriela</A>, <A HREF="/pls/parlam/structura.mp?idm=50&leg=2012&cam=1">Croitoru&nbsp;Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=55&leg=2012&cam=1">Donţu&nbsp;Ovidiu Liviu</A>, <A HREF="/pls/parlam/structura.mp?idm=56&leg=2012&cam=1">Drăghici&nbsp;Damian</A>, <A HREF="/pls/parlam/structura.mp?idm=58&leg=2012&cam=1">Dumitrescu&nbsp;Cristian-Sorin</A>, <A HREF="/pls/parlam/structura.mp?idm=61&leg=2012&cam=1">Duruţ&nbsp;Aurel</A>, <A HREF="/pls/parlam/structura.mp?idm=63&leg=2012&cam=1">Federovici&nbsp;Doina Elena</A>, <A HREF="/pls/parlam/structura.mp?idm=64&leg=2012&cam=1">Fifor&nbsp;Mihai-Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=65&leg=2012&cam=1">Filip&nbsp;Petru</A>, <A HREF="/pls/parlam/structura.mp?idm=66&leg=2012&cam=1">Firea&nbsp;Gabriela</A>, <A HREF="/pls/parlam/structura.mp?idm=69&leg=2012&cam=1">Frătean&nbsp;Petru Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=70&leg=2012&cam=1">Geoană&nbsp;Mircea Dan</A>, <A HREF="/pls/parlam/structura.mp?idm=74&leg=2012&cam=1">Greblă&nbsp;Toni</A>, <A HREF="/pls/parlam/structura.mp?idm=87&leg=2012&cam=1">Lazăr&nbsp;Sorin Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=94&leg=2012&cam=1">Mazăre&nbsp;Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=97&leg=2012&cam=1">Mihăilescu&nbsp;Petru Şerban</A>, <A HREF="/pls/parlam/structura.mp?idm=99&leg=2012&cam=1">Mitu&nbsp;Augustin Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=100&leg=2012&cam=1">Mocanu&nbsp;Victor</A>, <A HREF="/pls/parlam/structura.mp?idm=101&leg=2012&cam=1">Moga&nbsp;Nicolae</A>, <A HREF="/pls/parlam/structura.mp?idm=102&leg=2012&cam=1">Mohanu&nbsp;Nicolae</A>, <A HREF="/pls/parlam/structura.mp?idm=105&leg=2012&cam=1">Mutu&nbsp;Gabriel</A>, <A HREF="/pls/parlam/structura.mp?idm=110&leg=2012&cam=1">Nicolae&nbsp;Şerban</A>, <A HREF="/pls/parlam/structura.mp?idm=111&leg=2012&cam=1">Nicula&nbsp;Vasile Cosmin</A>, <A HREF="/pls/parlam/structura.mp?idm=120&leg=2012&cam=1">Oprea&nbsp;Stefan Radu</A>, <A HREF="/pls/parlam/structura.mp?idm=124&leg=2012&cam=1">Pavel&nbsp;Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=132&leg=2012&cam=1">Popa&nbsp;Florian</A>, <A HREF="/pls/parlam/structura.mp?idm=129&leg=2012&cam=1">Pop&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=130&leg=2012&cam=1">Pop&nbsp;Liviu-Marian</A>, <A HREF="/pls/parlam/structura.mp?idm=143&leg=2012&cam=1">Rotaru&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=144&leg=2012&cam=1">Saghian&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=145&leg=2012&cam=1">Savu&nbsp;Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=146&leg=2012&cam=1">Sârbu&nbsp;Ilie</A>, <A HREF="/pls/parlam/structura.mp?idm=148&leg=2012&cam=1">Severin&nbsp;Georgică</A>, <A HREF="/pls/parlam/structura.mp?idm=149&leg=2012&cam=1">Silistru&nbsp;Doina</A>, <A HREF="/pls/parlam/structura.mp?idm=152&leg=2012&cam=1">Stuparu&nbsp;Timotei</A>, <A HREF="/pls/parlam/structura.mp?idm=153&leg=2012&cam=1">Suciu&nbsp;Matei</A>, <A HREF="/pls/parlam/structura.mp?idm=156&leg=2012&cam=1">Tămagă&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=157&leg=2012&cam=1">Tătaru&nbsp;Dan</A>, <A HREF="/pls/parlam/structura.mp?idm=162&leg=2012&cam=1">Toma&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=167&leg=2012&cam=1">Valeca&nbsp;Şerban Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=169&leg=2012&cam=1">Vâlcov&nbsp;Darius Bogdan</A></td></tr><tr valign="top"><td nowrap>senatori - PNL:</td><td><A HREF="/pls/parlam/structura.mp?idm=5&leg=2012&cam=1">Antonescu&nbsp;George Crin Laurenţiu</A>, <A HREF="/pls/parlam/structura.mp?idm=7&leg=2012&cam=1">Ardelean&nbsp;Ben-Oni</A>, <A HREF="/pls/parlam/structura.mp?idm=9&leg=2012&cam=1">Atanasiu&nbsp;Teodor</A>, <A HREF="/pls/parlam/structura.mp?idm=13&leg=2012&cam=1">Barbu&nbsp;Daniel-Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=22&leg=2012&cam=1">Boboc&nbsp;Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=23&leg=2012&cam=1">Bodea&nbsp;Cristian Petru</A>, <A HREF="/pls/parlam/structura.mp?idm=25&leg=2012&cam=1">Boeriu&nbsp;Valeriu-Victor</A>, <A HREF="/pls/parlam/structura.mp?idm=30&leg=2012&cam=1">Burlea&nbsp;Marin</A>, <A HREF="/pls/parlam/structura.mp?idm=39&leg=2012&cam=1">Chiuariu&nbsp;Tudor-Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=40&leg=2012&cam=1">Ciorbea&nbsp;Victor</A>, <A HREF="/pls/parlam/structura.mp?idm=46&leg=2012&cam=1">Cotescu&nbsp;Marin-Adrănel</A>, <A HREF="/pls/parlam/structura.mp?idm=49&leg=2012&cam=1">Cristina&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=51&leg=2012&cam=1">Deneş&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=53&leg=2012&cam=1">Dobra&nbsp;Dorin-Mircea</A>, <A HREF="/pls/parlam/structura.mp?idm=54&leg=2012&cam=1">Dobriţoiu&nbsp;Corneliu</A>, <A HREF="/pls/parlam/structura.mp?idm=60&leg=2012&cam=1">Dumitrescu&nbsp;Iulian</A>, <A HREF="/pls/parlam/structura.mp?idm=62&leg=2012&cam=1">Ehegartner&nbsp;Petru</A>, <A HREF="/pls/parlam/structura.mp?idm=73&leg=2012&cam=1">Grapă&nbsp;Sebastian</A>, <A HREF="/pls/parlam/structura.mp?idm=75&leg=2012&cam=1">Grigoraş&nbsp;Viorel</A>, <A HREF="/pls/parlam/structura.mp?idm=76&leg=2012&cam=1">Haşotti&nbsp;Puiu</A>, <A HREF="/pls/parlam/structura.mp?idm=79&leg=2012&cam=1">Iliescu&nbsp;Lucian</A>, <A HREF="/pls/parlam/structura.mp?idm=80&leg=2012&cam=1">Ilieşiu&nbsp;Sorin</A>, <A HREF="/pls/parlam/structura.mp?idm=88&leg=2012&cam=1">Luchian&nbsp;Dragoş</A>, <A HREF="/pls/parlam/structura.mp?idm=89&leg=2012&cam=1">Luchian&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=103&leg=2012&cam=1">Mora&nbsp;Akos-Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=104&leg=2012&cam=1">Motoc&nbsp;Octavian</A>, <A HREF="/pls/parlam/structura.mp?idm=106&leg=2012&cam=1">Nasta&nbsp;Nicolae</A>, <A HREF="/pls/parlam/structura.mp?idm=107&leg=2012&cam=1">Neagu&nbsp;Nicolae</A>, <A HREF="/pls/parlam/structura.mp?idm=108&leg=2012&cam=1">Neculoiu&nbsp;Marius</A>, <A HREF="/pls/parlam/structura.mp?idm=109&leg=2012&cam=1">Nicoară&nbsp;Marius Petre</A>, <A HREF="/pls/parlam/structura.mp?idm=114&leg=2012&cam=1">Niţu&nbsp;Remus-Daniel</A>, <A HREF="/pls/parlam/structura.mp?idm=115&leg=2012&cam=1">Obreja&nbsp;Marius Lucian</A>, <A HREF="/pls/parlam/structura.mp?idm=119&leg=2012&cam=1">Oprea&nbsp;Mario-Ovidiu</A>, <A HREF="/pls/parlam/structura.mp?idm=121&leg=2012&cam=1">Paşca&nbsp;Liviu Titus</A>, <A HREF="/pls/parlam/structura.mp?idm=125&leg=2012&cam=1">Păran&nbsp;Dorin</A>, <A HREF="/pls/parlam/structura.mp?idm=133&leg=2012&cam=1">Popa&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=134&leg=2012&cam=1">Popa&nbsp;Mihaela</A>, <A HREF="/pls/parlam/structura.mp?idm=137&leg=2012&cam=1">Popescu&nbsp;Dumitru-Dian</A>, <A HREF="/pls/parlam/structura.mp?idm=147&leg=2012&cam=1">Secăşan&nbsp;Iosif</A>, <A HREF="/pls/parlam/structura.mp?idm=158&leg=2012&cam=1">Tătaru&nbsp;Nelu</A>, <A HREF="/pls/parlam/structura.mp?idm=163&leg=2012&cam=1">Tomoiagă&nbsp;Ştefan-Liviu</A>, <A HREF="/pls/parlam/structura.mp?idm=164&leg=2012&cam=1">Tudor&nbsp;Doina-Anca</A>, <A HREF="/pls/parlam/structura.mp?idm=165&leg=2012&cam=1">Ţapu&nbsp;Nazare Eugen</A>, <A HREF="/pls/parlam/structura.mp?idm=175&leg=2012&cam=1">Vosganian&nbsp;Varujan</A>, <A HREF="/pls/parlam/structura.mp?idm=176&leg=2012&cam=1">Zisu&nbsp;Ionuţ-Elie</A></td></tr><tr valign="top"><td nowrap>senatori - PC:</td><td><A HREF="/pls/parlam/structura.mp?idm=4&leg=2012&cam=1">Anghel&nbsp;Cristiana-Irina</A>, <A HREF="/pls/parlam/structura.mp?idm=12&leg=2012&cam=1">Banias&nbsp;Mircea Marius</A>, <A HREF="/pls/parlam/structura.mp?idm=57&leg=2012&cam=1">Durbacă&nbsp;Eugen</A>, <A HREF="/pls/parlam/structura.mp?idm=95&leg=2012&cam=1">Mihai&nbsp;Cristian Dănuţ</A>, <A HREF="/pls/parlam/structura.mp?idm=96&leg=2012&cam=1">Mihai&nbsp;Neagu</A>, <A HREF="/pls/parlam/structura.mp?idm=112&leg=2012&cam=1">Nistor&nbsp;Vasile</A>, <A HREF="/pls/parlam/structura.mp?idm=113&leg=2012&cam=1">Niţă&nbsp;Mihai</A>, <A HREF="/pls/parlam/structura.mp?idm=127&leg=2012&cam=1">Pelican&nbsp;Dumitru</A></td></tr></table></td></tr>
+</table>
+
+<p><table width="100%" border=0 cellspacing=0 cellpadding=0>
+<tr height=18><td colspan=3 class="headlinetext"><b>Derularea procedurii legislative</b></td></tr>
+<tr height=18 bgcolor="#E0E0E0" align="center">
+  <td><b>Data</b></td>
+  <td bgcolor="#E0E0E0">&nbsp;
+&nbsp
+
+  &nbsp;</td>
+  <td colspan=2 align="center"><b>Actiunea</td>
+</tr>
+<tr>
+  <td colspan=2>&nbsp;</td>
+  <td><img height=1 width="100" src="/img/spacer.gif" align="left" border=0></td>
+</tr>
+<tr><td bgcolor="#FFFFFF"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr>
+                <td bgcolor="#dfefff"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#ffffff" colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#666666" rowspan="11"><img src="/img/spacer.gif" width=1 height=1 hspace="0" vspace="0" border="0" align="left"></td>
+                <td valign="center" rowspan="11"><img src="/img/rarr2.gif" border=0 /></td>
+                <td valign="center" bgcolor="#dfefff" rowspan="11">SE</td>
+               </tr>
+<tr><td bgcolor="#dfefff"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#dfefff">
+25.06.2013
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+înregistrat la Senat pentru dezbatere cu nr.b429
+</td></tr>
+<tr><td bgcolor="#dfefff"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#dfefff">
+26.06.2013
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+trimis pentru aviz la Consiliul legislativ (termen: 01.07.2013)
+</td></tr>
+<tr><td bgcolor="#dfefff"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#dfefff">
+&nbsp;
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+solicitare aviz de la Consiliul Legislativ
+<div id="obs">termen: 01-07-2013</div>
+</td></tr>
+<tr><td bgcolor="#dfefff"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#dfefff">
+28.06.2013
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+primire aviz de la Consiliul legislativ - cu nr. 242/28.06.2013 (favorabil)
+</td></tr>
+<tr><td bgcolor="#dfefff"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#dfefff">
+&nbsp;
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+primire aviz de la Consiliul Legislativ
+(favorabil)
+</td></tr>
+<tr><td colspan=3><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td><td colspan=3 bgcolor="#666666"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+</table>
+</td></table>
+<td width=10><img src="/img/spacer.gif" width=10 height=1 hspace=0 vspace=0 /></td>
+</tr>
+</table>
+
+<table width="100%" border=0>
+<tr>
+<td width="100%" colspan=2><div class=pageHeaderDiv></div></td>
+
+</tr>
+
+
+<tr>
+  <td class="footlinetext"><b>Adresa poştală:</b> Palatul Parlamentului, str.Izvor nr.2-4, sect.5, Bucureşti
+  </td><td align="right" class="footlinetext">marţi, 1 octombrie  2013, 17:35</td>
+</tr>
+<tr>
+  <td class="footlinetext"><b>Telefoane (centrala):</b> 021 316 0300, 021 414 1111
+  </td>
+  <td align="right" rowspan=2 class="footlinetext"><a href="https://www.cdep.ro"><img src="/img/eToken.gif" width=60 height=32 border=0 /></a>
+  </td>
+</tr>
+<tr><td class="footlinetext"><b>E-mail:</b> <A HREF="mailto:webmaster@cdep.ro">webmaster@cdep.ro</A></td>
+</table>
+</td></tr></table>
+</body>
+</html>
