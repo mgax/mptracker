@@ -91,7 +91,7 @@ def join_tokens(tokens):
     return Token(text, tokens[0].start, tokens[-1].end)
 
 
-def prepare_names(name_list):
+def prepare_vocabulary(name_list):
     out = defaultdict(dict)
     for name in name_list:
         norm_name = normalize(name)
@@ -103,16 +103,19 @@ def prepare_names(name_list):
     return sorted(out.items())
 
 
-def match_names(text, name_list, mp_info={}):
+def match_names(text, name_list, phrase_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
 
-    name_data = prepare_names(name_list)
+    name_vocabulary = prepare_vocabulary(name_list)
+    phrase_vocabulary = prepare_vocabulary(phrase_list)
 
     matches = []
     tokens = list(tokenize(text))
     for idx in range(len(tokens)):
         token_matches = []
-        for word_count, counted_name_list in name_data:
+        first = tokens[idx].text[0]
+        vocabulary = name_vocabulary if first.isupper() else phrase_vocabulary
+        for word_count, counted_name_list in vocabulary:
             if idx + word_count > len(tokens):
                 continue
             token_window = tokens[idx : idx + word_count]
@@ -162,9 +165,7 @@ def match_text_for_mandate(mandate, text):
         local_names = county_data['place_names']
         mp_info['county_name'] = county_data['name']
 
-    all_names = local_names + other_phrases
-
-    matches = match_names(text, all_names, mp_info=mp_info)
+    matches = match_names(text, local_names, other_phrases, mp_info=mp_info)
     top_matches = sorted(matches,
                          key=lambda m: m['distance'],
                          reverse=True)[:10]
