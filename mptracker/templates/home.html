@@ -20,8 +20,10 @@
   </p>
 
   <p>
-    {% set url = url_for('proposals.relevant') %}
+    {% set url = url_for('proposals.index') %}
     <a href="{{ url }}">Propuneri legislative</a>
+    {% set url = url_for('proposals.relevant') %}
+    (<a href="{{ url }}">după relevanță locală</a>)
   </p>
 
   <p>
