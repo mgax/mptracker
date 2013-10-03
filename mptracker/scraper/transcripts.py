@@ -1,4 +1,4 @@
-""" Fetch and parse stenograms """
+""" Fetch and parse transcripts """
 
 from datetime import date
 from urllib.parse import urlparse, parse_qs
@@ -7,29 +7,29 @@ from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
                                       get_cdep_id)
 
 
-class StenoDay:
+class Day:
 
     def __init__(self):
         self.chapters = []
 
 
-class StenoChapter:
+class Chapter:
 
     def __init__(self):
         self.paragraphs = []
 
 
-class StenoParagraph(dict):
+class Paragraph(dict):
 
     pass
 
 
-class StenogramScraper(Scraper):
+class TranscriptScraper(Scraper):
 
-    steno_url = 'http://www.cdep.ro/pls/steno/steno.data?cam=2&idl=1'
+    transcript_url = 'http://www.cdep.ro/pls/steno/steno.data?cam=2&idl=1'
 
     def chapters_for_day(self, day):
-        contents = self.fetch_url(self.steno_url,
+        contents = self.fetch_url(self.transcript_url,
                                   {'dat': day.strftime('%Y%m%d')})
         for link_el in contents('td.headlinetext1 b a'):
             link = link_el.attrib['href']
@@ -58,24 +58,24 @@ class StenogramScraper(Scraper):
         else:
             return name
 
-    def parse_steno_page(self, link):
+    def parse_transcript_page(self, link):
         page = self.fetch_url(link)
         table_rows = pqitems(page, '#pageContent > table tr')
-        steno_paragraph = None
-        steno_chapter = StenoChapter()
+        transcript_paragraph = None
+        transcript_chapter = Chapter()
         text_buffer = []
 
         def save_paragraph():
-            text = "\n".join(steno_paragraph.pop('text_buffer'))
-            steno_paragraph['text'] = text
-            steno_chapter.paragraphs.append(steno_paragraph)
+            text = "\n".join(transcript_paragraph.pop('text_buffer'))
+            transcript_paragraph['text'] = text
+            transcript_chapter.paragraphs.append(transcript_paragraph)
 
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
                     speakers = paragraph('b font[color="#0000FF"]')
                     if speakers:
-                        if steno_paragraph:
+                        if transcript_paragraph:
                             save_paragraph()
                         assert len(speakers) == 1
                         speaker_name = self.trim_name(speakers.text())
@@ -84,7 +84,7 @@ class StenogramScraper(Scraper):
                             speaker_cdep_id = get_cdep_id(link.attr('href'))
                         else:
                             speaker_cdep_id = None
-                        steno_paragraph = StenoParagraph({
+                        transcript_paragraph = Paragraph({
                             'speaker_cdep_id': speaker_cdep_id,
                             'speaker_name': speaker_name,
                             'text_buffer': [],
@@ -92,34 +92,34 @@ class StenogramScraper(Scraper):
                         })
 
                     else:
-                        if steno_paragraph is None:
+                        if transcript_paragraph is None:
                             continue  # still looking for first speaker
                         text = paragraph.text()
-                        steno_paragraph['text_buffer'].append(text)
+                        transcript_paragraph['text_buffer'].append(text)
 
-        if steno_paragraph:
+        if transcript_paragraph:
             save_paragraph()
 
-        return steno_chapter
+        return transcript_chapter
 
     def fetch_day(self, day):
         self.day = day
         self.chapter_serial = 0
-        steno_day = StenoDay()
-        steno_day.date = day
+        transcript_day = Day()
+        transcript_day.date = day
         for link, headline in self.chapters_for_day(day):
             self.chapter_serial += 1
             self.paragraph_serial = 0
-            steno_chapter = self.parse_steno_page(link)
-            steno_chapter.headline = headline
-            steno_chapter.serial = self.get_chapter_serial()
-            steno_day.chapters.append(steno_chapter)
-        return steno_day
+            transcript_chapter = self.parse_transcript_page(link)
+            transcript_chapter.headline = headline
+            transcript_chapter.serial = self.get_chapter_serial()
+            transcript_day.chapters.append(transcript_chapter)
+        return transcript_day
 
 
 if __name__ == '__main__':
-    steno_scraper = StenogramScraper(get_cached_session())
-    steno_day = steno_scraper.fetch_day(date(2013, 6, 10))
-    for steno_chapter in steno_day.chapters:
-        for paragraph in steno_chapter.paragraphs:
+    transcript_scraper = TranscriptScraper(get_cached_session())
+    transcript_day = transcript_scraper.fetch_day(date(2013, 6, 10))
+    for transcript_chapter in transcript_day.chapters:
+        for paragraph in transcript_chapter.paragraphs:
             print(paragraph)
