@@ -144,7 +144,7 @@ class County(db.Model):
         return "<%s>" % self
 
 
-class StenoChapter(db.Model):
+class TranscriptChapter(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     date = db.Column(db.Date, index=True)
     headline = db.Column(db.Text)
@@ -155,18 +155,18 @@ class StenoChapter(db.Model):
         return self.serial.split('/', 1)[1]
 
 
-class StenoParagraph(db.Model):
+class Transcript(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     text = db.Column(db.Text)
     serial = db.Column(db.Text, index=True)
 
-    chapter_id = db.Column(UUID, db.ForeignKey('steno_chapter.id'))
-    chapter = db.relationship('StenoChapter',
-        backref=db.backref('paragraphs', lazy='dynamic'))
+    chapter_id = db.Column(UUID, db.ForeignKey('transcript_chapter.id'))
+    chapter = db.relationship('TranscriptChapter',
+        backref=db.backref('transcripts', lazy='dynamic'))
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'))
     mandate = db.relationship('Mandate',
-        backref=db.backref('steno_paragraphs', lazy='dynamic'))
+        backref=db.backref('transcripts', lazy='dynamic'))
 
 
 class Question(db.Model):

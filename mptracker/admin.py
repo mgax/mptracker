@@ -33,8 +33,8 @@ class ModelView(ModelView_base):
             return None
 
 
-admin.add_view(ModelView(models.StenoChapter))
-admin.add_view(ModelView(models.StenoParagraph))
+admin.add_view(ModelView(models.TranscriptChapter))
+admin.add_view(ModelView(models.Transcript))
 admin.add_view(ModelView(models.User))
 admin.add_view(ModelView(models.County))
 admin.add_view(ModelView(models.Proposal,
