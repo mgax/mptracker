@@ -514,7 +514,8 @@ def dump(name, columns=None, number=None, filter=None, _file=sys.stdout):
 
 
 @db_manager.command
-def load(name, include_columns=None, create=True, remove=False):
+def load(name, include_columns=None, create=True, remove=False,
+         _file=sys.stdin):
     if include_columns:
         include_columns = set(include_columns.split(','))
         def filter_record(r):
@@ -524,7 +525,7 @@ def load(name, include_columns=None, create=True, remove=False):
     loader = TableLoader(name)
     patcher = TablePatcher(loader.model, db.session, key_columns=['id'])
     records = (filter_record(loader.decode_dict(flask.json.loads(line)))
-               for line in sys.stdin)
+               for line in _file)
     patcher.update(records, create=create, remove=remove)
 
 
@@ -550,6 +551,19 @@ def dump_tables(folder_path=None, xclude=None):
         with open(file_path, 'w', encoding='utf-8') as table_fd:
             count = dump(name, _file=table_fd)
         print(count, 'rows')
+
+
+@db_manager.command
+def load_tables(names, folder_path=None, remove=False):
+    if folder_path is None:
+        folder_path = flask.current_app.config['MPTRACKER_DUMP_TABLES_FOLDER']
+        assert folder_path
+    names = names.split(',')
+    for name in names:
+        file_name = '%s.json' % name
+        with open(path(folder_path) / file_name, 'rb') as f:
+            print(name, end=' ... ')
+            load(name, remove=remove, _file=f)
 
 
 def create_backup(backup_path):
