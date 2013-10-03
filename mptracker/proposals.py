@@ -24,6 +24,14 @@ def mandate_proposals(mandate_id):
     })
 
 
+@proposals.route('/proposals/')
+def proposal_index():
+    return flask.render_template('proposals/index.html', **{
+        'proposals': iter(models.Proposal.query
+                          .order_by(models.Proposal.date.desc())),
+    })
+
+
 @proposals.route('/proposals/<uuid:proposal_id>')
 def proposal(proposal_id):
     proposal = (models.Proposal.query

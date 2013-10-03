@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>Propuneri legislative</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <th>Dată</th>
+      <th>Titlu</th>
+    </thead>
+
+   {% for proposal in proposals %}
+    <tr>
+      <td>{{ proposal.date }}</td>
+      <td>
+        {% set url = url_for('.proposal', proposal_id=proposal.id) %}
+        <a href="{{ url }}">{{ proposal.title|truncate(100) }}</a>
+      </td>
+    </tr>
+   {% endfor %}
+  </table>
+
+{% endblock %}
