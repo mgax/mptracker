@@ -463,7 +463,7 @@ class TableLoader:
         for col in self.model.__table__._columns:
             self.columns.append(col.name)
             if isinstance(col.type, db.Date):
-                self.encoder[col.name] = lambda v: v.isoformat()
+                self.encoder[col.name] = lambda v: v and v.isoformat()
                 self.decoder[col.name] = parse_date
             else:
                 self.encoder[col.name] = self.decoder[col.name] = identity

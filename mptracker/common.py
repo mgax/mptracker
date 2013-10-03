@@ -37,7 +37,7 @@ def register_url_converters(state):
 
 
 def parse_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%d').date()
+    return date_str and datetime.strptime(date_str, '%Y-%m-%d').date()
 
 
 def fix_local_chars(txt):
