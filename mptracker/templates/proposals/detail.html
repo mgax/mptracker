@@ -27,14 +27,14 @@
   {% for sp in sponsorships %}
     <section class="panel panel-default">
       <div class="panel-heading">
-          <div class="panel-heading-id">{{ sp.id }}</div>
+        <div class="panel-heading-id">{{ sp.id }}</div>
 
-          <h3 class="panel-title">
-            {%- set person = sp['mandate'].person %}
-            {%- set url = url_for('pages.person', person_id=person.id) %}
-            Rezultatul analizei –
-            <a href="{{ url }}">{{ person }}</a>
-          </h3>
+        <h3 class="panel-title">
+          {%- set person = sp['mandate'].person %}
+          {%- set url = url_for('pages.person', person_id=person.id) %}
+          Rezultatul analizei –
+          <a href="{{ url }}">{{ person }}</a>
+        </h3>
       </div>
 
       <div class="panel-body">
