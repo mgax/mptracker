@@ -2,6 +2,15 @@
 
 
 {% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
+        ("deputați",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
   <h1>Persoane</h1>
 
   <article class="people">

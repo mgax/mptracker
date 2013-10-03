@@ -4,6 +4,8 @@
 {% block content %}
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
         ("comisii",
             None),
       ] %}

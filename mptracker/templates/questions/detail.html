@@ -95,6 +95,8 @@
 {% block content %}
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
         ("întrebări și interpelări ",
             url_for('.mandate_index')),
         ("%s-%s"|format(question.date, question.number),

@@ -4,9 +4,11 @@
 {% block content %}
   {%- from 'bits.html' import breadcrumbs %}
   {%- set breadcrumb_links = [
-        ("deputați",
+        ("mptracker",
+            url_for('pages.home')),
+        ("persoane",
             url_for('.person_index')),
-        (person.cdep_id,
+        (person|string,
             None),
       ] %}
   {{ breadcrumbs(breadcrumb_links) }}
