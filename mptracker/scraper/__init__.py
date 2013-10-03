@@ -102,11 +102,12 @@ def committee_summaries(year=2013):
 
 
 @scraper_manager.command
-def proposals(dry_run=False):
+def proposals(dry_run=False, cache_name=None, throttle=None):
     from mptracker.scraper.proposals import ProposalScraper
 
-    proposal_scraper = ProposalScraper(create_session(cache_name='page-cache',
-                                                      throttle=0.5))
+    proposal_scraper = ProposalScraper(create_session(
+            cache_name=cache_name,
+            throttle=float(throttle) if throttle else None))
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
