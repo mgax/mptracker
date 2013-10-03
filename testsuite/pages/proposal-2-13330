@@ -1,0 +1,239 @@
+<html lang="ro"><head><title>URMARIREA PROCESULUI LEGISLATIV</title><meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-2" /><link rel="stylesheet" href="/stylesheets/general.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/general_roz.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/home.css" type="text/css" /></head><body style="background: url(/img/banners/body101.gif) #f3f3f3 fixed no-repeat 0px 100%;">
+    <script type='text/javascript' src='/js/hv_menu_conf_1.js'></script>
+    <script type="text/javascript">
+    var NoOffFirstLineMenus=4;			                      // Number of first level items
+  	var LowBgColor="#c7c7c7";			          // Background color when mouse is not over
+  	var LowSubBgColor="#c7c7c7";			        // Background color when mouse is not over on subs
+  	var HighBgColor="#730A48";			          // Background color when mouse is over
+  	var HighSubBgColor="#730A48";			      // Background color when mouse is over on subs
+  	var FontLowColor="#730A48";			                      // Font color when mouse is not over
+  	var FontSubLowColor="#730A48";		                    // Font color subs when mouse is not over
+  	var FontHighColor="#FFFFFF";			                    // Font color when mouse is over
+  	var FontSubHighColor="#FFFFFF";		                    // Font color subs when mouse is over
+  	var BorderColor="#c7c7c7";			          // Border color
+  	var BorderSubColor="#b19477";			                    // Border color for subs
+  	var BorderWidth=1;				                            // Border width
+  	var BorderBtwnElmnts=1;				                        // Border between elements 1 or 0
+  	var FontFamily="arial,comic sans ms,technical"	      // Font family menu items
+  	var FontSize=9;				                                // Font size menu items
+  	var FontBold=0;					                              // Bold menu items 1 or 0
+  	var FontItalic=0;				                              // Italic menu items 1 or 0
+  	var MenuTextCentered="left";			                    // Item text position "left", "center" or "right"
+  	var MenuCentered="left";			                        // Menu horizontal position "left", "center" or "right"
+  	var MenuVerticalCentered="top";		                    // Menu vertical position "top", "middle","bottom" or static
+  	var ChildOverlap=.2;				                          // horizontal overlap child/ parent
+  	var ChildVerticalOverlap=.2;			                    // vertical overlap child/parent
+  	var StartTop=0;					                              // Menu offset x coordinate
+  	var StartLeft=0;				                              // Menu offset y coordinate
+  	var VerCorrect=0;				                              // Multiple frames y correction
+  	var HorCorrect=0;				                              // Multiple frames x correction
+  	var LeftPaddng=3;				                              // Left padding
+  	var TopPaddng=2;				                              // Top padding
+  	var FirstLineHorizontal=1;			                      // SET TO 1 FOR HORIZONTAL MENU, 0 FOR VERTICAL
+  	var MenuFramesVertical=1;			                        // Frames in cols or rows 1 or 0
+  	var DissapearDelay=1000;			                        // delay before menu folds in
+  	var TakeOverBgColor=1;				                        // Menu frame takes over background color subitem frame
+  	var FirstLineFrame="navig";			                      // Frame where first level appears
+  	var SecLineFrame="space";			                        // Frame where sub levels appear
+  	var DocTargetFrame="space";			                      // Frame where target documents appear
+  	var TargetLoc="MenuPos";			                        // span id for relative positioning
+  	var HideTop=0;					                              // Hide first level when loading new document 1 or 0
+  	var MenuWrap=1;					                              // enables/ disables menu wrap 1 or 0
+  	var RightToLeft=0;				                            // enables/ disables right to left unfold 1 or 0
+  	var UnfoldsOnClick=1;				                          // Level 1 unfolds onclick/ onmouseover
+  	var WebMasterCheck=0;				                          // menu tree checking on or off 1 or 0
+  	var ShowArrow=1;				                              // Uses arrow gifs when 1
+  	var KeepHilite=1;				                              // Keep selected path highligthed
+  	var Arrws=["/img/icon_link_r.gif",9,5,"",0,0,"/img/icon_link_l.gif",9,5];	// Arrow source, width and height
+    </script>
+    <script type='text/javascript' src='/js/hv_menu.js'></script>
+<table border=0 cellspacing=0 cellpadding=0 width=985>
+<tr>
+  <td><img src="/img/spacer.gif" width=40></td>
+  <td width="100%">
+    <table style="background: url(/img/banners/cd_1.gif) no-repeat" cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <tr>
+      <td height=22 width=65><a href="/"><img src="/img/spacer.gif" height=22 width=65></a></td>
+    </tr>
+    <tr>
+      <td valign=top width=65 height=51><a href="/pls/dic/site.home?idl=1"><img src="/img/spacer.gif" height=51 width=65></a></td>
+      <td valign=top width="100%" height=51>
+        <table border=0 cellspacing=0 cellpadding=0 width=550>
+        <tr>
+        <td>
+          <div id=MenuTop style="margin-top: 33px; margin-left: 0px;">
+<a href="/pls/dic/site.page?id=794">Menţiune juridică</a> |
+<a href="/pls/dic/site.page?id=709">Forum</a> | <a href="/pls/dic/site.page?den=servicii-contact&amp;idl=1">Contact</a>
+
+          </div>
+        </td>
+        <td align="right">
+          <div id=MenuTop style="margin-top: 27px;">
+          <form name="frmSearch" method="post" action="/pls/proiecte/upl_pck.cauta?cam=2">
+          <table cellSpacing=0 cellPadding=0 border=0>
+          <tr>
+            <td vAlign=middle><input type="text" name="sir" size="15" class="size1"></td>
+            <td vAlign=middle>&nbsp;<a href="#">Caută</a></td>
+          </tr>
+          </table>
+          </form>
+          </div>
+        </td>      
+        </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign=top align=left width="100%" colSpan=3 height=20><div id="MenuPos" style="position:relative; height=18; MARGIN-RIGHT: 10px; MARGIN-LEFT: 10px; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px;"></div></td>
+    </tr>
+    </table>
+<table width="100%" border=0 cellspacing=5 cellpadding=0>
+<tr valign="top">
+<td><img src="/img/spacer.gif" width=145 height=1 hspace=0 vspace=0 /><table border=0 cellpadding=0 cellspacing=0 align="center">
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1340" valign="top"><td width="100%" colspan=2 class="menuoff" align="left"><i>Legendă culori:</i></td></tr><tr id="itm1341" valign="top"><td width="100%" colspan=2 class="menuoff" align="left"><table width="100%" cellspacing=0 cellpadding=0 border=0>
+<tr valign="top" bgcolor="#ffffe8"><td nowrap class="menuoff">PA - </td><td class="menuoff">Parlament</td></tr>
+<tr valign="top" bgcolor="#FFF0D8"><td nowrap class="menuoff">CD - </td><td class="menuoff">Camera Deputatilor</td></tr>
+<tr valign="top" bgcolor="#DFEFFF"><td nowrap class="menuoff">SE - </td><td class="menuoff">Senat</td></tr>
+</table>
+</td></tr></tbody></table>
+</td></tr>
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td bgcolor="#ffffff" colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1320" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.home?cam=2"><B>Iniţiative legislative la Camera Deputaţilor</B></a></td></tr><tr id="itm1322" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left">înregistrate în:<a href="upl_pck.lista?cam=2&anp=2012">2012</a>
+</td></tr><tr id="itm1323" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left">promulgate legi în:<a href="upl_pck.lista?cam=2&anl=2012">2012</a>
+</td></tr><tr id="itm3045" valign="top"><td align="center"><img src="/img/icon_maro.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.lista?cam=2&std=DZ">în dezbatere publică</a>
+</td></tr><tr id="itm3048" valign="top"><td colspan=2><table border=0 cellspacing=0 cellpadding=0 width="100%"><td height=1 bgcolor="#666666"><img src="/img/spacer.gif"</td></table></td></tr><tr id="itm3046" valign="top"><td align="center"><img src="/imagini/pdf_15_16.jpg" alt="" border=0 width=15 height=16 /></td><td width="100%"  class="menuoff" align="left"><a href="/pdfs/HBP_ConsultarePublica.pdf" target="PDF">Hotărâre privind gestionarea propunerilor &#537;i sugestiilor formulate de către persoanele fizice &#537;i/sau juridice interesate la propunerile legisltive aflate în dezbatere publică</a></td></tr><tr id="itm2163" valign="top"><td colspan=2><table border=0 cellspacing=0 cellpadding=0 width="100%"><td height=1 bgcolor="#666666"><img src="/img/spacer.gif"</td></table></td></tr><tr id="itm2143" valign="top"><td align="center"><img src="/img/atentie_icon1.gif" alt="" border=0 width=14 height=14 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.termene">Termene adoptare</a></td></tr><tr id="itm1324" valign="top"><td align="center"><img src="/img/question_icon1.gif" alt="" border=0 width=14 height=14 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.interogare">Interogare</a></td></tr><tr id="itm3047" valign="top"><td colspan=2><table border=0 cellspacing=0 cellpadding=0 width="100%"><td height=1 bgcolor="#666666"><img src="/img/spacer.gif"</td></table></td></tr><tr id="itm1321" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/proiecte/upl_pck.home?cam=1">Iniţiative legislative la Senat</a></td></tr><tr id="itm3044" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/dic/site.page?id=927">Buletine legislative</a></td></tr></tbody></table></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+</td></tr>
+</table></td>
+<td width="100%">
+<table border=0 width="100%">
+   	       <tr valign="top">
+   	       <td nowrap class="cale1">Sunteti în sectiunea:</td>
+   	       <td class="cale2" width="100%"><A HREF="/">Prima pagina</A> &gt; <A HREF="/pls/dic/site.page?den=legislativ1">Proceduri parlamentare</A> &gt; <A HREF="upl_pck.home?cam=2">Proces legislativ la Camera Deputatilor</A> &gt; BP327/2013</td>
+<td width=50 align="right"><a href="/pls/proiecte/upl_pck.proiect?idp=13330&cam=2&prn=1" target="PRN"><img src="/img/printer0.jpg" border=0 alt="Versiunea pentru printare"></a></td>
+</tr></table>
+<p>
+<table border=0 cellspacing=0 cellpadding=5 width="100%">
+<tr valign="top">
+<td width=50><img src="/img/spacer.gif" border=0 width=40 height=8><img src="/img/bile.gif" border=0 width=38 height=10></td>
+<td class="headline" width="100%">BP327/2013<br>Propunere legislativă privind facilită&#539;ile acordate &#537;omerilor pentru transportul intern</td>
+</tr>
+</table>
+<p>
+<table border=0 cellspacing=0 cellpadding=0 width="100%"><td>
+<p><table width="100%" border=0 cellspacing=0 cellpadding=3>
+<tr valign=top><td bgcolor="fff0d8">Nr. înregistrare:</td></tr>
+<tr valign=top><td bgcolor="fff0d8">- B.P.I.:</td><td width="100%">327/29-05-2013</td></tr>
+<tr valign=top><td bgcolor="fff0d8">- Camera Deputatilor:</td><td width="100%"><b>BP327/29.05.2013</b></td></tr>
+<tr valign=top><td bgcolor="fff0d8">- Senat:</td><td><A HREF="/pls/proiecte/upl_pck.proiect?cam=1&idp=17334">L421/03.09.2013</A></td></tr>
+<tr valign=top><td bgcolor="fff0d8">Procedura legislativa:</td><td>cf. Constitutiei revizuita în 2003</td></tr>
+<tr valign=top><td bgcolor="fff0d8">Camera decizionala:</td><td><b>Camera Deputatilor</b>
+</td></tr>
+<tr valign=top><td bgcolor="fff0d8">Tip initiativa:</td><td>Propunere legislativa
+</td></tr>
+<tr valign=top><td bgcolor="fff0d8" nowrap>Procedura de urgenta:</td><td>nu</td></tr>
+<tr valign=top><td bgcolor="#fff0d8">Stadiu:</td><td>
+ la Senat
+</td></tr>
+<tr valign=top><td bgcolor="#fff0d8">Initiator:</td><td>15 deputaţi, din care:<table border=0><tr valign="top"><td nowrap>- PC:</td><td><A HREF="/pls/parlam/structura.mp?idm=17&leg=2012&cam=2">Avram&nbsp;Constantin</A>, <A HREF="/pls/parlam/structura.mp?idm=65&leg=2012&cam=2">Cioată&nbsp;Cezar</A>, <A HREF="/pls/parlam/structura.mp?idm=72&leg=2012&cam=2">Ciucă&nbsp;Liviu-Bogdan</A>, <A HREF="/pls/parlam/structura.mp?idm=77&leg=2012&cam=2">Coman&nbsp;Gheorghe</A>, <A HREF="/pls/parlam/structura.mp?idm=101&leg=2012&cam=2">Diniţă&nbsp;Ion</A>, <A HREF="/pls/parlam/structura.mp?idm=117&leg=2012&cam=2">Drăguşanu&nbsp;Vasile-Cătălin</A>, <A HREF="/pls/parlam/structura.mp?idm=120&leg=2012&cam=2">Dumitru&nbsp;Georgică</A>, <A HREF="/pls/parlam/structura.mp?idm=133&leg=2012&cam=2">Florea&nbsp;Damian</A>, <A HREF="/pls/parlam/structura.mp?idm=149&leg=2012&cam=2">Giurescu&nbsp;Dinu</A>, <A HREF="/pls/parlam/structura.mp?idm=180&leg=2012&cam=2">Ionescu&nbsp;Aurelian</A>, <A HREF="/pls/parlam/structura.mp?idm=183&leg=2012&cam=2">Irimie&nbsp;Vicenţiu-Mircea</A>, <A HREF="/pls/parlam/structura.mp?idm=233&leg=2012&cam=2">Moldovan&nbsp;Ioan</A>, <A HREF="/pls/parlam/structura.mp?idm=248&leg=2012&cam=2">Negruţ&nbsp;Cornelia</A>, <A HREF="/pls/parlam/structura.mp?idm=305&leg=2012&cam=2">Raeţchi&nbsp;Ovidiu Alexandru</A>, <A HREF="/pls/parlam/structura.mp?idm=369&leg=2012&cam=2">Tănăsescu&nbsp;Claudiu-Andrei</A></td></tr></table></td></tr>
+<tr valign=top><td bgcolor="#fff0d8">Consultati:</td><td><table border=0 cellspacing=0 cellpadding=2>
+<tr valign="top"><td width=20><A HREF="/proiecte/bp/2013/300/20/7/em327.pdf" TARGET="PDF"><img src="/img/icon_pdf_small.gif" border=0 alt="Format PDF - 53 kb"></A></td>
+<td colspan=3 width="100%">Expunerea de motive</td>
+</tr>
+<tr valign="top"><td width=20><A HREF="/proiecte/bp/2013/300/20/7/pl327.pdf" TARGET="PDF"><img src="/img/icon_pdf_small.gif" border=0 alt="Format PDF - 49 kb"></A></td>
+<td colspan=3 width="100%">Forma iniţiatorului</td>
+</tr>
+<tr><td colspan=4><A HREF="http://webapp.senat.ro/senat.lista.asp?pageNumber=0&nri=L421&ani=2013&inf=0&Stadiu=&tip=&urg=0&orgt=&orgn=&orga=&ini=&ins=&sir=&pri=" TARGET="SENAT">fisa de la Senat</A></td></tr>
+</table></td></tr>
+</table>
+
+<p><table width="100%" border=0 cellspacing=0 cellpadding=0>
+<tr height=18><td colspan=3 class="headlinetext"><b>Derularea procedurii legislative</b></td></tr>
+<tr height=18 bgcolor="#E0E0E0" align="center">
+  <td><b>Data</b></td>
+  <td bgcolor="#E0E0E0">&nbsp;
+&nbsp
+
+  &nbsp;</td>
+  <td colspan=2 align="center"><b>Actiunea</td>
+</tr>
+<tr>
+  <td colspan=2>&nbsp;</td>
+  <td><img height=1 width="100" src="/img/spacer.gif" align="left" border=0></td>
+</tr>
+<tr><td bgcolor="#FFFFFF"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr>
+                <td bgcolor="#fff0d8"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#ffffff" colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#666666" rowspan="3"><img src="/img/spacer.gif" width=1 height=1 hspace="0" vspace="0" border="0" align="left"></td>
+                <td valign="center" rowspan="3"><img src="/img/rarr2.gif" border=0 /></td>
+                <td valign="center" bgcolor="#fff0d8" rowspan="3">CD</td>
+               </tr>
+<tr><td bgcolor="#fff0d8"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#fff0d8">
+03.06.2013
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+prezentare în Biroul Permanent al Camerei Deputatilor
+<dd><table cellspacing=0 cellpadding=2 border=0>
+<tr valign="top"><td width=20><A HREF="/proiecte/bp/2013/300/20/7/in327.pdf" TARGET="PDF"><img src="/img/icon_pdf_small.gif" border=0 alt="Format PDF - 39 kb"></A></td>
+<td>Adresa iniţiatorului </td></tr>
+</table>
+</td></tr>
+<tr><td bgcolor="#fff0d8"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td><td colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td><td colspan=3 bgcolor="#666666"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr><td bgcolor="#fff0d8"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr>
+                <td bgcolor="#dfefff"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#ffffff" colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td>
+                <td bgcolor="#666666" rowspan="3"><img src="/img/spacer.gif" width=1 height=1 hspace="0" vspace="0" border="0" align="left"></td>
+                <td valign="center" rowspan="3"><img src="/img/rarr2.gif" border=0 /></td>
+                <td valign="center" bgcolor="#dfefff" rowspan="3">SE</td>
+               </tr>
+<tr><td bgcolor="#dfefff"><img height=5 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+<tr valign="top"><td align="center" bgcolor="#dfefff">
+03.06.2013
+</td><td align="center" nowrap>&nbsp;
+&nbsp;</td><td colspan=2>
+înaintat
+la Senat
+</td></tr>
+<tr><td colspan=3><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td><td colspan=3 bgcolor="#666666"><img height=1 src="/img/spacer.gif" width=1 align="left" border=0></td></tr>
+</table>
+</td></table>
+<td width=10><img src="/img/spacer.gif" width=10 height=1 hspace=0 vspace=0 /></td>
+</tr>
+</table>
+
+<table width="100%" border=0>
+<tr>
+<td width="100%" colspan=2><div class=pageHeaderDiv></div></td>
+
+</tr>
+
+
+<tr>
+  <td class="footlinetext"><b>Adresa poştală:</b> Palatul Parlamentului, str.Izvor nr.2-4, sect.5, Bucureşti
+  </td><td align="right" class="footlinetext">joi, 3 octombrie  2013, 11:47</td>
+</tr>
+<tr>
+  <td class="footlinetext"><b>Telefoane (centrala):</b> 021 316 0300, 021 414 1111
+  </td>
+  <td align="right" rowspan=2 class="footlinetext"><a href="https://www.cdep.ro"><img src="/img/eToken.gif" width=60 height=32 border=0 /></a>
+  </td>
+</tr>
+<tr><td class="footlinetext"><b>E-mail:</b> <A HREF="mailto:webmaster@cdep.ro">webmaster@cdep.ro</A></td>
+</table>
+</td></tr></table>
+</body>
+</html>

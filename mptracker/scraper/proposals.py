@@ -1,6 +1,7 @@
 import re
 import logging
 from pyquery import PyQuery as pq
+from werkzeug.urls import url_decode
 from mptracker.scraper.common import Scraper, pqitems, get_cdep_id
 from mptracker.common import fix_local_chars
 
@@ -20,17 +21,19 @@ class ProposalScraper(Scraper):
     def fetch_from_mp_pages(self, mandate_cdep_id_list):
         proposals = {}
         for mandate_cdep_id in mandate_cdep_id_list:
-            for combined_id, proposal_url in \
+            for combined_id, cdeppks, proposal_url in \
                     self.fetch_mp_proposals(mandate_cdep_id):
-                if combined_id in proposals:
-                    proposal_data = proposals[combined_id]
+                if cdeppks in proposals:
+                    proposal_data = proposals[cdeppks]
                     assert proposal_data['url'] == proposal_url
                 else:
                     proposal_data = self.fetch_proposal_details(proposal_url)
                     assert proposal_data['url'] == proposal_url
                     proposal_data['combined_id'] = combined_id
+                    proposal_data['cdeppk_cdep'] = cdeppks[0]
+                    proposal_data['cdeppk_senate'] = cdeppks[1]
                     proposal_data['_sponsorships'] = []
-                    proposals[combined_id] = proposal_data
+                    proposals[cdeppks] = proposal_data
                 proposal_data['_sponsorships'].append(mandate_cdep_id)
         return list(proposals.values())
 
@@ -47,6 +50,13 @@ class ProposalScraper(Scraper):
         assert "Camera Deputaţilor" in next(rows).text()
         for row in rows:
             cols = pqitems(row, 'td')
+            def cdeppk(col):
+                href = col.find('a').attr('href') or '?'
+                val = url_decode(href.split('?', 1)[1]).get('idp')
+                return int(val) if val else None
+            cdep_code = cdeppk(cols[1])
+            senate_code = cdeppk(cols[2])
+            cdeppks = (cdep_code, senate_code)
             cdep_code = cols[1].text()
             senate_code = cols[2].text()
             combined_id = 'cdep=%s senate=%s' % (cdep_code, senate_code)
@@ -55,7 +65,7 @@ class ProposalScraper(Scraper):
             if 'cam=' not in url:
                 assert '?' in url
                 url += '&cam=2'
-            yield combined_id, url
+            yield combined_id, cdeppks, url
 
     def fetch_proposal_details(self, url):
         page = self.fetch_url(url)

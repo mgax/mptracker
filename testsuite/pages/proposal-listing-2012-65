@@ -1,0 +1,191 @@
+<html lang="ro"><head><title>STRUCTURA PARLAMENTULUI ROMÂNIEI 2012-prezent</title><meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-2" /><link rel="stylesheet" href="/stylesheets/general.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/general_roz.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/home.css" type="text/css" /><script type="text/javascript" src="/highslide/highslide.js"></script><link rel="stylesheet" type="text/css" href="/highslide/highslide.css" /></head><body style="background: url(/img/banners/body101.gif) #f3f3f3 fixed no-repeat 0px 100%;">
+    <script type='text/javascript' src='/js/hv_menu_conf_1.js'></script>
+    <script type="text/javascript">
+    var NoOffFirstLineMenus=4;			                      // Number of first level items
+  	var LowBgColor="#c7c7c7";			          // Background color when mouse is not over
+  	var LowSubBgColor="#c7c7c7";			        // Background color when mouse is not over on subs
+  	var HighBgColor="#730A48";			          // Background color when mouse is over
+  	var HighSubBgColor="#730A48";			      // Background color when mouse is over on subs
+  	var FontLowColor="#730A48";			                      // Font color when mouse is not over
+  	var FontSubLowColor="#730A48";		                    // Font color subs when mouse is not over
+  	var FontHighColor="#FFFFFF";			                    // Font color when mouse is over
+  	var FontSubHighColor="#FFFFFF";		                    // Font color subs when mouse is over
+  	var BorderColor="#c7c7c7";			          // Border color
+  	var BorderSubColor="#b19477";			                    // Border color for subs
+  	var BorderWidth=1;				                            // Border width
+  	var BorderBtwnElmnts=1;				                        // Border between elements 1 or 0
+  	var FontFamily="arial,comic sans ms,technical"	      // Font family menu items
+  	var FontSize=9;				                                // Font size menu items
+  	var FontBold=0;					                              // Bold menu items 1 or 0
+  	var FontItalic=0;				                              // Italic menu items 1 or 0
+  	var MenuTextCentered="left";			                    // Item text position "left", "center" or "right"
+  	var MenuCentered="left";			                        // Menu horizontal position "left", "center" or "right"
+  	var MenuVerticalCentered="top";		                    // Menu vertical position "top", "middle","bottom" or static
+  	var ChildOverlap=.2;				                          // horizontal overlap child/ parent
+  	var ChildVerticalOverlap=.2;			                    // vertical overlap child/parent
+  	var StartTop=0;					                              // Menu offset x coordinate
+  	var StartLeft=0;				                              // Menu offset y coordinate
+  	var VerCorrect=0;				                              // Multiple frames y correction
+  	var HorCorrect=0;				                              // Multiple frames x correction
+  	var LeftPaddng=3;				                              // Left padding
+  	var TopPaddng=2;				                              // Top padding
+  	var FirstLineHorizontal=1;			                      // SET TO 1 FOR HORIZONTAL MENU, 0 FOR VERTICAL
+  	var MenuFramesVertical=1;			                        // Frames in cols or rows 1 or 0
+  	var DissapearDelay=1000;			                        // delay before menu folds in
+  	var TakeOverBgColor=1;				                        // Menu frame takes over background color subitem frame
+  	var FirstLineFrame="navig";			                      // Frame where first level appears
+  	var SecLineFrame="space";			                        // Frame where sub levels appear
+  	var DocTargetFrame="space";			                      // Frame where target documents appear
+  	var TargetLoc="MenuPos";			                        // span id for relative positioning
+  	var HideTop=0;					                              // Hide first level when loading new document 1 or 0
+  	var MenuWrap=1;					                              // enables/ disables menu wrap 1 or 0
+  	var RightToLeft=0;				                            // enables/ disables right to left unfold 1 or 0
+  	var UnfoldsOnClick=1;				                          // Level 1 unfolds onclick/ onmouseover
+  	var WebMasterCheck=0;				                          // menu tree checking on or off 1 or 0
+  	var ShowArrow=1;				                              // Uses arrow gifs when 1
+  	var KeepHilite=1;				                              // Keep selected path highligthed
+  	var Arrws=["/img/icon_link_r.gif",9,5,"",0,0,"/img/icon_link_l.gif",9,5];	// Arrow source, width and height
+    </script>
+    <script type='text/javascript' src='/js/hv_menu.js'></script>
+<table border=0 cellspacing=0 cellpadding=0 width=985>
+<tr>
+  <td><img src="/img/spacer.gif" width=40></td>
+  <td width="100%">
+    <table style="background: url(/img/banners/cd_1.gif) no-repeat" cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <tr>
+      <td height=22 width=65><a href="/"><img src="/img/spacer.gif" height=22 width=65></a></td>
+    </tr>
+    <tr>
+      <td valign=top width=65 height=51><a href="/pls/dic/site.home?idl=1"><img src="/img/spacer.gif" height=51 width=65></a></td>
+      <td valign=top width="100%" height=51>
+        <table border=0 cellspacing=0 cellpadding=0 width=550>
+        <tr>
+        <td>
+          <div id=MenuTop style="margin-top: 33px; margin-left: 0px;">
+<a href="/pls/dic/site.page?id=794">Menţiune juridică</a> |
+<a href="/pls/dic/site.page?id=709">Forum</a> | <a href="/pls/dic/site.page?den=servicii-contact&amp;idl=1">Contact</a>
+| <a href="/pls/parlam/structura.mp?idm=65&leg=2012&cam=2&pag=2&prn=0&par=&idl=2">English</a>
+| <a href="/pls/parlam/structura.mp?idm=65&leg=2012&cam=2&pag=2&prn=0&par=&idl=3">Français</a>
+
+          </div>
+        </td>
+        <td align="right">
+          <div id=MenuTop style="margin-top: 27px;">
+          <form name="frmSearch" method="post" action=""><input type="hidden" name="idl" value="1">
+          <table cellSpacing=0 cellPadding=0 border=0>
+          <tr>
+            <td vAlign=middle><input type="text" name="sir" size="15" class="size1"></td>
+            <td vAlign=middle>&nbsp;<a href="#">Caută</a></td>
+          </tr>
+          </table>
+          </form>
+          </div>
+        </td>      
+        </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign=top align=left width="100%" colSpan=3 height=20><div id="MenuPos" style="position:relative; height=18; MARGIN-RIGHT: 10px; MARGIN-LEFT: 10px; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px;"></div></td>
+    </tr>
+    </table>
+
+    <table width="100%" border=0 cellspacing=5 cellpadding=0>
+    <tr valign="top">
+<td width="10"><img src="/img/spacer.gif" width=10 height=1 hspace=0 vspace=0 /></td>
+
+      <td>
+        <img src="/img/spacer.gif" width=145 height=1 hspace=0 vspace=0 />
+        <table border=0 cellpadding=0 cellspacing=0 align="center">
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm974" valign="top"><td width="100%" colspan=2 class="menuoff" align="center"><a href="/parlamentari/l2012/mari/Cioata_Cezar.jpg" class="highslide" onclick="return hs.expand(this)"><img src="/parlamentari/l2012/Cioata_Cezar.jpg" border=0 width="150" alt="Cezar Cioată"></a><br>Cezar Cioată<br>n.  12 oct. 1976</td></tr></tbody></table>
+</td></tr>
+<tr><td><img src="/img/spacer.gif" width=1 height=5></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%">
+<tr id="itm" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=0&idl=1"><b>Curriculum Vitae</b></a></td></tr><tr id="itm" valign="top"><td width="100%" colspan=2 class="size1"><font color="#ff9933"><b>Activitate parlamentară</b></font></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=1&idl=1"><b>2012-prezent (dep.)</b></a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=2&idl=1">iniţiative legislative</a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=3&idl=1">întrebări şi interpelări</a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=11&idl=1">moţiuni</a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/steno/steno.lista?idv=6127&leg=2012&idl=1">luări de cuvânt în plen</a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/steno/evot.mp?idm=65&pag=1&cam=2&leg=2012&idl=1">votul electronic</a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=5&idl=1">declaraţie de avere</a></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/spacer.gif" alt="" border=0 width=1 height=1 /></td><td width="100%"  class="size1"><a href="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012&pag=6&idl=1">declaraţie de interese</a></td></tr><tr id="itm" valign="top"><td width="100%" colspan=2 class="size1"><font color="#FF9933"><b>Legături:</b></font></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="size1"><A HREF="mailto:cezar.cioata@cdep.ro">cezar.cioata@cdep.ro</A></td></tr><tr id="itm" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="size1"><A HREF="mailto:cezar_cioata@yahoo.com">cezar_cioata@yahoo.com</A></td></tr><tr id="itm" valign="top"><td width="100%" colspan=2 class="size1">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table></td>
+<td width="100%">
+<table border=0 width="100%">
+     	       <tr valign="top">
+     	       <td nowrap class="cale1">Sunteti în sectiunea:</td>
+     	       <td class="cale2" width="100%"><a href="/pls/dic/site.home?idl=1">Prima pagina</a> &gt; <A HREF="/pls/parlam/structura.home?leg=2012&idl=1">Legislatura 2012-prezent</A> &gt; Camera Deputaţilor &gt; <A HREF="/pls/parlam/structura.mp?idm=65&leg=2012&cam=2&pag=1&idl=1&prn=0&par=">Cezar Cioată</A> &gt; Propuneri legislative</td>
+<td width=50 align="right"><a href="/pls/parlam/structura.mp?idm=65&leg=2012&cam=2&pag=2&idl=1&prn=1" target="PRN"><img src="/img/printer0.jpg" border=0 alt="Versiunea pentru printare"></a></td>
+<td><A HREF="/pls/parlam/structura.mp?idm=64&leg=2012&cam=2&pag=2&idl=1&prn=0&par="><img src="/img/blue_l.gif" border=0></A></td>
+<td><A HREF="/pls/parlam/structura.mp?idm=66&leg=2012&cam=2&pag=2&idl=1&prn=0&par="><img src="/img/blue_r.gif" border=0></A></td>
+</tr></table>
+<p><table border=0 cellspacing=0 cellpadding=5 width="100%">
+<tr valign="top">
+<td width=50><img src="/img/spacer.gif" border=0 width=40 height=8><img src="/img/bile.gif" border=0 width=38 height=10></td>
+<td class="headline" width="100%">Cezar CIOATĂ<br>Propuneri legislative iniţiate în legislatura 2012-prezent</td>
+</tr>
+</table>
+<p>
+<table border=0 cellspacing=0 cellpadding=0 width="100%"><td>
+<p>
+<p>
+  <table border=0 cellspacing=0 cellpadding=3 width="100%">
+  <tr align="center" bgcolor="#14247C"> 
+  <td class="size1" rowspan=2 nowrap><b><font color="#ffffff">Nr.<br>crt.</font></b></td>
+  <td class="size1" colspan=2 nowrap><b><font color="#ffffff">PL înregistrat la</font></b></td>
+  <td class="size1" rowspan=2 width="100%"><b><font color="#ffffff">Titlu</font></b></td>
+  <td class="size1" rowspan=2 nowrap><b><font color="#ffffff">Stadiu</font></b></td>
+  </tr>
+
+  <tr align="center" bgcolor="#14247C"> 
+  <td class="size1"><b><font color="#ffffff">Camera<br>Deputaţilor</font></b></td>
+  <td class="size1"><b><font color="#ffffff">Senat</font></b></td>
+  </tr>
+<tr valign=top bgcolor="#fef9c2"><td align="right" class="headlinetext1">1.</td>
+<td align="center" class="headlinetext1" nowrap>&nbsp;</td>
+<td align="center" class="headlinetext1" nowrap><A HREF="/pls/proiecte/upl_pck.proiect?idp=17113&cam=1">L200/2013</A></td>
+<td class="headlinetext1">Propunere legislativă pentru modificarea art.3 alin.(1) lit.b) din Legea nr.61/1993 privind alocaţia de stat pentru copii, republicată
+</td><td align="center" class="headlinetext1" nowrap>la comisii</td></tr>
+<tr valign=top bgcolor="#fffef2"><td align="right" class="headlinetext1">2.</td>
+<td align="center" class="headlinetext1" nowrap><A HREF="/pls/proiecte/upl_pck.proiect?idp=13330">BP327/2013</A></td>
+<td align="center" class="headlinetext1" nowrap><A HREF="/pls/proiecte/upl_pck.proiect?idp=17334&cam=1">L421/2013</A></td>
+<td class="headlinetext1">Propunere legislativă privind facilită&#539;ile acordate &#537;omerilor pentru transportul intern
+</td><td align="center" class="headlinetext1" nowrap> la Senat</td></tr>
+<tr valign=top bgcolor="#fef9c2"><td align="right" class="headlinetext1">3.</td>
+<td align="center" class="headlinetext1" nowrap><A HREF="/pls/proiecte/upl_pck.proiect?idp=13526">BP536/2013</A></td>
+<td align="center" class="headlinetext1" nowrap>&nbsp;</td>
+<td class="headlinetext1">Propunere legislativă privind completarea &#537;i modificarea unor prevederi din Legea nr.185 din 05 iulie 2013 pentru amplasarea &#537;i autorizarea mijloacelor de publicitate
+</td><td align="center" class="headlinetext1" nowrap> la Senat</td></tr>
+<tr valign=top bgcolor="#fffef2"><td align="right" class="headlinetext1">4.</td>
+<td align="center" class="headlinetext1" nowrap>&nbsp;</td>
+<td align="center" class="headlinetext1" nowrap><A HREF="/pls/proiecte/upl_pck.proiect?idp=17422&cam=1">BP429/2013</A></td>
+<td class="headlinetext1">Propunere legislativă privind revizuirea Constituţiei României
+</td><td align="center" class="headlinetext1" nowrap>aviz/<BR>punct de vedere<BR>solicitat</td></tr>
+</table>
+</td></table>
+<td width=10><img src="/img/spacer.gif" width=10 height=1 hspace=0 vspace=0 /></td>
+</tr>
+</table>
+
+<table width="100%" border=0>
+<tr>
+
+<td width="10" rowspan=4><img src="/img/spacer.gif" alt="" width="10" height="1" hspace=0 vspace=0 align="left" /></td>    
+<td width="100%" colspan=2 bgcolor="#b2b2b2" align="center"><img src="/img/spacer.gif" alt="" width="1" height="1" border=0 align="left"></td>
+<td width="10" rowspan=4><img src="/img/spacer.gif" alt="" width="10" height="1" hspace=0 vspace=0 align="left" /></td>
+
+</tr>
+
+
+<tr>
+  <td class="footlinetext"><b>Adresa poştală:</b> Palatul Parlamentului, str.Izvor nr.2-4, sect.5, Bucureşti
+  </td><td align="right" class="footlinetext">joi, 3 octombrie  2013, 11:46</td>
+</tr>
+<tr>
+  <td class="footlinetext"><b>Telefoane (centrala):</b> 021 316 0300, 021 414 1111
+  </td>
+  <td align="right" rowspan=2 class="footlinetext"><a href="https://www.cdep.ro"><img src="/img/eToken.gif" width=60 height=32 border=0 /></a>
+  </td>
+</tr>
+<tr><td class="footlinetext"><b>E-mail:</b> <A HREF="mailto:webmaster@cdep.ro">webmaster@cdep.ro</A></td>
+</table>
+</body>
+</html>

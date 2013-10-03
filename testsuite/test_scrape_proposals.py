@@ -32,3 +32,26 @@ def test_simple_scraping(session):
     assert "declararea zilei de 10 mai" in pr['title']
     assert pr['url'] == ('http://www.cdep.ro/pls/proiecte/upl_pck.proiect'
                          '?idp=13348&cam=2')
+
+
+def test_correlate_cdep_senate(session):
+    from mptracker.scraper.proposals import ProposalScraper
+
+    session.url_map.update({
+        LISTING_URL % (65, 2012): PAGES_DIR / 'proposal-listing-2012-65',
+        PROPOSAL_URL + 'idp=17113&cam=1': PAGES_DIR / 'proposal-1-17113',
+        PROPOSAL_URL + 'idp=13330&cam=2': PAGES_DIR / 'proposal-2-13330',
+        PROPOSAL_URL + 'idp=13526&cam=2': PAGES_DIR / 'proposal-2-13526',
+        PROPOSAL_URL + 'idp=17422&cam=1': PAGES_DIR / 'proposal-1-17422',
+    })
+
+    scraper = ProposalScraper(session)
+    proposals = scraper.fetch_from_mp_pages([(2012, 65)])
+
+    assert len(proposals) == 4
+    proposals.sort(key=lambda p: p['title'])
+    pr = proposals[0]
+    assert pr['title'] == ('BP327/2013 Propunere legislativă privind '
+        'facilitățile acordate șomerilor pentru transportul intern')
+    assert pr['cdeppk_cdep'] == 13330
+    assert pr['cdeppk_senate'] == 17334
