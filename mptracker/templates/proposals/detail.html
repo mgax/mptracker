@@ -38,7 +38,9 @@
       </div>
 
       <div class="panel-body">
-        {% if sp['match_data'].top_matches %}
+        {% if not sp['match_data'] %}
+          <p>Nu a fost analizat.</p>
+        {% elif sp['match_data'].top_matches %}
           <ul>
           {% for match in sp['match_data'].top_matches %}
             <li>

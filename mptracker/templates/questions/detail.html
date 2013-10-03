@@ -127,7 +127,9 @@
       </div>
 
       <div class="panel-body">
-        {% if ask['match_data'].top_matches %}
+        {% if not ask['match_data'] %}
+          <p>Nu a fost analizat.</p>
+        {% elif ask['match_data'].top_matches %}
           <ul>
           {% for match in ask['match_data'].top_matches %}
             <li>
