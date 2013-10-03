@@ -1,5 +1,6 @@
 import re
 import logging
+from datetime import date
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
 from mptracker.scraper.common import Scraper, pqitems, get_cdep_id
@@ -8,6 +9,22 @@ from mptracker.common import fix_local_chars
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
+def get_date_from_numbers(numbers):
+    rv = None
+    for n in numbers:
+        if n:
+            m = re.search(r'(?P<day>\d{2})[.\-]'
+                          r'(?P<month>\d{2})[.\-]'
+                          r'(?P<year>\d{4})', n)
+            if m is not None:
+                new_date = date(int(m.group('year')),
+                                int(m.group('month')),
+                                int(m.group('day')))
+                if rv is None or new_date < rv:
+                    rv = new_date
+    return rv
 
 
 class ProposalScraper(Scraper):
@@ -75,8 +92,14 @@ class ProposalScraper(Scraper):
             label = cols.eq(0).text().strip()
             val_td = cols.eq(1) if len(cols) > 1 else None
 
-            if label == "- Camera Deputatilor:":
-                out['cdep_serial'] = val_td.text()
+            if label == "- B.P.I.:":
+                out['number_bpi'] = val_td.text()
+
+            elif label == "- Camera Deputatilor:":
+                out['number_cdep'] = val_td.text()
+
+            elif label == "- Senat:":
+                out['number_senate'] = val_td.text()
 
             elif label == "Tip initiativa:":
                 out['proposal_type'] = val_td.text()
@@ -96,5 +119,10 @@ class ProposalScraper(Scraper):
                     out['decision_chamber'] = 'senat'
                 else:
                     logger.warn("Unknown decision_chamber %r", txt)
+
+        out['date'] = get_date_from_numbers([out.get('number_bpi'),
+                                             out.get('number_cdep'),
+                                             out.get('number_senate')])
+        assert out['date'] is not None, "No date for proposal %r" % url
 
         return out
