@@ -320,9 +320,12 @@ class Proposal(db.Model):
     title = db.Column(db.Text)
     url = db.Column(db.Text)
     pdf_url = db.Column(db.Text)
-    cdep_serial = db.Column(db.Text)
     cdeppk_cdep = db.Column(db.Integer)
     cdeppk_senate = db.Column(db.Integer)
+    number_cdep = db.Column(db.Text)
+    number_senate = db.Column(db.Text)
+    number_bpi = db.Column(db.Text)
+    date = db.Column(db.Date)
     proposal_type = db.Column(db.Text)
 
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
