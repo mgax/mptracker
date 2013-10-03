@@ -11,7 +11,8 @@ scraper_manager = Manager()
 
 
 @scraper_manager.command
-def questions(year='2013', reimport_existing=False):
+def questions(year='2013', reimport_existing=False,
+              cache_name=None, throttle=None):
     from mptracker.scraper.questions import QuestionScraper
 
     if reimport_existing:
@@ -23,7 +24,8 @@ def questions(year='2013', reimport_existing=False):
         return url in known_urls
 
     questions_scraper = QuestionScraper(
-            session=create_session(cache_name='page-cache', throttle=0.5),
+            session=create_session(cache_name=cache_name,
+                                   throttle=throttle and float(throttle)),
             skip=skip_question)
 
     mandate_lookup = models.MandateLookup()
