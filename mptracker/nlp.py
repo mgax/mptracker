@@ -106,7 +106,7 @@ def prepare_vocabulary(name_list):
 def match_names(text, name_list, phrase_list, mp_info={}):
     MP_TITLE_LOOKBEHIND_TOKENS = 7
 
-    name_vocabulary = prepare_vocabulary(name_list)
+    name_vocabulary = prepare_vocabulary(name_list + phrase_list)
     phrase_vocabulary = prepare_vocabulary(phrase_list)
 
     matches = []
