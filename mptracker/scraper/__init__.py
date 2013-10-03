@@ -115,13 +115,21 @@ def proposals(dry_run=False):
                   for m in models.Mandate.query
                   if m.year == 2012}
 
+    id_cdeppk_cdep = {}
+    id_cdeppk_senate = {}
+    for proposal in models.Proposal.query:
+        if proposal.cdeppk_cdep:
+            id_cdeppk_cdep[proposal.cdeppk_cdep] = proposal.id
+        if proposal.cdeppk_senate:
+            id_cdeppk_senate[proposal.cdeppk_senate] = proposal.id
+
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
     proposals = proposal_scraper.fetch_from_mp_pages(set(by_cdep_id.keys()))
 
     proposal_patcher = TablePatcher(models.Proposal,
                                     models.db.session,
-                                    key_columns=['combined_id'])
+                                    key_columns=['id'])
 
     sp_updates = sp_added = sp_removed = 0
 
@@ -130,6 +138,12 @@ def proposals(dry_run=False):
             if 'decision_chamber' in record:
                 slug = record.pop('decision_chamber')
                 record['decision_chamber'] = chamber_by_slug[slug]
+
+            idc = id_cdeppk_cdep.get(record['cdeppk_cdep'])
+            ids = id_cdeppk_senate.get(record['cdeppk_senate'])
+            if idc and ids:
+                assert idc == ids
+            record['id'] = idc or ids or models.random_uuid()
 
             sponsorships = record.pop('_sponsorships')
             url = record['url']
@@ -142,14 +156,14 @@ def proposals(dry_run=False):
             to_remove = set(existing_sponsorships) - set(new_people)
             to_add = set(new_people) - set(existing_sponsorships)
             if to_remove:
-                logger.info("Removing sponsors %s: %r", row.combined_id,
+                logger.info("Removing sponsors %s: %r", row.id,
                             [cdep_id(m) for m in to_remove])
                 sp_removed += 1
                 for m in to_remove:
                     sp = existing_sponsorships[m]
                     models.db.session.delete(sp)
             if to_add:
-                logger.info("Adding sponsors %s: %r", row.combined_id,
+                logger.info("Adding sponsors %s: %r", row.id,
                             [cdep_id(m) for m in to_add])
                 sp_added += 1
                 for m in to_add:

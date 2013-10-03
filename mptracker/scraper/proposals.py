@@ -21,7 +21,7 @@ class ProposalScraper(Scraper):
     def fetch_from_mp_pages(self, mandate_cdep_id_list):
         proposals = {}
         for mandate_cdep_id in mandate_cdep_id_list:
-            for combined_id, cdeppks, proposal_url in \
+            for cdeppks, proposal_url in \
                     self.fetch_mp_proposals(mandate_cdep_id):
                 if cdeppks in proposals:
                     proposal_data = proposals[cdeppks]
@@ -29,7 +29,6 @@ class ProposalScraper(Scraper):
                 else:
                     proposal_data = self.fetch_proposal_details(proposal_url)
                     assert proposal_data['url'] == proposal_url
-                    proposal_data['combined_id'] = combined_id
                     proposal_data['cdeppk_cdep'] = cdeppks[0]
                     proposal_data['cdeppk_senate'] = cdeppks[1]
                     proposal_data['_sponsorships'] = []
@@ -54,18 +53,13 @@ class ProposalScraper(Scraper):
                 href = col.find('a').attr('href') or '?'
                 val = url_decode(href.split('?', 1)[1]).get('idp')
                 return int(val) if val else None
-            cdep_code = cdeppk(cols[1])
-            senate_code = cdeppk(cols[2])
-            cdeppks = (cdep_code, senate_code)
-            cdep_code = cols[1].text()
-            senate_code = cols[2].text()
-            combined_id = 'cdep=%s senate=%s' % (cdep_code, senate_code)
+            cdeppks = (cdeppk(cols[1]), cdeppk(cols[2]))
             link = pqitems(row, 'a')[0]
             url = link.attr('href')
             if 'cam=' not in url:
                 assert '?' in url
                 url += '&cam=2'
-            yield combined_id, cdeppks, url
+            yield cdeppks, url
 
     def fetch_proposal_details(self, url):
         page = self.fetch_url(url)
