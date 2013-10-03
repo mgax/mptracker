@@ -321,7 +321,6 @@ class Proposal(db.Model):
     url = db.Column(db.Text)
     pdf_url = db.Column(db.Text)
     cdep_serial = db.Column(db.Text)
-    combined_id = db.Column(db.Text)
     cdeppk_cdep = db.Column(db.Integer)
     cdeppk_senate = db.Column(db.Integer)
     proposal_type = db.Column(db.Text)
