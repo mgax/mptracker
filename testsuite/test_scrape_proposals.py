@@ -23,8 +23,9 @@ def test_simple_scraping(session):
     proposals.sort(key=lambda p: p['title'])
     pr = proposals[0]
     assert pr['_sponsorships'] == [(2012, 126)]
-    assert pr['cdep_serial'] == 'BP346/04.06.2013'
-    assert pr['combined_id'] == 'cdep=BP346/2013 senate=L430/2013'
+    assert pr['number_bpi'] == '346/04-06-2013'
+    assert pr['number_cdep'] == 'BP346/04.06.2013'
+    assert pr['number_senate'] == 'L430/03.09.2013'
     assert pr['decision_chamber'] == 'cdep'
     assert pr['proposal_type'] == 'Propunere legislativa'
     assert pr['pdf_url'] == ('http://www.cdep.ro/proiecte/bp/'
