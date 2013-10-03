@@ -4,7 +4,7 @@ from datetime import date
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
-                                      get_cdep_id)
+                                      parse_cdep_id)
 
 
 class Day:
@@ -63,7 +63,6 @@ class TranscriptScraper(Scraper):
         table_rows = pqitems(page, '#pageContent > table tr')
         transcript_paragraph = None
         transcript_chapter = Chapter()
-        text_buffer = []
 
         def save_paragraph():
             text = "\n".join(transcript_paragraph.pop('text_buffer'))
@@ -80,12 +79,13 @@ class TranscriptScraper(Scraper):
                         assert len(speakers) == 1
                         speaker_name = self.trim_name(speakers.text())
                         link = speakers.parents('a')
-                        if link:
-                            speaker_cdep_id = get_cdep_id(link.attr('href'))
-                        else:
-                            speaker_cdep_id = None
+                        if not link:
+                            transcript_paragraph = None
+                            continue
+                        (year, number) = parse_cdep_id(link.attr('href'))
                         transcript_paragraph = Paragraph({
-                            'speaker_cdep_id': speaker_cdep_id,
+                            'mandate_year': year,
+                            'mandate_number': number,
                             'speaker_name': speaker_name,
                             'text_buffer': [],
                             'serial': self.next_paragraph_serial()
@@ -93,7 +93,7 @@ class TranscriptScraper(Scraper):
 
                     else:
                         if transcript_paragraph is None:
-                            continue  # still looking for first speaker
+                            continue
                         text = paragraph.text()
                         transcript_paragraph['text_buffer'].append(text)
 

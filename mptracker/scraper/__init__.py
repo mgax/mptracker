@@ -1,8 +1,9 @@
 import logging
+from datetime import timedelta
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import TablePatcher, fix_local_chars
+from mptracker.common import TablePatcher, fix_local_chars, parse_date
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -180,6 +181,56 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
+
+
+@scraper_manager.command
+def transcripts(day_start, n_days=1, cache_name=None, throttle=None):
+    from mptracker.scraper.transcripts import TranscriptScraper
+    n_days = int(n_days)
+
+    transcript_scraper = TranscriptScraper(
+            session=create_session(cache_name=cache_name,
+                                   throttle=throttle and float(throttle)))
+
+    mandate_lookup = models.MandateLookup()
+
+    transcript_patcher = TablePatcher(models.Transcript,
+                                      models.db.session,
+                                      key_columns=['serial'])
+
+    day = parse_date(day_start)
+
+    with transcript_patcher.process() as add:
+        while n_days > 0:
+            day_data = transcript_scraper.fetch_day(day)
+            logger.info("Fetching day %s", day.isoformat())
+            for chapter in day_data.chapters:
+                chapter_row = (models.TranscriptChapter.query
+                                        .filter_by(serial=chapter.serial)
+                                        .first())
+                if chapter_row is None:
+                    chapter_row = models.TranscriptChapter(
+                            date=day_data.date,
+                            headline=chapter.headline,
+                            serial=chapter.serial)
+                    models.db.session.add(chapter_row)
+                    models.db.session.flush()
+
+                for paragraph in chapter.paragraphs:
+                    mandate = mandate_lookup.find(paragraph['speaker_name'],
+                                                  paragraph['mandate_year'],
+                                                  paragraph['mandate_number'])
+
+                    transcript_data = {
+                        'chapter_id': chapter_row.id,
+                        'text': paragraph['text'],
+                        'serial': paragraph['serial'],
+                        'mandate_id': mandate.id,
+                    }
+                    add(transcript_data)
+
+            n_days -= 1
+            day += timedelta(days=1)
 
 
 @scraper_manager.command
