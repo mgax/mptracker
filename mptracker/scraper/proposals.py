@@ -54,7 +54,7 @@ class ProposalScraper(Scraper):
             url = link.attr('href')
             if 'cam=' not in url:
                 assert '?' in url
-                url = url.replace('?', '?cam=2&')
+                url += '&cam=2'
             yield combined_id, url
 
     def fetch_proposal_details(self, url):

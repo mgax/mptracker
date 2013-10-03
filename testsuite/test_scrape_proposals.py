@@ -1,19 +1,19 @@
 from path import path
 
 PAGES_DIR = path(__file__).abspath().parent / 'pages'
+LISTING_URL = ('http://www.cdep.ro/pls/parlam/structura.mp?'
+                        'idm=%d&leg=%d&cam=2&pag=2&idl=1&prn=0&par=')
+PROPOSAL_URL = ('http://www.cdep.ro/pls/proiecte/upl_pck.proiect?')
 
 
-def test_thing(session):
+def test_simple_scraping(session):
     from mptracker.scraper.proposals import ProposalScraper
 
-    listing_url = ('http://www.cdep.ro/pls/parlam/structura.mp?'
-                            'idm=%d&leg=%d&cam=2&pag=2&idl=1&prn=0&par=')
-    proposal_url = ('http://www.cdep.ro/pls/proiecte/upl_pck.proiect?')
     session.url_map.update({
-        listing_url % (126, 2012): PAGES_DIR / 'proposal-listing-2012-126',
-        proposal_url + 'idp=17135&cam=1': PAGES_DIR / 'proposal-1-17135',
-        proposal_url + 'cam=2&idp=13348': PAGES_DIR / 'proposal-2-13348',
-        proposal_url + 'idp=17422&cam=1': PAGES_DIR / 'proposal-1-17422',
+        LISTING_URL % (126, 2012): PAGES_DIR / 'proposal-listing-2012-126',
+        PROPOSAL_URL + 'idp=17135&cam=1': PAGES_DIR / 'proposal-1-17135',
+        PROPOSAL_URL + 'idp=13348&cam=2': PAGES_DIR / 'proposal-2-13348',
+        PROPOSAL_URL + 'idp=17422&cam=1': PAGES_DIR / 'proposal-1-17422',
     })
 
     scraper = ProposalScraper(session)
@@ -31,4 +31,4 @@ def test_thing(session):
                              '2013/300/40/6/pl346.pdf')
     assert "declararea zilei de 10 mai" in pr['title']
     assert pr['url'] == ('http://www.cdep.ro/pls/proiecte/upl_pck.proiect'
-                         '?cam=2&idp=13348')
+                         '?idp=13348&cam=2')
