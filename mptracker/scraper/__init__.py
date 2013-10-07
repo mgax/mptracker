@@ -223,9 +223,15 @@ def transcripts(day_start, n_days=1, cache_name=None, throttle=None):
                     models.db.session.flush()
 
                 for paragraph in chapter.paragraphs:
-                    mandate = mandate_lookup.find(paragraph['speaker_name'],
-                                                  paragraph['mandate_year'],
-                                                  paragraph['mandate_number'])
+                    try:
+                        mandate = mandate_lookup.find(
+                                paragraph['speaker_name'],
+                                paragraph['mandate_year'],
+                                paragraph['mandate_number'])
+                    except:
+                        logger.info("Exception with serial=%s",
+                                    paragraph['serial'])
+                        raise
 
                     transcript_data = {
                         'chapter_id': chapter_row.id,

@@ -6,7 +6,8 @@ import requests
 from pyquery import PyQuery as pq
 
 
-project_root = path(__file__).abspath().parent.parent.parent
+SCRAPER_PACKAGE = path(__file__).abspath().parent
+PROJECT_ROOT = SCRAPER_PACKAGE.parent.parent
 
 
 class Scraper(object):
@@ -50,7 +51,7 @@ def create_throttle(seconds):
 def create_session(cache_name=None, throttle=None, counters=False):
     if cache_name:
         import requests_cache
-        cache_path = project_root / '_data' / cache_name
+        cache_path = PROJECT_ROOT / '_data' / cache_name
         session = requests_cache.CachedSession(cache_path)
 
     else:
@@ -112,3 +113,7 @@ def parse_cdep_id(href):
 
 def never(*args, **kwargs):
     return False
+
+
+def open_scraper_resource(name, mode='rb'):
+    return (SCRAPER_PACKAGE / name).open(mode)

@@ -3,8 +3,9 @@
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
+import yaml
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
-                                      parse_cdep_id)
+                                      parse_cdep_id, open_scraper_resource)
 
 
 class Day:
@@ -26,15 +27,24 @@ class Paragraph(dict):
 
 class TranscriptScraper(Scraper):
 
-    transcript_url = 'http://www.cdep.ro/pls/steno/steno.data?cam=2&idl=1'
+    transcript_url = ('http://www.cdep.ro/pls/steno/steno.data'
+                      '?cam=2&idl=1&dat=%s')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        with open_scraper_resource('transcript_exceptions.yaml') as f:
+            self.exceptions = yaml.load(f)
 
     def chapters_for_day(self, day):
-        contents = self.fetch_url(self.transcript_url,
-                                  {'dat': day.strftime('%Y%m%d')})
+        day_url = self.transcript_url % day.strftime('%Y%m%d')
+        contents = self.fetch_url(day_url)
         for link_el in contents('td.headlinetext1 b a'):
             link = link_el.attrib['href']
             plink = urlparse(link)
-            assert plink.path == '/pls/steno/steno.stenograma'
+            if plink.path == '/pls/steno/steno.sumar':
+                continue
+            assert plink.path == '/pls/steno/steno.stenograma', \
+                "%s -> %s" % (day_url, link)
             if ',' in parse_qs(plink.query)['idm'][0]:
                 # this is a fragment page. we can ignore it since we
                 # already have the content from the parent page.
@@ -76,8 +86,11 @@ class TranscriptScraper(Scraper):
                     if speakers:
                         if transcript_paragraph:
                             save_paragraph()
+                        serial = self.next_paragraph_serial()
                         assert len(speakers) == 1
-                        speaker_name = self.trim_name(speakers.text())
+                        speaker_name = self.exceptions['names'].get(serial)
+                        if not speaker_name:
+                            speaker_name = self.trim_name(speakers.text())
                         link = speakers.parents('a')
                         if not link:
                             transcript_paragraph = None
@@ -88,7 +101,7 @@ class TranscriptScraper(Scraper):
                             'mandate_number': number,
                             'speaker_name': speaker_name,
                             'text_buffer': [],
-                            'serial': self.next_paragraph_serial()
+                            'serial': serial,
                         })
 
                     else:
