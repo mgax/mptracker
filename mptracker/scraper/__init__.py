@@ -24,10 +24,11 @@ def questions(year='2013', reimport_existing=False,
     def skip_question(url):
         return url in known_urls
 
-    questions_scraper = QuestionScraper(
-            session=create_session(cache_name=cache_name,
-                                   throttle=throttle and float(throttle)),
-            skip=skip_question)
+    http_session = create_session(cache_name=cache_name,
+                                  throttle=throttle and float(throttle),
+                                  counters=True)
+    questions_scraper = QuestionScraper(session=http_session,
+                                        skip=skip_question)
 
     mandate_lookup = models.MandateLookup()
 
@@ -60,6 +61,11 @@ def questions(year='2013', reimport_existing=False,
 
     if new_ask_rows:
         logger.info("Added %d ask records", new_ask_rows)
+
+    counters = http_session.counters
+    logger.info("HTTP: %d kb in %s requests, %.2f seconds",
+                counters['bytes'] / 1024, counters['requests'],
+                counters['download_time'].total_seconds())
 
 
 @scraper_manager.command

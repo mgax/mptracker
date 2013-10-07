@@ -1,4 +1,5 @@
 import time
+from datetime import timedelta
 from urllib.parse import urlencode, urlparse, parse_qs
 from path import path
 import requests
@@ -14,6 +15,17 @@ class Scraper(object):
         self.session = session or requests.Session()
         self.use_cdep_opener = use_cdep_opener
 
+    def opener(self, url):
+        # we need to pass in all the hooks because of a bug in requests 2.0.0
+        # https://github.com/kennethreitz/requests/issues/1655
+        resp = self.session.get(url, hooks=self.session.hooks)
+        if self.use_cdep_opener:
+            text = resp.content.decode('iso-8859-2')
+            # we use utf-16 because the parser's autodetect works fine with it
+            return text.encode('utf-16')
+        else:
+            return resp.text
+
     def fetch_url(self, url, args=None):
         if args:
             if '?' not in url:
@@ -21,15 +33,7 @@ class Scraper(object):
             elif url[-1] not in ['?', '&']:
                 url += '&'
             url += urlencode(args)
-        kwargs = {'parser': 'html'}
-        if self.use_cdep_opener:
-            def opener(url):
-                resp = self.session.get(url)
-                text = resp.content.decode('iso-8859-2')
-                # we use utf-16 because the parser's autodetect works fine with it
-                return text.encode('utf-16')
-            kwargs['opener'] = opener
-        page = pq(url, **kwargs)
+        page = pq(url, parser='html', opener=self.opener)
         page.make_links_absolute()
         return page
 
@@ -43,7 +47,7 @@ def create_throttle(seconds):
     return hook
 
 
-def create_session(cache_name=None, throttle=None):
+def create_session(cache_name=None, throttle=None, counters=False):
     if cache_name:
         import requests_cache
         cache_path = project_root / '_data' / cache_name
@@ -52,8 +56,23 @@ def create_session(cache_name=None, throttle=None):
     else:
         session = requests.Session()
 
+    if counters:
+        session.counters = counters_data = {
+            'requests': 0,
+            'bytes': 0,
+            'download_time': timedelta(),
+        }
+
+        def request_count_hook(response, **extra):
+            counters_data['requests'] += 1
+            counters_data['bytes'] += len(response.content)
+            counters_data['download_time'] += response.elapsed
+            return response
+
+        session.hooks['response'].append(request_count_hook)
+
     if throttle:
-        session.hooks = {'response': create_throttle(throttle)}
+        session.hooks['response'].append(create_throttle(throttle))
 
     return session
 
