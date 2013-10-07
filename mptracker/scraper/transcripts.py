@@ -1,14 +1,14 @@
 """ Fetch and parse transcripts """
 
-from datetime import date
+from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
 import yaml
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
-                                      parse_cdep_id, open_scraper_resource)
+                                      parse_profile_url, open_scraper_resource)
 
 
-class Day:
+class Session:
 
     def __init__(self):
         self.chapters = []
@@ -27,6 +27,8 @@ class Paragraph(dict):
 
 class TranscriptScraper(Scraper):
 
+    session_url = 'http://www.cdep.ro/pls/steno/steno.sumar?ids=%d'
+
     transcript_url = ('http://www.cdep.ro/pls/steno/steno.data'
                       '?cam=2&idl=1&dat=%s')
 
@@ -35,16 +37,17 @@ class TranscriptScraper(Scraper):
         with open_scraper_resource('transcript_exceptions.yaml') as f:
             self.exceptions = yaml.load(f)
 
-    def chapters_for_day(self, day):
-        day_url = self.transcript_url % day.strftime('%Y%m%d')
-        contents = self.fetch_url(day_url)
-        for link_el in contents('td.headlinetext1 b a'):
+    def get_session_date(self, page):
+        td = page.find(':contains("Sunteţi în secţiunea")')
+        date_str = td.parent().text().split()[-1]
+        return datetime.strptime(date_str, '%d-%m-%Y').date()
+
+    def chapters_for_session(self, page):
+        for link_el in page('td.headlinetext1 b a'):
             link = link_el.attrib['href']
             plink = urlparse(link)
-            if plink.path == '/pls/steno/steno.sumar':
-                continue
             assert plink.path == '/pls/steno/steno.stenograma', \
-                "%s -> %s" % (day_url, link)
+                    "%s -> %s" % (self.cdeppk, link)
             if ',' in parse_qs(plink.query)['idm'][0]:
                 # this is a fragment page. we can ignore it since we
                 # already have the content from the parent page.
@@ -55,7 +58,7 @@ class TranscriptScraper(Scraper):
             yield link, headline
 
     def get_chapter_serial(self):
-        return self.day.strftime('%Y-%m-%d') + '/%02d' % self.chapter_serial
+        return '%05d/%02d' % (self.session_cdeppk, self.chapter_serial)
 
     def next_paragraph_serial(self):
         self.paragraph_serial += 1
@@ -95,9 +98,11 @@ class TranscriptScraper(Scraper):
                         if not link:
                             transcript_paragraph = None
                             continue
-                        (year, number) = parse_cdep_id(link.attr('href'))
+                        (year, chamber, number) = \
+                            parse_profile_url(link.attr('href'))
                         transcript_paragraph = Paragraph({
                             'mandate_year': year,
+                            'mandate_chamber': chamber,
                             'mandate_number': number,
                             'speaker_name': speaker_name,
                             'text_buffer': [],
@@ -115,24 +120,17 @@ class TranscriptScraper(Scraper):
 
         return transcript_chapter
 
-    def fetch_day(self, day):
-        self.day = day
+    def fetch_session(self, cdeppk):
+        self.session_cdeppk = cdeppk
         self.chapter_serial = 0
-        transcript_day = Day()
-        transcript_day.date = day
-        for link, headline in self.chapters_for_day(day):
+        transcript_session = Session()
+        session_page = self.fetch_url(self.session_url % self.session_cdeppk)
+        transcript_session.date = self.get_session_date(session_page)
+        for link, headline in self.chapters_for_session(session_page):
             self.chapter_serial += 1
             self.paragraph_serial = 0
             transcript_chapter = self.parse_transcript_page(link)
             transcript_chapter.headline = headline
             transcript_chapter.serial = self.get_chapter_serial()
-            transcript_day.chapters.append(transcript_chapter)
-        return transcript_day
-
-
-if __name__ == '__main__':
-    transcript_scraper = TranscriptScraper(get_cached_session())
-    transcript_day = transcript_scraper.fetch_day(date(2013, 6, 10))
-    for transcript_chapter in transcript_day.chapters:
-        for paragraph in transcript_chapter.paragraphs:
-            print(paragraph)
+            transcript_session.chapters.append(transcript_chapter)
+        return transcript_session

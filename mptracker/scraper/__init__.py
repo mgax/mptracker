@@ -190,9 +190,10 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
 
 
 @scraper_manager.command
-def transcripts(day_start, n_days=1, cache_name=None, throttle=None):
+def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
     from mptracker.scraper.transcripts import TranscriptScraper
-    n_days = int(n_days)
+    cdeppk = int(cdeppk_start)
+    n_sessions = int(n_sessions)
 
     transcript_scraper = TranscriptScraper(
             session=create_session(cache_name=cache_name,
@@ -204,25 +205,26 @@ def transcripts(day_start, n_days=1, cache_name=None, throttle=None):
                                       models.db.session,
                                       key_columns=['serial'])
 
-    day = parse_date(day_start)
-
     with transcript_patcher.process() as add:
-        while n_days > 0:
-            day_data = transcript_scraper.fetch_day(day)
-            logger.info("Fetching day %s", day.isoformat())
-            for chapter in day_data.chapters:
+        while n_sessions > 0:
+            session_data = transcript_scraper.fetch_session(cdeppk)
+            logger.info("Fetching session %s", cdeppk)
+            for chapter in session_data.chapters:
                 chapter_row = (models.TranscriptChapter.query
                                         .filter_by(serial=chapter.serial)
                                         .first())
                 if chapter_row is None:
                     chapter_row = models.TranscriptChapter(
-                            date=day_data.date,
-                            headline=chapter.headline,
-                            serial=chapter.serial)
+                        serial=chapter.serial)
                     models.db.session.add(chapter_row)
                     models.db.session.flush()
 
+                chapter_row.date = session_data.date
+                chapter_row.headline = chapter.headline
+
                 for paragraph in chapter.paragraphs:
+                    if paragraph['mandate_chamber'] != 2:
+                        continue
                     try:
                         mandate = mandate_lookup.find(
                                 paragraph['speaker_name'],
@@ -241,8 +243,8 @@ def transcripts(day_start, n_days=1, cache_name=None, throttle=None):
                     }
                     add(transcript_data)
 
-            n_days -= 1
-            day += timedelta(days=1)
+            n_sessions -= 1
+            cdeppk += 1
 
 
 @scraper_manager.command

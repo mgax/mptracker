@@ -103,11 +103,17 @@ def get_cdep_id(href, fail='raise'):
     return '%s-%03d' % (int(qs['leg'][0]), int(qs['idm'][0]))
 
 
-def parse_cdep_id(href):
+def parse_profile_url(href):
     qs = parse_qs(urlparse(href).query)
-    assert qs.get('cam') == ['2']
     year = int(qs['leg'][0])
+    chamber = int(qs.get('cam')[0])
     number = int(qs['idm'][0])
+    return (year, chamber, number)
+
+
+def parse_cdep_id(href):
+    (year, chamber, number) = parse_profile_url(href)
+    assert chamber == 2
     return (year, number)
 
 
