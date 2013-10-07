@@ -32,13 +32,13 @@ def home():
     })
 
 
-@pages.route('/steno/')
-def steno_index():
+@pages.route('/transcript/')
+def transcript_index():
     people = models.Person.query.order_by('name')
-    date_query = models.db.session.query(models.StenoChapter.date)
-    steno_days = set(row[0] for row in date_query.distinct())
-    return flask.render_template('steno.html', **{
-        'steno_days': steno_days,
+    date_query = models.db.session.query(models.TranscriptChapter.date)
+    transcript_days = set(row[0] for row in date_query.distinct())
+    return flask.render_template('transcript.html', **{
+        'transcript_days': transcript_days,
     })
 
 
@@ -62,7 +62,7 @@ def person(person_id):
             'county_name': m.county.name,
             'chamber_name': m.chamber.name,
             'questions_count': m.asked.count(),
-            'paragraphs_count': m.steno_paragraphs.count(),
+            'transcripts_count': m.transcripts.count(),
             'sponsorships_count': m.sponsorships.count(),
             'college': m.college,
             'phone': m.phone,
@@ -124,25 +124,24 @@ def group(group_id):
     })
 
 
-@pages.route('/steno/<date_str>')
-def steno_contents(date_str):
+@pages.route('/transcript/<date_str>')
+def transcript_contents(date_str):
     date_value = parse_date(date_str)
-    return flask.render_template('steno_contents.html', **{
+    return flask.render_template('transcript_contents.html', **{
         'date': date_value,
-        'chapters': models.StenoChapter.query.filter_by(date=date_value),
+        'chapters': models.TranscriptChapter.query.filter_by(date=date_value),
     })
 
 
-@pages.route('/steno/<date_str>/<chapter_serial_number>')
-def steno_chapter(date_str, chapter_serial_number):
+@pages.route('/transcript/<date_str>/<path:chapter_serial>')
+def transcript_chapter(date_str, chapter_serial):
     date_value = parse_date(date_str)
-    chapter_serial = date_value.strftime('%Y-%m-%d/') + chapter_serial_number
-    chapter = (models.StenoChapter.query
+    chapter = (models.TranscriptChapter.query
                 .filter_by(serial=chapter_serial)
                 .first_or_404())
     if chapter.date != date_value:
         flask.abort(404)
-    return flask.render_template('steno_chapter.html', **{
+    return flask.render_template('transcript_chapter.html', **{
         'date': date_value,
         'chapter': chapter,
     })

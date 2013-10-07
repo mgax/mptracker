@@ -6,8 +6,9 @@ class MockSession:
 
     def __init__(self):
         self.url_map = {}
+        self.hooks = []
 
-    def get(self, url):
+    def get(self, url, hooks=[]):
         file_path = self.url_map[url]
         content = file_path.bytes()
         return Mock(content=content)

@@ -12,9 +12,9 @@
   <ul>
   {% for chapter in chapters %}
     <li>
-      {% set url = url_for('.steno_chapter',
+      {% set url = url_for('.transcript_chapter',
                            date_str=date.isoformat(),
-                           chapter_serial_number=chapter.serial_number) %}
+                           chapter_serial=chapter.serial) %}
       <a href="{{ url }}">{{ chapter.headline }}</a>
     </li>
   {% endfor %}

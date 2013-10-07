@@ -2,17 +2,17 @@
 
 
 {% block content %}
-  {% set url = url_for('.steno_contents', date_str=date.isoformat()) %}
+  {% set url = url_for('.transcript_contents', date_str=date.isoformat()) %}
   <p>
     <a href="{{ url }}">&laquo; stenograme din {{ date.isoformat() }}</a>
   </p>
   <h1>{{ chapter.headline }}</h1>
 
   <ul>
-  {% for paragraph in chapter.paragraphs %}
+  {% for transcript in chapter.transcripts %}
     <li>
       <h4>
-        {% set mandate = paragraph.mandate %}
+        {% set mandate = transcript.mandate %}
         {% if mandate %}
           {% set url = url_for('.person', person_id=mandate.person_id) %}
           <a href="{{ url }}">{{ mandate.person.name }}</a>
@@ -20,7 +20,7 @@
           (altcineva)
         {% endif %}
       </h4>
-      <p>{{ paragraph.text }}</p>
+      <p>{{ transcript.text }}</p>
     </li>
   {% endfor %}
   </ul>
