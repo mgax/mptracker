@@ -24,6 +24,7 @@ path.py==4.3
 psycopg2==2.5.1
 python-dateutil==2.1
 pytz==2013b
+PyYAML==3.10
 redis==2.7.6
 requests==2.0.0
 rq==0.3.10
