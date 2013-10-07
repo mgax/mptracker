@@ -86,6 +86,15 @@ def person(person_id):
     })
 
 
+@pages.route('/mandate/<uuid:mandate_id>/transcripts')
+def mandate_transcripts(mandate_id):
+    mandate = models.Mandate.query.get_or_404(mandate_id)
+    return flask.render_template('mandate_transcripts.html', **{
+        'mandate': mandate,
+        'transcripts': iter(mandate.transcripts),
+    })
+
+
 @pages.route('/committee/')
 def committee_index():
     return flask.render_template('committee_index.html', **{

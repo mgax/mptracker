@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
+        (mandate.person|string,
+            url_for('pages.person', person_id=mandate.person.id)),
+        ("luări de cuvânt " + mandate.year|string,
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <ul>
+  {% for transcript in transcripts %}
+    <li>
+      <h4>
+        {% set mandate = transcript.mandate %}
+        {% if mandate %}
+          {% set url = url_for('.person', person_id=mandate.person_id) %}
+          <a href="{{ url }}">{{ mandate.person.name }}</a>
+        {% else %}
+          (altcineva)
+        {% endif %}
+      </h4>
+      <p>{{ transcript.text }}</p>
+    </li>
+  {% endfor %}
+  </ul>
+
+{% endblock %}

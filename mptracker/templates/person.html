@@ -75,7 +75,10 @@
       {% endif %}
 
       <dt>luări de cuvânt:</dt>
-      <dd>{{ mandate.transcripts_count }}</d>
+      <dd>
+        {% set url = url_for('.mandate_transcripts', mandate_id=mandate.id) %}
+        <a href="{{ url }}">{{ mandate.transcripts_count }}</a>
+      </d>
 
       <dt>întrebări și interpelări:</dt>
       <dd>
