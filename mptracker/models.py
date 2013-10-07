@@ -366,6 +366,10 @@ class User(db.Model, UserMixin):
             return row
 
 
+class LookupError(Exception):
+    pass
+
+
 class MandateLookup:
     """ Find the right person+mandate based on name, year and cdep_number """
 
@@ -378,9 +382,9 @@ class MandateLookup:
 
     def find(self, name, year, cdep_number):
         mandate = self.cdep_mandate[year, cdep_number]
-        assert self.name_bits(mandate.person.name) == self.name_bits(name), \
-            "Names don't match: %r != %r, %r-%r" \
-            % (name, mandate.person.name, year, cdep_number)
+        if self.name_bits(mandate.person.name) != self.name_bits(name):
+            raise LookupError("Names don't match: %r != %r, %r-%r"
+                              % (name, mandate.person.name, year, cdep_number))
         return mandate
 
 

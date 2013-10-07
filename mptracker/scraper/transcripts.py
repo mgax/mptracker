@@ -34,14 +34,12 @@ class TranscriptScraper(Scraper):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        with open_scraper_resource('transcript_exceptions.yaml') as f:
-            exceptions = yaml.load(f)
-            self.patches = exceptions['patches']
-            self.skip_sessions = exceptions['skip_sessions']
 
     def get_session_date(self, page):
         td = page.find(':contains("Sunteţi în secţiunea")')
         date_str = td.parent().text().split()[-1]
+        if date_str == '>':
+            return None
         return datetime.strptime(date_str, '%d-%m-%Y').date()
 
     def chapters_for_session(self, page):
@@ -93,11 +91,10 @@ class TranscriptScraper(Scraper):
                         if transcript:
                             save_paragraph()
                         serial = self.next_paragraph_serial()
-                        patch = self.patches.get(serial, {})
                         assert len(speakers) == 1
                         speaker_name = self.trim_name(speakers.text())
                         link = speakers.parents('a')
-                        if not link or patch.get('not_cdep'):
+                        if not link:
                             transcript = None
                             continue
                         (year, chamber, number) = \
@@ -110,7 +107,6 @@ class TranscriptScraper(Scraper):
                             'text_buffer': [],
                             'serial': serial,
                         })
-                        transcript.update(patch)
 
                     else:
                         if transcript is None:
@@ -129,6 +125,8 @@ class TranscriptScraper(Scraper):
         transcript_session = Session()
         session_page = self.fetch_url(self.session_url % self.session_cdeppk)
         transcript_session.date = self.get_session_date(session_page)
+        if transcript_session.date is None:
+            return None
         for link, headline in self.chapters_for_session(session_page):
             self.chapter_serial += 1
             self.paragraph_serial = 0

@@ -209,10 +209,11 @@ def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
         while n_sessions > 0:
             n_sessions -= 1
             cdeppk += 1
-            if cdeppk in transcript_scraper.skip_sessions:
-                continue
-            session_data = transcript_scraper.fetch_session(cdeppk)
             logger.info("Fetching session %s", cdeppk)
+            session_data = transcript_scraper.fetch_session(cdeppk)
+            if session_data is None:
+                logger.info("No content")
+                continue
             for chapter in session_data.chapters:
                 chapter_row = (models.TranscriptChapter.query
                                         .filter_by(serial=chapter.serial)
@@ -234,10 +235,9 @@ def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
                                 paragraph['speaker_name'],
                                 paragraph['mandate_year'],
                                 paragraph['mandate_number'])
-                    except:
-                        logger.info("Exception with serial=%s",
-                                    paragraph['serial'])
-                        raise
+                    except models.LookupError as e:
+                        logger.warn("at %s %s", paragraph['serial'], e)
+                        continue
 
                     transcript_data = {
                         'chapter_id': chapter_row.id,
