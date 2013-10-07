@@ -150,6 +150,8 @@ class ProposalScraper(Scraper):
         seen_data = False
         location = None
         location_countdown = 0
+        buffer = []
+        ac = None
         for row in table.children().items():
             if location_countdown > 0:
                 location_countdown -= 1
@@ -164,7 +166,12 @@ class ProposalScraper(Scraper):
                 continue
 
             if date_text:
-                date = datetime.strptime(date_text, '%d.%m.%Y').date()
+                if ac:
+                    activity.append(ac)
+                ac = Activity()
+                ac.date = datetime.strptime(date_text, '%d.%m.%Y').date()
+                ac.location = location
+                ac.html = ""
 
             last_col = pq(cols[-1])
             if last_col.attr('rowspan'):
@@ -176,10 +183,9 @@ class ProposalScraper(Scraper):
                 last_col.find('img[src="/img/spacer.gif"]').remove()
                 html = last_col.html()
                 if html:
-                    ac = Activity()
-                    ac.date = date
-                    ac.location = location
-                    ac.html = html.strip()
-                    activity.append(ac)
+                    ac.html += '<p>' + html.strip() + '</p>\n'
+
+        if ac:
+            activity.append(ac)
 
         return activity

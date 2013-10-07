@@ -71,7 +71,10 @@ def test_get_activity(session):
     scraper = ProposalScraper(session)
     page = scraper.fetch_url(PROP_URL)
     activity = scraper.get_activity(page)
-    assert activity[0].html == ("prezentare în Biroul Permanent al "
-                                 "Camerei Deputatilor")
+    assert "prezentare în Biroul Permanent" in activity[0].html
     assert activity[0].location == 'CD'
     assert activity[0].date == date(2013, 2, 11)
+    assert activity[3].date == date(2013, 6, 5)
+    assert "la Camera Deputaţilor pentru dezbatere" in activity[3].html
+    assert "trimis pentru aviz la" in activity[3].html
+    assert activity[4].date == date(2013, 6, 13)
