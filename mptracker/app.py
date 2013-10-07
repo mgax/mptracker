@@ -5,7 +5,7 @@ from path import path
 from mptracker import models
 from mptracker.common import common
 from mptracker.questions import questions, questions_manager
-from mptracker.pages import pages, parse_date
+from mptracker.pages import pages
 from mptracker.auth import auth
 from mptracker.admin import admin
 from mptracker.placenames import placenames_manager
@@ -54,35 +54,6 @@ def create_app():
     return app
 
 
-def import_steno_day(day):
-    from mptracker.scraper.common import get_cached_session
-    from mptracker.scraper.steno import StenogramScraper
-    http_session = get_cached_session()
-
-    person_matcher = models.PersonMatcher()
-    session = models.db.session
-    steno_scraper = StenogramScraper(http_session)
-    steno_day = steno_scraper.fetch_day(day)
-    new_paragraphs = 0
-    for steno_chapter in steno_day.chapters:
-        chapter_ob = models.StenoChapter(date=steno_day.date,
-                                         headline=steno_chapter.headline,
-                                         serial=steno_chapter.serial)
-        session.add(chapter_ob)
-        for paragraph in steno_chapter.paragraphs:
-            person = person_matcher.get_person(paragraph['speaker_name'],
-                                               paragraph['speaker_cdep_id'])
-
-            paragraph_ob = models.StenoParagraph(text=paragraph['text'],
-                                                 chapter=chapter_ob,
-                                                 person=person,
-                                                 serial=paragraph['serial'])
-            session.add(paragraph_ob)
-            new_paragraphs += 1
-    print('added', new_paragraphs, 'stenogram paragraphs')
-    session.commit()
-
-
 def create_manager(app):
     from flask.ext.script import Manager
 
@@ -94,12 +65,10 @@ def create_manager(app):
     manager.add_command('scraper', scraper_manager)
     manager.add_command('proposals', proposals_manager)
 
-
     @manager.command
     def worker():
         from flask.ext.rq import get_worker
         get_worker().work()
-
 
     @manager.command
     def requeue_failed():
@@ -108,7 +77,6 @@ def create_manager(app):
         failed = get_failed_queue(get_connection())
         for job in failed.get_jobs():
             failed.requeue(job.id)
-
 
     @manager.command
     def import_people():
@@ -127,24 +95,5 @@ def create_manager(app):
                 new_people += 1
         print('added', new_people, 'people')
         session.commit()
-
-
-    @manager.command
-    def import_steno(day=None, stdin=False):
-        if stdin:
-            import sys
-            days = [line.strip() for line in sys.stdin]
-        elif day is not None:
-            days = [day]
-        else:
-            raise RuntimeError("Need day or stdin")
-
-        for day in days:
-            try:
-                import_steno_day(parse_date(day))
-                print(day, "ok")
-            except Exception as e:
-                models.db.session.rollback()
-                print(day, "fail", e)
 
     return manager
