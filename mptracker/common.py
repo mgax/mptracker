@@ -196,3 +196,10 @@ def csv_lines(cols, rows):
         writer.writerow(r)
         yield out.getvalue()
         out.seek(out.truncate(0))
+
+
+def model_to_dict(model, namelist):
+    rv = {}
+    for name in namelist:
+        rv[name] = getattr(model, name)
+    return rv

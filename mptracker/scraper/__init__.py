@@ -3,7 +3,8 @@ from datetime import timedelta
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import TablePatcher, fix_local_chars, parse_date
+from mptracker.common import (TablePatcher, fix_local_chars, parse_date,
+                              model_to_dict)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -144,24 +145,25 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
     sp_updates = sp_added = sp_removed = 0
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add:
-        for record in proposals:
-            if 'decision_chamber' in record:
-                slug = record.pop('decision_chamber')
+        for prop in proposals:
+            record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
+                'decision_chamber', 'url', 'title', 'date', 'number_bpi',
+                'number_cdep', 'number_senate', 'proposal_type', 'pdf_url'])
+
+            slug = prop.decision_chamber
+            if slug:
                 record['decision_chamber'] = chamber_by_slug[slug]
 
-            idc = id_cdeppk_cdep.get(record['cdeppk_cdep'])
-            ids = id_cdeppk_senate.get(record['cdeppk_senate'])
+            idc = id_cdeppk_cdep.get(prop.cdeppk_cdep)
+            ids = id_cdeppk_senate.get(prop.cdeppk_senate)
             if idc and ids:
                 assert idc == ids
             record['id'] = idc or ids or models.random_uuid()
 
-            sponsorships = record.pop('_sponsorships')
-            url = record['url']
-
             result = add(record)
             row = result.row
 
-            new_people = set(by_cdep_id[ci] for ci in sponsorships)
+            new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
             existing_sponsorships = {sp.mandate: sp for sp in row.sponsorships}
             to_remove = set(existing_sponsorships) - set(new_people)
             to_add = set(new_people) - set(existing_sponsorships)

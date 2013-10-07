@@ -11,6 +11,18 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+class Proposal:
+
+    def __init__(self, cdeppk_cdep, cdeppk_senate):
+        self.cdeppk_cdep = cdeppk_cdep
+        self.cdeppk_senate = cdeppk_senate
+        self.sponsorships = []
+
+    @property
+    def cdeppks(self):
+        return (self.cdeppk_cdep, self.cdeppk_senate)
+
+
 def get_date_from_numbers(numbers):
     rv = None
     for n in numbers:
@@ -38,19 +50,13 @@ class ProposalScraper(Scraper):
     def fetch_from_mp_pages(self, mandate_cdep_id_list):
         proposals = {}
         for mandate_cdep_id in mandate_cdep_id_list:
-            for cdeppks, proposal_url in \
-                    self.fetch_mp_proposals(mandate_cdep_id):
-                if cdeppks in proposals:
-                    proposal_data = proposals[cdeppks]
-                    assert proposal_data['url'] == proposal_url
+            for prop in self.fetch_mp_proposals(mandate_cdep_id):
+                if prop.cdeppks in proposals:
+                    prop = proposals[prop.cdeppks]
                 else:
-                    proposal_data = self.fetch_proposal_details(proposal_url)
-                    assert proposal_data['url'] == proposal_url
-                    proposal_data['cdeppk_cdep'] = cdeppks[0]
-                    proposal_data['cdeppk_senate'] = cdeppks[1]
-                    proposal_data['_sponsorships'] = []
-                    proposals[cdeppks] = proposal_data
-                proposal_data['_sponsorships'].append(mandate_cdep_id)
+                    self.fetch_proposal_details(prop)
+                    proposals[prop.cdeppks] = prop
+                prop.sponsorships.append(mandate_cdep_id)
         return list(proposals.values())
 
     def fetch_mp_proposals(self, cdep_id):
@@ -76,14 +82,18 @@ class ProposalScraper(Scraper):
             if 'cam=' not in url:
                 assert '?' in url
                 url += '&cam=2'
-            yield cdeppks, url
+            p = Proposal(*cdeppks)
+            p.url = url
+            yield p
 
-    def fetch_proposal_details(self, url):
-        page = self.fetch_url(url)
-        out = {
-            'title': pq('.headline', page).text(),
-            'url': url,
-        }
+    def fetch_proposal_details(self, prop):
+        page = self.fetch_url(prop.url)
+        prop.title = pq('.headline', page).text()
+        prop.number_bpi = None
+        prop.number_cdep = None
+        prop.number_senate = None
+        prop.decision_chamber = None
+        prop.pdf_url = None
 
         [hook_td] = pqitems(page, ':contains("Nr. înregistrare")')
         metadata_table = pq(hook_td.parents('table')[-1])
@@ -93,36 +103,34 @@ class ProposalScraper(Scraper):
             val_td = cols.eq(1) if len(cols) > 1 else None
 
             if label == "- B.P.I.:":
-                out['number_bpi'] = val_td.text()
+                prop.number_bpi = val_td.text()
 
             elif label == "- Camera Deputatilor:":
-                out['number_cdep'] = val_td.text()
+                prop.number_cdep = val_td.text()
 
             elif label == "- Senat:":
-                out['number_senate'] = val_td.text()
+                prop.number_senate = val_td.text()
 
             elif label == "Tip initiativa:":
-                out['proposal_type'] = val_td.text()
+                prop.proposal_type = val_td.text()
 
             elif label == "Consultati:":
                 for tr in pqitems(val_td, 'tr'):
                     if tr.text() == "Forma iniţiatorului":
                         [a] = pqitems(tr, 'a')
                         href = a.attr('href')
-                        out['pdf_url'] = href
+                        prop.pdf_url = href
 
             elif label == "Camera decizionala:":
                 txt = val_td.text()
                 if txt == 'Camera Deputatilor':
-                    out['decision_chamber'] = 'cdep'
+                    prop.decision_chamber = 'cdep'
                 elif txt == 'Senatul':
-                    out['decision_chamber'] = 'senat'
+                    prop.decision_chamber = 'senat'
                 else:
                     logger.warn("Unknown decision_chamber %r", txt)
 
-        out['date'] = get_date_from_numbers([out.get('number_bpi'),
-                                             out.get('number_cdep'),
-                                             out.get('number_senate')])
-        assert out['date'] is not None, "No date for proposal %r" % url
-
-        return out
+        prop.date = get_date_from_numbers([prop.number_bpi,
+                                         prop.number_cdep,
+                                         prop.number_senate])
+        assert prop.date is not None, "No date for proposal %r" % prop.url

@@ -20,19 +20,19 @@ def test_simple_scraping(session):
     proposals = scraper.fetch_from_mp_pages([(2012, 126)])
 
     assert len(proposals) == 3
-    proposals.sort(key=lambda p: p['title'])
+    proposals.sort(key=lambda p: p.title)
     pr = proposals[0]
-    assert pr['_sponsorships'] == [(2012, 126)]
-    assert pr['number_bpi'] == '346/04-06-2013'
-    assert pr['number_cdep'] == 'BP346/04.06.2013'
-    assert pr['number_senate'] == 'L430/03.09.2013'
-    assert pr['decision_chamber'] == 'cdep'
-    assert pr['proposal_type'] == 'Propunere legislativa'
-    assert pr['pdf_url'] == ('http://www.cdep.ro/proiecte/bp/'
-                             '2013/300/40/6/pl346.pdf')
-    assert "declararea zilei de 10 mai" in pr['title']
-    assert pr['url'] == ('http://www.cdep.ro/pls/proiecte/upl_pck.proiect'
-                         '?idp=13348&cam=2')
+    assert pr.sponsorships == [(2012, 126)]
+    assert pr.number_bpi == '346/04-06-2013'
+    assert pr.number_cdep == 'BP346/04.06.2013'
+    assert pr.number_senate == 'L430/03.09.2013'
+    assert pr.decision_chamber == 'cdep'
+    assert pr.proposal_type == 'Propunere legislativa'
+    assert pr.pdf_url == ('http://www.cdep.ro/proiecte/bp/'
+                          '2013/300/40/6/pl346.pdf')
+    assert "declararea zilei de 10 mai" in pr.title
+    assert pr.url == ('http://www.cdep.ro/pls/proiecte/upl_pck.proiect'
+                      '?idp=13348&cam=2')
 
 
 def test_correlate_cdep_senate(session):
@@ -50,9 +50,10 @@ def test_correlate_cdep_senate(session):
     proposals = scraper.fetch_from_mp_pages([(2012, 65)])
 
     assert len(proposals) == 4
-    proposals.sort(key=lambda p: p['title'])
+    proposals.sort(key=lambda p: p.title)
     pr = proposals[0]
-    assert pr['title'] == ('BP327/2013 Propunere legislativă privind '
-        'facilitățile acordate șomerilor pentru transportul intern')
-    assert pr['cdeppk_cdep'] == 13330
-    assert pr['cdeppk_senate'] == 17334
+    assert pr.title == ('BP327/2013 Propunere legislativă privind '
+                        'facilitățile acordate șomerilor pentru '
+                        'transportul intern')
+    assert pr.cdeppk_cdep == 13330
+    assert pr.cdeppk_senate == 17334
