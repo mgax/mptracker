@@ -1,3 +1,4 @@
+from datetime import date
 from path import path
 
 PAGES_DIR = path(__file__).abspath().parent / 'pages'
@@ -57,3 +58,20 @@ def test_correlate_cdep_senate(session):
                         'transportul intern')
     assert pr.cdeppk_cdep == 13330
     assert pr.cdeppk_senate == 17334
+
+
+def test_get_activity(session):
+    from mptracker.scraper.proposals import ProposalScraper
+    PROP_URL = 'http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=13037'
+
+    session.url_map.update({
+        PROP_URL: PAGES_DIR / 'proposal-2-13037',
+    })
+
+    scraper = ProposalScraper(session)
+    page = scraper.fetch_url(PROP_URL)
+    activity = scraper.get_activity(page)
+    assert activity[0].html == ("prezentare în Biroul Permanent al "
+                                 "Camerei Deputatilor")
+    assert activity[0].location == 'CD'
+    assert activity[0].date == date(2013, 2, 11)

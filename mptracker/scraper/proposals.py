@@ -1,6 +1,6 @@
 import re
 import logging
-from datetime import date
+from datetime import date, datetime
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
 from mptracker.scraper.common import Scraper, pqitems, get_cdep_id
@@ -21,6 +21,10 @@ class Proposal:
     @property
     def cdeppks(self):
         return (self.cdeppk_cdep, self.cdeppk_senate)
+
+
+class Activity:
+    pass
 
 
 def get_date_from_numbers(numbers):
@@ -134,3 +138,48 @@ class ProposalScraper(Scraper):
                                          prop.number_cdep,
                                          prop.number_senate])
         assert prop.date is not None, "No date for proposal %r" % prop.url
+
+        prop.activity = self.get_activity(page)
+
+    def get_activity(self, page):
+        activity = []
+        headline = page.find(':contains("Derularea procedurii legislative")')
+        table = list(headline.parents('table').items())[-1]
+
+        date = None
+        seen_data = False
+        location = None
+        location_countdown = 0
+        for row in table.children().items():
+            if location_countdown > 0:
+                location_countdown -= 1
+
+            cols = row.children()
+
+            date_text = cols.eq(0).text()
+            if date_text == 'Data':
+                seen_data = True
+                continue
+            elif not seen_data:
+                continue
+
+            if date_text:
+                date = datetime.strptime(date_text, '%d.%m.%Y').date()
+
+            last_col = pq(cols[-1])
+            if last_col.attr('rowspan'):
+                assert location_countdown == 0
+                location_countdown = int(last_col.attr('rowspan'))
+                location = last_col.text()
+
+            else:
+                last_col.find('img[src="/img/spacer.gif"]').remove()
+                html = last_col.html()
+                if html:
+                    ac = Activity()
+                    ac.date = date
+                    ac.location = location
+                    ac.html = html.strip()
+                    activity.append(ac)
+
+        return activity
