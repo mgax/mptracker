@@ -1,5 +1,36 @@
-names:
-  '2013-09-03/01-039': "Adrian Gurzău"
-  '2013-09-10/01-022': "Petre Daea"
-  '2013-09-10/01-052': "Adrian Gurzău"
-  '2013-09-10/01-053': "Adrian Gurzău"
+patches:
+  '07200/02-002': {speaker_name: "Victor-Viorel Ponta"}
+  '07200/02-044': {speaker_name: "Maria-Andreea Paul"}
+  '07200/02-080': {mandate_number: 10}
+  '07200/02-082': {mandate_number: 10}
+  '07200/02-084': {mandate_number: 10}
+  '07200/02-086': {mandate_number: 10}
+  '07200/02-088': {mandate_number: 10}
+  '07200/02-122': {mandate_number: 10}
+  '07200/02-124': {mandate_number: 10}
+  '07200/02-126': {mandate_number: 10}
+  '07200/02-128': {mandate_number: 10}
+  '07200/02-130': {mandate_number: 10}
+  '07200/02-132': {mandate_number: 10}
+  '07200/02-254': {mandate_number: 410}
+  '07200/02-296': {mandate_number: 410}
+  '07200/02-351': {mandate_number: 141}
+  '07200/02-353': {mandate_number: 141}
+  '07200/02-471': {speaker_name: "Cseke Attila-Zoltán"}
+  '07202/02-038': {speaker_name: "Mihăiţă Calimente "}
+  '07202/02-040': {speaker_name: "Márton Árpád-Francisc"}
+  '07202/02-042': {speaker_name: "Márton Árpád-Francisc"}
+  '07202/05-044': {speaker_name: "Radu Mihai Popa"}
+  '07202/07-019': {speaker_name: "Victor-Viorel Ponta"}
+  '07217/10-002': {mandate_number: 244}
+  '07218/11-002': {not_cdep: true}
+
+skip_sessions:
+  - 7203
+  - 7206
+  - 7209
+  - 7214
+  - 7215
+  - 7216
+  - 7219
+  - 7220

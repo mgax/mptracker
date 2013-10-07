@@ -192,7 +192,7 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
 @scraper_manager.command
 def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
     from mptracker.scraper.transcripts import TranscriptScraper
-    cdeppk = int(cdeppk_start)
+    cdeppk = int(cdeppk_start) - 1
     n_sessions = int(n_sessions)
 
     transcript_scraper = TranscriptScraper(
@@ -207,6 +207,10 @@ def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
 
     with transcript_patcher.process() as add:
         while n_sessions > 0:
+            n_sessions -= 1
+            cdeppk += 1
+            if cdeppk in transcript_scraper.skip_sessions:
+                continue
             session_data = transcript_scraper.fetch_session(cdeppk)
             logger.info("Fetching session %s", cdeppk)
             for chapter in session_data.chapters:
@@ -242,9 +246,6 @@ def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
                         'mandate_id': mandate.id,
                     }
                     add(transcript_data)
-
-            n_sessions -= 1
-            cdeppk += 1
 
 
 @scraper_manager.command

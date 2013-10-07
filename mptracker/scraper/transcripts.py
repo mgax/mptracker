@@ -20,7 +20,7 @@ class Chapter:
         self.paragraphs = []
 
 
-class Paragraph(dict):
+class Transcript(dict):
 
     pass
 
@@ -35,7 +35,9 @@ class TranscriptScraper(Scraper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         with open_scraper_resource('transcript_exceptions.yaml') as f:
-            self.exceptions = yaml.load(f)
+            exceptions = yaml.load(f)
+            self.patches = exceptions['patches']
+            self.skip_sessions = exceptions['skip_sessions']
 
     def get_session_date(self, page):
         td = page.find(':contains("Sunteţi în secţiunea")')
@@ -65,6 +67,7 @@ class TranscriptScraper(Scraper):
         return self.get_chapter_serial() + '-%03d' % self.paragraph_serial
 
     def trim_name(self, name):
+        name = name.replace(' (din sală)', '')
         for prefix in ['Domnul ', 'Doamna ', 'Domnişoara ']:
             if name.startswith(prefix):
                 return name[len(prefix):]
@@ -74,33 +77,32 @@ class TranscriptScraper(Scraper):
     def parse_transcript_page(self, link):
         page = self.fetch_url(link)
         table_rows = pqitems(page, '#pageContent > table tr')
-        transcript_paragraph = None
+        transcript = None
         transcript_chapter = Chapter()
 
         def save_paragraph():
-            text = "\n".join(transcript_paragraph.pop('text_buffer'))
-            transcript_paragraph['text'] = text
-            transcript_chapter.paragraphs.append(transcript_paragraph)
+            text = "\n".join(transcript.pop('text_buffer'))
+            transcript['text'] = text
+            transcript_chapter.paragraphs.append(transcript)
 
         for tr in table_rows:
             for td in pqitems(tr, 'td'):
                 for paragraph in pqitems(td, 'p'):
                     speakers = paragraph('b font[color="#0000FF"]')
                     if speakers:
-                        if transcript_paragraph:
+                        if transcript:
                             save_paragraph()
                         serial = self.next_paragraph_serial()
+                        patch = self.patches.get(serial, {})
                         assert len(speakers) == 1
-                        speaker_name = self.exceptions['names'].get(serial)
-                        if not speaker_name:
-                            speaker_name = self.trim_name(speakers.text())
+                        speaker_name = self.trim_name(speakers.text())
                         link = speakers.parents('a')
-                        if not link:
-                            transcript_paragraph = None
+                        if not link or patch.get('not_cdep'):
+                            transcript = None
                             continue
                         (year, chamber, number) = \
                             parse_profile_url(link.attr('href'))
-                        transcript_paragraph = Paragraph({
+                        transcript = Transcript({
                             'mandate_year': year,
                             'mandate_chamber': chamber,
                             'mandate_number': number,
@@ -108,14 +110,15 @@ class TranscriptScraper(Scraper):
                             'text_buffer': [],
                             'serial': serial,
                         })
+                        transcript.update(patch)
 
                     else:
-                        if transcript_paragraph is None:
+                        if transcript is None:
                             continue
                         text = paragraph.text()
-                        transcript_paragraph['text_buffer'].append(text)
+                        transcript['text_buffer'].append(text)
 
-        if transcript_paragraph:
+        if transcript:
             save_paragraph()
 
         return transcript_chapter
