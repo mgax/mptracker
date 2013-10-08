@@ -3,7 +3,6 @@
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 from pyquery import PyQuery as pq
-import yaml
 from mptracker.scraper.common import (Scraper, pqitems, get_cached_session,
                                       parse_profile_url, open_scraper_resource)
 
