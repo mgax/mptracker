@@ -4,6 +4,8 @@ from urllib.parse import urlencode, urlparse, parse_qs
 from path import path
 import requests
 from pyquery import PyQuery as pq
+from lxml.html.clean import clean_html
+from lxml import etree
 
 
 SCRAPER_PACKAGE = path(__file__).abspath().parent
@@ -123,3 +125,17 @@ def never(*args, **kwargs):
 
 def open_scraper_resource(name, mode='rb'):
     return (SCRAPER_PACKAGE / name).open(mode)
+
+
+def sanitize(html):
+    if not html.strip():
+        return ''
+    try:
+        cleaned = clean_html(html)
+    except etree.ParserError:
+        return ''
+    doc = pq(cleaned)
+    if doc.find('body'):
+        return doc.find('body').html()
+    else:
+        return str(doc)

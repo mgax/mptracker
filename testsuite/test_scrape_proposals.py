@@ -1,5 +1,6 @@
 from datetime import date
 from path import path
+import pytest
 
 PAGES_DIR = path(__file__).abspath().parent / 'pages'
 LISTING_URL = ('http://www.cdep.ro/pls/parlam/structura.mp?'
@@ -78,3 +79,17 @@ def test_get_activity(session):
     assert "la Camera Deputaţilor pentru dezbatere" in activity[3].html
     assert "trimis pentru aviz la" in activity[3].html
     assert activity[4].date == date(2013, 6, 13)
+
+
+@pytest.mark.parametrize(['in_html', 'out_html'], [
+    ('', ''),
+    ('  ', ''),
+    ('&', '<p>&amp;</p>'),
+    ('<<', ''),
+    ('<script>foo</script>', '<div/>'),
+    ('foo', '<p>foo</p>'),
+    ('<div><p>bar</p></div>', '<div><p>bar</p></div>'),
+])
+def test_sanitize(in_html, out_html):
+    from mptracker.scraper.common import sanitize
+    assert sanitize(in_html) == out_html
