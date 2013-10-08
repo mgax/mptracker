@@ -181,6 +181,8 @@ class ProposalScraper(Scraper):
 
             else:
                 last_col.find('img[src="/img/spacer.gif"]').remove()
+                (last_col.find('img[src="/img/icon_pdf_small.gif"]')
+                    .replaceWith('(pdf)'))
                 html = last_col.html()
                 if html:
                     ac.html += sanitize(html) + '\n'
