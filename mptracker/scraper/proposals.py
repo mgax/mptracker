@@ -3,7 +3,7 @@ import logging
 from datetime import date, datetime
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
-from mptracker.scraper.common import Scraper, pqitems, get_cdep_id
+from mptracker.scraper.common import Scraper, pqitems, get_cdep_id, sanitize
 from mptracker.common import fix_local_chars
 
 
@@ -183,7 +183,7 @@ class ProposalScraper(Scraper):
                 last_col.find('img[src="/img/spacer.gif"]').remove()
                 html = last_col.html()
                 if html:
-                    ac.html += '<p>' + html.strip() + '</p>\n'
+                    ac.html += sanitize(html) + '\n'
 
         if ac:
             activity.append(ac)
