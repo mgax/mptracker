@@ -5,6 +5,7 @@ from path import path
 import requests
 from pyquery import PyQuery as pq
 from lxml.html.clean import clean_html
+from lxml.html import fromstring, HTMLParser
 from lxml import etree
 
 
@@ -130,10 +131,12 @@ def open_scraper_resource(name, mode='rb'):
 def sanitize(html):
     if not html.strip():
         return ''
+    parser = HTMLParser(encoding='utf-8')
     try:
-        cleaned = clean_html(html.encode('utf-16'))
+        doc = fromstring(html, parser=parser)
     except etree.ParserError:
         return ''
+    cleaned = clean_html(doc)
     doc = pq(cleaned)
     if doc.find('body'):
         return doc.find('body').html()
