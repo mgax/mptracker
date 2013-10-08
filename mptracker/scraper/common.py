@@ -131,7 +131,7 @@ def sanitize(html):
     if not html.strip():
         return ''
     try:
-        cleaned = clean_html(html)
+        cleaned = clean_html(html.encode('utf-16'))
     except etree.ParserError:
         return ''
     doc = pq(cleaned)

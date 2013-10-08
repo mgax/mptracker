@@ -89,6 +89,7 @@ def test_get_activity(session):
     ('<script>foo</script>', '<div/>'),
     ('foo', '<p>foo</p>'),
     ('<div><p>bar</p></div>', '<div><p>bar</p></div>'),
+    ('șțăîâüø£€™æ…‘“', '<p>șțăîâüø£€™æ…‘“</p>'),
 ])
 def test_sanitize(in_html, out_html):
     from mptracker.scraper.common import sanitize
