@@ -37,6 +37,7 @@ def proposal(proposal_id):
     proposal = (models.Proposal.query
                     .filter_by(id=proposal_id)
                     .first_or_404())
+    activity = proposal.activity.order_by(models.ProposalActivityItem.order)
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'sponsorships': [{
@@ -44,6 +45,7 @@ def proposal(proposal_id):
                 'mandate': sp.mandate,
                 'match_data': flask.json.loads(sp.match.data or '{}'),
             } for sp in proposal.sponsorships],
+        'activity': activity.all(),
     })
 
 

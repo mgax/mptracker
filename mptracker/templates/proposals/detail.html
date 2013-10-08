@@ -10,6 +10,16 @@
 
   <p>Camera decisională: {{ proposal.decision_chamber.name }}</p>
 
+  <h2>Procesul legislativ</h2>
+  <table class="table table-condensed table-bordered">
+    {% for item in activity %}
+      <tr>
+        <th>{{ item.date }} ({{ item.location.lower() }})</th>
+        <td>{{ item.html|safe }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
  {% if sponsorships %}
   <h2>Sponsori</h2>
 
