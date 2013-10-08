@@ -65,6 +65,7 @@ class TablePatcher:
 
     def __init__(self, model, session, key_columns):
         self.model = model
+        self.table_name = model.__table__.name
         self.session = session
         self.key_columns = key_columns
         self.existing = {}
@@ -88,7 +89,7 @@ class TablePatcher:
         if row is None:
             if create:
                 row = self.model()
-                logger.info("Adding %r", key)
+                logger.info("Adding %s %r", self.table_name, key)
                 is_new = is_changed = True
                 self.session.add(row)
                 self.existing[key] = row
@@ -102,12 +103,13 @@ class TablePatcher:
                 old_val = getattr(row, k)
                 new_val = record[k]
                 if old_val != new_val:
-                    logger.debug("Value change for %r: %s %r != %r",
-                                 key, k, old_val, new_val)
+                    logger.debug("Value change for %s %r: %s %r != %r",
+                                 self.table_name, key, k, old_val, new_val)
                     changes.append(k)
 
             if changes:
-                logger.info("Updating %r %s", key, ','.join(changes))
+                logger.info("Updating %s %r %s",
+                            self.table_name, key, ','.join(changes))
                 is_changed = True
 
         if is_changed:
@@ -148,11 +150,12 @@ class TablePatcher:
         if remove:
             for key in set(self.existing) - self.seen:
                 self.session.delete(self.existing[key])
-                logger.info("Removing %r", key)
+                logger.info("Removing %s %r", self.table_name, key)
                 counters['n_remove'] += 1
 
         self.session.flush()
-        logger.info("Created %d, updated %d, removed %d, found ok %d.",
+        logger.info("%s: created %d, updated %d, removed %d, found ok %d.",
+                    self.table_name,
                     counters['n_add'], counters['n_update'],
                     counters['n_remove'], counters['n_ok'])
 
