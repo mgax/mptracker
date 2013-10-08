@@ -1,5 +1,6 @@
 import logging
 from datetime import timedelta
+from collections import defaultdict
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
@@ -144,56 +145,81 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
 
     proposals = proposal_scraper.fetch_from_mp_pages(set(by_cdep_id.keys()))
 
+    all_activity = defaultdict(list)
+    for item in models.ProposalActivityItem.query:
+        all_activity[item.proposal_id].append(item)
+
     proposal_patcher = TablePatcher(models.Proposal,
+                                    models.db.session,
+                                    key_columns=['id'])
+
+    activity_patcher = TablePatcher(models.ProposalActivityItem,
                                     models.db.session,
                                     key_columns=['id'])
 
     sp_updates = sp_added = sp_removed = 0
 
-    with proposal_patcher.process(autoflush=1000, remove=True) as add:
-        for prop in proposals:
-            record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
-                'decision_chamber', 'url', 'title', 'date', 'number_bpi',
-                'number_cdep', 'number_senate', 'proposal_type', 'pdf_url'])
+    with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
+        with activity_patcher.process(autoflush=1000, remove=False) \
+                as add_activity:
+            for prop in proposals:
+                record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
+                    'decision_chamber', 'url', 'title', 'date', 'number_bpi',
+                    'number_cdep', 'number_senate', 'proposal_type',
+                    'pdf_url'])
 
-            slug = prop.decision_chamber
-            if slug:
-                record['decision_chamber'] = chamber_by_slug[slug]
+                slug = prop.decision_chamber
+                if slug:
+                    record['decision_chamber'] = chamber_by_slug[slug]
 
-            idc = id_cdeppk_cdep.get(prop.cdeppk_cdep)
-            ids = id_cdeppk_senate.get(prop.cdeppk_senate)
-            if idc and ids:
-                assert idc == ids
-            record['id'] = idc or ids or models.random_uuid()
+                idc = id_cdeppk_cdep.get(prop.cdeppk_cdep)
+                ids = id_cdeppk_senate.get(prop.cdeppk_senate)
+                if idc and ids:
+                    assert idc == ids
+                record['id'] = idc or ids or models.random_uuid()
 
-            result = add(record)
-            row = result.row
+                result = add_proposal(record)
+                row = result.row
 
-            new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
-            existing_sponsorships = {sp.mandate: sp for sp in row.sponsorships}
-            to_remove = set(existing_sponsorships) - set(new_people)
-            to_add = set(new_people) - set(existing_sponsorships)
-            if to_remove:
-                logger.info("Removing sponsors %s: %r", row.id,
-                            [cdep_id(m) for m in to_remove])
-                sp_removed += 1
-                for m in to_remove:
-                    sp = existing_sponsorships[m]
-                    models.db.session.delete(sp)
-            if to_add:
-                logger.info("Adding sponsors %s: %r", row.id,
-                            [cdep_id(m) for m in to_add])
-                sp_added += 1
-                for m in to_add:
-                    row.sponsorships.append(models.Sponsorship(mandate=m))
+                new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
+                existing_sponsorships = {sp.mandate: sp
+                                         for sp in row.sponsorships}
+                to_remove = set(existing_sponsorships) - set(new_people)
+                to_add = set(new_people) - set(existing_sponsorships)
+                if to_remove:
+                    logger.info("Removing sponsors %s: %r", row.id,
+                                [cdep_id(m) for m in to_remove])
+                    sp_removed += 1
+                    for m in to_remove:
+                        sp = existing_sponsorships[m]
+                        models.db.session.delete(sp)
+                if to_add:
+                    logger.info("Adding sponsors %s: %r", row.id,
+                                [cdep_id(m) for m in to_add])
+                    sp_added += 1
+                    for m in to_add:
+                        row.sponsorships.append(models.Sponsorship(mandate=m))
 
-            if to_remove or to_add:
-                sp_updates += 1
+                if to_remove or to_add:
+                    sp_updates += 1
 
-        if dry_run:
-            models.db.session.rollback()
+                db_activity = all_activity[row.id]
+                db_activity.sort(key=lambda a: a.order)
+                db_length = len(db_activity)
+                assert ([i.date for i in db_activity] ==
+                        [ac.date for ac in prop.activity][:db_length])
 
-    models.db.session.commit()
+                for n, ac in enumerate(prop.activity[db_length:], db_length):
+                     record = model_to_dict(ac, ['date', 'location', 'html'])
+                     record['id'] = models.random_uuid()
+                     record['proposal_id'] = row.id
+                     record['order'] = n
+                     add_activity(record)
+
+    if dry_run:
+        models.db.session.rollback()
+    else:
+        models.db.session.commit()
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
