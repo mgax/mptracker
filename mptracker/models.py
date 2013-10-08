@@ -543,6 +543,7 @@ def load(name, include_columns=None, create=True, remove=False,
     records = (filter_record(loader.decode_dict(flask.json.loads(line)))
                for line in _file)
     patcher.update(records, create=create, remove=remove)
+    db.session.commit()
 
 
 @db_manager.command

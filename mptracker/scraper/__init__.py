@@ -60,6 +60,8 @@ def questions(year='2013', reimport_existing=False,
 
             assert not old_asked
 
+    models.db.session.commit()
+
     if new_ask_rows:
         logger.info("Added %d ask records", new_ask_rows)
 
@@ -95,6 +97,8 @@ def people(year='2012'):
 
     patcher.update(get_people())
 
+    models.db.session.commit()
+
 
 @scraper_manager.command
 def committee_summaries(year=2013):
@@ -109,6 +113,8 @@ def committee_summaries(year=2013):
     records = summary_scraper.fetch_summaries(year, get_pdf_text=True)
 
     patcher.update(records)
+
+    models.db.session.commit()
 
 
 @scraper_manager.command
@@ -187,6 +193,8 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
         if dry_run:
             models.db.session.rollback()
 
+    models.db.session.commit()
+
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
 
@@ -248,6 +256,8 @@ def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
                         'mandate_id': mandate.id,
                     }
                     add(transcript_data)
+
+    models.db.session.commit()
 
 
 @scraper_manager.command
@@ -325,3 +335,5 @@ def import_person_xls(xls_path):
                 'mp_group_id': groups[name],
                 'role': role,
             })
+
+    models.db.session.commit()

@@ -151,7 +151,7 @@ class TablePatcher:
                 logger.info("Removing %r", key)
                 counters['n_remove'] += 1
 
-        self.session.commit()
+        self.session.flush()
         logger.info("Created %d, updated %d, removed %d, found ok %d.",
                     counters['n_add'], counters['n_update'],
                     counters['n_remove'], counters['n_ok'])
