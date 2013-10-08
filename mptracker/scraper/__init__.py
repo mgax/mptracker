@@ -206,14 +206,18 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
                 db_activity = all_activity[row.id]
                 db_activity.sort(key=lambda a: a.order)
                 db_length = len(db_activity)
-                assert ([i.date for i in db_activity] ==
-                        [ac.date for ac in prop.activity][:db_length])
-
-                for n, ac in enumerate(prop.activity[db_length:], db_length):
+                for n, ac in enumerate(prop.activity):
                      record = model_to_dict(ac, ['date', 'location', 'html'])
-                     record['id'] = models.random_uuid()
                      record['proposal_id'] = row.id
                      record['order'] = n
+                     if n < db_length:
+                         item = db_activity[n]
+                         record['id'] = item.id
+                         assert item.date == record['date']
+                         assert item.location == record['location']
+                         assert item.order == record['order']
+                     else:
+                         record['id'] = models.random_uuid()
                      add_activity(record)
 
     if dry_run:
