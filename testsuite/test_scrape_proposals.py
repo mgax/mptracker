@@ -79,6 +79,9 @@ def test_get_activity(session):
     assert "la Camera Deputaţilor pentru dezbatere" in activity[3].html
     assert "trimis pentru aviz la" in activity[3].html
     assert activity[4].date == date(2013, 6, 13)
+    assert activity[-1].date == date(2013, 6, 25)
+    assert "primire aviz de la" in activity[-1].html
+    assert "Comisia pentru sănătate şi familie" in activity[-1].html
 
 
 @pytest.mark.parametrize(['in_html', 'out_html'], [
