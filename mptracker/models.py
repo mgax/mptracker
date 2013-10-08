@@ -349,6 +349,18 @@ class Proposal(db.Model):
         self._get_text_row().text = value
 
 
+class ProposalActivityItem(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    date = db.Column(db.Date)
+    location = db.Column(db.Text)
+    html = db.Column(db.Text)
+    order = db.Column(db.Integer)
+
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
+    proposal = db.relationship('Proposal', lazy='eager',
+        backref=db.backref('activity', lazy='dynamic', cascade='all'))
+
+
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
