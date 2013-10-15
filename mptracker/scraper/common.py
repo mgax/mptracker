@@ -1,6 +1,7 @@
 import time
 from datetime import timedelta
 from urllib.parse import urlencode, urlparse, parse_qs
+import logging
 from path import path
 import requests
 from pyquery import PyQuery as pq
@@ -8,6 +9,7 @@ from lxml.html.clean import clean_html
 from lxml.html import fromstring, HTMLParser
 from lxml import etree
 
+logger = logging.getLogger(__name__)
 
 SCRAPER_PACKAGE = path(__file__).abspath().parent
 PROJECT_ROOT = SCRAPER_PACKAGE.parent.parent
@@ -37,6 +39,7 @@ class Scraper(object):
             elif url[-1] not in ['?', '&']:
                 url += '&'
             url += urlencode(args)
+        logger.debug("Fetching URL %s", url)
         page = pq(url, parser='html', opener=self.opener)
         page.make_links_absolute()
         return page
