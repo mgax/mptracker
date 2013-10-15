@@ -14,9 +14,15 @@ scraper_manager = Manager()
 
 
 @scraper_manager.command
-def questions(year='2013', reimport_existing=False,
-              cache_name=None, throttle=None):
+def questions(
+        year='2013',
+        reimport_existing=False,
+        cache_name=None,
+        throttle=None,
+        autoanalyze=False,
+        ):
     from mptracker.scraper.questions import QuestionScraper
+    from mptracker.questions import ocr_question
 
     if reimport_existing:
         known_urls = set()
@@ -40,11 +46,14 @@ def questions(year='2013', reimport_existing=False,
 
     new_ask_rows = 0
 
+    changed = []
+
     with question_patcher.process() as add:
         for question in questions_scraper.run(int(year)):
             person_list = question.pop('person')
             question['addressee'] = '; '.join(question['addressee'])
-            q = add(question).row
+            result = add(question)
+            q = result.row
 
             old_asked = {ask.mandate_id: ask for ask in q.asked}
             for name, person_year, person_number in person_list:
@@ -59,6 +68,9 @@ def questions(year='2013', reimport_existing=False,
                     logger.info("Adding ask for %s: %s", q, mandate)
                     new_ask_rows += 1
 
+            if result.is_changed:
+                changed.append(q)
+
             assert not old_asked
 
     models.db.session.commit()
@@ -70,6 +82,11 @@ def questions(year='2013', reimport_existing=False,
     logger.info("HTTP: %d kb in %s requests, %.2f seconds",
                 counters['bytes'] / 1024, counters['requests'],
                 counters['download_time'].total_seconds())
+
+    if autoanalyze:
+        logger.info("Scheduling %d jobs", len(changed))
+        for question in changed:
+            ocr_question.delay(question.id, autoanalyze=True)
 
 
 @scraper_manager.command
@@ -119,8 +136,13 @@ def committee_summaries(year=2013):
 
 
 @scraper_manager.command
-def proposals(dry_run=False, cache_name=None, throttle=None):
+def proposals(
+        cache_name=None,
+        throttle=None,
+        autoanalyze=False,
+        ):
     from mptracker.scraper.proposals import ProposalScraper
+    from mptracker.proposals import ocr_proposal
 
     proposal_scraper = ProposalScraper(create_session(
             cache_name=cache_name,
@@ -158,6 +180,8 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
                                     key_columns=['id'])
 
     sp_updates = sp_added = sp_removed = 0
+
+    changed = []
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
         with activity_patcher.process(autoflush=1000, remove=False) \
@@ -229,10 +253,18 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
                         record['id'] = models.random_uuid()
                     add_activity(record)
 
+                if result.is_changed:
+                    changed.append(row)
+
     models.db.session.commit()
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
+
+    if autoanalyze:
+        logger.info("Scheduling %d jobs", len(changed))
+        for proposal in changed:
+            ocr_proposal.delay(proposal.id, autoanalyze=True)
 
 
 @scraper_manager.command
