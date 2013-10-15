@@ -579,7 +579,7 @@ def load_tables(names, folder_path=None, remove=False):
     for name in names:
         file_name = '%s.json' % name
         with open(path(folder_path) / file_name, 'rb') as f:
-            print(name, end=' ... ')
+            print(name, '...')
             load(name, remove=remove, _file=f)
 
 
