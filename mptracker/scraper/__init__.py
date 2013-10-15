@@ -184,7 +184,7 @@ def proposals(
     changed = []
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
-        with activity_patcher.process(autoflush=1000, remove=False) \
+        with activity_patcher.process(autoflush=1000, remove=True) \
                 as add_activity:
             for prop in proposals:
                 record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
@@ -207,6 +207,8 @@ def proposals(
 
                 result = add_proposal(record)
                 row = result.row
+                if result.is_changed:
+                    changed.append(row)
 
                 new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
                 existing_sponsorships = {sp.mandate: sp
@@ -235,8 +237,9 @@ def proposals(
                 act_fields = lambda r: (r.date, r.location)
                 if ([act_fields(r) for r in db_activity] !=
                     [act_fields(r) for r in prop.activity[:len(db_activity)]]):
-                    for r in db_activity:
-                        models.db.session.delete(r)
+                    logger.warn("History doesn't match for %s, "
+                                "%d items will be removed",
+                                row.id,len(db_activity))
                     db_activity = []
 
                 for n, ac in enumerate(prop.activity):
@@ -252,9 +255,6 @@ def proposals(
                     else:
                         record['id'] = models.random_uuid()
                     add_activity(record)
-
-                if result.is_changed:
-                    changed.append(row)
 
     models.db.session.commit()
 

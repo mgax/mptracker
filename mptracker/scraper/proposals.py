@@ -23,6 +23,24 @@ class Proposal:
     def cdeppks(self):
         return (self.cdeppk_cdep, self.cdeppk_senate)
 
+    @property
+    def url_cdep(self):
+        if self.cdeppk_cdep is None:
+            return None
+        return ("http://www.cdep.ro/pls/proiecte/upl_pck.proiect"
+                "?idp=%d&cam=2" % self.cdeppk_cdep)
+
+    @property
+    def url_senate(self):
+        if self.cdeppk_senate is None:
+            return None
+        return ("http://www.cdep.ro/pls/proiecte/upl_pck.proiect"
+                "?idp=%d&cam=1" % self.cdeppk_senate)
+
+    @property
+    def url(self):
+        return self.url_cdep or self.url_senate
+
 
 class Activity:
 
@@ -86,17 +104,19 @@ class ProposalScraper(Scraper):
                 val = url_decode(href.split('?', 1)[1]).get('idp')
                 return int(val) if val else None
             cdeppks = (cdeppk(cols[1]), cdeppk(cols[2]))
-            link = pqitems(row, 'a')[0]
-            url = link.attr('href')
-            if 'cam=' not in url:
-                assert '?' in url
-                url += '&cam=2'
             p = Proposal(*cdeppks)
-            p.url = url
             yield p
 
     def fetch_proposal_details(self, prop):
         page = self.fetch_url(prop.url)
+        page_cdep = page_senate = None
+        if prop.url_cdep:
+            page_cdep = self.fetch_url(prop.url_cdep)
+        if prop.url_senate:
+            page_senate = self.fetch_url(prop.url_senate)
+
+        page = page_cdep or page_senate
+
         prop.title = pq('.headline', page).text()
         prop.number_bpi = None
         prop.number_cdep = None
@@ -144,7 +164,11 @@ class ProposalScraper(Scraper):
                                          prop.number_senate])
         assert prop.date is not None, "No date for proposal %r" % prop.url
 
-        prop.activity = self.get_activity(page)
+        cdep_activity = (self.get_activity(page_cdep)
+                         if page_cdep else [])
+        senate_activity = (self.get_activity(page_senate)
+                           if page_senate else [])
+        prop.activity = self.merge_activity(cdep_activity, senate_activity)
 
     def get_activity(self, page):
         activity = []
