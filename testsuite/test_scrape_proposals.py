@@ -85,6 +85,27 @@ def test_get_activity(session):
     assert '(pdf)' in activity[-1].html
 
 
+def test_merge_activity(session):
+    from mptracker.scraper.proposals import ProposalScraper
+    PROP_URL_CDEP = PROPOSAL_URL + 'idp=13037&cam=2'
+    PROP_URL_SENATE = PROPOSAL_URL + 'idp=17003&cam=1'
+
+    session.url_map.update({
+        PROP_URL_CDEP: PAGES_DIR / 'proposal-2-13037',
+        PROP_URL_SENATE: PAGES_DIR / 'proposal-1-17003',
+    })
+
+    scraper = ProposalScraper(session)
+    activity = scraper.merge_activity(
+        scraper.get_activity(scraper.fetch_url(PROP_URL_CDEP)),
+        scraper.get_activity(scraper.fetch_url(PROP_URL_SENATE)))
+    assert activity[3].date == date(2013, 2, 12)
+    assert "înregistrat la Senat pentru dezbatere" in activity[3].html
+    assert "cu nr.b38 (adresa nr.bpi19/11-02-2013)" in activity[3].html
+    assert activity[4].date == date(2013, 2, 19)
+    assert "trimis pentru aviz la Consiliul legislativ" in activity[4].html
+
+
 @pytest.mark.parametrize(['in_html', 'out_html'], [
     ('', ''),
     ('  ', ''),

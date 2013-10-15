@@ -1,6 +1,7 @@
 import re
 import logging
 from datetime import date, datetime
+import itertools
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
 from mptracker.scraper.common import Scraper, pqitems, get_cdep_id, sanitize
@@ -24,7 +25,11 @@ class Proposal:
 
 
 class Activity:
-    pass
+
+    def __init__(self, date, location, html):
+        self.date = date
+        self.location = location
+        self.html = html
 
 
 def get_date_from_numbers(numbers):
@@ -168,10 +173,11 @@ class ProposalScraper(Scraper):
             if date_text:
                 if ac:
                     activity.append(ac)
-                ac = Activity()
-                ac.date = datetime.strptime(date_text, '%d.%m.%Y').date()
-                ac.location = location
-                ac.html = ""
+                ac = Activity(
+                    date=datetime.strptime(date_text, '%d.%m.%Y').date(),
+                    location=location,
+                    html="",
+                )
 
             last_col = pq(cols[-1])
             if last_col.attr('rowspan'):
@@ -191,3 +197,24 @@ class ProposalScraper(Scraper):
             activity.append(ac)
 
         return activity
+
+    def merge_activity(self, activity_cdep, activity_senate):
+        if not activity_cdep:
+            return activity_senate
+
+        if not activity_senate:
+            return activity_cdep
+
+        def activity_chunks(series):
+            for _, g in itertools.groupby(series, lambda ac: ac.location):
+                chunk = list(g)
+                start_date = chunk[0].date
+                yield (start_date, chunk)
+
+        chunks = (list(activity_chunks(activity_cdep)) +
+                  list(activity_chunks(activity_senate)))
+        chunks.sort(key=lambda pair: pair[0])
+        rv = []
+        for _, chunk in chunks:
+            rv.extend(chunk)
+        return rv
