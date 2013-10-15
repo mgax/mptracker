@@ -19,7 +19,7 @@ questions_manager = Manager()
 
 
 @job
-def ocr_question(question_id):
+def ocr_question(question_id, autoanalyze=False):
     question = models.Question.query.get(question_id)
 
     pages = ocr_url(question.pdf_url)
@@ -28,6 +28,12 @@ def ocr_question(question_id):
     models.db.session.add(question)
     models.db.session.commit()
     logger.info("done OCR for %s (%d pages)", question, len(pages))
+
+    if autoanalyze:
+        asked = question.asked.all()
+        logger.info("scheduling analysis for %d mandates", len(asked))
+        for ask in asked:
+            analyze.delay(ask.id)
 
 
 @questions_manager.command

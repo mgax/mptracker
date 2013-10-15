@@ -58,10 +58,23 @@ def relevant():
     })
 
 
+@job
+def ocr_proposal(proposal_id, autoanalyze=False):
+    proposal = models.Proposal.query.get(proposal_id)
+    pages = ocr_url(proposal.pdf_url)
+    proposal.text = '\n\n'.join(pages)
+    models.db.session.commit()
+    logger.info("done OCR for %s (%d pages)", proposal, len(pages))
+
+    if autoanalyze:
+        sponsorships = proposal.sponsorships.all()
+        logger.info("scheduling analysis for %d mandates", len(sponsorships))
+        for sp in sponsorships:
+            analyze_sponsorship.delay(sp.id)
+
+
 @proposals_manager.command
 def ocr_all(number=None, force=False):
-    job_map = {}
-
     n_jobs = n_skip = n_ok = 0
     for proposal in models.Proposal.query:
         if not proposal.pdf_url:
@@ -71,39 +84,13 @@ def ocr_all(number=None, force=False):
             n_ok += 1
             continue
 
-        job = ocr_url.delay(proposal.pdf_url)
-        job_map[proposal.id] = job
+        ocr_proposal.delay(proposal.id)
 
         n_jobs += 1
         if number and n_jobs >= int(number):
             break
+
     logger.info("enqueued %d jobs, skipped %d, ok %d", n_jobs, n_skip, n_ok)
-
-    session = models.db.session
-
-    while job_map:
-        sleep(1)
-
-        done = set()
-        failed = set()
-        session.rollback()
-        for proposal_id, job in job_map.items():
-            if job.is_finished:
-                done.add(proposal_id)
-                proposal = models.Proposal.query.get(proposal_id)
-                pages = job.result
-                proposal.text = '\n\n'.join(pages)
-
-            elif job.is_failed:
-                failed.add(proposal_id)
-
-        session.commit()
-
-        if done or failed:
-            for proposal_id in done | failed:
-                del job_map[proposal_id]
-            logger.info("saved %d, failed %d, remaining %d",
-                        len(done), len(failed), len(job_map))
 
 
 @job
