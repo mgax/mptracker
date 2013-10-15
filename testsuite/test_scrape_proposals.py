@@ -16,6 +16,7 @@ def test_simple_scraping(session):
         PROPOSAL_URL + 'idp=17135&cam=1': PAGES_DIR / 'proposal-1-17135',
         PROPOSAL_URL + 'idp=13348&cam=2': PAGES_DIR / 'proposal-2-13348',
         PROPOSAL_URL + 'idp=17422&cam=1': PAGES_DIR / 'proposal-1-17422',
+        PROPOSAL_URL + 'idp=17343&cam=1': PAGES_DIR / 'proposal-1-17343',
     })
 
     scraper = ProposalScraper(session)
@@ -46,6 +47,7 @@ def test_correlate_cdep_senate(session):
         PROPOSAL_URL + 'idp=13330&cam=2': PAGES_DIR / 'proposal-2-13330',
         PROPOSAL_URL + 'idp=13526&cam=2': PAGES_DIR / 'proposal-2-13526',
         PROPOSAL_URL + 'idp=17422&cam=1': PAGES_DIR / 'proposal-1-17422',
+        PROPOSAL_URL + 'idp=17334&cam=1': PAGES_DIR / 'proposal-1-17334',
     })
 
     scraper = ProposalScraper(session)
