@@ -174,8 +174,11 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
 
                 idc = id_cdeppk_cdep.get(prop.cdeppk_cdep)
                 ids = id_cdeppk_senate.get(prop.cdeppk_senate)
-                if idc and ids:
-                    assert idc == ids
+                if idc and ids and idc != ids:
+                    logger.warn("Two different records for the same proposal: "
+                                "(%s, %s). Removing the 2nd.", idc, ids)
+                    models.db.session.delete(models.Proposal.query.get(ids))
+                    ids = None
                 record['id'] = idc or ids or models.random_uuid()
 
                 result = add_proposal(record)
@@ -205,25 +208,28 @@ def proposals(dry_run=False, cache_name=None, throttle=None):
 
                 db_activity = all_activity[row.id]
                 db_activity.sort(key=lambda a: a.order)
-                db_length = len(db_activity)
-                for n, ac in enumerate(prop.activity):
-                     record = model_to_dict(ac, ['date', 'location', 'html'])
-                     record['proposal_id'] = row.id
-                     record['order'] = n
-                     if n < db_length:
-                         item = db_activity[n]
-                         record['id'] = item.id
-                         assert item.date == record['date']
-                         assert item.location == record['location']
-                         assert item.order == record['order']
-                     else:
-                         record['id'] = models.random_uuid()
-                     add_activity(record)
+                act_fields = lambda r: (r.date, r.location)
+                if ([act_fields(r) for r in db_activity] !=
+                    [act_fields(r) for r in prop.activity[:len(db_activity)]]):
+                    for r in db_activity:
+                        models.db.session.delete(r)
+                    db_activity = []
 
-    if dry_run:
-        models.db.session.rollback()
-    else:
-        models.db.session.commit()
+                for n, ac in enumerate(prop.activity):
+                    record = model_to_dict(ac, ['date', 'location', 'html'])
+                    record['proposal_id'] = row.id
+                    record['order'] = n
+                    if n < len(db_activity):
+                        item = db_activity[n]
+                        record['id'] = item.id
+                        assert item.date == record['date']
+                        assert item.location == record['location']
+                        assert item.order == record['order']
+                    else:
+                        record['id'] = models.random_uuid()
+                    add_activity(record)
+
+    models.db.session.commit()
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
                 sp_updates, sp_added, sp_removed)
