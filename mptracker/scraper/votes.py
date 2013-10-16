@@ -52,6 +52,7 @@ class VoteScraper(Scraper):
         voting_session = VotingSession(
             cdeppk=vote_cdeppk,
             subject=subject_td.text(),
+            subject_html=subject_td.html(),
             votes=[],
             proposal_cdeppk=None,
         )

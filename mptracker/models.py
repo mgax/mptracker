@@ -365,6 +365,7 @@ class VotingSession(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     date = db.Column(db.Date)
     subject = db.Column(db.Text)
+    subject_html = db.Column(db.Text)
     cdeppk = db.Column(db.Integer)
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=True)

@@ -11,6 +11,7 @@ def upgrade():
         sa.Column('id', postgresql.UUID(), nullable=False),
         sa.Column('date', sa.Date(), nullable=True),
         sa.Column('subject', sa.Text(), nullable=True),
+        sa.Column('subject_html', sa.Text(), nullable=True),
         sa.Column('cdeppk', sa.Integer(), nullable=True),
         sa.Column('proposal_id', postgresql.UUID(), nullable=True),
         sa.ForeignKeyConstraint(['proposal_id'], ['proposal.id']),
