@@ -12,6 +12,8 @@ logger.setLevel(logging.INFO)
 
 scraper_manager = Manager()
 
+ONE_DAY = timedelta(days=1)
+
 
 @scraper_manager.command
 def questions(
@@ -416,10 +418,22 @@ def import_person_xls(xls_path):
 
 @scraper_manager.command
 def votes(
+        start=None,
+        n_days=1,
         cache_name=None,
         throttle=None,
         ):
     from mptracker.scraper.votes import VoteScraper
+
+    if start is None:
+        start = models.db.session.execute(
+            'select date from voting_session '
+            'order by date desc limit 1').scalar() + ONE_DAY
+
+    else:
+        start = parse_date(start)
+
+    n_days = int(n_days)
 
     http_session = create_session(cache_name=cache_name,
                                   throttle=throttle and float(throttle))
@@ -443,27 +457,31 @@ def votes(
 
     with voting_session_patcher.process() as add_voting_session:
         with vote_patcher.process() as add_vote:
-            the_date = date(2013, 10, 8)
-            for voting_session in vote_scraper.scrape_day(the_date):
-                record = model_to_dict(
-                    voting_session,
-                    ['cdeppk', 'subject', 'subject_html'],
-                )
-                record['date'] = the_date
-                proposal_cdeppk = voting_session.proposal_cdeppk
-                record['proposal_id'] = (proposal_ids.get(proposal_cdeppk)
-                                         if proposal_cdeppk else None)
-                vs = add_voting_session(record).row
-
-                for vote in voting_session.votes:
-                    record = model_to_dict(vote, ['choice'])
-                    record['voting_session_id'] = vs.id
-                    mandate = mandate_lookup.find(
-                        vote.mandate_name,
-                        vote.mandate_year,
-                        vote.mandate_number,
+            for delta in range(n_days):
+                the_date = start + ONE_DAY * delta
+                logger.info("Scraping votes from %s", the_date)
+                for voting_session in vote_scraper.scrape_day(the_date):
+                    record = model_to_dict(
+                        voting_session,
+                        ['cdeppk', 'subject', 'subject_html'],
                     )
-                    record['mandate_id'] = mandate.id
-                    add_vote(record)
+                    record['date'] = the_date
+                    proposal_cdeppk = voting_session.proposal_cdeppk
+                    record['proposal_id'] = (proposal_ids.get(proposal_cdeppk)
+                                             if proposal_cdeppk else None)
+                    vs = add_voting_session(record).row
+                    if vs.id is None:
+                        models.db.session.flush()
+
+                    for vote in voting_session.votes:
+                        record = model_to_dict(vote, ['choice'])
+                        record['voting_session_id'] = vs.id
+                        mandate = mandate_lookup.find(
+                            vote.mandate_name,
+                            vote.mandate_year,
+                            vote.mandate_number,
+                        )
+                        record['mandate_id'] = mandate.id
+                        add_vote(record)
 
     models.db.session.commit()
