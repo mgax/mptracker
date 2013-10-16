@@ -361,6 +361,36 @@ class ProposalActivityItem(db.Model):
         backref=db.backref('activity', lazy='dynamic', cascade='all'))
 
 
+class VotingSession(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    date = db.Column(db.Date)
+    subject = db.Column(db.Text)
+    cdeppk = db.Column(db.Integer)
+
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=True)
+    proposal = db.relationship('Proposal',
+        backref=db.backref('voting_sessions', lazy='dynamic'))
+
+    @property
+    def cdep_url(self):
+        return ("http://www.cdep.ro/pls/steno/evot.nominal"
+                "?idv={s.cdeppk}").format(s=self)
+
+
+class Vote(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    choice = db.Column(db.Text)
+
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
+        backref=db.backref('votes', lazy='dynamic'))
+
+    voting_session_id = db.Column(UUID, db.ForeignKey('voting_session.id'),
+                                  nullable=False)
+    voting_session = db.relationship('VotingSession',
+        backref=db.backref('votes', lazy='dynamic'))
+
+
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
