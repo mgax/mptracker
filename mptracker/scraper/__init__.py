@@ -268,9 +268,16 @@ def proposals(
 
 
 @scraper_manager.command
-def transcripts(cdeppk_start, n_sessions=1, cache_name=None, throttle=None):
+def transcripts(start=None, n_sessions=1, cache_name=None, throttle=None):
     from mptracker.scraper.transcripts import TranscriptScraper
-    cdeppk = int(cdeppk_start) - 1
+
+    if start is None:
+        max_serial = models.db.session.execute(
+            'select serial from transcript_chapter '
+            'order by serial desc limit 1').scalar()
+        start = int(max_serial.split('/')[0]) + 1
+
+    cdeppk = int(start) - 1
     n_sessions = int(n_sessions)
 
     transcript_scraper = TranscriptScraper(
