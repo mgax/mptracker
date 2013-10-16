@@ -58,10 +58,10 @@ class VoteScraper(Scraper):
         proposal_link = subject_td.find('a[target=PROIECTE]')
         if proposal_link:
             href = proposal_link.attr('href')
-            assert href.startswith('http://www.cdep.ro/pls/proiecte'
-                                   '/upl_pck.proiect?idp=')
-            args = url_args(href)
-            voting_session.proposal_cdeppk = args.get('idp', type=int)
+            if href.startswith('http://www.cdep.ro/pls/proiecte'
+                               '/upl_pck.proiect?idp='):
+                args = url_args(href)
+                voting_session.proposal_cdeppk = args.get('idp', type=int)
 
         td_nr_crt = page.find(':contains("Nr. Crt.")')
         table = pq(td_nr_crt.parents().filter('table')[-1])
