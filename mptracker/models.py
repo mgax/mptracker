@@ -594,6 +594,7 @@ def dump_tables(folder_path=None, xclude=None):
         if name in exclude:
             continue
         print(name, end=' ... ')
+        sys.stdout.flush()
         file_name = '%s.json' % name
         file_path = folder_path / file_name
         with open(file_path, 'w', encoding='utf-8') as table_fd:
