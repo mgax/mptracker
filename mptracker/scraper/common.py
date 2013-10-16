@@ -4,6 +4,7 @@ from urllib.parse import urlencode, urlparse, parse_qs
 import logging
 from path import path
 import requests
+from werkzeug.urls import url_decode, url_parse
 from pyquery import PyQuery as pq
 from lxml.html.clean import clean_html
 from lxml.html import fromstring, HTMLParser
@@ -43,6 +44,13 @@ class Scraper(object):
         page = pq(url, parser='html', opener=self.opener)
         page.make_links_absolute()
         return page
+
+
+class GenericModel:
+
+    def __init__(self, **kw):
+        for k, v in kw.items():
+            setattr(self, k, v)
 
 
 def create_throttle(seconds):
@@ -121,6 +129,10 @@ def parse_cdep_id(href):
     (year, chamber, number) = parse_profile_url(href)
     assert chamber == 2
     return (year, number)
+
+
+def url_args(url):
+    return url_decode(url_parse(url).query)
 
 
 def never(*args, **kwargs):

@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta
+from datetime import timedelta, date
 from collections import defaultdict
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session, create_session
@@ -412,3 +412,20 @@ def import_person_xls(xls_path):
             })
 
     models.db.session.commit()
+
+
+@scraper_manager.command
+def votes(
+        cache_name=None,
+        throttle=None,
+        ):
+    from mptracker.scraper.votes import VoteScraper
+
+    http_session = create_session(cache_name=cache_name,
+                                  throttle=throttle and float(throttle))
+    vote_scraper = VoteScraper(http_session)
+
+    for voting_session in vote_scraper.scrape_day(date(2013, 10, 8)):
+        print(voting_session.cdeppk, voting_session.subject[:60])
+        for ch in voting_session.votes:
+            print(' --', ch.mandate_name, ch.choice)
