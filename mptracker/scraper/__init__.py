@@ -425,7 +425,28 @@ def votes(
                                   throttle=throttle and float(throttle))
     vote_scraper = VoteScraper(http_session)
 
-    for voting_session in vote_scraper.scrape_day(date(2013, 10, 8)):
-        print(voting_session.cdeppk, voting_session.subject[:60])
-        for ch in voting_session.votes:
-            print(' --', ch.mandate_name, ch.choice)
+
+    voting_session_patcher = TablePatcher(
+        models.VotingSession,
+        models.db.session,
+        key_columns=['cdeppk'],
+    )
+
+    proposal_by_cdeppk = {p.cdeppk_cdep: p.id for p in models.Proposal.query}
+
+    with voting_session_patcher.process() as add_voting_session:
+        the_date = date(2013, 10, 8)
+        for voting_session in vote_scraper.scrape_day(the_date):
+            record = model_to_dict(
+                voting_session,
+                ['cdeppk', 'subject', 'proposal_cdeppk'],
+            )
+            record['date'] = the_date
+            proposal_cdeppk = voting_session.proposal_cdeppk
+            if proposal_cdeppk:
+                record['proposal_id'] = proposal_by_cdeppk.get(proposal_cdeppk)
+            else:
+                record['proposal_id'] = None
+            add_voting_session(record)
+
+    models.db.session.commit()
