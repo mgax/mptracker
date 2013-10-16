@@ -366,7 +366,6 @@ class VotingSession(db.Model):
     date = db.Column(db.Date)
     subject = db.Column(db.Text)
     cdeppk = db.Column(db.Integer)
-    proposal_cdeppk = db.Column(db.Integer)
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=True)
     proposal = db.relationship('Proposal',

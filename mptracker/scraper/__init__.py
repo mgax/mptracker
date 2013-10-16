@@ -447,7 +447,7 @@ def votes(
             for voting_session in vote_scraper.scrape_day(the_date):
                 record = model_to_dict(
                     voting_session,
-                    ['cdeppk', 'subject', 'proposal_cdeppk'],
+                    ['cdeppk', 'subject'],
                 )
                 record['date'] = the_date
                 proposal_cdeppk = voting_session.proposal_cdeppk
