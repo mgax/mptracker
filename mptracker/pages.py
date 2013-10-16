@@ -67,8 +67,8 @@ def person(person_id):
             'college': m.college,
             'phone': m.phone,
             'address': m.address,
-            'votes': m.votes,
-            'votes_percent': m.votes_percent,
+            'election_votes': m.election_votes,
+            'election_votes_percent': m.election_votes_percent,
             'candidate_party': m.candidate_party,
             'committee_memberships': (m.committee_memberships
                                             .join(models.MpCommittee)

@@ -63,8 +63,8 @@ def read_person_xls(xls_path):
                 'cdep_number': cdep_number,
                 'constituency': int(row['Nr Circumscriptie']),
                 'college': int(row['Nr Colegiu']),
-                'votes': int(row['Voturi obtinute']),
-                'votes_percent': Decimal(row['% Voturi obtinute']),
+                'election_votes': int(row['Voturi obtinute']),
+                'election_votes_percent': Decimal(row['% Voturi obtinute']),
                 'address': txtval(row['Adresa birou parlamentar']),
                 'phone': txtval(row['Telefon birou parlamentar']),
                 'candidate_party': txtval(
