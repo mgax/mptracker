@@ -13,7 +13,7 @@
   <h2>Procesul legislativ</h2>
   <table class="table table-condensed table-bordered">
     {% for item in activity %}
-      <tr>
+      <tr class="proposal-activity-at-{{ item.location.lower() }}">
         <th>{{ item.date }} ({{ item.location.lower() }})</th>
         <td>{{ item.html|safe }}</td>
       </tr>
