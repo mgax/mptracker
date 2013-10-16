@@ -43,7 +43,6 @@ class VoteScraper(Scraper):
                                    'steno/evot.nominal?idv=')
             vote_cdeppk = url_args(href).get('idv', type=int)
             yield self.scrape_vote(vote_cdeppk)
-            break
 
     def scrape_vote(self, vote_cdeppk):
         url = self.VOTE_URL % vote_cdeppk
@@ -75,8 +74,10 @@ class VoteScraper(Scraper):
                 mandate_year=year,
                 mandate_number=number,
                 mandate_name=link.text(),
-                choice=parse_choice(choice_td.text()),
+                choice=None,
             )
+            if voting_session.subject != 'Prezenţă':
+                vote.choice = parse_choice(choice_td.text())
             voting_session.votes.append(vote)
 
         return voting_session
