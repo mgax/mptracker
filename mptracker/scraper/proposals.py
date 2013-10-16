@@ -156,6 +156,8 @@ class ProposalScraper(Scraper):
                     prop.decision_chamber = 'cdep'
                 elif txt == 'Senatul':
                     prop.decision_chamber = 'senat'
+                elif txt == 'Camera Deputatilor + Senatul':
+                    prop.decision_chamber = 'common'
                 else:
                     logger.warn("Unknown decision_chamber %r", txt)
 
