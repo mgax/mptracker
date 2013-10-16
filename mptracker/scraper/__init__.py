@@ -432,21 +432,38 @@ def votes(
         key_columns=['cdeppk'],
     )
 
-    proposal_by_cdeppk = {p.cdeppk_cdep: p.id for p in models.Proposal.query}
+    vote_patcher = TablePatcher(
+        models.Vote,
+        models.db.session,
+        key_columns=['voting_session_id', 'mandate_id'],
+    )
+
+    proposal_ids = {p.cdeppk_cdep: p.id for p in models.Proposal.query}
+    mandate_lookup = models.MandateLookup()
 
     with voting_session_patcher.process() as add_voting_session:
-        the_date = date(2013, 10, 8)
-        for voting_session in vote_scraper.scrape_day(the_date):
-            record = model_to_dict(
-                voting_session,
-                ['cdeppk', 'subject', 'proposal_cdeppk'],
-            )
-            record['date'] = the_date
-            proposal_cdeppk = voting_session.proposal_cdeppk
-            if proposal_cdeppk:
-                record['proposal_id'] = proposal_by_cdeppk.get(proposal_cdeppk)
-            else:
-                record['proposal_id'] = None
-            add_voting_session(record)
+        with vote_patcher.process() as add_vote:
+            the_date = date(2013, 10, 8)
+            for voting_session in vote_scraper.scrape_day(the_date):
+                record = model_to_dict(
+                    voting_session,
+                    ['cdeppk', 'subject', 'proposal_cdeppk'],
+                )
+                record['date'] = the_date
+                proposal_cdeppk = voting_session.proposal_cdeppk
+                record['proposal_id'] = (proposal_ids.get(proposal_cdeppk)
+                                         if proposal_cdeppk else None)
+                vs = add_voting_session(record).row
+
+                for vote in voting_session.votes:
+                    record = model_to_dict(vote, ['choice'])
+                    record['voting_session_id'] = vs.id
+                    mandate = mandate_lookup.find(
+                        vote.mandate_name,
+                        vote.mandate_year,
+                        vote.mandate_number,
+                    )
+                    record['mandate_id'] = mandate.id
+                    add_vote(record)
 
     models.db.session.commit()
