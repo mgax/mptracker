@@ -459,6 +459,9 @@ def votes(
         with vote_patcher.process() as add_vote:
             for delta in range(n_days):
                 the_date = start + ONE_DAY * delta
+                if the_date >= date.today():
+                    # don't scrape today, maybe voting is not done yet!
+                    break
                 logger.info("Scraping votes from %s", the_date)
                 for voting_session in vote_scraper.scrape_day(the_date):
                     record = model_to_dict(
