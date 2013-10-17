@@ -11,6 +11,7 @@ from mptracker.admin import admin
 from mptracker.placenames import placenames_manager
 from mptracker.scraper import scraper_manager
 from mptracker.proposals import proposals, proposals_manager
+from mptracker.votes import votes
 
 
 logger = logging.getLogger(__name__)
@@ -46,6 +47,7 @@ def create_app():
     app.register_blueprint(pages)
     app.register_blueprint(questions)
     app.register_blueprint(proposals)
+    app.register_blueprint(votes)
     admin.init_app(app)
     app._logger = logger
     if app.debug:

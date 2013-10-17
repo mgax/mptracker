@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% set VOTE_LABEL = {
+      'yes': "da",
+      'no': "nu",
+      'abstain': "abținere",
+      'novote': "&mdash;"|safe,
+    } %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
+        ("voturi",
+            url_for('.index')),
+        (voting_session.date|string,
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <h1>{{ voting_session.date }}: {{ voting_session.cdeppk }}</h1>
+
+  <p>{{ voting_session.subject }}</p>
+
+  <table class="table table-condensed table-bordered">
+    <thead>
+      <th>Parlamentar</th>
+      <th>Grup</th>
+      <th>Vot</th>
+    </thead>
+
+    <tbody>
+    {% for vote in votes %}
+      <tr class="vote-{{ vote.choice }}">
+        <td>
+          {%- set person = vote.mandate.person %}
+          {%- set url = url_for('pages.person', person_id=person.id) %}
+          <a href="{{ url }}">{{ person }}</a>
+        </td>
+        <td>
+          {%- set mp_group = vote.mandate.group_memberships[0].mp_group %}
+          {%- set url = url_for('pages.group', group_id=mp_group.id) %}
+          <a href="{{ url }}">{{ mp_group.short_name }}</a>
+        </td>
+        <td>{{ VOTE_LABEL.get(vote.choice, "??") }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

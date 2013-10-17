@@ -13,6 +13,10 @@
   </p>
 
   <p>
+    <a href="{{ url_for('votes.index') }}">Voturi</a>
+  </p>
+
+  <p>
     {% set url = url_for('questions.mandate_index') %}
     <a href="{{ url }}">Întrebări și interpelări</a> –
     <a href="{{ url_for('questions.new') }}">noi ({{ new_count }})</a>,
