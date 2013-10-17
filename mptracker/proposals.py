@@ -46,6 +46,7 @@ def proposal(proposal_id):
                 'match_data': flask.json.loads(sp.match.data or '{}'),
             } for sp in proposal.sponsorships],
         'activity': activity.all(),
+        'voting_sessions': proposal.voting_sessions.all(),
     })
 
 

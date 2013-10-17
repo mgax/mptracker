@@ -27,5 +27,6 @@ def detail(voting_session_id):
             .join(models.MpGroupMembership.mp_group))
     return flask.render_template('votes/detail.html', **{
         'voting_session': voting_session,
+        'proposal': voting_session.proposal,
         'votes': iter(votes),
     })

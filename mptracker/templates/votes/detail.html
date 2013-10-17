@@ -22,6 +22,20 @@
 
   <h1>{{ voting_session.date }}: {{ voting_session.cdeppk }}</h1>
 
+  <p>
+    {%- set cdep_url = "http://www.cdep.ro/pls/steno/evot.nominal?idv=%d"
+                          |format(voting_session.cdeppk) %}
+    site cdep: <a href="{{ cdep_url }}">{{ cdep_url }}</a>
+  </p>
+
+  {% if proposal %}
+    <p>
+      {%- set url = url_for('proposals.proposal', proposal_id=proposal.id) %}
+      propunere:
+      <a href="{{ url }}">{{ proposal.title|truncate(80) }}</a>
+    </p>
+  {% endif %}
+
   <p>{{ voting_session.subject }}</p>
 
   <table class="table table-condensed table-bordered">

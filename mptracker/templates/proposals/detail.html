@@ -10,6 +10,20 @@
 
   <p>Camera decizională: {{ proposal.decision_chamber.name }}</p>
 
+  {% if voting_sessions %}
+    <h2>Voturi</h2>
+    <ul>
+    {% for voting_session in voting_sessions %}
+      <li>
+        <a href="{{ url_for('votes.detail',
+                            voting_session_id=voting_session.id) }}">
+          {{ voting_session.date }}
+        </a>
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
   <h2>Procesul legislativ</h2>
   <table class="table table-condensed table-bordered">
     {% for item in activity %}
