@@ -33,6 +33,11 @@ def ocr_question(question_id, autoanalyze=False):
         asked = question.asked.all()
         logger.info("scheduling analysis for %d mandates", len(asked))
         for ask in asked:
+            mandate = ask.mandate
+            if not mandate.minority:
+                if (mandate.county is None or
+                    mandate.county.geonames_code is None):
+                    continue
             analyze.delay(ask.id)
 
 
