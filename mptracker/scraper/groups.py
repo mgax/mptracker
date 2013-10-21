@@ -72,13 +72,7 @@ class GroupScraper(Scraper):
                     mp_ident=parse_profile_url(name_link.attr('href')),
                     party=row_children.eq(3).text(),
                     start_date=None,
-                    title_start_date=None,
                 )
-
-                name_td_html = row_children.eq(2).html()
-                if re.search(r'<br/>\s*din', name_td_html):
-                    date_txt = re.split(r'<br/>\s*din', name_td_html)[1]
-                    member.title_start_date = parse_date(date_txt.strip())
 
                 date_txt = row_children.eq(4).text()
                 if date_txt:

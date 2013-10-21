@@ -27,10 +27,6 @@ def test_simple_scraping(session):
     assert current_3.start_date is None
     assert current_3.title == 'Vicelideri'
 
-    current_14 = psd.current_members[14]
-    assert current_14.title_start_date == date(2013, 9, 2)
-    assert current_14.start_date is None
-
     current_84 = psd.current_members[84]
     assert current_84.start_date == date(2013, 9, 18)
 
