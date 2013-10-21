@@ -57,48 +57,56 @@ class GroupScraper(Scraper):
             pass
 
         else:
-            current_title = None
-            rows = list(mp_tables[0].items('tr'))
-            for row in rows[1:]:
-                row_children = row.children()
-                next_title = row_children.eq(1).text()
-                if next_title:
-                    current_title = next_title
-                name_link = row_children.eq(2).find('a')
+            group.current_members.extend(
+                self.fetch_current_members(mp_tables[0]))
 
-                member = Member(
-                    title=current_title,
-                    mp_name=name_link.text(),
-                    mp_ident=parse_profile_url(name_link.attr('href')),
-                    party=row_children.eq(3).text(),
-                    start_date=None,
-                )
-
-                date_txt = row_children.eq(4).text()
-                if date_txt:
-                    member.start_date = parse_date(date_txt)
-
-                group.current_members.append(member)
-
-            rows = list(mp_tables[-1].items('tr'))
-            has_start = bool("Membru din" in rows[0].text())
-            end_date_col = 4 if has_start else 3
-            for row in rows[1:]:
-                row_children = row.children()
-                name_link = row_children.eq(1).find('a')
-
-                member = Member(
-                    mp_name=name_link.text(),
-                    mp_ident=parse_profile_url(name_link.attr('href')),
-                    start_date=None,
-                    end_date=parse_date(row_children.eq(end_date_col).text()),
-                )
-
-                if has_start:
-                    start_txt = row_children.eq(3).text()
-                    if start_txt:
-                        member.start_date = parse_date(start_txt)
-
-                group.former_members.append(member)
+            group.former_members.extend(
+                self.fetch_former_members(mp_tables[-1]))
 
         return group
+
+    def fetch_current_members(self, table):
+        current_title = None
+        rows = list(table.items('tr'))
+        for row in rows[1:]:
+            row_children = row.children()
+            next_title = row_children.eq(1).text()
+            if next_title:
+                current_title = next_title
+            name_link = row_children.eq(2).find('a')
+
+            member = Member(
+                title=current_title,
+                mp_name=name_link.text(),
+                mp_ident=parse_profile_url(name_link.attr('href')),
+                party=row_children.eq(3).text(),
+                start_date=None,
+            )
+
+            date_txt = row_children.eq(4).text()
+            if date_txt:
+                member.start_date = parse_date(date_txt)
+
+            yield member
+
+    def fetch_former_members(self, table):
+        rows = list(table.items('tr'))
+        has_start = bool("Membru din" in rows[0].text())
+        end_date_col = 4 if has_start else 3
+        for row in rows[1:]:
+            row_children = row.children()
+            name_link = row_children.eq(1).find('a')
+
+            member = Member(
+                mp_name=name_link.text(),
+                mp_ident=parse_profile_url(name_link.attr('href')),
+                start_date=None,
+                end_date=parse_date(row_children.eq(end_date_col).text()),
+            )
+
+            if has_start:
+                start_txt = row_children.eq(3).text()
+                if start_txt:
+                    member.start_date = parse_date(start_txt)
+
+            yield member
