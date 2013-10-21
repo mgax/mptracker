@@ -1,6 +1,6 @@
 from collections import defaultdict
 import calendar
-from datetime import datetime
+from datetime import date, datetime
 import flask
 from sqlalchemy.orm import joinedload
 from path import path
@@ -73,9 +73,10 @@ def person(person_id):
             'committee_memberships': (m.committee_memberships
                                             .join(models.MpCommittee)
                                             .all()),
-            'group_membership': (m.group_memberships
-                                        .join(models.MpGroup)
-                                        .first()),
+            'group_memberships': (
+                m.group_memberships
+                    .join(models.MpGroup)
+                    .all()),
         } for m in person.mandates
                          .join(models.Mandate.county)
                          .join(models.Mandate.chamber)
@@ -126,10 +127,14 @@ def group(group_id):
     group = models.MpGroup.query.get_or_404(group_id)
     return flask.render_template('group.html', **{
         'group': group,
-        'memberships': (group.memberships
-                                .join(models.Mandate)
-                                .join(models.Person)
-                                .all()),
+        'memberships': (
+            group.memberships
+                .filter(
+                    models.MpGroupMembership.interval.contains(
+                        date.today()))
+                .join(models.Mandate)
+                .join(models.Person)
+                .all()),
     })
 
 

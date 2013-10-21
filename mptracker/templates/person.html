@@ -94,15 +94,16 @@
         <a href="{{ url }}">{{ mandate.sponsorships_count }}</a>
       </dd>
 
-      {% if mandate.group_membership %}
-        {% set membership = mandate.group_membership %}
-        <dt>grup parlamentar:</dt>
+      <dt>grup parlamentar:</dt>
+      {% for membership in mandate.group_memberships %}
         <dd>
           {% set url = url_for('.group', group_id=membership.mp_group_id) %}
           <a href="{{ url }}">{{ membership.mp_group.short_name }}</a>
+          ({{ membership.interval.lower|datefmt }} &ndash;
+           {{ membership.interval.upper|datefmt }})
           {% if membership.role %}({{ membership.role }}){% endif %}
         </dd>
-      {% endif %}
+      {% endfor %}
 
       {% if mandate.phone or mandate.address %}
         <dt>birou parlamentar:</dt>
