@@ -54,7 +54,8 @@ class GroupScraper(Scraper):
         idg = url_args(group_url).get('idg', type=int)
         if idg == 0:
             # group of unaffiliated MPs
-            pass
+            group.current_members.extend(
+                self.fetch_current_independent_members(mp_tables[0]))
 
         else:
             group.current_members.extend(
@@ -65,6 +66,19 @@ class GroupScraper(Scraper):
                     self.fetch_former_members(mp_tables[-1]))
 
         return group
+
+    def fetch_current_independent_members(self, table):
+        rows = list(table.items('tr'))
+        for row in rows[1:]:
+            row_children = row.children()
+            name_link = row_children.eq(1).find('a')
+
+            member = Member(
+                mp_name=name_link.text(),
+                mp_ident=parse_profile_url(name_link.attr('href')),
+            )
+
+            yield member
 
     def fetch_current_members(self, table):
         current_title = None

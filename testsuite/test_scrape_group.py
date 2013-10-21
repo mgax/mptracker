@@ -18,6 +18,11 @@ def test_simple_scraping(session):
     scraper = GroupScraper(session)
     groups = list(scraper.fetch())
 
+    indep = groups[0]
+    assert len(indep.current_members) == 13
+    indep_2 = indep.current_members[2]
+    assert indep_2.mp_name == "Dumitru Ovidiu-Ioan"
+
     psd = groups[1]
     assert len(psd.current_members) == 165
     assert len(psd.former_members) == 2
