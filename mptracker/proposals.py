@@ -71,6 +71,11 @@ def ocr_proposal(proposal_id, autoanalyze=False):
         sponsorships = proposal.sponsorships.all()
         logger.info("scheduling analysis for %d mandates", len(sponsorships))
         for sp in sponsorships:
+            mandate = sp.mandate
+            if not mandate.minority:
+                if (mandate.county is None or
+                    mandate.county.geonames_code is None):
+                    continue
             analyze_sponsorship.delay(sp.id)
 
 
