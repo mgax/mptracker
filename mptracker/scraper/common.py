@@ -1,7 +1,8 @@
 import time
-from datetime import timedelta
+from datetime import date, timedelta
 from urllib.parse import urlencode, urlparse, parse_qs
 import logging
+import re
 from path import path
 import requests
 from werkzeug.urls import url_decode, url_parse
@@ -160,3 +161,17 @@ def sanitize(html):
         return doc.find('body').html()
     else:
         return str(doc)
+
+
+MONTHS = {'ian': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'mai': 5, 'iun': 6,
+          'iul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12}
+
+
+def parse_date(txt):
+    m = re.match(r'^(?P<day>\d{1,2}) (?P<month>\w+)\.? (?P<year>\d{4})$', txt)
+    assert m is not None, "can't parse date: %r" % txt
+    return date(
+        int(m.group('year')),
+        MONTHS[m.group('month')],
+        int(m.group('day')),
+    )

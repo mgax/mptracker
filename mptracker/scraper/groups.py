@@ -1,9 +1,7 @@
-from datetime import date
-import re
 from collections import namedtuple
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, url_args, GenericModel,
-                                      parse_profile_url)
+                                      parse_profile_url, parse_date)
 
 
 Interval = namedtuple('Interval', ['start', 'end', 'group'])
@@ -19,20 +17,6 @@ class Member(GenericModel):
 
     def get_interval(self):
         return Interval(self.start_date, self.end_date, self.group)
-
-
-MONTHS = {'ian': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'mai': 5, 'iun': 6,
-          'iul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12}
-
-
-def parse_date(txt):
-    m = re.match(r'^(?P<day>\d{1,2}) (?P<month>\w+)\.? (?P<year>\d{4})$', txt)
-    assert m is not None, "can't parse date: %r" % txt
-    return date(
-        int(m.group('year')),
-        MONTHS[m.group('month')],
-        int(m.group('day')),
-    )
 
 
 class GroupScraper(Scraper):
