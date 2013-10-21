@@ -36,7 +36,6 @@ def test_simple_scraping(session):
 
     current_3 = psd.current_members[3]
     assert current_3.mp_name == "Itu Cornel"
-    assert current_3.party == 'PSD'
     assert current_3.start_date is None
     assert current_3.end_date is None
     assert current_3.title == 'Vicelideri'
