@@ -179,6 +179,10 @@ def groups(
         interval_list.extend(new_intervals)
         interval_list.sort()
 
+        if interval_list[-1].end is not None:
+            logger.warn("Mandate %s ends at %s",
+                        mandate, interval_list[-1].end)
+
     group_patcher = TablePatcher(
         models.MpGroup,
         models.db.session,
