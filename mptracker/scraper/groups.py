@@ -81,6 +81,8 @@ class GroupScraper(Scraper):
             member = Member(
                 mp_name=name_link.text(),
                 mp_ident=parse_profile_url(name_link.attr('href')),
+                start_date=None,
+                end_date=None,
             )
 
             yield member
@@ -101,6 +103,7 @@ class GroupScraper(Scraper):
                 mp_ident=parse_profile_url(name_link.attr('href')),
                 party=row_children.eq(3).text(),
                 start_date=None,
+                end_date=None,
             )
 
             date_txt = row_children.eq(4).text()

@@ -23,6 +23,8 @@ def test_simple_scraping(session):
     assert len(indep.current_members) == 13
     indep_2 = indep.current_members[2]
     assert indep_2.mp_name == "Dumitru Ovidiu-Ioan"
+    assert indep_2.start_date is None
+    assert indep_2.end_date is None
 
     psd = groups[1]
     assert not psd.is_independent
@@ -33,6 +35,7 @@ def test_simple_scraping(session):
     assert current_3.mp_name == "Itu Cornel"
     assert current_3.party == 'PSD'
     assert current_3.start_date is None
+    assert current_3.end_date is None
     assert current_3.title == 'Vicelideri'
 
     current_84 = psd.current_members[84]
