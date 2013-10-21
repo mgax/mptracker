@@ -75,6 +75,7 @@ def person(person_id):
                                             .all()),
             'group_memberships': (
                 m.group_memberships
+                    .order_by(models.MpGroupMembership.interval)
                     .join(models.MpGroup)
                     .all()),
         } for m in person.mandates
