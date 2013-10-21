@@ -49,11 +49,16 @@ class GroupScraper(Scraper):
         headline = group_page.find('td.headline')
         parent_td = pq(headline.parents('td')[-1])
         mp_tables = list(parent_td.items('table table'))
-        group = Group(current_members=[], former_members=[])
+        group = Group(
+            is_independent=False,
+            current_members=[],
+            former_members=[],
+        )
 
         idg = url_args(group_url).get('idg', type=int)
         if idg == 0:
             # group of unaffiliated MPs
+            group.is_independent = True
             group.current_members.extend(
                 self.fetch_current_independent_members(mp_tables[0]))
 
