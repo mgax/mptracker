@@ -13,7 +13,7 @@ from path import path
 from mptracker.common import (parse_date, TablePatcher, temp_dir,
                               fix_local_chars)
 from mptracker.dbutil import JsonString
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, DATERANGE
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
 logger = logging.getLogger(__name__)
@@ -72,6 +72,7 @@ class MpGroup(db.Model):
 class MpGroupMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     role = db.Column(db.Text)
+    interval = db.Column(DATERANGE, nullable=False)
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
