@@ -71,6 +71,7 @@ class GroupScraper(Scraper):
         if idg == 0:
             # group of unaffiliated MPs
             group.is_independent = True
+            group.short_name = "Indep."
             group.current_members.extend(
                 self.fetch_current_independent_members(mp_tables[0]))
 
