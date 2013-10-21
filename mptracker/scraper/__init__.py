@@ -121,6 +121,20 @@ def people(year='2012'):
 
 
 @scraper_manager.command
+def groups(
+        cache_name=None,
+        throttle=None,
+        ):
+    from mptracker.scraper.groups import GroupScraper
+
+    http_session = create_session(cache_name=cache_name,
+                                  throttle=throttle and float(throttle))
+    group_scraper = GroupScraper(http_session)
+    for group in group_scraper.fetch():
+        print(group)
+
+
+@scraper_manager.command
 def committee_summaries(year=2013):
     from mptracker.scraper.committee_summaries import SummaryScraper
 
