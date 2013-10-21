@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from contextlib import contextmanager
 from collections import namedtuple
 import subprocess
@@ -11,6 +11,7 @@ from itertools import chain
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
 from flask.ext.rq import job
+from babel.dates import format_date
 from psycopg2.extras import DateRange
 from path import path
 
@@ -35,6 +36,13 @@ class UuidConverter(BaseConverter):
 def register_url_converters(state):
     app = state.app
     app.url_map.converters['uuid'] = UuidConverter
+
+
+@common.app_template_filter('datefmt')
+def datefmt(value):
+    if value in [date.min, date.max]:
+        return ""
+    return format_date(value, 'd MMMM y', locale='ro')
 
 
 def parse_date(date_str):
