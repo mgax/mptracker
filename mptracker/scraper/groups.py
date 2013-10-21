@@ -66,24 +66,24 @@ class GroupScraper(Scraper):
                     current_title = next_title
                 name_link = row_children.eq(2).find('a')
 
-                name_td_html = row_children.eq(2).html()
-                if re.search(r'<br/>\s*din', name_td_html):
-                    date_txt = re.split(r'<br/>\s*din', name_td_html)[1]
-                    start_date = parse_date(date_txt.strip())
-                else:
-                    date_txt = row_children.eq(4).text()
-                    if date_txt:
-                        start_date = parse_date(date_txt)
-                    else:
-                        start_date = None
-
                 member = Member(
                     title=current_title,
                     mp_name=name_link.text(),
                     mp_ident=parse_profile_url(name_link.attr('href')),
                     party=row_children.eq(3).text(),
-                    start_date=start_date,
+                    start_date=None,
+                    title_start_date=None,
                 )
+
+                name_td_html = row_children.eq(2).html()
+                if re.search(r'<br/>\s*din', name_td_html):
+                    date_txt = re.split(r'<br/>\s*din', name_td_html)[1]
+                    member.title_start_date = parse_date(date_txt.strip())
+
+                date_txt = row_children.eq(4).text()
+                if date_txt:
+                    member.start_date = parse_date(date_txt)
+
                 group.current_members.append(member)
 
             rows = list(mp_tables[1].items('tr'))[1:]
