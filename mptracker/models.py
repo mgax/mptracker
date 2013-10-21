@@ -76,11 +76,11 @@ class MpGroupMembership(db.Model):
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
-        backref=db.backref('group_memberships', lazy='dynamic'))
+        backref=db.backref('group_memberships', lazy='dynamic', cascade='all'))
 
     mp_group_id = db.Column(UUID, db.ForeignKey('mp_group.id'), nullable=False)
     mp_group = db.relationship('MpGroup',
-        backref=db.backref('memberships', lazy='dynamic'))
+        backref=db.backref('memberships', lazy='dynamic', cascade='all'))
 
 
 class MpCommittee(db.Model):
