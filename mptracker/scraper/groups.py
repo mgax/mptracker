@@ -58,8 +58,8 @@ class GroupScraper(Scraper):
 
         else:
             current_title = None
-            rows = list(mp_tables[0].items('tr'))[1:]
-            for row in rows:
+            rows = list(mp_tables[0].items('tr'))
+            for row in rows[1:]:
                 row_children = row.children()
                 next_title = row_children.eq(1).text()
                 if next_title:
@@ -80,14 +80,25 @@ class GroupScraper(Scraper):
 
                 group.current_members.append(member)
 
-            rows = list(mp_tables[1].items('tr'))[1:]
-            for row in rows:
+            rows = list(mp_tables[-1].items('tr'))
+            has_start = bool("Membru din" in rows[0].text())
+            end_date_col = 4 if has_start else 3
+            for row in rows[1:]:
                 row_children = row.children()
                 name_link = row_children.eq(1).find('a')
+
                 member = Member(
                     mp_name=name_link.text(),
                     mp_ident=parse_profile_url(name_link.attr('href')),
+                    start_date=None,
+                    end_date=parse_date(row_children.eq(end_date_col).text()),
                 )
+
+                if has_start:
+                    start_txt = row_children.eq(3).text()
+                    if start_txt:
+                        member.start_date = parse_date(start_txt)
+
                 group.former_members.append(member)
 
         return group

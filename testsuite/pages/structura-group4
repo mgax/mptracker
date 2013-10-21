@@ -1,0 +1,556 @@
+<html lang="ro"><head><title>STRUCTURA PARLAMENTULUI ROMÂNIEI 2012-prezent</title><meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-2" /><link rel="stylesheet" href="/stylesheets/general.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/general_roz.css" type="text/css" /><link rel="stylesheet" href="/stylesheets/home.css" type="text/css" /></head><body style="background: url(/img/banners/body101.gif) #f3f3f3 fixed no-repeat 0px 100%;">
+    <script type='text/javascript' src='/js/hv_menu_conf_1.js'></script>
+    <script type="text/javascript">
+    var NoOffFirstLineMenus=4;			                      // Number of first level items
+  	var LowBgColor="#c7c7c7";			          // Background color when mouse is not over
+  	var LowSubBgColor="#c7c7c7";			        // Background color when mouse is not over on subs
+  	var HighBgColor="#730A48";			          // Background color when mouse is over
+  	var HighSubBgColor="#730A48";			      // Background color when mouse is over on subs
+  	var FontLowColor="#730A48";			                      // Font color when mouse is not over
+  	var FontSubLowColor="#730A48";		                    // Font color subs when mouse is not over
+  	var FontHighColor="#FFFFFF";			                    // Font color when mouse is over
+  	var FontSubHighColor="#FFFFFF";		                    // Font color subs when mouse is over
+  	var BorderColor="#c7c7c7";			          // Border color
+  	var BorderSubColor="#b19477";			                    // Border color for subs
+  	var BorderWidth=1;				                            // Border width
+  	var BorderBtwnElmnts=1;				                        // Border between elements 1 or 0
+  	var FontFamily="arial,comic sans ms,technical"	      // Font family menu items
+  	var FontSize=9;				                                // Font size menu items
+  	var FontBold=0;					                              // Bold menu items 1 or 0
+  	var FontItalic=0;				                              // Italic menu items 1 or 0
+  	var MenuTextCentered="left";			                    // Item text position "left", "center" or "right"
+  	var MenuCentered="left";			                        // Menu horizontal position "left", "center" or "right"
+  	var MenuVerticalCentered="top";		                    // Menu vertical position "top", "middle","bottom" or static
+  	var ChildOverlap=.2;				                          // horizontal overlap child/ parent
+  	var ChildVerticalOverlap=.2;			                    // vertical overlap child/parent
+  	var StartTop=0;					                              // Menu offset x coordinate
+  	var StartLeft=0;				                              // Menu offset y coordinate
+  	var VerCorrect=0;				                              // Multiple frames y correction
+  	var HorCorrect=0;				                              // Multiple frames x correction
+  	var LeftPaddng=3;				                              // Left padding
+  	var TopPaddng=2;				                              // Top padding
+  	var FirstLineHorizontal=1;			                      // SET TO 1 FOR HORIZONTAL MENU, 0 FOR VERTICAL
+  	var MenuFramesVertical=1;			                        // Frames in cols or rows 1 or 0
+  	var DissapearDelay=1000;			                        // delay before menu folds in
+  	var TakeOverBgColor=1;				                        // Menu frame takes over background color subitem frame
+  	var FirstLineFrame="navig";			                      // Frame where first level appears
+  	var SecLineFrame="space";			                        // Frame where sub levels appear
+  	var DocTargetFrame="space";			                      // Frame where target documents appear
+  	var TargetLoc="MenuPos";			                        // span id for relative positioning
+  	var HideTop=0;					                              // Hide first level when loading new document 1 or 0
+  	var MenuWrap=1;					                              // enables/ disables menu wrap 1 or 0
+  	var RightToLeft=0;				                            // enables/ disables right to left unfold 1 or 0
+  	var UnfoldsOnClick=1;				                          // Level 1 unfolds onclick/ onmouseover
+  	var WebMasterCheck=0;				                          // menu tree checking on or off 1 or 0
+  	var ShowArrow=1;				                              // Uses arrow gifs when 1
+  	var KeepHilite=1;				                              // Keep selected path highligthed
+  	var Arrws=["/img/icon_link_r.gif",9,5,"",0,0,"/img/icon_link_l.gif",9,5];	// Arrow source, width and height
+    </script>
+    <script type='text/javascript' src='/js/hv_menu.js'></script>
+<table border=0 cellspacing=0 cellpadding=0 width=985>
+<tr>
+  <td><img src="/img/spacer.gif" width=40></td>
+  <td width="100%">
+    <table style="background: url(/img/banners/cd_1.gif) no-repeat" cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <tr>
+      <td height=22 width=65><a href="/"><img src="/img/spacer.gif" height=22 width=65></a></td>
+    </tr>
+    <tr>
+      <td valign=top width=65 height=51><a href="/pls/dic/site.home?idl=1"><img src="/img/spacer.gif" height=51 width=65></a></td>
+      <td valign=top width="100%" height=51>
+        <table border=0 cellspacing=0 cellpadding=0 width=550>
+        <tr>
+        <td>
+          <div id=MenuTop style="margin-top: 33px; margin-left: 0px;">
+<a href="/pls/dic/site.page?id=794">Menţiune juridică</a> |
+<a href="/pls/dic/site.page?id=709">Forum</a> | <a href="/pls/dic/site.page?den=servicii-contact&amp;idl=1">Contact</a>
+| <a href="/pls/parlam/structura.gp?idg=4&idl=2">English</a>
+| <a href="/pls/parlam/structura.gp?idg=4&idl=3">Français</a>
+
+          </div>
+        </td>
+        <td align="right">
+          <div id=MenuTop style="margin-top: 27px;">
+          <form name="frmSearch" method="post" action=""><input type="hidden" name="idl" value="1">
+          <table cellSpacing=0 cellPadding=0 border=0>
+          <tr>
+            <td vAlign=middle><input type="text" name="sir" size="15" class="size1"></td>
+            <td vAlign=middle>&nbsp;<a href="#">Caută</a></td>
+          </tr>
+          </table>
+          </form>
+          </div>
+        </td>      
+        </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign=top align=left width="100%" colSpan=3 height=20><div id="MenuPos" style="position:relative; height=18; MARGIN-RIGHT: 10px; MARGIN-LEFT: 10px; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px;"></div></td>
+    </tr>
+    </table>
+
+    <table width="100%" border=0 cellspacing=5 cellpadding=0>
+    <tr valign="top">
+
+      <td>
+        <img src="/img/spacer.gif" width=145 height=1 hspace=0 vspace=0 />
+        <table border=0 cellpadding=0 cellspacing=0 align="center">
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm974" valign="top"><td width="100%" colspan=2 class="menuoff" align="center"><img src="/camera_deputatilor/grupuri/ppdd2012.jpg" border=0></td></tr></tbody></table>
+</td></tr>
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=0 border=0 width="100%"><tr>
+		       <td bgcolor="#666666" colspan=2><img height=1 src="/img/spacer.gif" alt="" width=1 align="left" border=0></td>
+				   <td bgcolor="#666666" rowspan=5><img src="/img/spacer.gif" alt="" width=1 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+<tr><td bgcolor="#ffffff" colspan=2>
+         <table width="100%" cellspacing=0 cellpadding=0 border=0><tr><td><table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1119" valign="top"><td width="100%" colspan=2 class="menuoff" align="left"><table border=0 width="100%"><tr valign=top><td>Email:</td><td nowrap><A HREF="mailto:grup_ppdd@cdep.ro">grup_ppdd@cdep.ro</A></td></tr><tr valign=top><td colspan=2><A HREF="/pls/parlam/structura.gp?idg=4&leg=2012&cam=2&pag=cp">Comunicate de presa</A></td></tr><tr valign=top><td colspan=2><A HREF="/pls/parlam/structura.gp?idg=4&poz=1">Lista cu fotografii</A></td></tr><tr valign=top><td colspan=2>Propuneri legislative din:<br> <A HREF="/pls/parlam/structura.gp?idg=4&leg=2012&cam=2&pag=pl2013">2013</A></td></tr><tr valign=top><td colspan=2>Întrebări şi interpelări din:<br> <A HREF="/pls/parlam/structura.gp?idg=4&leg=2012&cam=2&pag=ii2013">2013</A></td></tr></table></td></tr></tbody></table></td></tr></table>
+         </td></tr>
+         <tr><td bgcolor="#666666" colspan=2><img src="/img/spacer.gif" alt="" width=145 height=1 hspace=0 vspace=0 border=0 align="left"></td></tr>
+</table>
+</td></tr>
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1196" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/parlam/structura.gp?leg=2012&cam=2&idg=&poz=0&idl=1">Grupurile parlamentare ale Camerei Deputaţilor</a></td></tr></tbody></table>
+</td></tr>
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1197" valign="top"><td align="center"><img src="/img/icon_elenco.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/parlam/structura.gp?leg=2012&cam=1&idg=&poz=0&idl=1">Grupurile parlamentare ale Senatului</a></td></tr></tbody></table>
+</td></tr>
+<tr><td><img src="/img/spacer.gif" alt="" width=1 height=3></td></tr>
+<tr><td>
+<table cellspacing=0 cellpadding=2 border=0 width="100%"><tbody><tr id="itm1198" valign="top"><td align="center"><img src="/img/icon_bifa.gif" alt="" border=0 /></td><td width="100%"  class="menuoff" align="left"><a href="/pls/dic/site.page?id=227">Mai multe detalii despre grupurile parlamentare</a></td></tr></tbody></table>
+</td></tr>
+</table></td>
+<td width="100%">
+<table border=0 width="100%">
+     	       <tr valign="top">
+     	       <td nowrap class="cale1">Sunteti în sectiunea:</td>
+     	       <td class="cale2" width="100%"><a href="/pls/dic/site.home?idl=1">Prima pagina</a> &gt; <A HREF="/pls/parlam/structura.home?leg=2012&idl=1">Legislatura 2012-prezent</A> &gt; Camera Deputaţilor &gt; <A HREF="/pls/parlam/structura.gp?idg=">Grupuri</A> &gt; PP-DD</td>
+<td width=50 align="right"><a href="/pls/parlam/structura.gp?idg=4&prn=1" target="PRN"><img src="/img/printer0.jpg" border=0 alt="Versiunea pentru printare"></a></td>
+</tr></table>
+<p><table border=0 cellspacing=0 cellpadding=5 width="100%">
+<tr valign="top">
+<td width=50><img src="/img/spacer.gif" border=0 width=40 height=8><img src="/img/bile.gif" border=0 width=38 height=10></td>
+<td class="headline" width="100%">Grupul parlamentar al Partidului Poporului - Dan Diaconescu</td>
+</tr>
+</table>
+<p>
+<table border=0 cellspacing=0 cellpadding=0 width="100%"><td>
+<p>
+
+<p align="right"><table width="100%" cellpadding=3 cellspacing=0 border=0>
+<tr bgcolor="#14247C" align=center>
+<td width=5%><b><font color="#ffffff">&nbsp;</td><td align=left><b><font color="#ffffff">Funcţia</td>
+<td align=left><b><font color="#ffffff">Nume şi prenume</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>1.</td>
+<td>Lider</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=130&cam=2&leg=2012">Fenechiu Cătălin-Daniel</A></b>
+<br>din  14 mai 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>2.</td>
+<td>Vicelideri</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=2&cam=2&leg=2012">Adam Luminiţa-Pachel</A></b>
+<br>din  14 mai 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>3.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=73&cam=2&leg=2012">Ciuhodaru Tudor</A></b>
+<br>din  18 feb. 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>4.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=76&cam=2&leg=2012">Codîrlă Liviu</A></b>
+<br>din  18 feb. 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>5.</td>
+<td>Secretari</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=221&cam=2&leg=2012">Mincă Liliana</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>6.</td>
+<td>Membri</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=11&cam=2&leg=2012">Anghel Gabriela-Lola</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>7.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=33&cam=2&leg=2012">Blănariu Valentin</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>8.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=49&cam=2&leg=2012">Burlacu Ştefan</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>9.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=51&cam=2&leg=2012">Caloianu Mario-Ernest</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>10.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=67&cam=2&leg=2012">Ciobanu Liliana</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>11.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=78&cam=2&leg=2012">Comşa Cornel-George</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>12.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=79&cam=2&leg=2012">Condurăţeanu Andrei-Răzvan</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>13.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=94&cam=2&leg=2012">Dalca Ştefan-Petru</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>14.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=96&cam=2&leg=2012">Deaconu Mihai</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>15.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=98&cam=2&leg=2012">Diaconu Adrian-Nicolae</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>16.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=113&cam=2&leg=2012">Dragomir Maria</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>17.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=121&cam=2&leg=2012">Dumitru Ioana-Jenica</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>18.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=135&cam=2&leg=2012">Fonta Nuţu</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>19.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=169&cam=2&leg=2012">Hulea Ioan</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>20.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=170&cam=2&leg=2012">Iacob Ridzi Monica Maria</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>21.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=230&cam=2&leg=2012">Mocioi Niculina</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>22.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=231&cam=2&leg=2012">Moisii Constantin</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>23.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=241&cam=2&leg=2012">Murgu Neagu</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>24.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=260&cam=2&leg=2012">Niculescu Dumitru</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>25.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=265&cam=2&leg=2012">Nistor Marioara</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>26.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=269&cam=2&leg=2012">Oajdea Daniel Vasile</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>27.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=331&cam=2&leg=2012">Sefer Cristian-George</A></b>
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>28.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=336&cam=2&leg=2012">Smarandache Miron Alexandru</A></b>
+</td>
+</tr>
+</table>
+<p>
+<span class="headline">Foşti membri ai biroului grupului:</span>
+
+<p align="right"><table width="100%" cellpadding=3 cellspacing=0 border=0>
+<tr bgcolor="#14247C" align=center>
+<td width=5%><b><font color="#ffffff">&nbsp;</td><td align=left><b><font color="#ffffff">Funcţia</td>
+<td align=left><b><font color="#ffffff">Nume şi prenume</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>1.</td>
+<td>Lider</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=296&cam=2&leg=2012">Popa Radu Mihai</A></b>
+<br>până în  14 mai 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>2.</td>
+<td>Vicelideri</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=59&cam=2&leg=2012">Chebac Eugen</A></b>
+<br>din  15 apr. 2013 - până în  30 sep. 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>3.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=78&cam=2&leg=2012">Comşa Cornel-George</A></b>
+<br>până în  15 apr. 2013
+</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>4.</td>
+<td>&nbsp;</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=98&cam=2&leg=2012">Diaconu Adrian-Nicolae</A></b>
+<br>până în  14 mai 2013
+</td>
+</tr>
+</table>
+<p>
+<span class="headline">Foşti membri ai grupului:</span>
+
+<p align="right"><table width="100%" cellpadding=3 cellspacing=0 border=0>
+<tr bgcolor="#14247C" align=center>
+<td width=5%><b><font color="#ffffff">&nbsp;</td>
+<td align=left><b><font color="#ffffff">Nume şi prenume</td><td><b><font color="#ffffff">Partid</td><td><b><font color="#ffffff">Membru din</td><td><b><font color="#ffffff">Membru până</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>1.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=32&cam=2&leg=2012">Blăjuţ Viorel-Ionel</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">21 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>2.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=44&cam=2&leg=2012">Bucur Constantin-Alin</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=70&cam=2&leg=2012&idl=1">UNPR</A></td>
+<td align="center"></td>
+<td align="center">15 apr. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>3.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=59&cam=2&leg=2012">Chebac Eugen</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=70&cam=2&leg=2012&idl=1">UNPR</A></td>
+<td align="center"></td>
+<td align="center">30 sep. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>4.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012">Cioată Cezar</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=50&cam=2&leg=2012&idl=1">PC</A></td>
+<td align="center"></td>
+<td align="center">4 feb. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>5.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=65&cam=2&leg=2012">Cioată Cezar</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=50&cam=2&leg=2012&idl=1">PC</A></td>
+<td align="center">11 feb. 2013</td>
+<td align="center">7 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>6.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=77&cam=2&leg=2012">Coman Gheorghe</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=50&cam=2&leg=2012&idl=1">PC</A></td>
+<td align="center"></td>
+<td align="center">26 mar. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>7.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=122&cam=2&leg=2012">Dumitru Ovidiu-Ioan</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">21 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>8.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=154&cam=2&leg=2012">Grecea Maria</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=27&cam=2&leg=2012&idl=1">PNL</A></td>
+<td align="center"></td>
+<td align="center">24 sep. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>9.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=205&cam=2&leg=2012">Marian Ion Cristinel</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">21 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>10.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=215&cam=2&leg=2012">Melinte Ion</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=40&cam=2&leg=2012&idl=1">PSD</A></td>
+<td align="center"></td>
+<td align="center">18 sep. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>11.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=217&cam=2&leg=2012">Mihai Aurelian</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">21 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>12.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=233&cam=2&leg=2012">Moldovan Ioan</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=50&cam=2&leg=2012&idl=1">PC</A></td>
+<td align="center"></td>
+<td align="center">22 ian. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>13.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=249&cam=2&leg=2012">Neţoiu Gheorghe</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=70&cam=2&leg=2012&idl=1">UNPR</A></td>
+<td align="center"></td>
+<td align="center">21 iun. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>14.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=253&cam=2&leg=2012">Nicoară Romeo Florin</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=27&cam=2&leg=2012&idl=1">PNL</A></td>
+<td align="center"></td>
+<td align="center">11 feb. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>15.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=296&cam=2&leg=2012">Popa Radu Mihai</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=40&cam=2&leg=2012&idl=1">PSD</A></td>
+<td align="center"></td>
+<td align="center">14 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>16.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=304&cam=2&leg=2012">Puşcaş Iacob</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">28 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>17.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=320&cam=2&leg=2012">Rotaru Răzvan</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=50&cam=2&leg=2012&idl=1">PC</A></td>
+<td align="center"></td>
+<td align="center">17 iun. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>18.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=357&cam=2&leg=2012">Şcheau Ion</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">21 mai 2013</td>
+</tr>
+<tr valign=top bgcolor="#fef9c2">
+<td align=center width=5%>19.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=366&cam=2&leg=2012">Tararache Mihai</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=1000&cam=2&leg=2012&idl=1">Indep.</A></td>
+<td align="center"></td>
+<td align="center">22 apr. 2013</td>
+</tr>
+<tr valign=top bgcolor="#fffef2">
+<td align=center width=5%>20.</td>
+<td><b><A HREF="/pls/parlam/structura.mp?idm=368&cam=2&leg=2012">Tănase Răzvan-Ionuţ</A></b>
+</td>
+<td align="center"><A HREF="structura.fp?idp=70&cam=2&leg=2012&idl=1">UNPR</A></td>
+<td align="center"></td>
+<td align="center">17 iun. 2013</td>
+</tr>
+</table>
+</td></table>
+<td width=10><img src="/img/spacer.gif" width=10 height=1 hspace=0 vspace=0 /></td>
+</tr>
+</table>
+
+<table width="100%" border=0>
+<tr>
+
+<td width="10" rowspan=4><img src="/img/spacer.gif" alt="" width="10" height="1" hspace=0 vspace=0 align="left" /></td>    
+<td width="100%" colspan=2 bgcolor="#b2b2b2" align="center"><img src="/img/spacer.gif" alt="" width="1" height="1" border=0 align="left"></td>
+<td width="10" rowspan=4><img src="/img/spacer.gif" alt="" width="10" height="1" hspace=0 vspace=0 align="left" /></td>
+
+</tr>
+
+
+<tr>
+  <td class="footlinetext"><b>Adresa poştală:</b> Palatul Parlamentului, str.Izvor nr.2-4, sect.5, Bucureşti
+  </td><td align="right" class="footlinetext">luni, 21 octombrie  2013, 12:34</td>
+</tr>
+<tr>
+  <td class="footlinetext"><b>Telefoane (centrala):</b> 021 316 0300, 021 414 1111
+  </td>
+  <td align="right" rowspan=2 class="footlinetext"><a href="https://www.cdep.ro"><img src="/img/eToken.gif" width=60 height=32 border=0 /></a>
+  </td>
+</tr>
+<tr><td class="footlinetext"><b>E-mail:</b> <A HREF="mailto:webmaster@cdep.ro">webmaster@cdep.ro</A></td>
+</table>
+</body>
+</html>
