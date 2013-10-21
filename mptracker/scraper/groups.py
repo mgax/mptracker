@@ -60,8 +60,9 @@ class GroupScraper(Scraper):
             group.current_members.extend(
                 self.fetch_current_members(mp_tables[0]))
 
-            group.former_members.extend(
-                self.fetch_former_members(mp_tables[-1]))
+            if len(mp_tables) > 1:
+                group.former_members.extend(
+                    self.fetch_former_members(mp_tables[-1]))
 
         return group
 
