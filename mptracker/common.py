@@ -50,7 +50,7 @@ def parse_date(date_str):
 
 
 def parse_date_range(date_range_str):
-    m = re.match(r'^\](?P<lower>\S+) (?P<upper>\S+)\)$', date_range_str)
+    m = re.match(r'^\[(?P<lower>\S+), (?P<upper>\S+)\)$', date_range_str)
     return DateRange(
         parse_date(m.group('lower')),
         parse_date(m.group('upper')),
