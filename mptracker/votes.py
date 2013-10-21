@@ -9,7 +9,10 @@ votes = flask.Blueprint('votes', __name__)
 def index():
     voting_sessions = (
         models.VotingSession.query
-            .order_by(models.VotingSession.cdeppk.desc()))
+            .order_by(
+                models.VotingSession.date.desc(),
+                models.VotingSession.cdeppk.desc(),
+            ))
     return flask.render_template('votes/index.html', **{
         'voting_sessions': iter(voting_sessions),
     })
