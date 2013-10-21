@@ -49,10 +49,14 @@ class GroupScraper(Scraper):
         headline = group_page.find('td.headline')
         parent_td = pq(headline.parents('td')[-1])
         mp_tables = list(parent_td.items('table table'))
+        short_name = group_page.find('.cale2').text().split('>')[-1].strip()
+
         group = Group(
             is_independent=False,
             current_members=[],
             former_members=[],
+            name=headline.text(),
+            short_name=short_name,
         )
 
         idg = url_args(group_url).get('idg', type=int)
