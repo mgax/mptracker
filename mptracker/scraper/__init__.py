@@ -125,13 +125,58 @@ def groups(
         cache_name=None,
         throttle=None,
         ):
-    from mptracker.scraper.groups import GroupScraper
+    from mptracker.scraper.groups import GroupScraper, Interval
 
     http_session = create_session(cache_name=cache_name,
                                   throttle=throttle and float(throttle))
     group_scraper = GroupScraper(http_session)
-    for group in group_scraper.fetch():
-        print(group)
+
+    mandate_lookup = models.MandateLookup()
+    mandate_intervals = defaultdict(list)
+
+    term_start = date(2012, 12, 19)
+
+    groups = list(group_scraper.fetch())
+    independents = groups[0]
+    assert independents.is_independent
+    for group in groups[1:] + [independents]:
+        for member in group.current_members + group.former_members:
+            (year, chamber, number) = member.mp_ident
+            assert chamber == 2
+            mandate = mandate_lookup.find(member.mp_name, year, number)
+            interval_list = mandate_intervals[mandate]
+
+            interval = member.get_interval()
+            if interval.start is None:
+                interval = interval._replace(start=term_start)
+
+            if group.is_independent:
+                if interval_list:
+                    start = interval_list[-1].end
+                    interval = interval._replace(start=start)
+
+            interval_list.append(interval)
+            interval_list.sort(key=lambda i: i[0])
+
+    for mandate, intervals in mandate_intervals.items():
+        # make sure intervals are continuous
+        new_intervals = []
+        for interval_one, interval_two in zip(intervals[:-1], intervals[1:]):
+            assert interval_one.start < interval_one.end
+            if interval_one.end < interval_two.start:
+                interval = Interval(
+                    start=interval_one.end,
+                    end=interval_two.start,
+                    group=independents,
+                )
+                new_intervals.append(interval)
+            elif interval_one.end > interval_two.start:
+                raise RuntimeError("Overlapping intervals")
+
+        intervals.extend(new_intervals)
+        intervals.sort()
+
+        print(mandate, intervals)
 
 
 @scraper_manager.command

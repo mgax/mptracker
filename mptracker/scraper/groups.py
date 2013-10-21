@@ -1,16 +1,24 @@
 from datetime import date
 import re
+from collections import namedtuple
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, url_args, GenericModel,
                                       parse_profile_url)
 
 
+Interval = namedtuple('Interval', ['start', 'end', 'group'])
+
+
 class Group(GenericModel):
-    pass
+
+    def __repr__(self):
+        return "<Group {s.short_name}>".format(s=self)
 
 
 class Member(GenericModel):
-    pass
+
+    def get_interval(self):
+        return Interval(self.start_date, self.end_date, self.group)
 
 
 MONTHS = {'ian': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'mai': 5, 'iun': 6,
@@ -73,6 +81,9 @@ class GroupScraper(Scraper):
             if len(mp_tables) > 1:
                 group.former_members.extend(
                     self.fetch_former_members(mp_tables[-1]))
+
+        for member in group.current_members + group.former_members:
+            member.group = group
 
         return group
 
