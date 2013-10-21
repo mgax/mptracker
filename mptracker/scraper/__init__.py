@@ -4,8 +4,7 @@ from collections import defaultdict
 from flask.ext.script import Manager
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import (TablePatcher, fix_local_chars, parse_date,
-                              model_to_dict)
+from mptracker.common import TablePatcher, parse_date, model_to_dict
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -92,32 +91,58 @@ def questions(
 
 
 @scraper_manager.command
-def people(year='2012'):
-    from mptracker.scraper.people import PersonScraper
+def people(
+    year='2012',
+    cache_name=None,
+    throttle=None,
+):
+    from mptracker.scraper.people import MandateScraper
 
-    patcher = TablePatcher(models.Person,
-                           models.db.session,
-                           key_columns=['cdep_id'])
+    http_session = create_session(
+        cache_name=cache_name,
+        throttle=throttle and float(throttle),
+    )
+    mandate_scraper = MandateScraper(http_session)
 
-    def get_people():
-        person_scraper = PersonScraper(get_cached_session())
-        for row in person_scraper.fetch_people(year):
-            county_name = row.pop('county_name')
-            if county_name:
-                ok_name = fix_local_chars(county_name.title())
-                if ok_name == "Bistrița-Năsăud":
-                    ok_name = "Bistrița Năsăud"
-                county = models.County.query.filter_by(name=ok_name).first()
+    mandate_patcher = TablePatcher(
+        models.Mandate,
+        models.db.session,
+        key_columns=['year', 'cdep_number'],
+    )
+
+    with mandate_patcher.process() as add_mandate:
+        for mandate in mandate_scraper.fetch(year):
+            row = mandate.as_dict([
+                'year',
+                'cdep_number',
+                'minority',
+                'college',
+                'constituency',
+            ])
+
+            person = (
+                models.Person.query
+                    .filter_by(name=mandate.person_name)
+                    .first())
+            if person is None:
+                raise RuntimeError("Can't find person named %r"
+                                   % mandate.person_name)
+
+            row['person_id'] = person.id
+
+            if not mandate.minority:
+                county = (
+                    models.County.query
+                        .filter_by(name=mandate.county_name)
+                        .first())
                 if county is None:
-                    logger.warn("Can't match county name %r", ok_name)
-                else:
-                    row['county'] = county
+                    raise RuntimeError("Can't match county name %r"
+                                       % mandate.county_name)
+                row['county'] = county
 
-            yield row
+            add_mandate(row)
 
-    patcher.update(get_people())
-
-    models.db.session.commit()
+    #models.db.session.commit()
 
 
 @scraper_manager.command
