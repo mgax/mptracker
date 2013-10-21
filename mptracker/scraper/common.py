@@ -52,6 +52,9 @@ class GenericModel:
         for k, v in kw.items():
             setattr(self, k, v)
 
+    def as_dict(self, keys):
+        return {k: getattr(self, k, None) for k in keys}
+
 
 def create_throttle(seconds):
     def hook(response, **extra):

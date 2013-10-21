@@ -126,6 +126,7 @@ def groups(
         throttle=None,
         ):
     from mptracker.scraper.groups import GroupScraper, Interval
+    from psycopg2.extras import DateRange
 
     http_session = create_session(cache_name=cache_name,
                                   throttle=throttle and float(throttle))
@@ -158,10 +159,12 @@ def groups(
             interval_list.append(interval)
             interval_list.sort(key=lambda i: i[0])
 
-    for mandate, intervals in mandate_intervals.items():
-        # make sure intervals are continuous
+    for mandate, interval_list in mandate_intervals.items():
+        # make sure interval_list are continuous
         new_intervals = []
-        for interval_one, interval_two in zip(intervals[:-1], intervals[1:]):
+        for interval_one, interval_two in \
+            zip(interval_list[:-1], interval_list[1:]):
+
             assert interval_one.start < interval_one.end
             if interval_one.end < interval_two.start:
                 interval = Interval(
@@ -173,10 +176,45 @@ def groups(
             elif interval_one.end > interval_two.start:
                 raise RuntimeError("Overlapping intervals")
 
-        intervals.extend(new_intervals)
-        intervals.sort()
+        interval_list.extend(new_intervals)
+        interval_list.sort()
 
-        print(mandate, intervals)
+    group_patcher = TablePatcher(
+        models.MpGroup,
+        models.db.session,
+        key_columns=['short_name'],
+    )
+
+    with group_patcher.process(remove=True) as add_group:
+        for group in groups:
+            record = group.as_dict(['name', 'short_name'])
+            group.row = add_group(record).row
+
+        models.db.session.flush()
+
+    membership_patcher = TablePatcher(
+        models.MpGroupMembership,
+        models.db.session,
+        key_columns=['mandate_id', 'mp_group_id', 'interval'],
+    )
+
+    with membership_patcher.process(
+            autoflush=1000,
+            remove=True,
+        ) as add_membership:
+
+        for mandate, interval_list in mandate_intervals.items():
+            for interval in interval_list:
+                row = add_membership({
+                    'mandate_id': mandate.id,
+                    'mp_group_id': interval.group.row.id,
+                    'interval': DateRange(
+                        interval.start or date.min,
+                        interval.end or date.max,
+                    ),
+                }).row
+
+    models.db.session.commit()
 
 
 @scraper_manager.command
