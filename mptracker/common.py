@@ -11,6 +11,7 @@ from itertools import chain
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
 from flask.ext.rq import job
+from psycopg2.extras import DateRange
 from path import path
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,14 @@ def register_url_converters(state):
 
 def parse_date(date_str):
     return date_str and datetime.strptime(date_str, '%Y-%m-%d').date()
+
+
+def parse_date_range(date_range_str):
+    m = re.match(r'^\](?P<lower>\S+) (?P<upper>\S+)\)$', date_range_str)
+    return DateRange(
+        parse_date(m.group('lower')),
+        parse_date(m.group('upper')),
+    )
 
 
 def fix_local_chars(txt):

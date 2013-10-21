@@ -10,8 +10,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.login import UserMixin
 from path import path
-from mptracker.common import (parse_date, TablePatcher, temp_dir,
-                              fix_local_chars)
+from mptracker.common import (parse_date, parse_date_range, TablePatcher,
+                              temp_dir, fix_local_chars)
 from mptracker.dbutil import JsonString, register_infinity_adapter
 from sqlalchemy.dialects.postgresql import UUID, DATERANGE
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -24,10 +24,6 @@ db = SQLAlchemy()
 
 def random_uuid():
     return str(uuid.uuid4())
-
-
-def identity(v):
-    return v
 
 
 class Chamber(db.Model):
@@ -512,11 +508,23 @@ class TableLoader:
         self.decoder = {}
         for col in self.model.__table__._columns:
             self.columns.append(col.name)
+
             if isinstance(col.type, db.Date):
-                self.encoder[col.name] = lambda v: v and v.isoformat()
-                self.decoder[col.name] = parse_date
+                encoder = lambda v: v and v.isoformat()
+                decoder = parse_date
+
+            elif isinstance(col.type, DATERANGE):
+                encoder = lambda v: "[%s, %s)" % (
+                    v.lower.isoformat(),
+                    v.upper.isoformat(),
+                )
+                decoder = parse_date_range
+
             else:
-                self.encoder[col.name] = self.decoder[col.name] = identity
+                encoder = decoder = lambda v: v
+
+            self.encoder[col.name] = encoder
+            self.decoder[col.name] = decoder
 
     def to_dict(self, row, columns=None):
         if columns is None:
