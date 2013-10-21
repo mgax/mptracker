@@ -12,7 +12,7 @@ from flask.ext.login import UserMixin
 from path import path
 from mptracker.common import (parse_date, TablePatcher, temp_dir,
                               fix_local_chars)
-from mptracker.dbutil import JsonString
+from mptracker.dbutil import JsonString, register_infinity_adapter
 from sqlalchemy.dialects.postgresql import UUID, DATERANGE
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
@@ -433,7 +433,9 @@ class MandateLookup:
 
 
 def init_app(app):
+    register_infinity_adapter()
     db.init_app(app)
+
     if app.config.get('READONLY'):
 
         class DatabaseReadonly(RuntimeError):
