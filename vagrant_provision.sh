@@ -30,6 +30,7 @@ if [ ! -d py33env ]; then
     curl -O "$SETUPTOOLS_URL"
     curl -O "$PIP_URL"
     python virtualenv.py -p python3.3 py33env
+    grep py33env .bashrc ||  echo "source ~/py33env/bin/activate" >> .bashrc
 fi
 
 cd /vagrant

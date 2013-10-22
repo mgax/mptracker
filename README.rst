@@ -30,7 +30,7 @@ VM to port 5001 on the host computer)::
 
     $ vagrant ssh
     $ cd /vagrant
-    $ ~/py33env/bin/python manage.py runserver -t 0.0.0.0
+    $ ./manage.py runserver -t 0.0.0.0
 
 .. _vagrant: http://www.vagrantup.com/
 
