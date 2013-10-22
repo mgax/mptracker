@@ -2,6 +2,7 @@ import logging
 from datetime import timedelta, date
 from collections import defaultdict
 from flask.ext.script import Manager
+from psycopg2.extras import DateRange
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
 from mptracker.common import TablePatcher, parse_date, model_to_dict
@@ -12,6 +13,8 @@ logger.setLevel(logging.INFO)
 scraper_manager = Manager()
 
 ONE_DAY = timedelta(days=1)
+
+TERM_2012_START = date(2012, 12, 19)
 
 
 @scraper_manager.command
@@ -95,6 +98,7 @@ def people(
     year='2012',
     cache_name=None,
     throttle=None,
+    no_commit=False,
 ):
     from mptracker.scraper.people import MandateScraper
 
@@ -119,6 +123,9 @@ def people(
                 'college',
                 'constituency',
             ])
+            if year == '2012':
+                end_date = mandate.end_date or date.max
+                row['interval'] = DateRange(TERM_2012_START, end_date)
 
             person = (
                 models.Person.query
@@ -142,7 +149,12 @@ def people(
 
             add_mandate(row)
 
-    #models.db.session.commit()
+    if not no_commit:
+        models.db.session.commit()
+
+    else:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
 
 
 @scraper_manager.command
@@ -151,7 +163,6 @@ def groups(
         throttle=None,
         ):
     from mptracker.scraper.groups import GroupScraper, Interval
-    from psycopg2.extras import DateRange
 
     http_session = create_session(cache_name=cache_name,
                                   throttle=throttle and float(throttle))
@@ -159,8 +170,6 @@ def groups(
 
     mandate_lookup = models.MandateLookup()
     mandate_intervals = defaultdict(list)
-
-    term_start = date(2012, 12, 19)
 
     groups = list(group_scraper.fetch())
     independents = groups[0]
@@ -174,7 +183,7 @@ def groups(
 
             interval = member.get_interval()
             if interval.start is None:
-                interval = interval._replace(start=term_start)
+                interval = interval._replace(start=TERM_2012_START)
 
             if group.is_independent:
                 if interval_list:
