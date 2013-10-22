@@ -515,7 +515,7 @@ class TableLoader:
                 decoder = parse_date
 
             elif isinstance(col.type, DATERANGE):
-                encoder = lambda v: "[%s, %s)" % (
+                encoder = lambda v: v and "[%s, %s)" % (
                     v.lower.isoformat(),
                     v.upper.isoformat(),
                 )
