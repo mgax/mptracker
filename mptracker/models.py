@@ -110,6 +110,7 @@ class Mandate(db.Model):
     candidate_party = db.Column(db.Text)
     address = db.Column(db.Text)
     phone = db.Column(db.Text)
+    interval = db.Column(DATERANGE)
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
     person = db.relationship('Person',
