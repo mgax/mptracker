@@ -149,18 +149,19 @@ def people(
 
             add_mandate(row)
 
-    if not no_commit:
-        models.db.session.commit()
-
-    else:
+    if no_commit:
         logger.warn("Rolling back the transaction")
         models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
 
 
 @scraper_manager.command
 def groups(
         cache_name=None,
         throttle=None,
+        no_commit=False,
         ):
     from mptracker.scraper.groups import GroupScraper, Interval
 
@@ -252,7 +253,12 @@ def groups(
                     ),
                 }).row
 
-    models.db.session.commit()
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
 
 
 @scraper_manager.command
