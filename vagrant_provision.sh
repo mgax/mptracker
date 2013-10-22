@@ -11,4 +11,5 @@ add-apt-repository -y "$POSTGRES_REPO"
 add-apt-repository -y ppa:fkrull/deadsnakes
 apt-get update
 apt-get upgrade -y
-apt-get install -y postgresql-9.3 build-essential python3.3 python3.3-dev
+apt-get install -y postgresql-9.3 postgresql-contrib-9.3 \
+                   build-essential python3.3 python3.3-dev
