@@ -214,7 +214,10 @@ def groups(
         interval_list.extend(new_intervals)
         interval_list.sort()
 
-        if interval_list[-1].end is not None:
+        mandate_end = mandate.interval.upper
+        if mandate_end == date.max:
+            mandate_end = None
+        if interval_list[-1].end != mandate_end:
             logger.warn("Mandate %s ends at %s",
                         mandate, interval_list[-1].end)
 
