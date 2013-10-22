@@ -25,10 +25,23 @@ sudo -u postgres psql mptracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
 
 cd /home/vagrant
 if [ ! -d py33env ]; then
+    echo "Creating virtualenv ..."
     curl -O "$VIRTUALENV_PY"
     curl -O "$SETUPTOOLS_URL"
     curl -O "$PIP_URL"
     python virtualenv.py -p python3.3 py33env
 fi
 
-py33env/bin/pip install -r /vagrant/requirements-dev.txt
+cd /vagrant
+
+~/py33env/bin/pip install -r requirements-dev.txt
+
+if [ ! -f settings.py ]; then
+    echo "Creating configuration file ..."
+    DB_URI='postgresql://mptracker:mptracker@localhost:5432/mptracker'
+    echo "DEBUG = True" >> settings.py
+    echo "SECRET_KEY = 'foo'" >> settings.py
+    echo "SQLALCHEMY_DATABASE_URI = '$DB_URI'" >> settings.py
+fi
+
+~/py33env/bin/python manage.py db sync
