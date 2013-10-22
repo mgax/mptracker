@@ -8,16 +8,16 @@ PIP_URL='https://pypi.python.org/packages/source/p/pip/pip-1.4.1.tar.gz'
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get install -y curl python-software-properties
-curl "$POSTGRES_KEY_URL" | sudo apt-key add -
-add-apt-repository -y "$POSTGRES_REPO"
-add-apt-repository -y ppa:fkrull/deadsnakes
-apt-get update
-apt-get upgrade -y
-apt-get install -y postgresql-9.3 postgresql-contrib-9.3 \
-                   postgresql-server-dev-9.3 \
-                   build-essential libxml2-dev libxslt1-dev \
-                   python3.3 python3.3-dev git
+sudo apt-get install -y curl python-software-properties
+sudo curl "$POSTGRES_KEY_URL" | sudo apt-key add -
+sudo add-apt-repository -y "$POSTGRES_REPO"
+sudo add-apt-repository -y ppa:fkrull/deadsnakes
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y postgresql-9.3 postgresql-contrib-9.3 \
+                        postgresql-server-dev-9.3 \
+                        build-essential libxml2-dev libxslt1-dev \
+                        python3.3 python3.3-dev git
 
 sudo -u postgres psql -c "CREATE USER mptracker WITH ENCRYPTED PASSWORD 'mptracker';"
 sudo -u postgres psql -c "CREATE DATABASE mptracker"
@@ -25,10 +25,10 @@ sudo -u postgres psql mptracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
 
 cd /home/vagrant
 if [ ! -d py33env ]; then
-    sudo -u vagrant curl -O "$VIRTUALENV_PY"
-    sudo -u vagrant curl -O "$SETUPTOOLS_URL"
-    sudo -u vagrant curl -O "$PIP_URL"
-    sudo -u vagrant python virtualenv.py -p python3.3 py33env
+    curl -O "$VIRTUALENV_PY"
+    curl -O "$SETUPTOOLS_URL"
+    curl -O "$PIP_URL"
+    python virtualenv.py -p python3.3 py33env
 fi
 
-sudo -u vagrant py33env/bin/pip install -r /vagrant/requirements-dev.txt
+py33env/bin/pip install -r /vagrant/requirements-dev.txt
