@@ -8,6 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get install -y curl python-software-properties
 curl "$POSTGRES_KEY_URL" | sudo apt-key add -
 add-apt-repository -y "$POSTGRES_REPO"
+add-apt-repository -y ppa:fkrull/deadsnakes
 apt-get update
 apt-get upgrade -y
-apt-get install -y postgresql-9.3
+apt-get install -y postgresql-9.3 build-essential python3.3 python3.3-dev
