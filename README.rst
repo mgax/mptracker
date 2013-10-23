@@ -13,6 +13,30 @@ Deputies website`_ and extracts questions submitted by MPs.
 Getting started
 ===============
 
+
+The easy way, using Vagrant
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Download and install vagrant_.
+
+2. Set up the virtual machine. This will take a while and download
+   several hundred MBs of images and packages::
+
+    $ vagrant up
+
+3. Log into the machine and start the app. It will be accessible at
+http://localhost:5001/ (vagrant takes care of mapping port 5000 in the
+VM to port 5001 on the host computer)::
+
+    $ vagrant ssh
+    $ cd /vagrant
+    $ ./manage.py runserver -t 0.0.0.0
+
+.. _vagrant: http://www.vagrantup.com/
+
+
+The hard way, by hand
+~~~~~~~~~~~~~~~~~~~~~
 Requirements:
 
 * Python 3.3
@@ -42,6 +66,3 @@ Run the application::
 
 
 .. _virtualenv: http://www.virtualenv.org/
-
-Possibly outdated installation instructions on a fresh Debian Wheezy
-box: https://gist.github.com/mgax/0d460307aa40d8021c3c
