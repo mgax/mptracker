@@ -32,6 +32,11 @@ VM to port 5001 on the host computer)::
     $ cd /vagrant
     $ ./manage.py runserver -t 0.0.0.0
 
+4. Load a database dump. Copy the archive to the repository root, then
+import it::
+
+    $ zcat /vagrant/mptracker-yyyy-mm-dd.sql.gz | psql mptracker
+
 .. _vagrant: http://www.vagrantup.com/
 
 
