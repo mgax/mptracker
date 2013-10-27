@@ -18,9 +18,13 @@ sudo apt-get install -y postgresql-9.3 postgresql-contrib-9.3 \
                         build-essential libxml2-dev libxslt1-dev \
                         python3.3 python3.3-dev git vim
 
-sudo -u postgres psql -c "CREATE USER mptracker WITH ENCRYPTED PASSWORD 'mptracker';"
-sudo -u postgres psql -c "CREATE DATABASE mptracker"
-sudo -u postgres psql mptracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+sudo sed -e 's/^\(local .*\) peer$/\1 trust/' -i /etc/postgresql/9.3/main/pg_hba.conf
+sudo service postgresql restart
+
+grep PGUSER .bashrc ||  echo "export PGUSER='mptracker'" >> .bashrc
+sudo -u postgres psql -c "CREATE USER mptracker WITH ENCRYPTED PASSWORD 'mptracker' SUPERUSER;"
+createdb mptracker -E UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 -T template0
+psql mptracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
 
 cd /home/vagrant
 if [ ! -d py33env ]; then
