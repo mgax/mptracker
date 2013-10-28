@@ -47,5 +47,3 @@ if [ ! -f settings.py ]; then
     echo "SECRET_KEY = 'foo'" >> settings.py
     echo "SQLALCHEMY_DATABASE_URI = '$DB_URI'" >> settings.py
 fi
-
-~/py33env/bin/python manage.py db sync
