@@ -284,6 +284,14 @@ class Meta(db.Model):
     key = db.Column(db.Text)
     value = db.Column(JsonString)
 
+    @classmethod
+    def get_or_create(cls, object_id, key):
+        row = cls.query.filter_by(object_id=object_id, key=key).first()
+        if not row:
+            row = cls(object_id=object_id, key=key)
+            db.session.add(row)
+        return row
+
 
 class CommitteeSummary(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
