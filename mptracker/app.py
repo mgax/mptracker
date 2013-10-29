@@ -12,6 +12,7 @@ from mptracker.placenames import placenames_manager
 from mptracker.scraper import scraper_manager
 from mptracker.proposals import proposals, proposals_manager
 from mptracker.votes import votes
+from mptracker.loyalty import loyalty_manager
 
 
 logger = logging.getLogger(__name__)
@@ -66,6 +67,7 @@ def create_manager(app):
     manager.add_command('placenames', placenames_manager)
     manager.add_command('scraper', scraper_manager)
     manager.add_command('proposals', proposals_manager)
+    manager.add_command('loyalty', loyalty_manager)
 
     @manager.command
     def worker():
