@@ -23,8 +23,8 @@ sudo service postgresql restart
 
 grep PGUSER .bashrc ||  echo "export PGUSER='mptracker'" >> .bashrc
 sudo -u postgres psql -c "CREATE USER mptracker WITH ENCRYPTED PASSWORD 'mptracker' SUPERUSER;"
-createdb mptracker -E UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 -T template0
-psql mptracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+createdb mptracker -U mptracker -E UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 -T template0
+psql mptracker -U mptracker -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
 
 cd /home/vagrant
 if [ ! -d py33env ]; then
