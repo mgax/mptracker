@@ -385,7 +385,7 @@ class Vote(db.Model):
         backref=db.backref('votes', lazy='dynamic'))
 
     voting_session_id = db.Column(UUID, db.ForeignKey('voting_session.id'),
-                                  nullable=False)
+                                  nullable=False, index=True)
     voting_session = db.relationship('VotingSession',
         backref=db.backref('votes', lazy='dynamic'))
 
