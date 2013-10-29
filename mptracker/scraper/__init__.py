@@ -410,7 +410,8 @@ def proposals(
     if autoanalyze:
         logger.info("Scheduling %d jobs", len(changed))
         for proposal in changed:
-            ocr_proposal.delay(proposal.id, autoanalyze=True)
+            if proposal.pdf_url:
+                ocr_proposal.delay(proposal.id, autoanalyze=True)
 
 
 @scraper_manager.command
