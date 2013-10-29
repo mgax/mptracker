@@ -15,6 +15,7 @@ from mptracker.common import (parse_date, parse_date_range, TablePatcher,
 from mptracker.dbutil import JsonString, register_infinity_adapter
 from sqlalchemy.dialects.postgresql import UUID, DATERANGE
 from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy import UniqueConstraint
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -275,6 +276,9 @@ class Match(db.Model):
 
 
 class Meta(db.Model):
+    __table_args__ = (
+        UniqueConstraint('id', 'object_id'),
+    )
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     object_id = db.Column(UUID, index=True)
     key = db.Column(db.Text)
