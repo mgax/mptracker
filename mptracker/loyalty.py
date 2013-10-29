@@ -3,6 +3,7 @@ from collections import defaultdict
 import logging
 import flask
 from flask.ext.script import Manager
+from flask.ext.rq import job
 from sqlalchemy import func
 from mptracker import models
 
@@ -12,6 +13,59 @@ logger.setLevel(logging.INFO)
 loyalty_manager = Manager()
 
 
+@job
+def calculate_voting_session_loyalty(voting_session_id, commit=False):
+    voting_session = models.VotingSession.query.get(voting_session_id)
+
+    # make sure we're in the right legislature
+    assert voting_session.date >= date(2012, 12, 19)
+
+    voter_query = (
+        models.db.session.query(
+            models.Vote,
+            models.MpGroup,
+        )
+        .join(models.Vote.mandate)
+        .join(models.Mandate.group_memberships)
+        .join(models.MpGroupMembership.mp_group)
+        .filter(
+            models.MpGroupMembership.interval.contains(
+                voting_session.date,
+            ),
+        )
+        .filter(
+            models.Vote.voting_session == voting_session
+        )
+    )
+
+    vote_map = defaultdict(lambda: defaultdict(list))
+
+    for vote, group in voter_query:
+        vote_map[group.id][vote.choice].append(vote)
+
+    majority_votes = {}
+
+    for group_id, votes_by_choice in vote_map.items():
+        top = max(
+            (len(votes), choice)
+            for choice, votes
+            in votes_by_choice.items()
+        )
+        top_choice = top[1]
+        majority_votes[group_id] = top_choice
+
+        for choice, votes in votes_by_choice.items():
+            loyal = bool(choice == top_choice)
+            for vote in votes:
+                vote.loyal = loyal
+
+    meta_row = models.Meta.get_or_create(voting_session.id, 'majority_votes')
+    meta_row.value = majority_votes
+
+    if commit:
+        models.db.session.commit()
+
+
 @loyalty_manager.command
 def calculate_groups():
     voting_session_query = (
@@ -19,48 +73,10 @@ def calculate_groups():
         .filter(models.VotingSession.subject != "Prezenţă")
         .order_by(models.VotingSession.date)
     )
-    session_count = 0
+    job_count = 0
     for voting_session in voting_session_query:
-        # make sure we're in the right legislature
-        assert voting_session.date >= date(2012, 12, 19)
-
-        vote_query = (
-            models.db.session.query(
-                models.MpGroup.id,
-                models.Vote.choice,
-                func.count('*'),
-            )
-            .join(models.Vote.mandate)
-            .join(models.Mandate.group_memberships)
-            .join(models.MpGroupMembership.mp_group)
-            .filter(
-                models.MpGroupMembership.interval.contains(
-                    voting_session.date,
-                ),
-            )
-            .filter(
-                models.Vote.voting_session == voting_session
-            )
-            .group_by(
-                models.MpGroup.id,
-                models.Vote.choice,
-            )
-        )
-
-        groups = defaultdict(dict)
-        for group_id, choice, count in vote_query:
-            groups[group_id][choice] = count
-
-        def majority(group_votes):
-            return max((n, choice) for choice, n in group_votes.items())[1]
-
-        meta_row = models.Meta.get_or_create(voting_session.id, 'group_votes')
-        meta_row.value = {
-            group_id: majority(votes)
-            for group_id, votes in groups.items()
-        }
-
-        session_count += 1
+        calculate_voting_session_loyalty.delay(voting_session.id, commit=True)
+        job_count += 1
 
     models.db.session.commit()
-    logger.info("Calculated majority for %d voting sessions", session_count)
+    logger.info("Enqueued %d jobs", job_count)
