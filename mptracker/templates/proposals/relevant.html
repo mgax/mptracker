@@ -14,14 +14,14 @@
 
    {% for sp in sponsorships %}
     {% set proposal = sp.proposal %}
-    {% set person = sp.person %}
+    {% set mandate = sp.mandate %}
     {% set match = sp.match %}
     <tr>
       <td>
         {% set url = url_for('.proposal', proposal_id=proposal.id) %}
         <a href="{{ url }}">{{ proposal.title|truncate(80) }}</a>
       </td>
-      <td>{{ person }}</td>
+      <td>{{ mandate.person }}</td>
       <td>{{ proposal.date }}</td>
       <td>{{ match.score }}</td>
     </tr>
