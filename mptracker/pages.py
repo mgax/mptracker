@@ -55,6 +55,7 @@ def person_index():
 @pages.route('/person/<uuid:person_id>')
 def person(person_id):
     person = models.Person.query.get_or_404(person_id)
+    voting_session_count = models.VotingSession.query.count()
     mandates = [{
             'id': m.id,
             'cdep_url': m.get_cdep_url(),
@@ -78,7 +79,8 @@ def person(person_id):
                     .order_by(models.MpGroupMembership.interval)
                     .join(models.MpGroup)
                     .all()),
-            'vote_count': models.Vote.query.filter_by(mandate=m).count(),
+            'votes_attended': m.votes.count(),
+            'votes_loyal': m.votes.filter_by(loyal=True).count(),
         } for m in person.mandates
                          .join(models.Mandate.county)
                          .join(models.Mandate.chamber)
@@ -86,6 +88,7 @@ def person(person_id):
     return flask.render_template('person.html', **{
         'person': person,
         'mandates': mandates,
+        'voting_session_count': voting_session_count,
     })
 
 
@@ -101,6 +104,7 @@ def mandate_transcripts(mandate_id):
 @pages.route('/mandate/<uuid:mandate_id>/votes')
 def mandate_votes(mandate_id):
     mandate = models.Mandate.query.get_or_404(mandate_id)
+    attendance = mandate.votes.count() / models.VotingSession.query.count()
     votes = (
         mandate.votes
         .join(models.Vote.voting_session)
@@ -111,6 +115,7 @@ def mandate_votes(mandate_id):
     )
     return flask.render_template('mandate_votes.html', **{
         'mandate': mandate,
+        'attendance': attendance,
         'vote_list': votes.all(),
     })
 

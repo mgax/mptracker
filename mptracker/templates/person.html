@@ -114,7 +114,12 @@
       <dt>voturi în plen</dt>
       <dd>
         {% set url = url_for('.mandate_votes', mandate_id=mandate.id) %}
-        <a href="{{ url }}">{{ mandate.vote_count }}</a>
+        {% set attendance = 100 * mandate.votes_attended / voting_session_count %}
+        {% set loyalty = 100 * mandate.votes_loyal / mandate.votes_attended %}
+        <a href="{{ url }}">
+          prezență {{ attendance|int }}%,
+          loialitate {{ loyalty|int }}%
+        </a>
       </dd>
 
       {% if mandate.election_votes %}
