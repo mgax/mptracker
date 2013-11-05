@@ -13,4 +13,4 @@ def upgrade():
 
 def downgrade():
     op.drop_index('meta_object_id_index')
-    op.drop_constraint('meta_unique_objectid_key', 'meta')
+    op.drop_constraint('meta_unique_object_id_key', 'meta')
