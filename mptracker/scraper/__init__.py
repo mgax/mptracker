@@ -90,7 +90,8 @@ def questions(
     if autoanalyze:
         logger.info("Scheduling %d jobs", len(changed))
         for question in changed:
-            ocr_question.delay(question.id, autoanalyze=True)
+            if question.pdf_url:
+                ocr_question.delay(question.id, autoanalyze=True)
 
 
 @scraper_manager.command
