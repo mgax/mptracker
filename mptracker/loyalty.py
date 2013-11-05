@@ -50,6 +50,7 @@ def calculate_voting_session_loyalty(voting_session_id, commit=False):
             (len(votes), choice)
             for choice, votes
             in votes_by_choice.items()
+            if choice != 'novote'
         )
         top_choice = top[1]
         majority_votes[group_id] = top_choice
