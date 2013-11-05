@@ -31,10 +31,8 @@ def configure(app):
         os.environ.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
 
     app.debug = (os.environ.get('DEBUG') == 'on')
-    sentry_dsn = os.environ.get('SENTRY_DSN')
-    if sentry_dsn:
-        from raven.contrib.flask import Sentry
-        Sentry(app, dsn=sentry_dsn)
+    app.config['SENTRY_DSN'] = os.environ.get('SENTRY_DSN')
+
     app.config.from_pyfile('../settings.py', silent=True)
 
 
@@ -53,6 +51,9 @@ def create_app():
     if app.debug:
         from werkzeug.debug import DebuggedApplication
         app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
+    if app.config.get('SENTRY_DSN'):
+        from raven.contrib.flask import Sentry
+        Sentry(app)
     return app
 
 
