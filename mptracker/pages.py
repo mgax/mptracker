@@ -13,9 +13,12 @@ pages = flask.Blueprint('pages', __name__)
 
 
 
-@pages.route('/_crashme')
+@pages.route('/_crashme', methods=['GET', 'POST'])
 def crashme():
-    raise RuntimeError("Crashing, as requested.")
+    if flask.request.method == 'POST':
+        raise RuntimeError("Crashing, as requested.")
+    else:
+        return '<form method="post"><button type="submit">err</button></form>'
 
 
 @pages.route('/_ping')
