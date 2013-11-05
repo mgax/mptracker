@@ -78,6 +78,7 @@ def person(person_id):
                     .order_by(models.MpGroupMembership.interval)
                     .join(models.MpGroup)
                     .all()),
+            'vote_count': models.Vote.query.filter_by(mandate=m).count(),
         } for m in person.mandates
                          .join(models.Mandate.county)
                          .join(models.Mandate.chamber)
@@ -94,6 +95,15 @@ def mandate_transcripts(mandate_id):
     return flask.render_template('mandate_transcripts.html', **{
         'mandate': mandate,
         'transcripts': iter(mandate.transcripts),
+    })
+
+
+@pages.route('/mandate/<uuid:mandate_id>/votes')
+def mandate_votes(mandate_id):
+    mandate = models.Mandate.query.get_or_404(mandate_id)
+    return flask.render_template('mandate_votes.html', **{
+        'mandate': mandate,
+        'votes': [],
     })
 
 

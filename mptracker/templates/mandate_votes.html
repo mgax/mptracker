@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
+        (mandate.person|string,
+            url_for('pages.person', person_id=mandate.person.id)),
+        ("voturi " + mandate.year|string,
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+{% endblock %}
