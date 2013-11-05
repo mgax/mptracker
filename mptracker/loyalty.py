@@ -20,6 +20,9 @@ def calculate_voting_session_loyalty(voting_session_id, commit=False):
     # make sure we're in the right legislature
     assert voting_session.date >= date(2012, 12, 19)
 
+    indep_group = models.MpGroup.query.filter_by(short_name='Indep.').first()
+    assert indep_group is not None
+
     voter_query = (
         models.db.session.query(
             models.Vote,
@@ -41,7 +44,8 @@ def calculate_voting_session_loyalty(voting_session_id, commit=False):
     vote_map = defaultdict(lambda: defaultdict(list))
 
     for vote, group in voter_query:
-        vote_map[group.id][vote.choice].append(vote)
+        if group != indep_group:
+            vote_map[group.id][vote.choice].append(vote)
 
     majority_votes = {}
 
