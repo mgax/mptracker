@@ -618,6 +618,8 @@ def votes(
                     proposal_cdeppk = voting_session.proposal_cdeppk
                     record['proposal_id'] = (proposal_ids.get(proposal_cdeppk)
                                              if proposal_cdeppk else None)
+                    record['final'] = bool("vot final" in
+                                           record['subject'].lower())
                     vs = add_voting_session(record).row
                     if vs.id is None:
                         models.db.session.flush()
