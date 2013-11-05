@@ -111,6 +111,12 @@
         {% if mandate.address %}<dd>adresă: {{ mandate.address }}</dd>{% endif %}
       {% endif %}
 
+      <dt>voturi în plen</dt>
+      <dd>
+        {% set url = url_for('.mandate_votes', mandate_id=mandate.id) %}
+        <a href="{{ url }}">{{ mandate.vote_count }}</a>
+      </dd>
+
       {% if mandate.election_votes %}
         <dt>voturi la alegeri:</dt>
         <dd>
