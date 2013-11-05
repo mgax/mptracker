@@ -8,7 +8,8 @@ import sqlalchemy as sa
 def upgrade():
     op.add_column('voting_session',
         sa.Column('final', sa.Boolean(), nullable=True))
-    op.execute('UPDATE voting_session SET final = false')
+    op.execute("UPDATE voting_session SET final = "
+                   "position('vot final' in lower(subject)) > 0")
     op.alter_column('voting_session', 'final', nullable=False)
 
 
