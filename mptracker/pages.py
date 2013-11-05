@@ -101,9 +101,17 @@ def mandate_transcripts(mandate_id):
 @pages.route('/mandate/<uuid:mandate_id>/votes')
 def mandate_votes(mandate_id):
     mandate = models.Mandate.query.get_or_404(mandate_id)
+    votes = (
+        mandate.votes
+        .join(models.Vote.voting_session)
+        .order_by(
+            models.VotingSession.date.desc(),
+            models.VotingSession.cdeppk.desc(),
+        )
+    )
     return flask.render_template('mandate_votes.html', **{
         'mandate': mandate,
-        'votes': [],
+        'vote_list': votes.all(),
     })
 
 
