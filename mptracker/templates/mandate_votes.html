@@ -13,4 +13,28 @@
       ] %}
   {{ breadcrumbs(breadcrumb_links) }}
 
+  <h2>Voturi</h2>
+
+  <table class="table table-condensed table-bordered">
+    <thead>
+      <th>Subiect</th>
+      <th>Opțiune</th>
+      <th>Loial</th>
+    </thead>
+
+    {% for vote in vote_list %}
+      <tr>
+        <td>
+          {%- set url = url_for('votes.detail',
+                voting_session_id=vote.voting_session.id) %}
+          <a href="{{ url }}">
+            {{- vote.voting_session.subject|truncate(80) -}}
+          </a>
+        </td>
+        <td>{{ vote.choice }}</td>
+        <td>{{ "✔" if vote.loyal else "✘" }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
 {% endblock %}
