@@ -565,7 +565,7 @@ def import_person_xls(xls_path):
 @scraper_manager.command
 def votes(
         start=None,
-        n_days=1,
+        days=1,
         cache_name=None,
         throttle=None,
         ):
@@ -579,7 +579,7 @@ def votes(
     else:
         start = parse_date(start)
 
-    n_days = int(n_days)
+    days = int(days)
 
     http_session = create_session(cache_name=cache_name,
                                   throttle=throttle and float(throttle))
@@ -603,7 +603,7 @@ def votes(
 
     with voting_session_patcher.process() as add_voting_session:
         with vote_patcher.process() as add_vote:
-            for delta in range(n_days):
+            for delta in range(days):
                 the_date = start + ONE_DAY * delta
                 if the_date >= date.today():
                     # don't scrape today, maybe voting is not done yet!
