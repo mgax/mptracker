@@ -33,11 +33,13 @@ def detail(voting_session_id):
     voting_session = models.VotingSession.query.get_or_404(voting_session_id)
     votes = (
         voting_session.votes
-            .join(models.Vote.mandate)
-            .join(models.Mandate.person)
-            .join(models.Mandate.county)
-            .join(models.Mandate.group_memberships)
-            .join(models.MpGroupMembership.mp_group))
+        .join(models.Vote.mandate)
+        .join(models.Mandate.person)
+        .join(models.Mandate.county)
+        .join(models.Mandate.group_memberships)
+        .join(models.MpGroupMembership.mp_group)
+        .order_by(models.Person.name)
+    )
     return flask.render_template('votes/detail.html', **{
         'voting_session': voting_session,
         'proposal': voting_session.proposal,
