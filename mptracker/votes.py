@@ -79,9 +79,12 @@ def calculate_voting_session_loyalty(voting_session_id, commit=False):
         if group != indep_group:
             vote_map[group.id][vote.choice].append(vote)
 
-    majority_votes = {}
+    group_vote_map = {
+        gv.mp_group_id: gv for gv in
+        models.GroupVote.query.filter_by(voting_session_id=voting_session.id)
+    }
 
-    for group_id, votes_by_choice in vote_map.items():
+    for mp_group_id, votes_by_choice in vote_map.items():
         top = max(
             (len(votes), choice)
             for choice, votes
@@ -89,15 +92,19 @@ def calculate_voting_session_loyalty(voting_session_id, commit=False):
             if choice != 'novote'
         )
         top_choice = top[1]
-        majority_votes[group_id] = top_choice
+
+        group_vote = group_vote_map.get(mp_group_id)
+        if group_vote is None:
+            group_vote = models.GroupVote(
+                mp_group_id=mp_group_id,
+                voting_session=voting_session,
+            )
+        group_vote.choice = top_choice
 
         for choice, votes in votes_by_choice.items():
             loyal = bool(choice == top_choice)
             for vote in votes:
                 vote.loyal = loyal
-
-    meta_row = models.Meta.get_or_create(voting_session.id, 'majority_votes')
-    meta_row.value = majority_votes
 
     if commit:
         models.db.session.commit()
