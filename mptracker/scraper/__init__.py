@@ -568,6 +568,7 @@ def votes(
         days=1,
         cache_name=None,
         throttle=None,
+        no_commit=False,
         ):
     from mptracker.scraper.votes import VoteScraper
 
@@ -635,4 +636,9 @@ def votes(
                         record['mandate_id'] = mandate.id
                         add_vote(record)
 
-    models.db.session.commit()
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
