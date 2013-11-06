@@ -20,6 +20,7 @@
       <th>Subiect</th>
       <th>Opțiune</th>
       <th>Loial</th>
+      <th>Opțiune grup</th>
     </thead>
 
     {% for vote in vote_list %}
@@ -33,6 +34,7 @@
         </td>
         <td>{{ vote.choice }}</td>
         <td>{{ "✔" if vote.loyal else "✘" }}</td>
+        <td>{{ vote.group_choice }}</td>
       </tr>
     {% endfor %}
   </table>

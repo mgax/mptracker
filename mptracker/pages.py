@@ -108,18 +108,41 @@ def mandate_transcripts(mandate_id):
 def mandate_votes(mandate_id):
     mandate = models.Mandate.query.get_or_404(mandate_id)
     attendance = mandate.votes.count() / models.VotingSession.query.count()
-    votes = (
-        mandate.votes
+    vote_query = (
+        models.db.session
+        .query(models.Vote, models.VotingSession, models.Meta, models.MpGroup)
+        .filter(models.Vote.mandate == mandate)
         .join(models.Vote.voting_session)
+        .join(models.Vote.mandate)
+        .join(models.MpGroupMembership)
+        .filter(
+            models.MpGroupMembership.interval.contains(
+                models.VotingSession.date
+            )
+        )
+        .join(models.MpGroupMembership.mp_group)
+        .filter(
+            models.Meta.object_id == models.VotingSession.id and
+            models.Meta.key == 'majority_votes',
+        )
         .order_by(
             models.VotingSession.date.desc(),
             models.VotingSession.cdeppk.desc(),
         )
     )
+    vote_list = [
+        {
+            'voting_session': voting_session,
+            'choice': vote.choice,
+            'loyal': vote.loyal,
+            'group_choice': meta.value.get(group.id),
+        }
+        for (vote, voting_session, meta, group) in vote_query
+    ]
     return flask.render_template('mandate_votes.html', **{
         'mandate': mandate,
         'attendance': attendance,
-        'vote_list': votes.all(),
+        'vote_list': vote_list,
     })
 
 
