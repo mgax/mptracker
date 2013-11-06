@@ -569,6 +569,7 @@ def votes(
         cache_name=None,
         throttle=None,
         no_commit=False,
+        autoanalyze=False,
         ):
     from mptracker.scraper.votes import VoteScraper
 
@@ -602,6 +603,8 @@ def votes(
     proposal_ids = {p.cdeppk_cdep: p.id for p in models.Proposal.query}
     mandate_lookup = models.MandateLookup()
 
+    new_voting_session_list = []
+
     with voting_session_patcher.process() as add_voting_session:
         with vote_patcher.process() as add_vote:
             for delta in range(days):
@@ -625,6 +628,8 @@ def votes(
                     if vs.id is None:
                         models.db.session.flush()
 
+                    new_voting_session_list.append(vs.id)
+
                     for vote in voting_session.votes:
                         record = model_to_dict(vote, ['choice'])
                         record['voting_session_id'] = vs.id
@@ -642,3 +647,9 @@ def votes(
 
     else:
         models.db.session.commit()
+
+    if autoanalyze:
+        from mptracker.votes import calculate_voting_session_loyalty
+        logger.info("Scheduling %d jobs", len(new_voting_session_list))
+        for voting_session_id in new_voting_session_list:
+            calculate_voting_session_loyalty.delay(voting_session_id)
