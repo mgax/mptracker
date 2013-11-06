@@ -461,6 +461,16 @@ def init_app(app):
     register_infinity_adapter()
     db.init_app(app)
 
+    query_timeout = app.config.get('DATABASE_QUERY_TIMEOUT')
+    if query_timeout:
+        with app.app_context():
+            from sqlalchemy import event
+            @event.listens_for(db.engine, 'connect')
+            def receive_connect(dbapi_connection, connection_record):
+                cursor = dbapi_connection.cursor()
+                cursor.execute('SET statement_timeout = %d' % query_timeout)
+
+
     if app.config.get('READONLY'):
 
         class DatabaseReadonly(RuntimeError):
