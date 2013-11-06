@@ -112,10 +112,9 @@ class TablePatcher:
     def _mark_seen(self, key):
         self.seen.add(key)
 
-    def _iter_unseen_rows(self):
-        for key in set(self.existing) - self.seen:
-            row = self.existing[key]
-            yield key, row
+    def _get_unseen_ids(self):
+        return [self.existing[key].id for key in
+                set(self.existing) - self.seen]
 
     def add(self, record, create=True):
         key = self._dict_key(record)
@@ -184,10 +183,9 @@ class TablePatcher:
         yield add
 
         if remove:
-            for key, row in self._iter_unseen_rows():
-                self.session.delete(row)
-                self.logger.info("Removing %s %r", self.table_name, key)
-                counters['n_remove'] += 1
+            unseen = self._get_unseen_ids()
+            self.model.query.filter(self.model.id.in_(unseen)).delete(synchronize_session=False)
+            counters['n_remove'] += len(unseen)
 
         self.session.flush()
         self.logger.info("%s: created %d, updated %d, removed %d, found ok %d.",
