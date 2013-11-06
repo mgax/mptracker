@@ -98,25 +98,39 @@ class TablePatcher:
         return tuple(record.get(k) for k in self.key_columns)
 
     def _prepare(self):
-        self.existing = {}
-        for row in self.model.query:
-            key = self._row_key(row)
-            assert key not in self.existing, "Duplicate key %r" % key
-            self.existing[key] = row
+        self.existing_ids = {}
+        query = (
+            self.session
+            .query(
+                self.model.id,
+                *[getattr(self.model, k) for k in self.key_columns]
+            )
+        )
+        for row in query:
+            row_id = row[0]
+            key = row[1:]
+            assert row_id
+            assert key not in self.existing_ids, "Duplicate key %r" % key
+            self.existing_ids[key] = row_id
         self.seen = set()
 
     def _get_row_for_key(self, key):
-        return self.existing.get(key)
+        row_id = self.existing_ids.get(key)
+        if row_id is None:
+            return None
+        self.session.flush()
+        return self.model.query.get(row_id)
 
     def _remember_new_row(self, key, row):
-        self.existing[key] = row
+        assert row.id
+        self.existing_ids[key] = row.id
 
     def _mark_seen(self, key):
         self.seen.add(key)
 
     def _get_unseen_ids(self):
-        return [self.existing[key].id for key in
-                set(self.existing) - self.seen]
+        return [self.existing_ids[key] for key in
+                set(self.existing_ids) - self.seen]
 
     def add(self, record, create=True):
         key = self._dict_key(record)
