@@ -125,10 +125,16 @@ def mandate_votes(mandate_id):
     attendance = mandate.votes.count() / models.VotingSession.query.count()
     vote_query = (
         models.db.session
-        .query(models.Vote, models.VotingSession, models.Meta, models.MpGroup)
+        .query(
+            models.Vote,
+            models.VotingSession,
+            models.MpGroup,
+            models.GroupVote,
+        )
         .filter(models.Vote.mandate == mandate)
         .join(models.Vote.voting_session)
         .filter(models.VotingSession.final == True)
+        .join(models.VotingSession.group_votes)
         .join(models.Vote.mandate)
         .join(models.MpGroupMembership)
         .filter(
@@ -137,10 +143,7 @@ def mandate_votes(mandate_id):
             )
         )
         .join(models.MpGroupMembership.mp_group)
-        .filter(
-            models.Meta.object_id == models.VotingSession.id and
-            models.Meta.key == 'majority_votes',
-        )
+        .filter(models.GroupVote.mp_group_id == models.MpGroup.id)
         .order_by(
             models.VotingSession.date.desc(),
             models.VotingSession.cdeppk.desc(),
@@ -151,9 +154,9 @@ def mandate_votes(mandate_id):
             'voting_session': voting_session,
             'choice': vote.choice,
             'loyal': vote.loyal,
-            'group_choice': meta.value.get(group.id),
+            'group_choice': group_vote.choice,
         }
-        for (vote, voting_session, meta, group) in vote_query
+        for (vote, voting_session, group, group_vote) in vote_query
     ]
     return flask.render_template('mandate_votes.html', **{
         'mandate': mandate,
