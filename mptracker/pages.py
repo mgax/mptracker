@@ -58,8 +58,20 @@ def person_index():
 @pages.route('/person/<uuid:person_id>')
 def person(person_id):
     person = models.Person.query.get_or_404(person_id)
-    voting_session_count = models.VotingSession.query.count()
-    mandates = [{
+    voting_session_count = (
+        models.VotingSession.query
+        .count()
+    )
+    mandates = []
+    mandates_query = (
+         person.mandates
+         .join(models.Mandate.county)
+         .join(models.Mandate.chamber)
+         .order_by('-year')
+    )
+    for m in mandates_query:
+        loyal_votes = m.votes.filter_by(loyal=True)
+        mandates.append({
             'id': m.id,
             'cdep_url': m.get_cdep_url(),
             'year': m.year,
@@ -83,11 +95,8 @@ def person(person_id):
                     .join(models.MpGroup)
                     .all()),
             'votes_attended': m.votes.count(),
-            'votes_loyal': m.votes.filter_by(loyal=True).count(),
-        } for m in person.mandates
-                         .join(models.Mandate.county)
-                         .join(models.Mandate.chamber)
-                         .order_by('-year')]
+            'votes_loyal': loyal_votes.count(),
+        })
     return flask.render_template('person.html', **{
         'person': person,
         'mandates': mandates,
