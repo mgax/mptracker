@@ -60,6 +60,7 @@ def person(person_id):
     person = models.Person.query.get_or_404(person_id)
     voting_session_count = (
         models.VotingSession.query
+        .filter(models.VotingSession.final == True)
         .count()
     )
     mandates = []
@@ -70,7 +71,12 @@ def person(person_id):
          .order_by('-year')
     )
     for m in mandates_query:
-        loyal_votes = m.votes.filter_by(loyal=True)
+        final_votes = (
+            m.votes
+            .join(models.Vote.voting_session)
+            .filter(models.VotingSession.final == True)
+        )
+        loyal_votes = final_votes.filter(models.Vote.loyal == True)
         mandates.append({
             'id': m.id,
             'cdep_url': m.get_cdep_url(),
@@ -94,7 +100,7 @@ def person(person_id):
                     .order_by(models.MpGroupMembership.interval)
                     .join(models.MpGroup)
                     .all()),
-            'votes_attended': m.votes.count(),
+            'votes_attended': final_votes.count(),
             'votes_loyal': loyal_votes.count(),
         })
     return flask.render_template('person.html', **{
@@ -122,6 +128,7 @@ def mandate_votes(mandate_id):
         .query(models.Vote, models.VotingSession, models.Meta, models.MpGroup)
         .filter(models.Vote.mandate == mandate)
         .join(models.Vote.voting_session)
+        .filter(models.VotingSession.final == True)
         .join(models.Vote.mandate)
         .join(models.MpGroupMembership)
         .filter(
