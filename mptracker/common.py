@@ -87,22 +87,39 @@ class TablePatcher:
         self.table_name = model.__table__.name
         self.session = session
         self.key_columns = key_columns
+        self._prepare()
+
+    def _row_key(self, row):
+        return tuple(getattr(row, k) for k in self.key_columns)
+
+    def _dict_key(self, record):
+        return tuple(record.get(k) for k in self.key_columns)
+
+    def _prepare(self):
         self.existing = {}
         for row in self.model.query:
-            key = self.row_key(row)
+            key = self._row_key(row)
             assert key not in self.existing, "Duplicate key %r" % key
             self.existing[key] = row
         self.seen = set()
 
-    def row_key(self, row):
-        return tuple(getattr(row, k) for k in self.key_columns)
+    def _get_row_for_key(self, key):
+        return self.existing.get(key)
 
-    def dict_key(self, record):
-        return tuple(record.get(k) for k in self.key_columns)
+    def _remember_new_row(self, key, row):
+        self.existing[key] = row
+
+    def _mark_seen(self, key):
+        self.seen.add(key)
+
+    def _iter_unseen_rows(self):
+        for key in set(self.existing) - self.seen:
+            row = self.existing[key]
+            yield key, row
 
     def add(self, record, create=True):
-        key = self.dict_key(record)
-        row = self.existing.get(key)
+        key = self._dict_key(record)
+        row = self._get_row_for_key(key)
         is_new = is_changed = False
 
         if row is None:
@@ -111,7 +128,7 @@ class TablePatcher:
                 self.logger.info("Adding %s %r", self.table_name, key)
                 is_new = is_changed = True
                 self.session.add(row)
-                self.existing[key] = row
+                self._remember_new_row(key, row)
 
             else:
                 raise RowNotFound("Could not find row with key=%r" % key)
@@ -135,7 +152,7 @@ class TablePatcher:
             for k in record:
                 setattr(row, k, record[k])
 
-        self.seen.add(key)
+        self._mark_seen(key)
 
         return AddResult(row, is_new, is_changed)
 
@@ -167,8 +184,8 @@ class TablePatcher:
         yield add
 
         if remove:
-            for key in set(self.existing) - self.seen:
-                self.session.delete(self.existing[key])
+            for key, row in self._iter_unseen_rows():
+                self.session.delete(row)
                 self.logger.info("Removing %s %r", self.table_name, key)
                 counters['n_remove'] += 1
 
