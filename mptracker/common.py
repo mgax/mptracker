@@ -83,6 +83,8 @@ class TablePatcher:
     logger.setLevel(logging.INFO)
 
     def __init__(self, model, session, key_columns):
+        from mptracker.models import random_uuid
+        self.random_uuid = random_uuid
         self.model = model
         self.table_name = model.__table__.name
         self.session = session
@@ -123,7 +125,7 @@ class TablePatcher:
 
         if row is None:
             if create:
-                row = self.model()
+                row = self.model(id=record.get('id') or self.random_uuid())
                 self.logger.info("Adding %s %r", self.table_name, key)
                 is_new = is_changed = True
                 self.session.add(row)
