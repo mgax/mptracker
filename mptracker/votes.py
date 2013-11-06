@@ -46,7 +46,7 @@ def detail(voting_session_id):
 
 
 @job
-def calculate_voting_session_loyalty(voting_session_id, commit=False):
+def calculate_voting_session_loyalty(voting_session_id):
     voting_session = models.VotingSession.query.get(voting_session_id)
 
     # make sure we're in the right legislature
@@ -106,8 +106,7 @@ def calculate_voting_session_loyalty(voting_session_id, commit=False):
             for vote in votes:
                 vote.loyal = loyal
 
-    if commit:
-        models.db.session.commit()
+    models.db.session.commit()
 
 
 @votes_manager.command
@@ -119,8 +118,7 @@ def loyalty():
     )
     job_count = 0
     for voting_session in voting_session_query:
-        calculate_voting_session_loyalty.delay(voting_session.id, commit=True)
+        calculate_voting_session_loyalty.delay(voting_session.id)
         job_count += 1
 
-    models.db.session.commit()
     logger.info("Enqueued %d jobs", job_count)
