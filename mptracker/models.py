@@ -389,6 +389,20 @@ class VotingSession(db.Model):
                 "?idv={s.cdeppk}").format(s=self)
 
 
+class GroupVote(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    choice = db.Column(db.Text)
+
+    voting_session_id = db.Column(UUID, db.ForeignKey('voting_session.id'),
+                                  nullable=False, index=True)
+    voting_session = db.relationship('VotingSession',
+        backref=db.backref('group_votes', lazy='dynamic'))
+
+    mp_group_id = db.Column(UUID, db.ForeignKey('mp_group.id'), nullable=False)
+    mp_group = db.relationship('MpGroup',
+        backref=db.backref('group_votes', lazy='dynamic', cascade='all'))
+
+
 class Vote(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     choice = db.Column(db.Text)
