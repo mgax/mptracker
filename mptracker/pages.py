@@ -238,6 +238,11 @@ def committee_summary(summary_id):
     })
 
 
+@pages.route('/constituency-map')
+def constituency_map():
+    return flask.render_template('constituency_map.html')
+
+
 @pages.route('/debug')
 def debug():
     args = flask.request.args

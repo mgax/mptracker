@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css">
+<!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css"><![endif]-->
+<style>
+  #map {
+    height: 350px;
+    width: 450px;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
+        ("circumscripții",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <h1>Hartă circumscripții</h1>
+
+  <div id="map"></div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+<script src="https://raw.github.com/mbostock/topojson/master/topojson.js"></script>
+<script>
+(function() {
+  "use strict";
+
+  {%- set colleges_url = url_for('static', filename='colleges.topojson') %}
+  var colleges_url = {{ colleges_url|tojson|safe }};
+
+  var attribution = '&copy; <a href="http://osm.org/copyright">'
+                  + 'OpenStreetMap</a> contributors';
+  var map = L.map('map').setView([46, 25], 6);
+
+  L.tileLayer(
+    'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+    {attribution: attribution}
+  ).addTo(map);
+
+  var deputati_layer = L.geoJson().addTo(map);
+  var senatori_layer = L.geoJson().addTo(map);
+
+  $.getJSON(colleges_url, function(data) {
+      deputati_layer.addData(
+        topojson.feature(data, data.objects['2008-deputati']));
+      senatori_layer.addData(
+        topojson.feature(data, data.objects['2008-senatori']));
+  });
+
+})();
+</script>
+{% endblock %}
