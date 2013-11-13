@@ -200,8 +200,13 @@ class TablePatcher:
 
         if remove:
             unseen = self._get_unseen_ids()
-            self.model.query.filter(self.model.id.in_(unseen)).delete(synchronize_session=False)
-            counters['n_remove'] += len(unseen)
+            if unseen:
+                unseen_items = (
+                    self.model.query
+                    .filter(self.model.id.in_(unseen))
+                )
+                unseen_items.delete(synchronize_session=False)
+                counters['n_remove'] += len(unseen)
 
         self.session.flush()
         self.logger.info("%s: created %d, updated %d, removed %d, found ok %d.",
