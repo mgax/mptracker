@@ -5,8 +5,12 @@ from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+def random_uuid():
+    return str(uuid.uuid4())
+
+
 class Thing(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True, default=random_uuid)
     code = db.Column(db.String)
     number = db.Column(db.Integer)
     name = db.Column(db.String)
