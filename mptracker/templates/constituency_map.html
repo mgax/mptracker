@@ -72,12 +72,26 @@
         topojson.feature(data, data.objects['2008-senatori']));
   });
 
+  var zoom_to_result = function(result) {
+    var popup = new L.Popup();
+    map.fitBounds(result.bounds);
+    popup.setLatLng(result.latlng);
+    popup.setContent(result.content);
+    popup.addTo(map);
+    map.openPopup(popup);
+  };
+
   var geocoding = new L.Geocoding();
   map.addControl(geocoding);
   $('form[name=geocode]').submit(function(evt) {
     evt.preventDefault();
     var address = $(this).find('[name=address]').val();
-    geocoding.geocode(address);
+    geocoding.options.providers['osm']({
+      query: address,
+      bounds: map.getBounds(),
+      zoom: map.getZoom(),
+      cb: zoom_to_result
+    });
   });
 
 })();
