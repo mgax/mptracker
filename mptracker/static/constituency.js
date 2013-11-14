@@ -78,16 +78,59 @@ var zoom_to_result = function(result) {
   map.openPopup(popup);
 };
 
+var orig_button_text = $('form[name=geocode] button').text();
+
 var geocoding = new L.Geocoding();
 map.addControl(geocoding);
-$('form[name=geocode]').submit(function(evt) {
-  evt.preventDefault();
-  var address = $(this).find('[name=address]').val();
-  geocoding.options.providers['osm']({
-    query: address,
+
+function geocode(options) {
+  geocoding.options.providers[options['provider']]({
+    query: options['address'],
     bounds: map.getBounds(),
     zoom: map.getZoom(),
-    cb: zoom_to_result
+    cb: options['success'],
+    cb_err: options['error']
+  });
+}
+
+$('form[name=geocode]').submit(function(evt) {
+  evt.preventDefault();
+  var form = $(this);
+  var input = form.find('[name=address]');
+  var button = form.find('button');
+
+  var address = input.val();
+
+  button.text('...').attr('disabled', true);
+  form.removeClass('has-error has-success');
+
+  var geocode_end = function() {
+    button.text(orig_button_text).attr('disabled', false);
+  };
+
+  var geocode_success = function(result) {
+    geocode_end();
+    form.removeClass('has-error').addClass('has-success');
+    zoom_to_result(result);
+  };
+
+  var geocode_failure = function() {
+    geocode_end();
+    form.addClass('has-error');
+  };
+
+  geocode({
+    address: address,
+    provider: 'osm',
+    success: geocode_success,
+    error: function() {
+      geocode({
+        address: address,
+        provider: 'google',
+        success: geocode_success,
+        error: geocode_failure
+      });
+    }
   });
 });
 
