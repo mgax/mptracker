@@ -79,17 +79,20 @@ var zoom_to_result = function(result) {
     ));
   }
 
-  var popup = new L.Popup();
   if(result.bounds) {
     map.fitBounds(result.bounds);
   }
   else {
     map.panTo(result.latlng);
   }
-  popup.setLatLng(latlng);
-  popup.setContent(content.html());
-  popup.addTo(map);
-  map.openPopup(popup);
+  var html = content.html();
+  if(html.length > 0) {
+    var popup = new L.Popup();
+    popup.setLatLng(latlng);
+    popup.setContent(html);
+    popup.addTo(map);
+    map.openPopup(popup);
+  }
 };
 
 var orig_button_text = $('form[name=geocode] button').text();
