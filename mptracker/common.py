@@ -83,35 +83,67 @@ class TablePatcher:
     logger.setLevel(logging.INFO)
 
     def __init__(self, model, session, key_columns):
+        from mptracker.models import random_uuid
+        self.random_uuid = random_uuid
         self.model = model
         self.table_name = model.__table__.name
         self.session = session
         self.key_columns = key_columns
-        self.existing = {}
-        for row in self.model.query:
-            key = self.row_key(row)
-            assert key not in self.existing, "Duplicate key %r" % key
-            self.existing[key] = row
-        self.seen = set()
+        self._prepare()
 
-    def row_key(self, row):
+    def _row_key(self, row):
         return tuple(getattr(row, k) for k in self.key_columns)
 
-    def dict_key(self, record):
+    def _dict_key(self, record):
         return tuple(record.get(k) for k in self.key_columns)
 
+    def _prepare(self):
+        self.existing_ids = {}
+        query = (
+            self.session
+            .query(
+                self.model.id,
+                *[getattr(self.model, k) for k in self.key_columns]
+            )
+        )
+        for row in query:
+            row_id = row[0]
+            key = row[1:]
+            assert row_id
+            assert key not in self.existing_ids, "Duplicate key %r" % key
+            self.existing_ids[key] = row_id
+        self.seen = set()
+
+    def _get_row_for_key(self, key):
+        row_id = self.existing_ids.get(key)
+        if row_id is None:
+            return None
+        self.session.flush()
+        return self.model.query.get(row_id)
+
+    def _remember_new_row(self, key, row):
+        assert row.id
+        self.existing_ids[key] = row.id
+
+    def _mark_seen(self, key):
+        self.seen.add(key)
+
+    def _get_unseen_ids(self):
+        return [self.existing_ids[key] for key in
+                set(self.existing_ids) - self.seen]
+
     def add(self, record, create=True):
-        key = self.dict_key(record)
-        row = self.existing.get(key)
+        key = self._dict_key(record)
+        row = self._get_row_for_key(key)
         is_new = is_changed = False
 
         if row is None:
             if create:
-                row = self.model()
+                row = self.model(id=record.get('id') or self.random_uuid())
                 self.logger.info("Adding %s %r", self.table_name, key)
                 is_new = is_changed = True
                 self.session.add(row)
-                self.existing[key] = row
+                self._remember_new_row(key, row)
 
             else:
                 raise RowNotFound("Could not find row with key=%r" % key)
@@ -135,7 +167,7 @@ class TablePatcher:
             for k in record:
                 setattr(row, k, record[k])
 
-        self.seen.add(key)
+        self._mark_seen(key)
 
         return AddResult(row, is_new, is_changed)
 
@@ -167,10 +199,14 @@ class TablePatcher:
         yield add
 
         if remove:
-            for key in set(self.existing) - self.seen:
-                self.session.delete(self.existing[key])
-                self.logger.info("Removing %s %r", self.table_name, key)
-                counters['n_remove'] += 1
+            unseen = self._get_unseen_ids()
+            if unseen:
+                unseen_items = (
+                    self.model.query
+                    .filter(self.model.id.in_(unseen))
+                )
+                unseen_items.delete(synchronize_session=False)
+                counters['n_remove'] += len(unseen)
 
         self.session.flush()
         self.logger.info("%s: created %d, updated %d, removed %d, found ok %d.",
