@@ -64,13 +64,19 @@ var zoom_to_result = function(result) {
 
     content.append($('<div>').append($('<b>').text(county_name)));
 
-    var mandate = app.constituency.mandate_data[deputati_key];
-    if(mandate) {
-      content.append(
-        "deputat ",
-        "D" + props['COLDEP'] + " ",
-        $('<a>', {href: mandate['url']}).text(mandate['name'])
-      );
+    var mandate_list = app.constituency.mandate_data[deputati_key];
+    console.log(mandate_list);
+    if(mandate_list) {
+      content.append("deputat D" + props['COLDEP'] + " ");
+      for(var c = 0; c < mandate_list.length; c ++) {
+        var mandate = mandate_list[c];
+        content.append(
+          $('<a>', {href: mandate['url']}).text(mandate['name'])
+        );
+        if(c + 1 < mandate_list.length) {
+          content.append(', ');
+        }
+      }
     }
   }
 

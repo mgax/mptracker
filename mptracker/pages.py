@@ -247,19 +247,19 @@ def constituency_map():
         .join(models.Mandate.county)
     )
 
-    mandate_data = {
-        '%s%d' % (m.county.code, m.college): {
+    mandate_data = defaultdict(list)
+    for m in mandates:
+        key = '%s%d' % (m.county.code, m.college)
+        mandate_data[key].append({
             'name': m.person.name,
             'url': flask.url_for('.person', person_id=m.person.id),
-        }
-        for m in mandates
-    }
+        })
 
     county_name = {c.code: c.name for c in models.County.query}
 
     return flask.render_template('constituency_map.html', **{
         'county_name': county_name,
-        'mandate_data': mandate_data,
+        'mandate_data': dict(mandate_data),
     })
 
 
