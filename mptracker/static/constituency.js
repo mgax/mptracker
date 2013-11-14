@@ -83,17 +83,16 @@ var zoom_to_result = function(result) {
     ));
   }
 
-  if(result.bounds) {
-    map.fitBounds(result.bounds);
-  }
-  else {
-    map.panTo(result.latlng);
-  }
-  var html = content.html();
-  if(html.length > 0) {
+  if(deputati_poly || senatori_poly) {
+    if(result.bounds) {
+      map.fitBounds(result.bounds);
+    }
+    else {
+      map.panTo(result.latlng);
+    }
     var popup = new L.Popup();
     popup.setLatLng(latlng);
-    popup.setContent(html);
+    popup.setContent(content.html());
     popup.addTo(map);
     map.openPopup(popup);
   }
@@ -109,7 +108,14 @@ function geocode(options) {
     query: options['address'],
     bounds: map.getBounds(),
     zoom: map.getZoom(),
-    cb: options['success'],
+    cb: function(result) {
+      if(senatori_layer.getBounds().contains(result.latlng)) {
+        options['success'](result);
+      }
+      else {
+        options['error']();
+      }
+    },
     cb_err: options['error']
   });
 }
