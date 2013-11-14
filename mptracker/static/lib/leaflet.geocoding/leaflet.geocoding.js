@@ -131,21 +131,29 @@ L.Geocoding = L.Control.extend({
                 geocoder.geocode( { 'address': query}, function(results, status) {
                     if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
                         var res=results[0];
+                        var result = {
+                            query : query
+                            , content : res.formatted_address
+                            , latlng : new L.LatLng(res.geometry.location.lat(), res.geometry.location.lng())
+                        };
                         if(res.geometry.bounds) {
-                            cb({
-                                query : query
-                                , content : res.formatted_address
-                                , latlng : new L.LatLng(res.geometry.location.lat(), res.geometry.location.lng())
-                                , bounds : new L.LatLngBounds([
-                                    res.geometry.bounds.getSouthWest().lat(), res.geometry.bounds.getSouthWest().lng()
-                                    ], [
-                                    res.geometry.bounds.getNorthEast().lat(), res.geometry.bounds.getNorthEast().lng()
-                                ])
-                            });
-                            return;
+                            result.bounds = new L.LatLngBounds([
+                                res.geometry.bounds.getSouthWest().lat(), res.geometry.bounds.getSouthWest().lng()
+                                ], [
+                                res.geometry.bounds.getNorthEast().lat(), res.geometry.bounds.getNorthEast().lng()
+                            ]);
                         }
+                        else {
+                            result.bounds = new L.LatLngBounds([
+                                [result.latlng.lat - .01, result.latlng.lng - .01],
+                                [result.latlng.lat + .01, result.latlng.lng + .01]
+                            ]);
+                        }
+                        cb(result);
                     }
-                    arg.cb_err();
+                    else {
+                        arg.cb_err();
+                    }
                 });
             });
     }
