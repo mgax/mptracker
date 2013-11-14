@@ -653,3 +653,13 @@ def votes(
         logger.info("Scheduling %d jobs", len(new_voting_session_list))
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
+
+#this is code from issue#19
+@scraper_manager.command
+def scrapecurata():
+        
+    from mptracker.scraper.scraper_curata import RomaniaCurata
+    my_scraper = RomaniaCurata()
+    my_scraper.fetch_fortunes()
+
+    print("curata called")
