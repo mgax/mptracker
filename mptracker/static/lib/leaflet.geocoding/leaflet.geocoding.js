@@ -102,6 +102,9 @@ L.Geocoding = L.Control.extend({
                     , bounds : new L.LatLngBounds([res.boundingbox[0], res.boundingbox[2]], [res.boundingbox[1], res.boundingbox[3]])
                 });
             }
+            else {
+                arg.cb_err();
+            }
         });
     }
 
@@ -126,19 +129,23 @@ L.Geocoding = L.Control.extend({
             loadAPI( function () {
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode( { 'address': query}, function(results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
+                    if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
                         var res=results[0];
-                        cb({
-                            query : query
-                            , content : res.formatted_address
-                            , latlng : new L.LatLng(res.geometry.location.lat(), res.geometry.location.lng())
-                            , bounds : new L.LatLngBounds([
-                                res.geometry.bounds.getSouthWest().lat(), res.geometry.bounds.getSouthWest().lng()
-                                ], [
-                                res.geometry.bounds.getNorthEast().lat(), res.geometry.bounds.getNorthEast().lng()
-                            ])
-                        });
+                        if(res.geometry.bounds) {
+                            cb({
+                                query : query
+                                , content : res.formatted_address
+                                , latlng : new L.LatLng(res.geometry.location.lat(), res.geometry.location.lng())
+                                , bounds : new L.LatLngBounds([
+                                    res.geometry.bounds.getSouthWest().lat(), res.geometry.bounds.getSouthWest().lng()
+                                    ], [
+                                    res.geometry.bounds.getNorthEast().lat(), res.geometry.bounds.getNorthEast().lng()
+                                ])
+                            });
+                            return;
+                        }
                     }
+                    arg.cb_err();
                 });
             });
     }
