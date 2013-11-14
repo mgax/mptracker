@@ -110,7 +110,8 @@ def get_county_data(code):
 @placenames_manager.command
 def expand_minority_names():
     from mptracker.scraper.common import Scraper, get_cached_session, pqitems
-    scraper = Scraper(get_cached_session(), use_cdep_opener=False)
+    scraper = Scraper(get_cached_session())
+    scraper.use_cdep_opener = False
     doc = get_minority_names()
     roots = doc['root_names']
     names = set()

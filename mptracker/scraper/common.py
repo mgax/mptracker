@@ -19,9 +19,10 @@ PROJECT_ROOT = SCRAPER_PACKAGE.parent.parent
 
 class Scraper(object):
 
-    def __init__(self, session=None, use_cdep_opener=True):
+    use_cdep_opener = True
+
+    def __init__(self, session=None):
         self.session = session or requests.Session()
-        self.use_cdep_opener = use_cdep_opener
 
     def opener(self, url):
         # we need to pass in all the hooks because of a bug in requests 2.0.0
