@@ -16,7 +16,8 @@ var deputati_layer = L.geoJson(null, {
     return {
       weight: '1px',
       opacity: 1,
-      fillOpacity: 0
+      fillOpacity: 0,
+      clickable: false
     };
   }
 });
@@ -25,11 +26,16 @@ var senatori_layer = L.geoJson(null, {
     return {
       weight: '2px',
       opacity: 1,
-      fillOpacity: 0
+      fillOpacity: 0,
+      clickable: false
     };
   }
 });
 map.addLayer(deputati_layer).addLayer(senatori_layer)
+
+map.on('click', function(evt) {
+  zoom_to_result({latlng: evt.latlng});
+});
 
 $.getJSON(app.constituency.colleges_url, function(data) {
     deputati_layer.addData(
@@ -41,7 +47,10 @@ $.getJSON(app.constituency.colleges_url, function(data) {
 var zoom_to_result = function(result) {
   var latlng = result.latlng;
   var content = $('<div>');
-  content.append($('<p>').text(result.content));
+
+  if(result.content) {
+    content.append($('<p>').text(result.content));
+  }
 
   var deputati_poly = leafletPip.pointInLayer(latlng, deputati_layer)[0];
   if(deputati_poly) {
@@ -71,7 +80,12 @@ var zoom_to_result = function(result) {
   }
 
   var popup = new L.Popup();
-  map.fitBounds(result.bounds);
+  if(result.bounds) {
+    map.fitBounds(result.bounds);
+  }
+  else {
+    map.panTo(result.latlng);
+  }
   popup.setLatLng(latlng);
   popup.setContent(content.html());
   popup.addTo(map);
