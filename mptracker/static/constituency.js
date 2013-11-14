@@ -11,8 +11,25 @@ L.tileLayer(
   {attribution: attribution}
 ).addTo(map);
 
-var deputati_layer = L.geoJson().addTo(map);
-var senatori_layer = L.geoJson().addTo(map);
+var deputati_layer = L.geoJson(null, {
+  style: function() {
+    return {
+      weight: '1px',
+      opacity: 1,
+      fillOpacity: 0
+    };
+  }
+});
+var senatori_layer = L.geoJson(null, {
+  style: function() {
+    return {
+      weight: '2px',
+      opacity: 1,
+      fillOpacity: 0
+    };
+  }
+});
+map.addLayer(deputati_layer).addLayer(senatori_layer)
 
 $.getJSON(app.constituency.colleges_url, function(data) {
     deputati_layer.addData(
