@@ -1,14 +1,18 @@
 (function() {
-
 "use strict";
 
-var attribution = '&copy; <a href="http://osm.org/copyright">'
+var attribution = 'Tiles Courtesy of <a href="http://www.mapquest.com/">'
+                + 'MapQuest</a> &mdash; Map data '
+                + '&copy; <a href="http://osm.org/copyright">'
                 + 'OpenStreetMap</a> contributors';
 var map = L.map('map').setView([46, 25], 6);
 
 L.tileLayer(
-  'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-  {attribution: attribution}
+  'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg',
+  {
+    attribution: attribution,
+    subdomains: '1234'
+  }
 ).addTo(map);
 
 var deputati_layer = L.geoJson(null, {
