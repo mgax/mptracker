@@ -135,6 +135,7 @@ class County(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     geonames_code = db.Column(db.Integer)
+    code = db.Column(db.Text)
 
     def __str__(self):
         return self.name

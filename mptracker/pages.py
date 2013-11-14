@@ -238,6 +238,31 @@ def committee_summary(summary_id):
     })
 
 
+@pages.route('/constituency-map')
+def constituency_map():
+    mandates = (
+        models.Mandate.query
+        .filter_by(year=2012)
+        .join(models.Mandate.person)
+        .join(models.Mandate.county)
+    )
+
+    mandate_data = {
+        '%s%d' % (m.county.code, m.college): {
+            'name': m.person.name,
+            'url': flask.url_for('.person', person_id=m.person.id),
+        }
+        for m in mandates
+    }
+
+    county_name = {c.code: c.name for c in models.County.query}
+
+    return flask.render_template('constituency_map.html', **{
+        'county_name': county_name,
+        'mandate_data': mandate_data,
+    })
+
+
 @pages.route('/debug')
 def debug():
     args = flask.request.args
