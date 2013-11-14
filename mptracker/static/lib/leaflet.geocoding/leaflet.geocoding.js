@@ -102,6 +102,9 @@ L.Geocoding = L.Control.extend({
                     , bounds : new L.LatLngBounds([res.boundingbox[0], res.boundingbox[2]], [res.boundingbox[1], res.boundingbox[3]])
                 });
             }
+            else {
+                arg.cb_err();
+            }
         });
     }
 
@@ -126,18 +129,30 @@ L.Geocoding = L.Control.extend({
             loadAPI( function () {
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode( { 'address': query}, function(results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
+                    if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
                         var res=results[0];
-                        cb({
+                        var result = {
                             query : query
                             , content : res.formatted_address
                             , latlng : new L.LatLng(res.geometry.location.lat(), res.geometry.location.lng())
-                            , bounds : new L.LatLngBounds([
+                        };
+                        if(res.geometry.bounds) {
+                            result.bounds = new L.LatLngBounds([
                                 res.geometry.bounds.getSouthWest().lat(), res.geometry.bounds.getSouthWest().lng()
                                 ], [
                                 res.geometry.bounds.getNorthEast().lat(), res.geometry.bounds.getNorthEast().lng()
-                            ])
-                        });
+                            ]);
+                        }
+                        else {
+                            result.bounds = new L.LatLngBounds([
+                                [result.latlng.lat - .01, result.latlng.lng - .01],
+                                [result.latlng.lat + .01, result.latlng.lng + .01]
+                            ]);
+                        }
+                        cb(result);
+                    }
+                    else {
+                        arg.cb_err();
                     }
                 });
             });
