@@ -654,12 +654,11 @@ def votes(
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
 
-#this is code from issue#19
+#./manage.py scraper get_romania_curata
 @scraper_manager.command
-def scrapecurata():
+def get_romania_curata():
         
     from mptracker.scraper.scraper_curata import RomaniaCurata
     my_scraper = RomaniaCurata()
     my_scraper.fetch_fortunes()
 
-    print("curata called")
