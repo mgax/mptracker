@@ -84,6 +84,7 @@ class MpCommittee(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     cdep_id = db.Column(db.Integer)
+    chamber_id = db.Column(db.Integer)
 
 
 class Mandate(db.Model):
