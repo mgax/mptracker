@@ -10,6 +10,12 @@
 
   <p>Camera decizională: {{ proposal.decision_chamber.name }}</p>
 
+  {% if policy_domain %}
+    <p>
+      Domeniul de politici publice: {{ policy_domain.name }}
+    </p>
+  {% endif %}
+
   {% if voting_sessions %}
     <h2>Voturi</h2>
     <ul>
