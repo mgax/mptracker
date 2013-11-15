@@ -86,20 +86,6 @@ class MpCommittee(db.Model):
     cdep_id = db.Column(db.Integer)
 
 
-class MpCommitteeMembership(db.Model):
-    id = db.Column(UUID, primary_key=True, default=random_uuid)
-    role = db.Column(db.Text)
-
-    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
-    mandate = db.relationship('Mandate',
-        backref=db.backref('committee_memberships', lazy='dynamic'))
-
-    mp_committee_id = db.Column(UUID, db.ForeignKey('mp_committee.id'),
-                                nullable=False)
-    mp_committee = db.relationship('MpCommittee',
-        backref=db.backref('memberships', lazy='dynamic'))
-
-
 class Mandate(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     year = db.Column(db.Integer)
@@ -293,16 +279,6 @@ class Meta(db.Model):
             row = cls(object_id=object_id, key=key)
             db.session.add(row)
         return row
-
-
-class CommitteeSummary(db.Model):
-    id = db.Column(UUID, primary_key=True, default=random_uuid)
-    title = db.Column(db.Text)
-    date = db.Column(db.Date)
-    committee = db.Column(db.Text)
-    pdf_url = db.Column(db.Text)
-    text = db.Column(db.Text)
-
 
 
 class Sponsorship(db.Model):
