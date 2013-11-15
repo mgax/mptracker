@@ -273,13 +273,27 @@ def committees(
 ):
     from mptracker.scraper.committees import CommitteeScraper
 
+    patcher = TablePatcher(
+        models.MpCommittee,
+        models.db.session,
+        key_columns=['name'],
+    )
+
     http_session = create_session(
         cache_name=cache_name,
         throttle=throttle and float(throttle),
     )
-    committee_scraper = CommitteeScraper(http_session)
-    for committee in committee_scraper.fetch_committees():
-        print(committee.cdep_id, committee.name)
+    scraper = CommitteeScraper(http_session)
+    with patcher.process(autoflush=1000) as add:
+        for committee in scraper.fetch_committees():
+            add(committee.as_dict(['cdep_id', 'name']))
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
 
 
 @scraper_manager.command
