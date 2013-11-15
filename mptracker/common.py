@@ -10,6 +10,7 @@ from io import StringIO
 from itertools import chain
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
+from werkzeug.urls import url_decode, url_parse
 from flask.ext.rq import job
 from babel.dates import format_date
 from psycopg2.extras import DateRange
@@ -261,3 +262,7 @@ def model_to_dict(model, namelist):
     for name in namelist:
         rv[name] = getattr(model, name)
     return rv
+
+
+def url_args(url):
+    return url_decode(url_parse(url).query)

@@ -67,6 +67,7 @@ def create_manager(app):
     from mptracker.scraper import scraper_manager
     from mptracker.proposals import proposals_manager
     from mptracker.votes import votes_manager
+    from mptracker.policy import policy_manager
 
     manager = Manager(app)
 
@@ -76,6 +77,7 @@ def create_manager(app):
     manager.add_command('scraper', scraper_manager)
     manager.add_command('proposals', proposals_manager)
     manager.add_command('votes', votes_manager)
+    manager.add_command('policy', policy_manager)
 
     @manager.command
     def worker():
