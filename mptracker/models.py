@@ -324,6 +324,9 @@ class Proposal(db.Model):
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
     decision_chamber = db.relationship('Chamber')
 
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
+    policy_domain = db.relationship('PolicyDomain')
+
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
                     primaryjoin='Proposal.id==foreign(OcrText.id)',
                     cascade='all')
