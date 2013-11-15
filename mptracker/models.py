@@ -172,6 +172,9 @@ class Question(db.Model):
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
 
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
+    policy_domain = db.relationship('PolicyDomain')
+
     def __str__(self):
         return "{q.number}/{q.date}".format(q=self)
 
