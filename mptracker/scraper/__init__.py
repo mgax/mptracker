@@ -276,7 +276,7 @@ def committees(
     patcher = TablePatcher(
         models.MpCommittee,
         models.db.session,
-        key_columns=['name'],
+        key_columns=['chamber_id', 'cdep_id'],
     )
 
     http_session = create_session(
@@ -284,9 +284,9 @@ def committees(
         throttle=throttle and float(throttle),
     )
     scraper = CommitteeScraper(http_session)
-    with patcher.process(autoflush=1000) as add:
+    with patcher.process(autoflush=1000, remove=True) as add:
         for committee in scraper.fetch_committees():
-            add(committee.as_dict(['cdep_id', 'name']))
+            add(committee.as_dict(['chamber_id', 'cdep_id', 'name']))
 
     if no_commit:
         logger.warn("Rolling back the transaction")
