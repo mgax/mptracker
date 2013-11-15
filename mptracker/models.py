@@ -85,6 +85,11 @@ class MpCommittee(db.Model):
     name = db.Column(db.Text)
     cdep_id = db.Column(db.Integer)
     chamber_id = db.Column(db.Integer)
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'),
+                                 nullable=True)
+
+    policy_domain = db.relationship('PolicyDomain',
+        backref=db.backref('committees', lazy='dynamic', cascade='all'))
 
 
 class Mandate(db.Model):
@@ -395,6 +400,21 @@ class Vote(db.Model):
                                   nullable=False, index=True)
     voting_session = db.relationship('VotingSession',
         backref=db.backref('votes', lazy='dynamic'))
+
+
+class Ministry(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    name = db.Column(db.Text)
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'),
+                                 nullable=True)
+
+    policy_domain = db.relationship('PolicyDomain',
+        backref=db.backref('ministries', lazy='dynamic', cascade='all'))
+
+
+class PolicyDomain(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    name = db.Column(db.Text)
 
 
 class User(db.Model, UserMixin):
