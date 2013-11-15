@@ -1,5 +1,6 @@
 import flask
 from flask.ext.script import Manager
+from flask.ext.rq import job
 from pyquery import PyQuery as pq
 from mptracker import models
 from mptracker.common import url_args
@@ -35,7 +36,18 @@ def get_proposal_policy_domain(proposal):
 
 
 @policy_manager.command
+@job
 def calculate_proposal(proposal_id):
     proposal = models.Proposal.query.get(proposal_id)
     proposal.policy_domain = get_proposal_policy_domain(proposal)
     models.db.session.commit()
+
+
+@policy_manager.command
+def calculate_all_proposals():
+    proposal_query = (
+        models.db.session.query(models.Proposal.id)
+        .filter(models.Proposal.policy_domain_id == None)
+    )
+    for (proposal_id,) in proposal_query:
+        calculate_proposal.delay(proposal_id)
