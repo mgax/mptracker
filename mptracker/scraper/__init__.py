@@ -27,6 +27,7 @@ def questions(
         ):
     from mptracker.scraper.questions import QuestionScraper
     from mptracker.questions import ocr_question
+    from mptracker.policy import calculate_question
 
     if reimport_existing:
         known_urls = set()
@@ -88,10 +89,13 @@ def questions(
                 counters['download_time'].total_seconds())
 
     if autoanalyze:
-        logger.info("Scheduling %d jobs", len(changed))
+        logger.info("Scheduling jobs for %d questions", len(changed))
         for question in changed:
             if question.pdf_url:
                 ocr_question.delay(question.id, autoanalyze=True)
+
+            if question.policy_domain_id is None:
+                calculate_question.delay(question.id)
 
 
 @scraper_manager.command
@@ -321,6 +325,7 @@ def proposals(
         ):
     from mptracker.scraper.proposals import ProposalScraper
     from mptracker.proposals import ocr_proposal
+    from mptracker.policy import calculate_proposal
 
     proposal_scraper = ProposalScraper(create_session(
             cache_name=cache_name,
@@ -360,6 +365,7 @@ def proposals(
     sp_updates = sp_added = sp_removed = 0
 
     changed = []
+    seen = []
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
         with activity_patcher.process(autoflush=1000, remove=True) \
@@ -387,6 +393,7 @@ def proposals(
                 row = result.row
                 if result.is_changed:
                     changed.append(row)
+                seen.append(row)
 
                 new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
                 existing_sponsorships = {sp.mandate: sp
@@ -440,10 +447,15 @@ def proposals(
                 sp_updates, sp_added, sp_removed)
 
     if autoanalyze:
-        logger.info("Scheduling %d jobs", len(changed))
+        logger.info("Scheduling analysis jobs for %d proposals", len(changed))
         for proposal in changed:
             if proposal.pdf_url:
                 ocr_proposal.delay(proposal.id, autoanalyze=True)
+
+        logger.info("Scheduling policy jobs for %d proposals", len(seen))
+        for proposal in seen:
+            if proposal.policy_domain_id is None:
+                calculate_proposal.delay(proposal.id)
 
 
 @scraper_manager.command
