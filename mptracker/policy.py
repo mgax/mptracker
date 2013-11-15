@@ -26,9 +26,16 @@ def iter_committees(proposal):
                 yield committee
 
 
+def get_proposal_policy_domain(proposal):
+    for committee in iter_committees(proposal):
+        if committee.policy_domain is not None:
+            return committee.policy_domain
+    else:
+        return None
+
+
 @policy_manager.command
 def calculate_proposal(proposal_id):
     proposal = models.Proposal.query.get(proposal_id)
-
-    for committee in iter_committees(proposal):
-        print(committee.name)
+    proposal.policy_domain = get_proposal_policy_domain(proposal)
+    models.db.session.commit()
