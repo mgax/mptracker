@@ -92,9 +92,6 @@ def person(person_id):
             'election_votes': m.election_votes,
             'election_votes_percent': m.election_votes_percent,
             'candidate_party': m.candidate_party,
-            'committee_memberships': (m.committee_memberships
-                                            .join(models.MpCommittee)
-                                            .all()),
             'group_memberships': (
                 m.group_memberships
                     .order_by(models.MpGroupMembership.interval)
@@ -177,10 +174,6 @@ def committee(committee_id):
     committee = models.MpCommittee.query.get_or_404(committee_id)
     return flask.render_template('committee.html', **{
         'committee': committee,
-        'memberships': (committee.memberships
-                                    .join(models.Mandate)
-                                    .join(models.Person)
-                                    .all()),
     })
 
 

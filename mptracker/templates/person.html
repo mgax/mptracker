@@ -137,18 +137,6 @@
           {{ mandate.candidate_party }}
         </dd>
       {% endif %}
-
-      {% if mandate.committee_memberships %}
-        <dt>comisii:</dt>
-        {% for membership in mandate.committee_memberships %}
-          <dd>
-          {% set url = url_for('.committee',
-              committee_id=membership.mp_committee_id) %}
-          <a href="{{ url }}">{{ membership.mp_committee.name }}</a>
-          {% if membership.role %}({{ membership.role }}){% endif %}
-          </dd>
-        {% endfor %}
-      {% endif %}
     </dl>
   </section>
  {% endfor %}

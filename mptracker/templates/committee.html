@@ -15,16 +15,4 @@
 
   <h1>{{ committee.name }}</h1>
 
-  <ul>
-  {% for m in memberships %}
-    {% set person = m.mandate.person %}
-    {% set url = url_for('.person', person_id=person.id) %}
-    <li>
-      <a href="{{ url }}">{{ person }}</a>
-      {% if m.role %}
-        &mdash; {{ m.role }}
-      {% endif %}
-    </li>
-  {% endfor %}
-  </ul>
 {% endblock %}
