@@ -266,6 +266,23 @@ def groups(
 
 
 @scraper_manager.command
+def committees(
+    cache_name=None,
+    throttle=None,
+    no_commit=False,
+):
+    from mptracker.scraper.committees import CommitteeScraper
+
+    http_session = create_session(
+        cache_name=cache_name,
+        throttle=throttle and float(throttle),
+    )
+    committee_scraper = CommitteeScraper(http_session)
+    for committee in committee_scraper.fetch_committees():
+        print(committee.cdep_id, committee.name)
+
+
+@scraper_manager.command
 def committee_summaries(year=2013):
     from mptracker.scraper.committee_summaries import SummaryScraper
 
