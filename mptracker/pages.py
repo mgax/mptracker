@@ -223,14 +223,6 @@ def transcript_chapter(date_str, chapter_serial):
     })
 
 
-@pages.route('/committee-summary/<uuid:summary_id>')
-def committee_summary(summary_id):
-    summary = models.CommitteeSummary.query.get_or_404(summary_id)
-    return flask.render_template('committee_summary.html', **{
-        'summary': summary,
-    })
-
-
 @pages.route('/constituency-map')
 def constituency_map():
     mandates = (
