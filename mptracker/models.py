@@ -43,6 +43,7 @@ class Person(db.Model):
     email_value = db.Column(db.Text)
     facebook_url = db.Column(db.Text)
     twitter_url = db.Column(db.Text)
+    romania_curata = db.Column(db.Text)
 
     @property
     def emails(self):
