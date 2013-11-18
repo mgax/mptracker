@@ -6,9 +6,8 @@ from mptracker.scraper.common import (Scraper, url_args, GenericModel,
 class EconScraper(Scraper):
 		index_url = 'http://www.cdep.ro/pls/parlam/informatii_economice.home'
 
-		#Url principal
+
 		def fetch(self):
-			#return 'Linkul este : %s' %(self.index_url)
 			index_page=self.fetch_url(self.index_url)
 			headline=index_page.find('#signup')
 			headline_tables=headline.find('table')
@@ -20,26 +19,29 @@ class EconScraper(Scraper):
 			for url in url_set:
 				return self.fetch_section(url) #Test cu return, a se modifica cu la final @ yield self.fetch_section(url)   
 
-#Url secundar -> Aleg doar D.	    
+
 		def fetch_section(self, section_url):
 			print (section_url)
 			section_page = self.fetch_url(section_url)
 			headline = section_page.find('#pageContent')
 			parent_td = pq(headline.parents('td')[-1])
 			mp_table = pq(parent_td.find('#div-1c')).children('ol>li').eq(3).find('a')
-			#NU TOATE AU SI VARIANTA D
+			#TODO: NU TOATE AU SI VARIANTA D
 			url = set()
 			url.add(mp_table.attr('href'))
-		   
-		'''#De continuat fetch_table
-	    def fetch_table(self,table_url):
-	    	table_page=self.fetch_section(table_url)
-	    	table_headline=table_page.find('rowh')
-	    	table_items=pq(table_headline).siblings('tr')
+
+			return self.fetch_table(url) #Comment line 20
+
+		def fetch_table(self,table_url):
+			table_page = self.fetch_url(table_url)
+			table_headline = table_page.find('#rowh')
+			table_items = pq(table_headline).siblings('tr')
 	    	#tr bgcolor /tr row0 row1
-	    	c=[]
+			print(table_items[1])
+	    	
+		'''c=[]
 	    	for item in table_items.items():
-	    		if item.hasClass('row0') or item.hasClass('row1'):
+	    		if item.hasClass('#row0') or item.hasClass('#row1'):
 	    			c.append(item)
 	    		else:
 	    			if c!=Null:
