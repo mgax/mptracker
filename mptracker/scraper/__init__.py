@@ -698,9 +698,7 @@ def votes(
             calculate_voting_session_loyalty.delay(voting_session_id)
 
 @scraper_manager.command
-def infoecon(
-        cache_name=None,
-        throttle=None,
-        no_commit=False,
-        ):
+def infoecon():
     from mptracker.scraper.infoecon import EconScraper
+    econ=EconScraper()
+    return '%s' %(econ.fetch())

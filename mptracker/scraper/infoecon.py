@@ -8,11 +8,16 @@ class EconScraper(Scraper):
 
 		#Url principal
 		def fetch(self):
-			index_page = self.fetch_url(self.index_url)
-	        headline = index_page.find('form#signup')
-	        headline_tables = headline.find('table') 
-	        headline_tables_tr = headline_tables.find('tr')
+			#return 'Linkul este : %s' %(self.index_url)
+			index_page=self.fetch_url(self.index_url)
+			headline=index_page.find('#signup')
+			headline_tables=headline.find('table')
+			headline_tables_tr=headline_tables.find('tr')
+			url_set = set()
+	        for link in headline_tables_tr.items('td>a'):
+	        	url_set.add(link.attr('href'))
 
+'''    
 	        #search in table td > a and url_set[] =href
 	        url_set = set()
 	        for link in headline_tables_tr.items('td > a'): 
@@ -20,7 +25,7 @@ class EconScraper(Scraper):
 
 	        for url in sorted(url_set):
 	            yield self.fetch_section(url)    
-	            
+   
 
 		#Url secundar -> Aleg doar D.	    
 	    def fetch_section(self, section_url):
@@ -53,3 +58,4 @@ class EconScraper(Scraper):
 	   		info = Info(
 	   			)
 	   		for item in table.items():
+'''
