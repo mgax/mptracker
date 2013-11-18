@@ -701,5 +701,4 @@ def votes(
 def infoecon():
     from mptracker.scraper.infoecon import EconScraper
     econ=EconScraper()
-    econ.fetch()
-    #return '%s' %(econ.fetch())
+    return '%s' %(econ.fetch())

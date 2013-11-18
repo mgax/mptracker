@@ -14,28 +14,28 @@ class EconScraper(Scraper):
 			headline_tables=headline.find('table')
 			headline_tables_tr=headline_tables.find('tr')
 			url_set = set()
-			#search in table td > a and url_set[] =href
+
 			for link in headline_tables_tr.items('td > a'):
 				url_set.add(link.attr('href'))
 			for url in url_set:
-				yield self.fetch_section(url)
+				return self.fetch_section(url) #Test cu return, a se modifica cu 'yield self.fetch_section(url)' la final
    
-
 #Url secundar -> Aleg doar D.	    
 		def fetch_section(self, section_url):
+			print (section_url)
 			section_page = self.fetch_url(section_url)
 			headline = section_page.find('.pageContent')
-			parent_td = pq(headline.parents('td')[-1])
+			parent_td = pq(headline.parents('td'))
 			mp_table = pq(parent_td.find('div-1c')).children('li').eq(3).find('a')
 			url_set = set()
 			url_set.add(mp_table.attr('href'))
 			return url_set
 
 	   
-'''    	        
+  	        
 
 		   
-	    #De continuat fetch_table
+		'''#De continuat fetch_table
 	    def fetch_table(self,table_url):
 	    	table_page=self.fetch_section(table_url)
 	    	table_headline=table_page.find('rowh')
@@ -54,5 +54,4 @@ class EconScraper(Scraper):
 	   	def make_scrap(self,table):
 	   		info = Info(
 	   			)
-	   		for item in table.items():
-'''
+	   		for item in table.items():'''
