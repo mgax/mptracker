@@ -1,4 +1,3 @@
-from collections import namedtuple
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (Scraper, url_args, GenericModel,
                                       parse_profile_url, parse_date)

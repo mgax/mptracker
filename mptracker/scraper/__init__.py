@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 scraper_manager = Manager()
 
-ONE_DAY = timedelta(days=1)
+ONE_DAY = timedelta(days=1
 
 TERM_2012_START = date(2012, 12, 19)
 
@@ -696,3 +696,10 @@ def votes(
         logger.info("Scheduling %d jobs", len(new_voting_session_list))
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
+
+def groups(
+        cache_name=None,
+        throttle=None,
+        no_commit=False,
+        ):
+    from mptracker.scraper.infoecon import EconScraper
