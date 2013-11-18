@@ -18,22 +18,18 @@ class EconScraper(Scraper):
 			for link in headline_tables_tr.items('td > a'):
 				url_set.add(link.attr('href'))
 			for url in url_set:
-				return self.fetch_section(url) #Test cu return, a se modifica cu 'yield self.fetch_section(url)' la final
-   
+				return self.fetch_section(url) #Test cu return, a se modifica cu la final @ yield self.fetch_section(url)   
+
 #Url secundar -> Aleg doar D.	    
 		def fetch_section(self, section_url):
 			print (section_url)
 			section_page = self.fetch_url(section_url)
-			headline = section_page.find('.pageContent')
-			parent_td = pq(headline.parents('td'))
-			mp_table = pq(parent_td.find('div-1c')).children('li').eq(3).find('a')
-			url_set = set()
-			url_set.add(mp_table.attr('href'))
-			return url_set
-
-	   
-  	        
-
+			headline = section_page.find('#pageContent')
+			parent_td = pq(headline.parents('td')[-1])
+			mp_table = pq(parent_td.find('#div-1c')).children('ol>li').eq(3).find('a')
+			#NU TOATE AU SI VARIANTA D
+			url = set()
+			url.add(mp_table.attr('href'))
 		   
 		'''#De continuat fetch_table
 	    def fetch_table(self,table_url):
