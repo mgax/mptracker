@@ -27,17 +27,19 @@ class EconScraper(Scraper):
 			parent_td = pq(headline.parents('td')[-1])
 			mp_table = pq(parent_td.find('#div-1c')).children('ol>li').eq(3).find('a')
 			#TODO: NU TOATE AU SI VARIANTA D
-			url = set()
-			url.add(mp_table.attr('href'))
-
-			return self.fetch_table(url) #Comment line 20
+			url_set = set()
+			url_set.add(mp_table.attr('href'))
+			for url in url_set:
+				return self.fetch_table(url) #Comment line 20
 
 		def fetch_table(self,table_url):
+			print(table_url)
 			table_page = self.fetch_url(table_url)
-			table_headline = table_page.find('#rowh')
-			table_items = pq(table_headline).siblings('tr')
+			table_headline = table_page.find('.rowh')
+			table_trs = pq(table_headline).siblings()
+			table_items = list(table_trs.items())
 	    	#tr bgcolor /tr row0 row1
-			print(table_items[1])
+			print (table_items)
 	    	
 		'''c=[]
 	    	for item in table_items.items():
