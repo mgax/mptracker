@@ -30,28 +30,19 @@ class EconScraper(Scraper):
 			url_set = set()
 			url_set.add(mp_table.attr('href'))
 			for url in url_set:
-				return self.fetch_table(url) #Comment line 20
+				return self.fetch_table(url) #Vezi comment line 20
 
 		def fetch_table(self,table_url):
 			print(table_url)
 			table_page = self.fetch_url(table_url)
-			table_headline = table_page.find('.rowh')
+			table_headline = table_page.find('.rowh') #Dictionary Key's
+			data=dict()
+			data.update({table_key:null}) #Get Dict keys.Last.
+			print (c)
+			print(table_headline.items())
+
+
 			table_trs = pq(table_headline).siblings()
 			table_items = list(table_trs.items())
-	    	#tr bgcolor /tr row0 row1
-			print (table_items)
-	    	
-		'''c=[]
-	    	for item in table_items.items():
-	    		if item.hasClass('#row0') or item.hasClass('#row1'):
-	    			c.append(item)
-	    		else:
-	    			if c!=Null:
-	    				make_scrap(c) #transforma c a.i. sa fie gata de baza de date
-	    			c=[]
-
-
-	   	def make_scrap(self,table):
-	   		info = Info(
-	   			)
-	   		for item in table.items():'''
+	    	#tr bgcolor (delimit) -> tr row0,tr row1
+			
