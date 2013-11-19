@@ -37,8 +37,8 @@ class EconScraper(Scraper):
 			table_page = self.fetch_url(table_url)
 			table_headline = table_page.find('.rowh') #Dictionary Key's
 			data=dict()
-			data.update({table_key:null}) #Get Dict keys.Last.
-			print (c)
+			data.update({'ky':'&nbsp'}) #Get Dict keys.Last.
+			print (data)
 			print(table_headline.items())
 
 
