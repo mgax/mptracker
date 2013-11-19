@@ -36,13 +36,16 @@ class EconScraper(Scraper):
 			print(table_url)
 			table_page = self.fetch_url(table_url)
 			table_headline = table_page.find('.rowh') #Dictionary Key's
+
 			data=dict()
-			data.update({'ky':'&nbsp'}) #Get Dict keys.Last.
-			print (data)
-			print(table_headline.items())
+			table=table_headline.children()
+			for item in table.items():
+				print (item.text().encode('utf-8'))
+				#data.update({item.text():None})
+				data[item.text()]=None
+				
 
-
-			table_trs = pq(table_headline).siblings()
+		'''table_trs = pq(table_headline).siblings()
 			table_items = list(table_trs.items())
-	    	#tr bgcolor (delimit) -> tr row0,tr row1
-			
+			tr bgcolor (delimit) -> tr row0,tr row1
+			'''
