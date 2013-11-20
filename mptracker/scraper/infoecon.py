@@ -30,7 +30,7 @@ class EconScraper(Scraper):
 				items.append(item.split('='))
 
 			if (items[1][1]<'2010' or (items[1][1]=='2010' and items[2][1]<='s3') ):
-				return None #Pentru tot ce este mai mic sau egal cu leg=2008&an=2010&lu=3
+				return None #Pentru tot ce este mai mic sau egal cu leg=2008&an=2010&lu=3 nu exista legatura catre sectiunea D
 			else:
 				section_page = self.fetch_url(section_url)
 				headline = section_page.find('#pageContent')
@@ -65,7 +65,6 @@ class EconScraper(Scraper):
 				})
 			'''	
 
-		'''table_trs = pq(table_headline).siblings()
+			table_trs = pq(table_headline).siblings()
 			table_items = list(table_trs.items())
-			tr bgcolor (delimit) -> tr row0,tr row1
-			'''
+			#tr bgcolor (delimiter) -> tr row0,tr row1
