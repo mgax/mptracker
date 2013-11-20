@@ -23,15 +23,24 @@ class EconScraper(Scraper):
 
 		def fetch_section(self, section_url):
 			print (section_url)
-			section_page = self.fetch_url(section_url)
-			headline = section_page.find('#pageContent')
-			parent_td = pq(headline.parents('td')[-1])
-			mp_table = pq(parent_td.find('#div-1c')).children('ol>li').eq(3).find('a')
-			#TODO: NU TOATE AU SI VARIANTA D
-			url_set = set()
-			url_set.add(mp_table.attr('href'))
-			for url in url_set:
-				return self.fetch_table(url) #Vezi comment line 20
+			
+			check_forD=(section_url.split('?'))[1].split('&')
+			items=[]
+			for item in check_forD:
+				items.append(item.split('='))
+
+			if (items[1][1]<'2010' or (items[1][1]=='2010' and items[2][1]<='s3') ):
+				return None #Pentru tot ce este mai mic sau egal cu leg=2008&an=2010&lu=3
+			else:
+				section_page = self.fetch_url(section_url)
+				headline = section_page.find('#pageContent')
+				parent_td = pq(headline.parents('td')[-1])
+				mp_table = pq(parent_td.find('#div-1c')).children('ol>li').eq(3).find('a')
+
+				url_set = set()
+				url_set.add(mp_table.attr('href'))
+				for url in url_set:
+					return self.fetch_table(url) #Vezi comment line 20
 
 		def fetch_table(self,table_url):
 			print(table_url)
