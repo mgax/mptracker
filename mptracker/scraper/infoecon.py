@@ -1,4 +1,5 @@
 from pyquery import PyQuery as pq
+from collections import OrderedDict
 from mptracker.scraper.common import (Scraper, url_args, GenericModel,
                                       parse_profile_url, parse_date)
 
@@ -40,10 +41,20 @@ class EconScraper(Scraper):
 			data=dict()
 			table=table_headline.children()
 			for item in table.items():
-				print (item.text().encode('utf-8'))
-				#data.update({item.text():None})
 				data[item.text()]=None
-				
+			OrderedDict(data)
+			for item in table.items():
+				print (item.text().encode('utf-8'))
+			'''
+			De genul asta:
+
+			dict({
+				nr.headline.key: nr
+				circumscr/coleg.key: [circumsc,coleg]
+				chelt.key: chelt
+				cheltbun.key: chelt
+				})
+			'''	
 
 		'''table_trs = pq(table_headline).siblings()
 			table_items = list(table_trs.items())
