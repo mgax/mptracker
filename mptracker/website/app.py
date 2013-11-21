@@ -9,7 +9,7 @@ def create_website_app():
     from mptracker.common import common
     from mptracker.website.pages import pages
 
-    app = flask.Flask(__name__)
+    app = flask.Flask(__name__, static_folder='../static')
     app.config.from_pyfile('../../settings.py', silent=True)
     app._logger = logger
     models.init_app(app)

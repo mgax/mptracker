@@ -20,4 +20,4 @@ def ping():
 
 @pages.route('/')
 def home():
-    return 'welcome to mptracker website'
+    return flask.render_template('home.html')
