@@ -64,6 +64,12 @@ class DataAccess:
             if group.short_name not in ['Indep.', 'Mino.']
         ]
 
+    def get_party(self, party_id, missing=KeyError):
+        party = MpGroup.query.get(party_id)
+        if party is None:
+            raise missing()
+        return party
+
     def get_policy_list(self):
         return [
             {'name': policy.name, 'id': policy.id}
