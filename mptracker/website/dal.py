@@ -19,13 +19,16 @@ class DataAccess:
             .filter(func.lower(Person.name).like('%' + query.lower() + '%'))
             .order_by(Person.name)
         )
-        return sql_query.all()
+        return [
+            {'name': person.name, 'id': person.id}
+            for person in sql_query.all()
+        ]
 
     def get_person(self, person_id, missing=KeyError):
         person = Person.query.get(person_id)
         if person is None:
             raise missing()
-        return person
+        return {'name': person.name}
 
     def get_mandate2012_details(self, person_id):
         mandate = (
@@ -70,7 +73,7 @@ class DataAccess:
         party = MpGroup.query.get(party_id)
         if party is None:
             raise missing()
-        return party
+        return {'name': party.name}
 
     def get_policy_list(self):
         return [
@@ -82,7 +85,7 @@ class DataAccess:
         policy = PolicyDomain.query.get(policy_id)
         if policy is None:
             raise missing()
-        return policy
+        return {'name': policy.name}
 
     def get_policy_proposal_list(self, policy_id):
         proposal_query = (
@@ -98,4 +101,4 @@ class DataAccess:
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
             raise missing()
-        return proposal
+        return {'title': proposal.title}

@@ -72,8 +72,8 @@ def person_index_search():
     query = flask.request.args['q']
     results = [
         {
-            'name': person.name,
-            'url': flask.url_for('.person_detail', person_id=person.id),
+            'name': person['name'],
+            'url': flask.url_for('.person_detail', person_id=person['id']),
         }
         for person in dal.search_person(query)
     ]
@@ -84,7 +84,7 @@ def person_index_search():
 @section('person')
 def person_detail(person_id):
     person = dal.get_person(person_id, missing=NotFound)
-    ctx = {'person_name': person.name}
+    ctx = {'person_name': person['name']}
     ctx.update(dal.get_mandate2012_details(person_id))
     return flask.render_template('person_detail.html', **ctx)
 
@@ -102,7 +102,7 @@ def party_index():
 def party_detail(party_id):
     party = dal.get_party(party_id, missing=NotFound)
     return flask.render_template('party_detail.html', **{
-        'party_name': party.name,
+        'party_name': party['name'],
     })
 
 
@@ -119,7 +119,7 @@ def policy_index():
 def policy_detail(policy_id):
     policy = dal.get_policy(policy_id, missing=NotFound)
     ctx = {
-        'policy_name': policy.name,
+        'policy_name': policy['name'],
         'proposal_list': dal.get_policy_proposal_list(policy_id),
     }
     return flask.render_template('policy_detail.html', **ctx)
@@ -130,6 +130,6 @@ def policy_detail(policy_id):
 def policy_proposal(proposal_id):
     proposal = dal.get_proposal(proposal_id, missing=NotFound)
     ctx = {
-        'proposal_title': proposal.title,
+        'proposal_title': proposal['title'],
     }
     return flask.render_template('policy_proposal.html', **ctx)
