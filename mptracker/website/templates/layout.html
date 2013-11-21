@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ url_for('static',
         filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
     {% block title %}{% endblock %}
+    <script>window.app = {};</script>
   </head>
 
   <body>
@@ -16,7 +17,12 @@
     <script src="{{ url_for('static',
         filename='lib/jquery-1.10.1/jquery.min.js') }}"></script>
     <script src="{{ url_for('static',
+        filename='lib/lodash-2.3.0/lodash.js') }}"></script>
+    <script src="{{ url_for('static',
+        filename='lib/backbone-1.1.0/backbone-min.js') }}"></script>
+    <script src="{{ url_for('static',
         filename='lib/bootstrap-3.0.2/js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='website.js') }}"></script>
     {% block scripts %}{% endblock %}
   </body>
 </html>

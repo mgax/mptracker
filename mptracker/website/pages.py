@@ -1,6 +1,9 @@
 import functools
 import flask
 from mptracker import models
+from mptracker.website.dal import DataAccess
+
+dal = DataAccess()
 
 pages = flask.Blueprint('pages', __name__)
 
@@ -60,7 +63,17 @@ def home():
 @pages.route('/persoane/')
 @section('person')
 def person_index():
-    return flask.render_template('layout.html')
+    return flask.render_template('person_index.html')
+
+
+@pages.route('/persoane/_search')
+def person_index_search():
+    query = flask.request.args['q']
+    results = [
+        {'name': person.name}
+        for person in dal.search_person(query)
+    ]
+    return flask.jsonify(results=results)
 
 
 @pages.route('/partide/')
