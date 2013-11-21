@@ -1,0 +1,13 @@
+<div class="container">
+  <nav class="navbar navbar-default">
+    <a class="navbar-brand" href="{{ url_for('pages.home') }}">MP Tracker</a>
+
+    <ul class="nav navbar-nav">
+      {%- for link in nav_link_list %}
+        <li>
+          <a href="{{ link['url'] }}">{{ link['label'] }}</a>
+        </li>
+      {%- endfor %}
+    </ul>
+  </nav>
+</div>
