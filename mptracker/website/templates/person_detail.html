@@ -3,4 +3,11 @@
 
 {% block content %}
   <h1>{{ person.name }}</h1>
+
+  <ul class="list-unstyled">
+    <li>
+      Deputat de {{ college.county_name }},
+      colegiul D{{ college.number }}
+    </li>
+  </ul>
 {% endblock %}

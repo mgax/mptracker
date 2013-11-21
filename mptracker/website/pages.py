@@ -84,9 +84,9 @@ def person_index_search():
 @section('person')
 def person_detail(person_id):
     person = dal.get_person(person_id, missing=NotFound)
-    return flask.render_template('person_detail.html', **{
-        'person': person,
-    })
+    ctx = {'person': person}
+    ctx.update(dal.get_mandate2012_details(person))
+    return flask.render_template('person_detail.html', **ctx)
 
 
 @pages.route('/partide/')

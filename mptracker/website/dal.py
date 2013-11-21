@@ -21,3 +21,12 @@ class DataAccess:
         if person is None:
             raise missing()
         return person
+
+    def get_mandate2012_details(self, person):
+        mandate = person.mandates.filter_by(year=2012).first()
+        return {
+            'college': {
+                'county_name': mandate.county.name,
+                'number': mandate.college,
+            }
+        }
