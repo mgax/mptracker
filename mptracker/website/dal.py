@@ -2,6 +2,7 @@ from sqlalchemy import func
 from mptracker.models import (
     Person,
     Mandate,
+    MpGroup,
     MpGroupMembership,
 )
 
@@ -53,3 +54,10 @@ class DataAccess:
             },
             'group_history': group_history,
         }
+
+    def get_party_list(self):
+        return [
+            {'name': group.name, 'id': group.id}
+            for group in MpGroup.query.order_by(MpGroup.name)
+            if group.short_name not in ['Indep.', 'Mino.']
+        ]

@@ -92,6 +92,14 @@ def person_detail(person_id):
 @pages.route('/partide/')
 @section('party')
 def party_index():
+    return flask.render_template('party_index.html', **{
+        'party_list': dal.get_party_list(),
+    })
+
+
+@pages.route('/partide/<uuid:party_id>')
+@section('party')
+def party_detail(party_id):
     return flask.render_template('layout.html')
 
 
