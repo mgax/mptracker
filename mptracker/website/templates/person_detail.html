@@ -9,5 +9,14 @@
       Deputat de {{ college.county_name }},
       colegiul D{{ college.number }}
     </li>
+
+    {% for membership in group_history %}
+      <li>
+        {{ membership.group_short_name }}
+        ({{ membership.start_date|datefmt }} &ndash;
+         {{ membership.end_date|datefmt or 'prezent' }})
+        {% if membership.role %}({{ membership.role }}){% endif %}
+      </li>
+    {% endfor %}
   </ul>
 {% endblock %}

@@ -1,6 +1,7 @@
 from sqlalchemy import func
 from mptracker.models import (
     Person,
+    MpGroupMembership,
 )
 
 
@@ -24,9 +25,25 @@ class DataAccess:
 
     def get_mandate2012_details(self, person):
         mandate = person.mandates.filter_by(year=2012).first()
+
+        membership_query = (
+            mandate.group_memberships
+            .order_by(MpGroupMembership.interval.desc())
+        )
+        group_history = [
+            {
+                'start_date': membership.interval.lower,
+                'end_date': membership.interval.upper,
+                'role': membership.role,
+                'group_short_name': membership.mp_group.short_name,
+            }
+            for membership in membership_query
+        ]
+
         return {
             'college': {
                 'county_name': mandate.county.name,
                 'number': mandate.college,
-            }
+            },
+            'group_history': group_history,
         }
