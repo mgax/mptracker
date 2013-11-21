@@ -1,5 +1,6 @@
 import functools
 import flask
+from werkzeug.exceptions import NotFound
 from mptracker import models
 from mptracker.website.dal import DataAccess
 
@@ -70,10 +71,22 @@ def person_index():
 def person_index_search():
     query = flask.request.args['q']
     results = [
-        {'name': person.name}
+        {
+            'name': person.name,
+            'url': flask.url_for('.person_detail', person_id=person.id),
+        }
         for person in dal.search_person(query)
     ]
     return flask.jsonify(results=results)
+
+
+@pages.route('/persoane/<uuid:person_id>')
+@section('person')
+def person_detail(person_id):
+    person = dal.get_person(person_id, missing=NotFound)
+    return flask.render_template('person_detail.html', **{
+        'person': person,
+    })
 
 
 @pages.route('/partide/')

@@ -15,3 +15,9 @@ class DataAccess:
             .order_by(Person.name)
         )
         return sql_query.all()
+
+    def get_person(self, person_id, missing=KeyError):
+        person = Person.query.get(person_id)
+        if person is None:
+            raise missing()
+        return person
