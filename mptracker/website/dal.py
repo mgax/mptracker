@@ -88,6 +88,12 @@ class DataAccess:
             .filter_by(policy_domain_id=policy_id)
         )
         return [
-            {'title': proposal.title}
+            {'title': proposal.title, 'id': proposal.id}
             for proposal in proposal_query
         ]
+
+    def get_proposal(self, proposal_id, missing=KeyError):
+        proposal = Proposal.query.get(proposal_id)
+        if proposal is None:
+            raise missing()
+        return proposal
