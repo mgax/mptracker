@@ -15,7 +15,7 @@ def main():
         logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
     if app.config.get('SCRAPER_DEBUG'):
         logging.getLogger('mptracker.scraper').setLevel(logging.DEBUG)
-        logging.getLogger('mptracker.common.TablePatcher').setLevel(logging.DEBUG)
+        logging.getLogger('mptracker.patcher.TablePatcher').setLevel(logging.DEBUG)
 
     manager = create_manager(app)
     manager.run()

@@ -10,7 +10,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.login import UserMixin
 from path import path
-from mptracker.common import (parse_date, parse_date_range, TablePatcher,
+from mptracker.common import (parse_date, parse_date_range,
                               temp_dir, fix_local_chars)
 from mptracker.dbutil import JsonString, register_infinity_adapter
 from sqlalchemy.dialects.postgresql import UUID, DATERANGE
@@ -616,6 +616,7 @@ def dump(name, columns=None, number=None, filter=None, _file=sys.stdout):
 @db_manager.command
 def load(name, include_columns=None, create=True, remove=False,
          _file=sys.stdin):
+    from mptracker.patcher import TablePatcher
     if include_columns:
         include_columns = set(include_columns.split(','))
         def filter_record(r):

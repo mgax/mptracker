@@ -5,7 +5,8 @@ from flask.ext.script import Manager
 from psycopg2.extras import DateRange
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import TablePatcher, parse_date, model_to_dict
+from mptracker.common import parse_date, model_to_dict
+from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
