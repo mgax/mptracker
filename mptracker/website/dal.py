@@ -4,6 +4,7 @@ from mptracker.models import (
     Mandate,
     MpGroup,
     MpGroupMembership,
+    PolicyDomain,
 )
 
 
@@ -60,4 +61,10 @@ class DataAccess:
             {'name': group.name, 'id': group.id}
             for group in MpGroup.query.order_by(MpGroup.name)
             if group.short_name not in ['Indep.', 'Mino.']
+        ]
+
+    def get_policy_list(self):
+        return [
+            {'name': policy.name, 'id': policy.id}
+            for policy in PolicyDomain.query
         ]

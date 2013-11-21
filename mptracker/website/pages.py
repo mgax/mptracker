@@ -106,4 +106,12 @@ def party_detail(party_id):
 @pages.route('/politici/')
 @section('policy')
 def policy_index():
+    return flask.render_template('policy_index.html', **{
+        'policy_list': dal.get_policy_list(),
+    })
+
+
+@pages.route('/politici/<uuid:policy_id>')
+@section('policy')
+def policy_detail(policy_id):
     return flask.render_template('layout.html')
