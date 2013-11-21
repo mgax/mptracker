@@ -22,48 +22,28 @@ class TablePatcher:
         self.table_name = model.__table__.name
         self.session = session
         self.key_columns = key_columns
-        self._prepare()
-
-    def _row_key(self, row):
-        return tuple(getattr(row, k) for k in self.key_columns)
+        self.seen = set()
 
     def _dict_key(self, record):
         return tuple(record.get(k) for k in self.key_columns)
 
-    def _prepare(self):
-        self.existing_ids = {}
-        query = (
-            self.session
-            .query(
-                self.model.id,
-                *[getattr(self.model, k) for k in self.key_columns]
-            )
-        )
-        for row in query:
-            row_id = row[0]
-            key = row[1:]
-            assert row_id
-            assert key not in self.existing_ids, "Duplicate key %r" % key
-            self.existing_ids[key] = row_id
-        self.seen = set()
-
     def _get_row_for_key(self, key):
-        row_id = self.existing_ids.get(key)
-        if row_id is None:
-            return None
         self.session.flush()
-        return self.model.query.get(row_id)
+        return (
+            self.model.query
+            .filter_by(**dict(zip(self.key_columns, key)))
+            .first()
+        )
 
-    def _remember_new_row(self, key, row):
-        assert row.id
-        self.existing_ids[key] = row.id
-
-    def _mark_seen(self, key):
-        self.seen.add(key)
+    def _mark_seen(self, row_id):
+        self.seen.add(row_id)
 
     def _get_unseen_ids(self):
-        return [self.existing_ids[key] for key in
-                set(self.existing_ids) - self.seen]
+        self.session.flush()
+        for row in self.session.query(self.model.id):
+            row_id = row[0]
+            if row_id not in self.seen:
+                yield row_id
 
     def add(self, record, create=True):
         key = self._dict_key(record)
@@ -76,7 +56,6 @@ class TablePatcher:
                 self.logger.info("Adding %s %r", self.table_name, key)
                 is_new = is_changed = True
                 self.session.add(row)
-                self._remember_new_row(key, row)
 
             else:
                 raise RowNotFound("Could not find row with key=%r" % key)
@@ -102,7 +81,9 @@ class TablePatcher:
             for k in record:
                 setattr(row, k, record[k])
 
-        self._mark_seen(key)
+        if row.id is None:
+            self.session.flush()
+        self._mark_seen(row.id)
 
         return AddResult(row, is_new, is_changed)
 
@@ -134,7 +115,7 @@ class TablePatcher:
         yield add
 
         if remove:
-            unseen = self._get_unseen_ids()
+            unseen = list(self._get_unseen_ids())
             if unseen:
                 unseen_items = (
                     self.model.query
