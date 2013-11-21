@@ -51,24 +51,25 @@ class EconScraper(Scraper):
 			data=[]
 			table=table_headline.children()
 			for item in table.items():
-				data.append(item.text())
+				data.append(item.text().encode('utf-8'))
 			#	print (item.text().encode('utf-8'))
-			
-			#Dict structure:
-			#	Key=Circumscriptie
-			#	List of td's returned with the headline names from @data array
 
-			c=OrderedDict()
+			#Array @C structure:
+			#	Key=Circumscriptie
+			#	Array of td's returned with the headline names from @data array
+			c=[]
 			table_trs=pq(table_headline).siblings()
 			for item in table_trs.items():
 				if (item.hasClass('row0') or item.hasClass('row1')):
-					c[key]=[]
-					#print (key)
+					td_data=[]
 					for td in item.find('td').items():
-					#	print (td.text().encode('utf-8'))
-						c[key].append(td.text().encode('utf-8'))
+						td_data.append(td.text().encode('utf-8'))
+
+					c.append([key,td_data])
 				else:
 					key=(item.text().encode('utf-8'))
+			
+			for sub in c:
+				print (sub)
+				print ('\n')
 
-			for key,value in c.items():
-				print (key,value)
