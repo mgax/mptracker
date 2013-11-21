@@ -54,10 +54,11 @@ class EconScraper(Scraper):
 				data.append(item.text().encode('utf-8'))
 			#	print (item.text().encode('utf-8'))
 
-			#Array @C structure:
-			#	Key=Circumscriptie
+			#Array @table_data structure:
+			#	"Key"=Circumscriptie
 			#	Array of td's returned with the headline names from @data array
-			c=[]
+			table_data=[]
+
 			table_trs=pq(table_headline).siblings()
 			for item in table_trs.items():
 				if (item.hasClass('row0') or item.hasClass('row1')):
@@ -65,11 +66,11 @@ class EconScraper(Scraper):
 					for td in item.find('td').items():
 						td_data.append(td.text().encode('utf-8'))
 
-					c.append([key,td_data])
+					table_data.append([key,td_data])
 				else:
 					key=(item.text().encode('utf-8'))
 			
-			for sub in c:
+			for sub in table_data:
 				print (sub)
 				print ('\n')
 
