@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>{{ policy_name }}</h1>
+
+  <ul class="list-unstyled">
+    {%- for proposal in proposal_list %}
+      <li>{{ proposal.title|truncate(80) }}</li>
+    {%- endfor %}
+  </ul>
+{% endblock %}

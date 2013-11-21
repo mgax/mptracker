@@ -4,6 +4,7 @@ from mptracker.models import (
     Mandate,
     MpGroup,
     MpGroupMembership,
+    Proposal,
     PolicyDomain,
 )
 
@@ -67,4 +68,20 @@ class DataAccess:
         return [
             {'name': policy.name, 'id': policy.id}
             for policy in PolicyDomain.query
+        ]
+
+    def get_policy(self, policy_id, missing=KeyError):
+        policy = PolicyDomain.query.get(policy_id)
+        if policy is None:
+            raise missing()
+        return policy
+
+    def get_policy_proposal_list(self, policy_id):
+        proposal_query = (
+            Proposal.query
+            .filter_by(policy_domain_id=policy_id)
+        )
+        return [
+            {'title': proposal.title}
+            for proposal in proposal_query
         ]

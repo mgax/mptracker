@@ -114,4 +114,9 @@ def policy_index():
 @pages.route('/politici/<uuid:policy_id>')
 @section('policy')
 def policy_detail(policy_id):
-    return flask.render_template('layout.html')
+    policy = dal.get_policy(policy_id, missing=NotFound)
+    ctx = {
+        'policy_name': policy.name,
+        'proposal_list': dal.get_policy_proposal_list(policy_id),
+    }
+    return flask.render_template('policy_detail.html', **ctx)
