@@ -84,8 +84,8 @@ def person_index_search():
 @section('person')
 def person_detail(person_id):
     person = dal.get_person(person_id, missing=NotFound)
-    ctx = {'person': person}
-    ctx.update(dal.get_mandate2012_details(person))
+    ctx = {'person_name': person.name}
+    ctx.update(dal.get_mandate2012_details(person_id))
     return flask.render_template('person_detail.html', **ctx)
 
 

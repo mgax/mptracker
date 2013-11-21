@@ -1,6 +1,7 @@
 from sqlalchemy import func
 from mptracker.models import (
     Person,
+    Mandate,
     MpGroupMembership,
 )
 
@@ -23,8 +24,13 @@ class DataAccess:
             raise missing()
         return person
 
-    def get_mandate2012_details(self, person):
-        mandate = person.mandates.filter_by(year=2012).first()
+    def get_mandate2012_details(self, person_id):
+        mandate = (
+            Mandate.query
+            .filter_by(person_id=person_id)
+            .filter_by(year=2012)
+            .first()
+        )
 
         membership_query = (
             mandate.group_memberships
