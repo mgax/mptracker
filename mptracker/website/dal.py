@@ -49,13 +49,15 @@ class DataAccess:
             for membership in membership_query
         ]
 
-        return {
-            'college': {
+        rv = {'group_history': group_history}
+
+        if mandate.county:
+            rv['college'] = {
                 'county_name': mandate.county.name,
                 'number': mandate.college,
-            },
-            'group_history': group_history,
-        }
+            }
+
+        return rv
 
     def get_party_list(self):
         return [

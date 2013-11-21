@@ -9,10 +9,14 @@
       <p class="placeholder">stream graph cu activitatea</p>
 
       <ul class="list-unstyled">
-        <li>
-          Deputat de {{ college.county_name }},
-          colegiul D{{ college.number }}
-        </li>
+        {% if college %}
+          <li>
+            Deputat de {{ college.county_name }},
+            colegiul D{{ college.number }}
+          </li>
+        {% else %}
+          <li>Ales la nivel național</li>
+        {% endif %}
 
         {% for membership in group_history %}
           <li>
