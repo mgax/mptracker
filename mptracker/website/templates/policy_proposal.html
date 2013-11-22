@@ -1,8 +1,27 @@
 {% extends 'layout.html' %}
 
 
-{% block content %}
-  <h1>{{ proposal_title }}</h1>
+{% set LOCATION_MAP = {
+    'cd': "Camera Deputaților",
+    'se': "Senat",
+  } %}
 
-  <p class="placeholder" style="height: 600px">activitate, voturi</p>
+
+{% block content %}
+  <h1>{{ proposal['title'] }}</h1>
+
+  <table class="table table-condensed table-bordered">
+    {% for item in proposal['activity'] %}
+      <tr>
+        {% set location = LOCATION_MAP.get(item['location']) %}
+        <th class="proposal-activity-at-{{ item['location'] }}">
+          {{ item['date']|datefmt }}<br>
+          {{ location }}
+        </th>
+
+        <td>{{ item['html']|safe }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
 {% endblock %}

@@ -133,8 +133,5 @@ def policy_detail(policy_id):
 @pages.route('/politici/propuneri/<uuid:proposal_id>')
 @section('policy')
 def policy_proposal(proposal_id):
-    proposal = dal.get_proposal(proposal_id, missing=NotFound)
-    ctx = {
-        'proposal_title': proposal['title'],
-    }
-    return flask.render_template('policy_proposal.html', **ctx)
+    proposal = dal.get_proposal_details(proposal_id, missing=NotFound)
+    return flask.render_template('policy_proposal.html', proposal=proposal)

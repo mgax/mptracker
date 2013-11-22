@@ -7,6 +7,7 @@ from mptracker.models import (
     MpGroup,
     MpGroupMembership,
     Proposal,
+    ProposalActivityItem,
     VotingSession,
     Vote,
     PolicyDomain,
@@ -158,8 +159,22 @@ class DataAccess:
             for proposal in proposal_query
         ]
 
-    def get_proposal(self, proposal_id, missing=KeyError):
+    def get_proposal_details(self, proposal_id, missing=KeyError):
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
             raise missing()
-        return {'title': proposal.title}
+        rv = {'title': proposal.title}
+
+        rv['activity'] = []
+        activity_query = (
+            proposal.activity
+            .order_by(ProposalActivityItem.order.desc())
+        )
+        for item in activity_query:
+            rv['activity'].append({
+                'date': item.date,
+                'location': item.location.lower(),
+                'html': item.html,
+            })
+
+        return rv
