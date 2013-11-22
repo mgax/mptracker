@@ -32,7 +32,17 @@
     </div>
 
     <div class="col-sm-4">
-      <p class="placeholder" style="height: 150px">stats</p>
+      <div>
+        <h4>Statistici</h4>
+
+        <dl class="dl-horizontal">
+          <dt>prezență la vot</dt>
+          <dd>{{ vote['attendance']|percent }}</dd>
+
+          <dt>loialitate față de partid</dt>
+          <dd>{{ vote['loyalty']|percent }}</dd>
+        </dl>
+      </div>
 
       <p class="placeholder" style="height: 200px">politici publice</p>
 

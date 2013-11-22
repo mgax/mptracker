@@ -5,6 +5,8 @@ from mptracker.models import (
     MpGroup,
     MpGroupMembership,
     Proposal,
+    VotingSession,
+    Vote,
     PolicyDomain,
 )
 
@@ -59,6 +61,24 @@ class DataAccess:
                 'county_name': mandate.county.name,
                 'number': mandate.college,
             }
+
+        voting_session_count = (
+            VotingSession.query
+            .filter(VotingSession.final == True)
+            .count()
+        )
+        final_votes = (
+            mandate.votes
+            .join(Vote.voting_session)
+            .filter(VotingSession.final == True)
+        )
+        votes_attended = final_votes.count()
+        votes_loyal = final_votes.filter(Vote.loyal == True).count()
+
+        rv['vote'] = {
+            'attendance': votes_attended / voting_session_count,
+            'loyalty': votes_loyal / votes_attended,
+        }
 
         return rv
 

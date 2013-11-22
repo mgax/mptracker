@@ -19,6 +19,11 @@ def section(name):
     return decorator
 
 
+@pages.app_template_filter('percent')
+def percent(value):
+    return "%.0f%%" % (value * 100)
+
+
 @pages.app_context_processor
 def inject_nav_links():
     return {
