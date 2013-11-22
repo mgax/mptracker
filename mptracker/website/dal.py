@@ -50,6 +50,7 @@ class DataAccess:
                 'end_date': membership.interval.upper,
                 'role': membership.role,
                 'group_short_name': membership.mp_group.short_name,
+                'group_id': membership.mp_group_id,
             }
             for membership in membership_query
         ]

@@ -20,7 +20,8 @@
 
         {% for membership in group_history %}
           <li>
-            {{ membership.group_short_name }}
+            {%- set url = url_for('.party_detail', party_id=membership.group_id) %}
+            <a href="{{ url }}">{{ membership.group_short_name }}</a>
             ({{ membership.start_date|datefmt }} &ndash;
              {{ membership.end_date|datefmt or 'prezent' }})
             {% if membership.role %}({{ membership.role }}){% endif %}
