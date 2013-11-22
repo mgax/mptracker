@@ -65,6 +65,7 @@ def ping():
 def home():
     return flask.render_template('home.html', **{
         'recent_proposals': dal.get_recent_proposals(),
+        'recent_questions': dal.get_recent_questions(),
     })
 
 

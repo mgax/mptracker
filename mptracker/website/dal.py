@@ -122,6 +122,31 @@ class DataAccess:
     def get_recent_proposals(self):
         return self._get_recent_proposals(None, 10)
 
+    def _get_recent_questions(self, mandate, limit):
+        recent_questions_query = (
+            Question.query
+            .order_by(Question.date.desc())
+        )
+
+        if mandate is not None:
+            recent_questions_query = (
+                recent_questions_query
+                .join(Question.asked)
+                .filter(Ask.mandate == mandate)
+            )
+
+        return [
+            {
+                'date': q.date,
+                'text': filters.do_truncate(q.title),
+                'type': q.type,
+            }
+            for q in recent_questions_query.limit(limit)
+        ]
+
+    def get_recent_questions(self):
+        return self._get_recent_questions(None, 10)
+
     def _get_recent_activity(self, mandate):
         recent_transcripts_query = (
             mandate.transcripts
@@ -138,22 +163,7 @@ class DataAccess:
             for t in recent_transcripts_query
         ]
 
-        recent_questions_query = (
-            Question.query
-            .join(Question.asked)
-            .filter(Ask.mandate == mandate)
-            .order_by(Question.date.desc())
-            .limit(5)
-        )
-        recent_questions = [
-            {
-                'date': q.date,
-                'text': filters.do_truncate(q.title),
-                'type': q.type,
-            }
-            for q in recent_questions_query
-        ]
-
+        recent_questions = self._get_recent_questions(mandate, 5)
         recent_proposals = self._get_recent_proposals(mandate, 5)
 
         rv = recent_transcripts + recent_questions + recent_proposals

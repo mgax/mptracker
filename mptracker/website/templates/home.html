@@ -19,4 +19,16 @@
       </li>
     {% endfor %}
   </ul>
+
+  <h3>Întrebări și interpelări</h3>
+
+  <ul class="list-unstyled">
+    {% for item in recent_questions %}
+      <li>
+        <strong>{{ item['date']|datefmt }}:</strong>
+
+        {{ item['text'] }}
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}
