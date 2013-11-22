@@ -1,5 +1,12 @@
 {% extends 'layout.html' %}
 
+{% set TYPE_MAP = {
+    'question': "întrebare",
+    'interpelation': "interpelare",
+    'proposal': "propunere legislativă",
+    'speech': "luare de cuvânt",
+  } %}
+
 
 {% block content %}
   <h1>{{ person_name }}</h1>
@@ -29,7 +36,21 @@
         {% endfor %}
       </ul>
 
-      <p class="placeholder" style="height: 400px">ultimele declarații</p>
+      <div>
+        <h3>Activitate recentă</h3>
+
+        <ul class="list-unstyled">
+          {% for item in recent_activity %}
+            <li>
+              <strong>
+                {{ item['date']|datefmt }},
+                {{ TYPE_MAP.get(item['type']) }}
+              </strong>:
+              {{ item['text'] }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
 
     <div class="col-sm-4">

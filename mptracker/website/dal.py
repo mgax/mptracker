@@ -1,6 +1,7 @@
 from datetime import date
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
+from jinja2 import filters
 from mptracker.models import (
     Person,
     Mandate,
@@ -8,6 +9,10 @@ from mptracker.models import (
     MpGroupMembership,
     Proposal,
     ProposalActivityItem,
+    Sponsorship,
+    Transcript,
+    Question,
+    Ask,
     VotingSession,
     Vote,
     PolicyDomain,
@@ -87,7 +92,58 @@ class DataAccess:
         rv['speeches'] = mandate.transcripts.count()
         rv['proposals'] = mandate.sponsorships.count()
 
+        rv['recent_activity'] = self._get_recent_activity(mandate)
+
         return rv
+
+    def _get_recent_activity(self, mandate):
+        recent_transcripts_query = (
+            mandate.transcripts
+            .order_by(Transcript.serial.desc())
+            .limit(5)
+            .options(joinedload('chapter'))
+        )
+        recent_transcripts = [
+            {
+                'date': t.chapter.date,
+                'text': filters.do_truncate(t.text, 200),
+                'type': 'speech',
+            }
+            for t in recent_transcripts_query
+        ]
+
+        recent_questions_query = (
+            Question.query
+            .join(Question.asked)
+            .filter(Ask.mandate == mandate)
+            .order_by(Question.date.desc())
+            .limit(5)
+        )
+        recent_questions = [
+            {
+                'date': q.date,
+                'text': filters.do_truncate(q.title),
+                'type': q.type,
+            }
+            for q in recent_questions_query
+        ]
+
+        recent_proposals_query = (
+            Proposal.query
+            .join(Proposal.sponsorships)
+            .filter(Sponsorship.mandate == mandate)
+            .order_by(Proposal.date.desc())
+            .limit(5)
+        )
+        recent_proposals = [
+            {'date': p.date, 'text': p.title, 'type': 'proposal'}
+            for p in recent_proposals_query
+        ]
+
+        rv = recent_transcripts + recent_questions + recent_proposals
+        rv.sort(key=lambda r: r['date'])
+        return rv[:10]
+
 
     def get_party_list(self):
         return [
