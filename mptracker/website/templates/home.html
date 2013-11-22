@@ -4,5 +4,19 @@
 {% block content %}
   <h1>MP Tracker</h1>
 
-  <p class="placeholder" style="height: 600px">activitate recentă</p>
+  <h3>Propuneri legislative</h3>
+
+  <ul class="list-unstyled">
+    {% for item in recent_proposals %}
+      {% set url = url_for(
+          '.policy_proposal',
+          proposal_id=item['proposal_id'],
+        ) %}
+      <li>
+        <strong>{{ item['date']|datefmt }}:</strong>
+
+        <a href="{{ url }}">{{ item['text'] }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

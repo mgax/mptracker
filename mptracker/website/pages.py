@@ -63,7 +63,9 @@ def ping():
 
 @pages.route('/')
 def home():
-    return flask.render_template('home.html')
+    return flask.render_template('home.html', **{
+        'recent_proposals': dal.get_recent_proposals(),
+    })
 
 
 @pages.route('/persoane/')

@@ -96,6 +96,32 @@ class DataAccess:
 
         return rv
 
+    def _get_recent_proposals(self, mandate, limit):
+        recent_proposals_query = (
+            Proposal.query
+            .order_by(Proposal.date.desc())
+        )
+
+        if mandate is not None:
+            recent_proposals_query = (
+                recent_proposals_query
+                .join(Proposal.sponsorships)
+                .filter(Sponsorship.mandate == mandate)
+            )
+
+        return [
+            {
+                'date': p.date,
+                'text': p.title,
+                'type': 'proposal',
+                'proposal_id': p.id,
+            }
+            for p in recent_proposals_query.limit(limit)
+        ]
+
+    def get_recent_proposals(self):
+        return self._get_recent_proposals(None, 10)
+
     def _get_recent_activity(self, mandate):
         recent_transcripts_query = (
             mandate.transcripts
@@ -128,22 +154,7 @@ class DataAccess:
             for q in recent_questions_query
         ]
 
-        recent_proposals_query = (
-            Proposal.query
-            .join(Proposal.sponsorships)
-            .filter(Sponsorship.mandate == mandate)
-            .order_by(Proposal.date.desc())
-            .limit(5)
-        )
-        recent_proposals = [
-            {
-                'date': p.date,
-                'text': p.title,
-                'type': 'proposal',
-                'proposal_id': p.id,
-            }
-            for p in recent_proposals_query
-        ]
+        recent_proposals = self._get_recent_proposals(mandate, 5)
 
         rv = recent_transcripts + recent_questions + recent_proposals
         rv.sort(key=lambda r: r['date'], reverse=True)
