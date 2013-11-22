@@ -1,28 +1,8 @@
-import os
 import logging
 import flask
 from path import path
 
 logger = logging.getLogger(__name__)
-
-
-def configure(app):
-    project_root = path(__file__).abspath().parent.parent
-    app.config['DATA_DIR'] = str(project_root / '_data')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE')
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    app.config['PRIVILEGED_EMAILS'] = \
-        os.environ.get('PRIVILEGED_EMAILS', '').split()
-    app.config['RQ_DEFAULT_URL'] = os.environ.get('REDIS_DSN')
-    app.config['MPTRACKER_DUMP_TABLES_FOLDER'] = \
-        os.environ.get('MPTRACKER_DUMP_TABLES_FOLDER')
-    app.config['MPTRACKER_DUMP_TABLES_EXCLUDE'] = \
-        os.environ.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
-
-    app.debug = (os.environ.get('DEBUG') == 'on')
-    app.config['SENTRY_DSN'] = os.environ.get('SENTRY_DSN')
-
-    app.config.from_pyfile('../settings.py', silent=True)
 
 
 def create_app():
@@ -36,7 +16,7 @@ def create_app():
     from mptracker.votes import votes
 
     app = flask.Flask(__name__)
-    configure(app)
+    app.config.from_pyfile('../settings.py', silent=True)
     app._logger = logger
 
     models.init_app(app)

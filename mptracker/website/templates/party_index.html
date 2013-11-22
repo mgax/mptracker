@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <ul class="list-unstyled">
+    {% for party in party_list %}
+      <li>
+        {%- set url = url_for('.party_detail', party_id=party.id) %}
+        <a href="{{ url }}">{{ party.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

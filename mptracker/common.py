@@ -41,6 +41,17 @@ def datefmt(value):
     return format_date(value, 'd MMMM y', locale='ro')
 
 
+@common.app_url_defaults
+def bust_cache(endpoint, values):
+    if endpoint == 'static':
+        filename = values['filename']
+        file_path = path(flask.current_app.static_folder) / filename
+        if file_path.exists():
+            mtime = file_path.stat().st_mtime
+            key = ('%x' % mtime)[-6:]
+            values['t'] = key
+
+
 def parse_date(date_str):
     return date_str and datetime.strptime(date_str, '%Y-%m-%d').date()
 
