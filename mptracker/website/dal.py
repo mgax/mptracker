@@ -80,6 +80,9 @@ class DataAccess:
             'loyalty': votes_loyal / votes_attended,
         }
 
+        rv['speeches'] = mandate.transcripts.count()
+        rv['proposals'] = mandate.sponsorships.count()
+
         return rv
 
     def get_party_list(self):
