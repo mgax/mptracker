@@ -141,7 +141,7 @@ class DataAccess:
         ]
 
         rv = recent_transcripts + recent_questions + recent_proposals
-        rv.sort(key=lambda r: r['date'])
+        rv.sort(key=lambda r: r['date'], reverse=True)
         return rv[:10]
 
 
