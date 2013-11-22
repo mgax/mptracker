@@ -10,6 +10,16 @@
 {% block content %}
   <h1>{{ proposal['title'] }}</h1>
 
+  <p>
+    Sponsori:
+    {% for person in proposal['sponsors'] %}
+      <a href="{{ url_for('.person_detail', person_id=person['id']) }}">
+        {{- person['name'] -}}
+      </a>
+      {%- if not loop.last %},{% endif %}
+    {% endfor %}
+  </p>
+
   <table class="table table-condensed table-bordered">
     {% for item in proposal['activity'] %}
       <tr>

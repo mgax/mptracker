@@ -238,4 +238,17 @@ class DataAccess:
                 'html': item.html,
             })
 
+        sponsors_query = (
+            Person.query
+            .join(Person.mandates)
+            .join(Mandate.sponsorships)
+            .filter(Sponsorship.proposal == proposal)
+        )
+        rv['sponsors'] = []
+        for person in sponsors_query:
+            rv['sponsors'].append({
+                'name': person.name,
+                'id': person.id,
+            })
+
         return rv
