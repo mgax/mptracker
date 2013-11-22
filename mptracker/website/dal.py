@@ -140,6 +140,7 @@ class DataAccess:
                 'date': q.date,
                 'text': filters.do_truncate(q.title),
                 'type': q.type,
+                'question_id': q.id,
             }
             for q in recent_questions_query.limit(limit)
         ]
@@ -170,6 +171,13 @@ class DataAccess:
         rv.sort(key=lambda r: r['date'], reverse=True)
         return rv[:10]
 
+    def get_question_details(self, question_id, missing=KeyError):
+        question = Question.query.get(question_id)
+        if question is None:
+            raise missing()
+
+        rv = {'title': question.title, 'text': question.text}
+        return rv
 
     def get_party_list(self):
         return [

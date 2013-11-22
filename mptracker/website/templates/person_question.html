@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h1>{{ question['title'] }}</h1>
+
+  <div>
+    {{- question['text'] -}}
+  </div>
+{% endblock %}

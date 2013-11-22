@@ -24,10 +24,14 @@
 
   <ul class="list-unstyled">
     {% for item in recent_questions %}
+      {% set url = url_for(
+          '.person_question',
+          question_id=item['question_id'],
+        ) %}
       <li>
         <strong>{{ item['date']|datefmt }}:</strong>
 
-        {{ item['text'] }}
+        <a href="{{ url }}">{{ item['text'] }}</a>
       </li>
     {% endfor %}
   </ul>

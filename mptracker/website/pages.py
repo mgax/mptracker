@@ -94,13 +94,28 @@ def person_detail(person_id):
     person = dal.get_person(person_id, missing=NotFound)
     ctx = {'person_name': person['name']}
     ctx.update(dal.get_mandate2012_details(person_id))
+
     for item in ctx['recent_activity']:
         if item['type'] == 'proposal':
             item['url'] = flask.url_for(
                 '.policy_proposal',
                 proposal_id=item['proposal_id'],
             )
+
+        elif item['type'] == 'question':
+            item['url'] = flask.url_for(
+                '.person_question',
+                question_id=item['question_id'],
+            )
+
     return flask.render_template('person_detail.html', **ctx)
+
+
+@pages.route('/persoane/intrebari-interpelari/<uuid:question_id>')
+def person_question(question_id):
+    return flask.render_template('person_question.html', **{
+        'question': dal.get_question_details(question_id),
+    })
 
 
 @pages.route('/partide/')
