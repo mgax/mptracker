@@ -122,6 +122,18 @@ class DataAccess:
                 'id': person.id,
             })
 
+        final_votes = (
+            Vote.query
+            .join(Vote.voting_session)
+            .filter(VotingSession.final == True)
+            .join(Vote.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group_id == party_id)
+        )
+        votes_attended = final_votes.count()
+        votes_loyal = final_votes.filter(Vote.loyal == True).count()
+        rv['member_loyalty'] = votes_loyal / votes_attended
+
         return rv
 
     def get_policy_list(self):

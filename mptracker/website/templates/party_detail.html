@@ -10,7 +10,14 @@
     </div>
 
     <div class="col-sm-4">
-      <p class="placeholder" style="height: 200px">statistici</p>
+      <div>
+        <h4>Statistici</h4>
+
+        <dl class="dl-horizontal">
+          <dt>loialitatea la vot</dt>
+          <dd>{{ party['member_loyalty']|percent }}</dd>
+        </dl>
+      </div>
 
       <div>
         <h4>Membri</h4>
