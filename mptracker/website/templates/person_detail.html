@@ -46,7 +46,12 @@
                 {{ item['date']|datefmt }},
                 {{ TYPE_MAP.get(item['type']) }}
               </strong>:
-              {{ item['text'] }}
+
+              {% if 'url' in item %}
+                <a href="{{ item['url'] }}">{{ item['text'] }}</a>
+              {% else %}
+                {{ item['text'] }}
+              {% endif %}
             </li>
           {% endfor %}
         </ul>

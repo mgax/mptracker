@@ -136,7 +136,12 @@ class DataAccess:
             .limit(5)
         )
         recent_proposals = [
-            {'date': p.date, 'text': p.title, 'type': 'proposal'}
+            {
+                'date': p.date,
+                'text': p.title,
+                'type': 'proposal',
+                'proposal_id': p.id,
+            }
             for p in recent_proposals_query
         ]
 
