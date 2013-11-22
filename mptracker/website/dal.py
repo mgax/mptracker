@@ -177,6 +177,20 @@ class DataAccess:
             raise missing()
 
         rv = {'title': question.title, 'text': question.text}
+
+        asked_query = (
+            Person.query
+            .join(Person.mandates)
+            .join(Mandate.asked)
+            .filter(Ask.question == question)
+        )
+        rv['asked_by'] = []
+        for person in asked_query:
+            rv['asked_by'].append({
+                'name': person.name,
+                'id': person.id,
+            })
+
         return rv
 
     def get_party_list(self):

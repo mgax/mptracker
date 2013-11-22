@@ -4,6 +4,16 @@
 {% block content %}
   <h1>{{ question['title'] }}</h1>
 
+  <p>
+    Adresant:
+    {% for person in question['asked_by'] %}
+      <a href="{{ url_for('.person_detail', person_id=person['id']) }}">
+        {{- person['name'] -}}
+      </a>
+      {%- if not loop.last %},{% endif %}
+    {% endfor %}
+  </p>
+
   <div>
     {{- question['text'] -}}
   </div>
