@@ -1,4 +1,6 @@
+from datetime import date
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 from mptracker.models import (
     Person,
     Mandate,
@@ -93,11 +95,34 @@ class DataAccess:
             if group.short_name not in ['Indep.', 'Mino.']
         ]
 
-    def get_party(self, party_id, missing=KeyError):
+    def get_party_details(self, party_id, missing=KeyError):
         party = MpGroup.query.get(party_id)
         if party is None:
             raise missing()
-        return {'name': party.name}
+        rv = {'name': party.name}
+
+        rv['member_list'] = []
+        memberships_query = (
+            party.memberships
+            .filter(
+                MpGroupMembership.interval.contains(date.today())
+            )
+            .options(
+                joinedload('mandate'),
+                joinedload('mandate.person'),
+            )
+            .join(MpGroupMembership.mandate)
+            .join(Mandate.person)
+            .order_by(Person.name)
+        )
+        for membership in memberships_query:
+            person = membership.mandate.person
+            rv['member_list'].append({
+                'name': person.name,
+                'id': person.id,
+            })
+
+        return rv
 
     def get_policy_list(self):
         return [
