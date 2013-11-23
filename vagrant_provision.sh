@@ -2,7 +2,7 @@
 
 POSTGRES_KEY_URL='http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc'
 POSTGRES_REPO='deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
-VIRTUALENV_PY='https://raw.github.com/pypa/virtualenv/develop/virtualenv.py'
+VIRTUALENV_PY='https://raw.github.com/pypa/virtualenv/1.10.1/virtualenv.py'
 SETUPTOOLS_URL='https://pypi.python.org/packages/source/s/setuptools/setuptools-1.1.6.tar.gz'
 PIP_URL='https://pypi.python.org/packages/source/p/pip/pip-1.4.1.tar.gz'
 
