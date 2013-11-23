@@ -4,25 +4,23 @@ from mptracker.scraper.common import (Scraper, url_args, GenericModel,
 
 
 class EconScraper(Scraper):
-    index_url = 'http://www.cdep.ro/pls/parlam/informatii_economice.home'
+	index_url = 'http://www.cdep.ro/pls/parlam/informatii_economice.home'
 
-    def fetch(self):
-        index_page = self.fetch_url(self.index_url)
-        headline = index_page.find('#signup')
-        headline_tables = headline.find('table')
-        headline_tables_tr = headline_tables.find('tr')
-        url_set = set()
-    
-        for link in headline_tables_tr.items('td > a'):
-            url_set.add(link.attr('href'))
+	def fetch(self):
+		index_page = self.fetch_url(self.index_url)
+		headline = index_page.find('#signup')
+		headline_tables = headline.find('table')
+		headline_tables_tr = headline_tables.find('tr')
+		url_set = set()
+
+		for link in headline_tables_tr.items('td > a'):
+			url_set.add(link.attr('href'))
 		for url in url_set:
 			return self.fetch_section(url) 
 		#Tested with return, when finished @ yield self.fetch_section(url)   
 
 
 	def fetch_section(self,section_url):
-		print (section_url)
-			
 		check_forD = (section_url.split('?'))[1].split('&')
 		items = []
 		for item in check_forD:
@@ -35,7 +33,6 @@ class EconScraper(Scraper):
 			headline = section_page.find('#pageContent')
 			parent_td = pq(headline.parents('td')[-1])
 			mp_table = pq(parent_td.find('#div-1c')).children('ol>li').eq(3).find('a')
-
 			url_set = set()
 			url_set.add(mp_table.attr('href'))
 			for url in url_set:
@@ -63,5 +60,4 @@ class EconScraper(Scraper):
 				table_data.append([key,td_data])
 			else:
 				key = (item.text().encode('utf-8'))
-		
 		return table_data

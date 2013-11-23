@@ -698,8 +698,36 @@ def votes(
             calculate_voting_session_loyalty.delay(voting_session_id)
 
 @scraper_manager.command
-def infoecon():
-    from mptracker.scraper.infoecon import EconScraper
-    econ=EconScraper()
-    print (econ.fetch())
+def infoecon(
+    cache_name=None,
+    throttle=None,
+    no_commit=False):
 
+    from mptracker.scraper.infoecon import EconScraper
+
+    econ = EconScraper()
+    print(econ.fetch())
+'''
+
+    patcher = TablePatcher(
+        models.MpInfoEcon,
+        models.db.session,
+        key_columns=['chamber_id', 'cdep_id'],
+    )
+
+    http_session = create_session(
+        cache_name=cache_name,
+        throttle=throttle and float(throttle),
+    )
+    scraper = CommitteeScraper(http_session)
+    with patcher.process(autoflush=1000, remove=True) as add:
+        for committee in scraper.fetch_committees():
+            add(committee.as_dict(['chamber_id', 'cdep_id', 'name']))
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
+'''
