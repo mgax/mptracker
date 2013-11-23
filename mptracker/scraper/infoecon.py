@@ -39,7 +39,6 @@ class EconScraper(Scraper):
 				return self.fetch_table(url) 
 
 	def fetch_table(self,table_url):
-		print(table_url)
 		table_page = self.fetch_url(table_url)
 
 		table_headline = table_page.find('.rowh')

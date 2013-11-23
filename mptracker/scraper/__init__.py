@@ -699,35 +699,34 @@ def votes(
 
 @scraper_manager.command
 def infoecon(
-    cache_name=None,
-    throttle=None,
-    no_commit=False):
+            cache_name=None,
+            throttle=None,
+            no_commit=False,
+            ):
 
     from mptracker.scraper.infoecon import EconScraper
-
-    econ = EconScraper()
+    econ=EconScraper()
     print(econ.fetch())
-'''
-
+'''    # circ_elect doar numele , id coleg uninom , chelt pers chelt bun_serv
     patcher = TablePatcher(
         models.MpInfoEcon,
         models.db.session,
-        key_columns=['chamber_id', 'cdep_id'],
+        key_columns=['circ_elect', 'id' , 'coleg_uninom' , 'chelt_pers' , 'chelt_bun_serv'],
     )
 
     http_session = create_session(
         cache_name=cache_name,
         throttle=throttle and float(throttle),
     )
-    scraper = CommitteeScraper(http_session)
+    scraper = EconScraper(http_session)
     with patcher.process(autoflush=1000, remove=True) as add:
-        for committee in scraper.fetch_committees():
-            add(committee.as_dict(['chamber_id', 'cdep_id', 'name']))
+        for infos in scraper.fetch():
+            add(infos.as_dict(['circ_elect', 'id' ,'coleg_uninom', 'chelt_pers' , 'chelt_bun_serv']))
 
     if no_commit:
         logger.warn("Rolling back the transaction")
         models.db.session.rollback()
 
     else:
-        models.db.session.commit()
-'''
+        models.db.session.commit()'''
+
