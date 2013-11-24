@@ -114,6 +114,7 @@ class Mandate(db.Model):
 
     county_id = db.Column(UUID, db.ForeignKey('county.id'))
     county = db.relationship('County')
+    picture_url = db.Column(db.Text)
 
     def get_cdep_url(self):
         return ("http://www.cdep.ro/pls/parlam/structura.mp"

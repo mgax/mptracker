@@ -18,12 +18,16 @@ class MandateScraper(Scraper):
             link = cols.eq(1).find('a')
             (mandate_year, cdep_number) = parse_cdep_id(link.attr('href'))
 
+            person_page = self.fetch_url(link.attr('href'))
+            picture = person_page.find('a.highslide')
+
             mandate = Mandate(
                 year=mandate_year,
                 cdep_number=cdep_number,
                 person_name=link.text(),
                 minority=False,
-                end_date=None
+                end_date=None,
+                picture_url=picture.attr('href'),
             )
 
             if cols.eq(2).text() == "ales la nivel naţional":

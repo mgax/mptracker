@@ -128,6 +128,7 @@ def people(
                 'minority',
                 'college',
                 'constituency',
+                'picture_url',
             ])
             if year == '2012':
                 end_date = mandate.end_date or date.max
