@@ -706,5 +706,5 @@ def expenses(
 ):
 
     from mptracker.scraper.expenses import EconScraper
-    econ = EconScraper()
+    econ_try = EconScraper()
     print(econ.fetch())
