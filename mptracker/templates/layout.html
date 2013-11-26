@@ -6,6 +6,7 @@
         filename='style.less') }}">
     <link rel="stylesheet" href="{{ url_for('static',
         filename='datatables-bootstrap.css') }}">
+    {% block styles %}{% endblock %}
     <script>window.app = {};</script>
     <script src="{{ url_for('static',
         filename='lib/less-1.4.1/less.min.js') }}"></script>

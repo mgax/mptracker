@@ -39,8 +39,6 @@ admin.add_view(ModelView(models.User))
 admin.add_view(ModelView(models.County))
 admin.add_view(ModelView(models.Proposal,
                          view_route='proposals.proposal:proposal_id'))
-admin.add_view(ModelView(models.CommitteeSummary,
-                         view_route='pages.committee_summary:summary_id'))
 admin.add_view(ModelView(models.Question,
                          view_route='questions.question_detail:question_id'))
 admin.add_view(ModelView(models.Person,

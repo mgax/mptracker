@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <form name="search-by-name">
+    <div class="form-group">
+      <label for="search-by-name-input">Căutare după nume</label>
+      <input type="search" class="form-control"
+             id="search-by-name-input" name="name"
+             placeholder="Nume deputat">
+    </div>
+    <button type="submit" class="btn btn-primary">Caută</button>
+  </form>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+(function() {
+  "use strict";
+
+  var person_query_url = {{ url_for('.person_index_search')|tojson|safe }};
+  var form = $('form[name=search-by-name]');
+  app.person_search = new app.PersonSearch({
+    el: form,
+    url: person_query_url
+  });
+
+})();
+</script>
+{% endblock %}

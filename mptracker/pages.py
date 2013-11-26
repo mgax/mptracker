@@ -92,9 +92,6 @@ def person(person_id):
             'election_votes': m.election_votes,
             'election_votes_percent': m.election_votes_percent,
             'candidate_party': m.candidate_party,
-            'committee_memberships': (m.committee_memberships
-                                            .join(models.MpCommittee)
-                                            .all()),
             'group_memberships': (
                 m.group_memberships
                     .order_by(models.MpGroupMembership.interval)
@@ -177,10 +174,6 @@ def committee(committee_id):
     committee = models.MpCommittee.query.get_or_404(committee_id)
     return flask.render_template('committee.html', **{
         'committee': committee,
-        'memberships': (committee.memberships
-                                    .join(models.Mandate)
-                                    .join(models.Person)
-                                    .all()),
     })
 
 
@@ -230,11 +223,28 @@ def transcript_chapter(date_str, chapter_serial):
     })
 
 
-@pages.route('/committee-summary/<uuid:summary_id>')
-def committee_summary(summary_id):
-    summary = models.CommitteeSummary.query.get_or_404(summary_id)
-    return flask.render_template('committee_summary.html', **{
-        'summary': summary,
+@pages.route('/constituency-map')
+def constituency_map():
+    mandates = (
+        models.Mandate.query
+        .filter_by(year=2012)
+        .join(models.Mandate.person)
+        .join(models.Mandate.county)
+    )
+
+    mandate_data = defaultdict(list)
+    for m in mandates:
+        key = '%s%d' % (m.county.code, m.college)
+        mandate_data[key].append({
+            'name': m.person.name,
+            'url': flask.url_for('.person', person_id=m.person.id),
+        })
+
+    county_name = {c.code: c.name for c in models.County.query}
+
+    return flask.render_template('constituency_map.html', **{
+        'county_name': county_name,
+        'mandate_data': dict(mandate_data),
     })
 
 
@@ -250,17 +260,6 @@ def debug():
         return flask.redirect(url)
 
     return flask.render_template('debug.html')
-
-
-@pages.app_url_defaults
-def bust_cache(endpoint, values):
-    if endpoint == 'static':
-        filename = values['filename']
-        file_path = path(flask.current_app.static_folder) / filename
-        if file_path.exists():
-            mtime = file_path.stat().st_mtime
-            key = ('%x' % mtime)[-6:]
-            values['t'] = key
 
 
 @pages.context_processor
