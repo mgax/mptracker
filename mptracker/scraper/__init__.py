@@ -5,7 +5,8 @@ from flask.ext.script import Manager
 from psycopg2.extras import DateRange
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import TablePatcher, parse_date, model_to_dict
+from mptracker.common import parse_date, model_to_dict
+from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -27,6 +28,7 @@ def questions(
         ):
     from mptracker.scraper.questions import QuestionScraper
     from mptracker.questions import ocr_question
+    from mptracker.policy import calculate_question
 
     if reimport_existing:
         known_urls = set()
@@ -88,10 +90,13 @@ def questions(
                 counters['download_time'].total_seconds())
 
     if autoanalyze:
-        logger.info("Scheduling %d jobs", len(changed))
+        logger.info("Scheduling jobs for %d questions", len(changed))
         for question in changed:
             if question.pdf_url:
                 ocr_question.delay(question.id, autoanalyze=True)
+
+            if question.policy_domain_id is None:
+                calculate_question.delay(question.id)
 
 
 @scraper_manager.command
@@ -123,6 +128,7 @@ def people(
                 'minority',
                 'college',
                 'constituency',
+                'picture_url',
             ])
             if year == '2012':
                 end_date = mandate.end_date or date.max
@@ -266,6 +272,37 @@ def groups(
 
 
 @scraper_manager.command
+def committees(
+    cache_name=None,
+    throttle=None,
+    no_commit=False,
+):
+    from mptracker.scraper.committees import CommitteeScraper
+
+    patcher = TablePatcher(
+        models.MpCommittee,
+        models.db.session,
+        key_columns=['chamber_id', 'cdep_id'],
+    )
+
+    http_session = create_session(
+        cache_name=cache_name,
+        throttle=throttle and float(throttle),
+    )
+    scraper = CommitteeScraper(http_session)
+    with patcher.process(autoflush=1000, remove=True) as add:
+        for committee in scraper.fetch_committees():
+            add(committee.as_dict(['chamber_id', 'cdep_id', 'name']))
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
+
+
+@scraper_manager.command
 def committee_summaries(year=2013):
     from mptracker.scraper.committee_summaries import SummaryScraper
 
@@ -290,6 +327,7 @@ def proposals(
         ):
     from mptracker.scraper.proposals import ProposalScraper
     from mptracker.proposals import ocr_proposal
+    from mptracker.policy import calculate_proposal
 
     proposal_scraper = ProposalScraper(create_session(
             cache_name=cache_name,
@@ -329,6 +367,7 @@ def proposals(
     sp_updates = sp_added = sp_removed = 0
 
     changed = []
+    seen = []
 
     with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
         with activity_patcher.process(autoflush=1000, remove=True) \
@@ -356,6 +395,7 @@ def proposals(
                 row = result.row
                 if result.is_changed:
                     changed.append(row)
+                seen.append(row)
 
                 new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
                 existing_sponsorships = {sp.mandate: sp
@@ -409,10 +449,15 @@ def proposals(
                 sp_updates, sp_added, sp_removed)
 
     if autoanalyze:
-        logger.info("Scheduling %d jobs", len(changed))
+        logger.info("Scheduling analysis jobs for %d proposals", len(changed))
         for proposal in changed:
             if proposal.pdf_url:
                 ocr_proposal.delay(proposal.id, autoanalyze=True)
+
+        logger.info("Scheduling policy jobs for %d proposals", len(seen))
+        for proposal in seen:
+            if proposal.policy_domain_id is None:
+                calculate_proposal.delay(proposal.id)
 
 
 @scraper_manager.command

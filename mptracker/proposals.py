@@ -40,6 +40,7 @@ def proposal(proposal_id):
     activity = proposal.activity.order_by(models.ProposalActivityItem.order)
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
+        'policy_domain': proposal.policy_domain,
         'sponsorships': [{
                 'id': sp.id,
                 'mandate': sp.mandate,

@@ -1,44 +1,24 @@
-import os
 import logging
 import flask
 from path import path
-from mptracker import models
-from mptracker.common import common
-from mptracker.questions import questions, questions_manager
-from mptracker.pages import pages
-from mptracker.auth import auth
-from mptracker.admin import admin
-from mptracker.placenames import placenames_manager
-from mptracker.scraper import scraper_manager
-from mptracker.proposals import proposals, proposals_manager
-from mptracker.votes import votes, votes_manager
-
 
 logger = logging.getLogger(__name__)
 
 
-def configure(app):
-    project_root = path(__file__).abspath().parent.parent
-    app.config['DATA_DIR'] = str(project_root / '_data')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE')
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    app.config['PRIVILEGED_EMAILS'] = \
-        os.environ.get('PRIVILEGED_EMAILS', '').split()
-    app.config['RQ_DEFAULT_URL'] = os.environ.get('REDIS_DSN')
-    app.config['MPTRACKER_DUMP_TABLES_FOLDER'] = \
-        os.environ.get('MPTRACKER_DUMP_TABLES_FOLDER')
-    app.config['MPTRACKER_DUMP_TABLES_EXCLUDE'] = \
-        os.environ.get('MPTRACKER_DUMP_TABLES_EXCLUDE')
-
-    app.debug = (os.environ.get('DEBUG') == 'on')
-    app.config['SENTRY_DSN'] = os.environ.get('SENTRY_DSN')
-
-    app.config.from_pyfile('../settings.py', silent=True)
-
-
 def create_app():
+    from mptracker import models
+    from mptracker.common import common
+    from mptracker.questions import questions
+    from mptracker.pages import pages
+    from mptracker.auth import auth
+    from mptracker.admin import admin
+    from mptracker.proposals import proposals
+    from mptracker.votes import votes
+
     app = flask.Flask(__name__)
-    configure(app)
+    app.config.from_pyfile('../settings.py', silent=True)
+    app._logger = logger
+
     models.init_app(app)
     app.register_blueprint(common)
     app.register_blueprint(auth)
@@ -47,18 +27,27 @@ def create_app():
     app.register_blueprint(proposals)
     app.register_blueprint(votes)
     admin.init_app(app)
-    app._logger = logger
+
     if app.debug:
         from werkzeug.debug import DebuggedApplication
         app.wsgi_app = DebuggedApplication(app.wsgi_app, evalex=True)
+
     if app.config.get('SENTRY_DSN'):
         from raven.contrib.flask import Sentry
         Sentry(app)
+
     return app
 
 
 def create_manager(app):
     from flask.ext.script import Manager
+    from mptracker import models
+    from mptracker.questions import questions_manager
+    from mptracker.placenames import placenames_manager
+    from mptracker.scraper import scraper_manager
+    from mptracker.proposals import proposals_manager
+    from mptracker.votes import votes_manager
+    from mptracker.policy import policy_manager
 
     manager = Manager(app)
 
@@ -68,6 +57,7 @@ def create_manager(app):
     manager.add_command('scraper', scraper_manager)
     manager.add_command('proposals', proposals_manager)
     manager.add_command('votes', votes_manager)
+    manager.add_command('policy', policy_manager)
 
     @manager.command
     def worker():

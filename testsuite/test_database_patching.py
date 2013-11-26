@@ -29,13 +29,13 @@ def db_app(request):
 
 @pytest.fixture
 def patcher(db_app):
-    from mptracker.common import TablePatcher
+    from mptracker.patcher import TablePatcher
     return TablePatcher(Thing, db.session, key_columns=['code'])
 
 
 @pytest.fixture
 def patcher_twin_key(db_app):
-    from mptracker.common import TablePatcher
+    from mptracker.patcher import TablePatcher
     return TablePatcher(Thing, db.session, key_columns=['code', 'number'])
 
 
@@ -69,7 +69,7 @@ def test_remove_extra_records(patcher):
 
 
 def test_refuse_to_create_records(patcher):
-    from mptracker.common import RowNotFound
+    from mptracker.patcher import RowNotFound
     records = [{'code': 'an', 'name': "Anne"}]
     with pytest.raises(RowNotFound):
         patcher.update(records, create=False)

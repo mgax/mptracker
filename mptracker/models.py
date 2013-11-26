@@ -10,7 +10,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.login import UserMixin
 from path import path
-from mptracker.common import (parse_date, parse_date_range, TablePatcher,
+from mptracker.common import (parse_date, parse_date_range,
                               temp_dir, fix_local_chars)
 from mptracker.dbutil import JsonString, register_infinity_adapter
 from sqlalchemy.dialects.postgresql import UUID, DATERANGE
@@ -83,20 +83,12 @@ class MpGroupMembership(db.Model):
 class MpCommittee(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
+    cdep_id = db.Column(db.Integer)
+    chamber_id = db.Column(db.Integer)
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
 
-
-class MpCommitteeMembership(db.Model):
-    id = db.Column(UUID, primary_key=True, default=random_uuid)
-    role = db.Column(db.Text)
-
-    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
-    mandate = db.relationship('Mandate',
-        backref=db.backref('committee_memberships', lazy='dynamic'))
-
-    mp_committee_id = db.Column(UUID, db.ForeignKey('mp_committee.id'),
-                                nullable=False)
-    mp_committee = db.relationship('MpCommittee',
-        backref=db.backref('memberships', lazy='dynamic'))
+    policy_domain = db.relationship('PolicyDomain',
+        backref=db.backref('committees', lazy='dynamic', cascade='all'))
 
 
 class Mandate(db.Model):
@@ -122,6 +114,7 @@ class Mandate(db.Model):
 
     county_id = db.Column(UUID, db.ForeignKey('county.id'))
     county = db.relationship('County')
+    picture_url = db.Column(db.Text)
 
     def get_cdep_url(self):
         return ("http://www.cdep.ro/pls/parlam/structura.mp"
@@ -135,6 +128,7 @@ class County(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     geonames_code = db.Column(db.Integer)
+    code = db.Column(db.Text)
 
     def __str__(self):
         return self.name
@@ -178,6 +172,9 @@ class Question(db.Model):
     type = db.Column(db.Text)
     method = db.Column(db.Text)
     addressee = db.Column(db.Text)
+
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
+    policy_domain = db.relationship('PolicyDomain')
 
     def __str__(self):
         return "{q.number}/{q.date}".format(q=self)
@@ -293,16 +290,6 @@ class Meta(db.Model):
         return row
 
 
-class CommitteeSummary(db.Model):
-    id = db.Column(UUID, primary_key=True, default=random_uuid)
-    title = db.Column(db.Text)
-    date = db.Column(db.Date)
-    committee = db.Column(db.Text)
-    pdf_url = db.Column(db.Text)
-    text = db.Column(db.Text)
-
-
-
 class Sponsorship(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
 
@@ -340,6 +327,9 @@ class Proposal(db.Model):
 
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
     decision_chamber = db.relationship('Chamber')
+
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
+    policy_domain = db.relationship('PolicyDomain')
 
     text_row = db.relationship('OcrText', lazy='eager', uselist=False,
                     primaryjoin='Proposal.id==foreign(OcrText.id)',
@@ -379,7 +369,7 @@ class VotingSession(db.Model):
     cdeppk = db.Column(db.Integer)
     final = db.Column(db.Boolean, nullable=False, default=False)
 
-    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=True)
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
     proposal = db.relationship('Proposal',
         backref=db.backref('voting_sessions', lazy='dynamic'))
 
@@ -416,6 +406,20 @@ class Vote(db.Model):
                                   nullable=False, index=True)
     voting_session = db.relationship('VotingSession',
         backref=db.backref('votes', lazy='dynamic'))
+
+
+class Ministry(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    name = db.Column(db.Text)
+    policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
+
+    policy_domain = db.relationship('PolicyDomain',
+        backref=db.backref('ministries', lazy='dynamic', cascade='all'))
+
+
+class PolicyDomain(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    name = db.Column(db.Text)
 
 
 class User(db.Model, UserMixin):
@@ -613,6 +617,7 @@ def dump(name, columns=None, number=None, filter=None, _file=sys.stdout):
 @db_manager.command
 def load(name, include_columns=None, create=True, remove=False,
          _file=sys.stdin):
+    from mptracker.patcher import TablePatcher
     if include_columns:
         include_columns = set(include_columns.split(','))
         def filter_record(r):

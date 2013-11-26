@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% set TYPE_MAP = {
+    'question': "întrebare",
+    'interpelation': "interpelare",
+    'proposal': "propunere legislativă",
+    'speech': "luare de cuvânt",
+  } %}
+
+
+{% block content %}
+  <h1>{{ person_name }}</h1>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <p class="placeholder">stream graph cu activitatea</p>
+
+      <ul class="list-unstyled">
+        {% if college %}
+          <li>
+            Deputat de {{ college.county_name }},
+            colegiul D{{ college.number }}
+          </li>
+        {% else %}
+          <li>Ales la nivel național</li>
+        {% endif %}
+
+        {% for membership in group_history %}
+          <li>
+            {%- set url = url_for('.party_detail', party_id=membership.group_id) %}
+            <a href="{{ url }}">{{ membership.group_short_name }}</a>
+            ({{ membership.start_date|datefmt }} &ndash;
+             {{ membership.end_date|datefmt or 'prezent' }})
+            {% if membership.role %}({{ membership.role }}){% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div>
+        <h3>Activitate recentă</h3>
+
+        <ul class="list-unstyled">
+          {% for item in recent_activity %}
+            <li>
+              <strong>
+                {{ item['date']|datefmt }},
+                {{ TYPE_MAP.get(item['type']) }}
+              </strong>:
+
+              {% if 'url' in item %}
+                <a href="{{ item['url'] }}">{{ item['text'] }}</a>
+              {% else %}
+                {{ item['text'] }}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div>
+        <h4>Statistici</h4>
+
+        <dl class="dl-horizontal">
+          <dt>prezență la vot</dt>
+          <dd>{{ vote['attendance']|percent }}</dd>
+
+          <dt>loialitate față de partid</dt>
+          <dd>{{ vote['loyalty']|percent }}</dd>
+
+          <dt>luări de cuvânt</dt>
+          <dd>{{ speeches }}</dd>
+
+          <dt>propuneri legislative</dt>
+          <dd>{{ proposals }}</dd>
+        </dl>
+      </div>
+
+      <p class="placeholder" style="height: 200px">politici publice</p>
+
+      <p class="placeholder" style="height: 300px">word cloud</p>
+    </div>
+  </div>
+{% endblock %}

@@ -111,6 +111,12 @@
 
   <p>Destinatar: {{ question.addressee }}</p>
 
+  {% if policy_domain %}
+    <p>
+      Domeniul de politici publice: {{ policy_domain.name }}
+    </p>
+  {% endif %}
+
   {% for ask in asked %}
     <section class="panel panel-default">
       <div class="panel-heading">

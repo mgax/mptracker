@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <ul class="list-unstyled">
+    {% for policy in policy_list %}
+      <li>
+        {%- set url = url_for('.policy_detail', policy_id=policy.id) %}
+        <a href="{{ url }}">{{ policy.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -197,6 +197,7 @@ def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
     return flask.render_template('questions/detail.html', **{
         'question': question,
+        'policy_domain': question.policy_domain,
         'asked': [{
                 'id': ask.id,
                 'mandate': ask.mandate,
