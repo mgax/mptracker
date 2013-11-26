@@ -697,13 +697,14 @@ def votes(
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
 
-@scraper_manager.command
-def infoecon(
-            cache_name=None,
-            throttle=None,
-            no_commit=False,
-            ):
 
-    from mptracker.scraper.infoecon import EconScraper
+@scraper_manager.command
+def expenses(
+        cache_name=None,
+        throttle=None,
+        no_commit=False,
+):
+
+    from mptracker.scraper.expenses import EconScraper
     econ = EconScraper()
     print(econ.fetch())
