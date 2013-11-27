@@ -699,11 +699,55 @@ def votes(
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
 
-#./manage.py scraper get_romania_curata
 @scraper_manager.command
 def get_romania_curata():
-        
     from mptracker.scraper.scraper_curata import RomaniaCurata
-    my_scraper = RomaniaCurata()
-    my_scraper.fetch_fortunes()
+    from difflib import SequenceMatcher
+    scraper = RomaniaCurata()
+    data = scraper.fetch_fortunes()
+    sql_name = [person.name for person in models.Person.query.all()] 
+    
+    my_alfabet = dict()
+    
+    my_alfabet.update({'â' : 'a'})
+    my_alfabet.update({'Á' : 'A'})
+    my_alfabet.update({'î' : 'i'})
 
+    my_alfabet.update({'ş' : 's'})   
+    my_alfabet.update({'Ş' : 'S'})
+    
+    my_alfabet.update({'ţ' : 't'})       
+    my_alfabet.update({'Ţ' : 'T'})
+    
+    my_alfabet.update({'Ő': 'O'})
+    my_alfabet.update({'ő' : 'o'})
+    my_alfabet.update({'Ö' : 'O'})
+    my_alfabet.update({'á' : 'a'})
+    my_alfabet.update({'ă' : 'a'})
+    my_alfabet.update({'é' : 'e'})  
+    
+    def without_diacritcs(string):
+        cp_string = []
+        for char in string:
+            if char in my_alfabet:
+                cp_string.append(my_alfabet[char])
+            else:
+                cp_string.append(char)
+        return "".join(cp_string)
+    
+    for name, fortune in data.items(): 
+        for temp_sqlname in sorted(sql_name):
+            name_scraper = without_diacritcs(name)
+            name_sql = without_diacritcs(temp_sqlname)
+            
+            matching = SequenceMatcher(None, name_scraper, name_sql).ratio() * 100
+            if matching > 70:
+                person = (
+                    models.Person.query
+                        .filter_by(name=temp_sqlname)
+                        .first()
+                )
+                if(person != None):
+                    print(name_scraper, name_sql)
+                    person.romania_curata = fortune
+    models.db.session.commit()
