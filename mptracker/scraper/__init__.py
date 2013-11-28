@@ -705,15 +705,15 @@ def get_romania_curata():
     from difflib import SequenceMatcher
     scraper = RomaniaCurata()
     data = scraper.fetch_fortunes()
-    sql_name = [person.name for person in models.Person.query.all()] 
+    sql_names = [person.name for person in models.Person.query.all()] 
     
     my_alfabet = dict()
-    
+ 
     my_alfabet.update({'â' : 'a'})
     my_alfabet.update({'Á' : 'A'})
     my_alfabet.update({'î' : 'i'})
 
-    my_alfabet.update({'ş' : 's'})   
+    my_alfabet.update({'ş' : ''})   
     my_alfabet.update({'Ş' : 'S'})
     
     my_alfabet.update({'ţ' : 't'})       
@@ -736,8 +736,9 @@ def get_romania_curata():
         return "".join(cp_string)
     
     for name, fortune in data.items(): 
-        for temp_sqlname in sorted(sql_name):
-            
+        found_match = 0
+
+        for temp_sqlname in sql_names:
             name_scraper = without_diacritcs(name)
             name_sql = without_diacritcs(temp_sqlname)
             matching = SequenceMatcher(None, name_scraper, name_sql).ratio() * 100
@@ -749,5 +750,10 @@ def get_romania_curata():
                         .first()
                 )
                 if(person != None):
+                    found_match = 1
                     person.romania_curata = fortune
+                    break;
+
+        if found_match == 0:
+            raise LookupError("Not found a match for %r" % name) 
     models.db.session.commit()
