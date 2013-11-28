@@ -737,10 +737,11 @@ def get_romania_curata():
     
     for name, fortune in data.items(): 
         for temp_sqlname in sorted(sql_name):
+            
             name_scraper = without_diacritcs(name)
             name_sql = without_diacritcs(temp_sqlname)
-            
             matching = SequenceMatcher(None, name_scraper, name_sql).ratio() * 100
+            
             if matching > 70:
                 person = (
                     models.Person.query
@@ -748,6 +749,5 @@ def get_romania_curata():
                         .first()
                 )
                 if(person != None):
-                    print(name_scraper, name_sql)
                     person.romania_curata = fortune
     models.db.session.commit()

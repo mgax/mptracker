@@ -42,6 +42,5 @@ class RomaniaCurata(Scraper):
                     total_fortunes.append(small_fortune.text())
 
             fortunes.update({best_name : total_fortunes})
-            break
         return fortunes
 
