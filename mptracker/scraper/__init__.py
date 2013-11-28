@@ -1,8 +1,11 @@
 import logging
 from datetime import timedelta, date
 from collections import defaultdict
+import flask
 from flask.ext.script import Manager
 from psycopg2.extras import DateRange
+from path import path
+import requests
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
 from mptracker.common import parse_date, model_to_dict
@@ -162,6 +165,23 @@ def people(
 
     else:
         models.db.session.commit()
+
+
+@scraper_manager.command
+def download_pictures():
+    localdir = path(flask.current_app.static_folder) / 'mandate-pictures'
+    localdir.mkdir_p()
+    for mandate in models.Mandate.query:
+        if mandate.picture_url is not None:
+            assert mandate.picture_url.endswith('.jpg')
+            filename = '%s.jpg' % str(mandate.id)
+            local_path = localdir / filename
+            if not local_path.isfile():
+                resp = requests.get(mandate.picture_url)
+                assert resp.headers['Content-Type'] == 'image/jpeg'
+                with local_path.open('wb') as f:
+                    f.write(resp.content)
+                logger.info('Saved %s (%d bytes)', filename, len(resp.content))
 
 
 @scraper_manager.command
