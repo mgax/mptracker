@@ -20,13 +20,10 @@ class EconScraper(Scraper):
         #Tested with return, when finished @ yield self.fetch_section(url)
 
     def fetch_month(self, section_url):
-        page_name = (section_url.split('?'))[1].split('&')
-        url_items = []
-        for info in page_name:
-            url_items.append(info.split('='))
+        url_date = url_args(section_url)
 
-        if (url_items[1][1] < '2010' or
-                (url_items[1][1] == '2010' and url_items[2][1] <= 's3')):
+        if (url_date['an'] < '2010' or
+                (url_date['an'] == '2010' and url_date['lu'] <= '3')):
             return None
         else:
             economical_info_page = self.fetch_url(section_url)
@@ -34,10 +31,7 @@ class EconScraper(Scraper):
             headline_parent = pq(headline.parents('td')[-1])
             table = pq(headline_parent.find('#div-1c'))
             table_items = table.children('ol>li').eq(3).find('a')
-            url_set = set()
-            url_set.add(table_items.attr('href'))
-            for url in url_set:
-                return self.fetch_table(url)
+            return (self.fetch_table(table_items.attr('href')))
 
     def fetch_table(self, table_url):
         expenses_page = self.fetch_url(table_url)
@@ -46,7 +40,7 @@ class EconScraper(Scraper):
         data = []
         table = headline.children()
         for item in table.items():
-            data.append(item.text().encode('utf-8'))
+            data.append(item.text())
 
         data_table = []
         expenses_table = pq(headline).siblings()
@@ -54,9 +48,9 @@ class EconScraper(Scraper):
             if (column.hasClass('row0') or column.hasClass('row1')):
                 column_data = []
                 for data in column.find('td').items():
-                    column_data.append(data.text().encode('utf-8'))
+                    column_data.append(data.text())
 
                 data_table.append([key, column_data])
             else:
-                key = (column.text().encode('utf-8'))
+                key = (column.text())
         return data_table
