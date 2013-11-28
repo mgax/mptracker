@@ -60,6 +60,12 @@
 
     <div class="col-sm-4">
       <div>
+        {%- if picture_url %}
+          <div>
+            <img src="{{ picture_url }}" width="100%">
+          </div>
+        {%- endif %}
+
         <h4>Statistici</h4>
 
         <dl class="dl-horizontal">

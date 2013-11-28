@@ -3,6 +3,7 @@ import flask
 from werkzeug.exceptions import NotFound
 from mptracker import models
 from mptracker.website.dal import DataAccess
+from path import path
 
 dal = DataAccess()
 
@@ -94,6 +95,14 @@ def person_detail(person_id):
     person = dal.get_person(person_id, missing=NotFound)
     ctx = {'person_name': person['name']}
     ctx.update(dal.get_mandate2012_details(person_id))
+
+    if 'picture_filename' in ctx:
+        picture_rel_path = path('mandate-pictures') / ctx['picture_filename']
+        if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
+            ctx['picture_url'] = flask.url_for(
+                'static',
+                filename=picture_rel_path,
+            )
 
     for item in ctx['recent_activity']:
         if item['type'] == 'proposal':
