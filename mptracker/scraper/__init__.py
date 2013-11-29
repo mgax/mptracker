@@ -718,3 +718,62 @@ def votes(
         logger.info("Scheduling %d jobs", len(new_voting_session_list))
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
+
+@scraper_manager.command
+def get_romania_curata():
+    from mptracker.scraper.scraper_curata import RomaniaCurata
+    from difflib import SequenceMatcher
+    scraper = RomaniaCurata()
+    data = scraper.fetch_fortunes()
+    sql_names = [person.name for person in models.Person.query.all()] 
+    
+    my_alfabet = dict()
+ 
+    my_alfabet.update({'â' : 'a'})
+    my_alfabet.update({'Á' : 'A'})
+    my_alfabet.update({'î' : 'i'})
+
+    my_alfabet.update({'ş' : ''})   
+    my_alfabet.update({'Ş' : 'S'})
+    
+    my_alfabet.update({'ţ' : 't'})       
+    my_alfabet.update({'Ţ' : 'T'})
+    
+    my_alfabet.update({'Ő': 'O'})
+    my_alfabet.update({'ő' : 'o'})
+    my_alfabet.update({'Ö' : 'O'})
+    my_alfabet.update({'á' : 'a'})
+    my_alfabet.update({'ă' : 'a'})
+    my_alfabet.update({'é' : 'e'})  
+    
+    def without_diacritcs(string):
+        cp_string = []
+        for char in string:
+            if char in my_alfabet:
+                cp_string.append(my_alfabet[char])
+            else:
+                cp_string.append(char)
+        return "".join(cp_string)
+    
+    for name, fortune in data.items(): 
+        found_match = 0
+
+        for temp_sqlname in sql_names:
+            name_scraper = without_diacritcs(name)
+            name_sql = without_diacritcs(temp_sqlname)
+            matching = SequenceMatcher(None, name_scraper, name_sql).ratio() * 100
+            
+            if matching > 70:
+                person = (
+                    models.Person.query
+                        .filter_by(name=temp_sqlname)
+                        .first()
+                )
+                if(person != None):
+                    found_match = 1
+                    person.romania_curata = fortune
+                    break;
+
+        if found_match == 0:
+            raise LookupError("Not found a match for %r" % name) 
+    models.db.session.commit()
