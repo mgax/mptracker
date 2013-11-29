@@ -11,12 +11,9 @@ class EconScraper(Scraper):
         headline = index_page.find('#signup')
         tables = headline.find('table')
         tables_months = tables.find('tr')
-        url_set = set()
 
         for link in tables_months.items('td > a'):
-            url_set.add(link.attr('href'))
-        for url in url_set:
-            return self.fetch_month(url)
+            return self.fetch_month(link.attr('href'))
         #Tested with return, when finished @ yield self.fetch_section(url)
 
     def fetch_month(self, section_url):
@@ -31,7 +28,7 @@ class EconScraper(Scraper):
             headline_parent = pq(headline.parents('td')[-1])
             table = pq(headline_parent.find('#div-1c'))
             table_items = table.children('ol>li').eq(3).find('a')
-            return (self.fetch_table(table_items.attr('href')))
+            return self.fetch_table(table_items.attr('href'))
 
     def fetch_table(self, table_url):
         expenses_page = self.fetch_url(table_url)
@@ -45,7 +42,7 @@ class EconScraper(Scraper):
         data_table = []
         expenses_table = pq(headline).siblings()
         for column in expenses_table.items():
-            if (column.hasClass('row0') or column.hasClass('row1')):
+            if column.hasClass('row0') or column.hasClass('row1'):
                 column_data = []
                 for data in column.find('td').items():
                     column_data.append(data.text())
