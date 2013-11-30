@@ -702,18 +702,18 @@ def votes(
 @scraper_manager.command
 def get_romania_curata():
     from mptracker.scraper.scraper_curata import RomaniaCurata
-    from difflib import SequenceMatcher
+    from difflib import SequenceMatcher as sm
+    from itertools import permutations
+
     scraper = RomaniaCurata()
     data = scraper.fetch_fortunes()
     sql_names = [person.name for person in models.Person.query.all()] 
-    
     my_alfabet = dict()
- 
+    my_alfabet.update({'ă': 'a'}) 
     my_alfabet.update({'â' : 'a'})
     my_alfabet.update({'Á' : 'A'})
     my_alfabet.update({'î' : 'i'})
-
-    my_alfabet.update({'ş' : ''})   
+    my_alfabet.update({'ş': 's'})
     my_alfabet.update({'Ş' : 'S'})
     
     my_alfabet.update({'ţ' : 't'})       
@@ -722,8 +722,8 @@ def get_romania_curata():
     my_alfabet.update({'Ő': 'O'})
     my_alfabet.update({'ő' : 'o'})
     my_alfabet.update({'Ö' : 'O'})
+
     my_alfabet.update({'á' : 'a'})
-    my_alfabet.update({'ă' : 'a'})
     my_alfabet.update({'é' : 'e'})  
     
     def without_diacritcs(string):
@@ -735,25 +735,36 @@ def get_romania_curata():
                 cp_string.append(char)
         return "".join(cp_string)
     
-    for name, fortune in data.items(): 
+    def matching_score(first_name, second_name):
+        return sm(None, first_name, second_name).ratio() * 100
+    #IMBA matching
+    for tuple_scraper in scraper.fetch_fortunes(): 
         found_match = 0
 
+        name = tuple_scraper[0]
+        fortune = tuple_scraper[1]
+        
+        max_matching = 0
         for temp_sqlname in sql_names:
             name_scraper = without_diacritcs(name)
             name_sql = without_diacritcs(temp_sqlname)
-            matching = SequenceMatcher(None, name_scraper, name_sql).ratio() * 100
+
+            max_matching = max([matching_score(" ".join(perm), " ".join(name_sql.split("-"))) \
+                    for perm in permutations(name_scraper.split(" "))])
             
-            if matching > 70:
+            if max_matching > 80:
                 person = (
                     models.Person.query
                         .filter_by(name=temp_sqlname)
                         .first()
                 )
+                sql_names.remove(temp_sqlname)
                 if(person != None):
+                    print("Found a match for %r, %r", name_sql.encode('utf-8'), max_matching)
                     found_match = 1
                     person.romania_curata = fortune
                     break;
 
         if found_match == 0:
-            raise LookupError("Not found a match for %r" % name) 
+            print("Not found a match for %r, %r", name.encode('utf-8'), max_matching) 
     models.db.session.commit()

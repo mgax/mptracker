@@ -16,14 +16,12 @@ class RomaniaCurata(Scraper):
         
         for candidate_index in range(len(candidates_html)):
             yield candidates_html.eq(candidate_index)('a').attr.href        
-        if(next_page != None):    
+        if next_page != None:    
             yield from self.fetch_urls(next_page)
     
     def fetch_fortunes(self):
-        fortunes = dict();
         url_set = self.fetch_urls(self.index_url)
         for url in url_set:
-            print(url)
             create_throttle(2)
             main_page = self.fetch_url(url)
 
@@ -32,15 +30,14 @@ class RomaniaCurata(Scraper):
             splitted_name = name_link.split(" ")
             #we reverse the order of names of a MP for matching to database
             best_name = splitted_name[-1] + " " + \
-                    (" ".join(splitted_name[ : len(splitted_name) - 1]))
+                    (" ".join(splitted_name[: len(splitted_name) - 1]))
             
             total_fortunes = []
 
             for fortune_index in range(len(big_fortune)):
                 small_fortune = big_fortune.eq(fortune_index) 
-                if(small_fortune('strong') == []):
+                if small_fortune('strong') == []:
                     total_fortunes.append(small_fortune.text())
 
-            fortunes.update({best_name : total_fortunes})
-        return fortunes
+            yield (best_name, total_fortunes)
 
