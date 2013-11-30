@@ -718,3 +718,96 @@ def votes(
         logger.info("Scheduling %d jobs", len(new_voting_session_list))
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
+
+@scraper_manager.command
+def get_romania_curata():
+    from os import path
+    #This part is commented due to long time scraping Romania Curata
+    #dumping the result
+    """ 
+    
+    from mptracker.scraper.scraper_curata import RomaniaCurata
+    
+    scraper = RomaniaCurata()
+    data = scraper.fetch_fortunes()
+    import json
+    
+    with open(path.relpath('mptracker/placename_data/scraper-curata.json'), "w") as f:
+        json.dump(data, f) 
+    return 
+    """
+    from difflib import SequenceMatcher as sm
+    from itertools import permutations
+    import json
+    
+    sql_names = [person.name for person in models.Person.query.all()]
+    
+     
+    with open(path.relpath("mptracker/placename_data/scraper-curata.json"), 'r', encoding='utf-8') as f:
+        scraper_result = json.load(f)
+
+    my_alfabet = dict()
+    my_alfabet.update({'ă': 'a'}) 
+    my_alfabet.update({'â' : 'a'})
+    my_alfabet.update({'Á' : 'A'})
+    my_alfabet.update({'î' : 'i'})
+    my_alfabet.update({'ş': 's'})
+    my_alfabet.update({'Ş' : 'S'})
+    
+    my_alfabet.update({'ţ' : 't'})       
+    my_alfabet.update({'Ţ' : 'T'})
+    
+    my_alfabet.update({'Ő': 'O'})
+    my_alfabet.update({'ő' : 'o'})
+    my_alfabet.update({'Ö' : 'O'})
+
+    my_alfabet.update({'á' : 'a'})
+    my_alfabet.update({'é' : 'e'})  
+    
+    def without_diacritcs(string):
+        cp_string = []
+        for char in string:
+            if char in my_alfabet:
+                cp_string.append(my_alfabet[char])
+            else:
+                cp_string.append(char)
+        return "".join(cp_string)
+    
+    def matching_score(first_name, second_name):
+        return sm(None, first_name, second_name).ratio() * 100
+    #IMBA matching
+    
+    errors = []
+    for tuple_scraper in scraper_result: 
+        found_match = 0
+        name = tuple_scraper[0]
+        fortune = tuple_scraper[1]
+        
+        max_matching = 0
+        for temp_sqlname in sql_names:
+            name_scraper = without_diacritcs(name)
+            name_sql = without_diacritcs(temp_sqlname)
+
+            max_matching = max([matching_score(" ".join(perm), " ".join(name_sql.split("-"))) \
+                    for perm in permutations(name_scraper.split(" "))])
+            
+            if max_matching > 80:
+                person = (
+                    models.Person.query
+                        .filter_by(name=temp_sqlname)
+                        .first()
+                )
+                if(person != None):
+                    print("Found a match for %r, %r", name_sql.encode('utf-8'), max_matching)
+                    sql_names.remove(temp_sqlname)
+                    found_match = 1
+                    person.romania_curata = fortune
+                    break
+
+        if found_match == 0:
+            errors.append(temp_sqlname)
+            break
+    
+    with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
+        json.dump(errors, f) 
+    #models.db.session.commit()
