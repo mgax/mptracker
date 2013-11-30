@@ -701,21 +701,26 @@ def votes(
 
 @scraper_manager.command
 def get_romania_curata():
+    from os import path
+    """ 
     from mptracker.scraper.scraper_curata import RomaniaCurata
     
     scraper = RomaniaCurata()
     data = scraper.fetch_fortunes()
     import json
-
-    with open("scraper-curata.json", "w") as f:
-        json.dump(scraper.fetch_fortunes(), f) 
+    
+    with open(path.relpath('mptracker/placename_data/scraper-curata.json'), "w") as f:
+        json.dump(data, f) 
     return 
-
+    """
     from difflib import SequenceMatcher as sm
     from itertools import permutations
+    import json
+    
     sql_names = [person.name for person in models.Person.query.all()]
     
-    with open("scraper-curata.json", "r", encoding='utf-8') as f:
+     
+    with open(path.relpath("mptracker/placename_data/scraper-curata.json"), 'r', encoding='utf-8') as f:
         scraper_result = json.load(f)
 
     my_alfabet = dict()
@@ -748,10 +753,10 @@ def get_romania_curata():
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
     #IMBA matching
-
-    for tuple_scraper in scraper_result(): 
+    
+    errors = []
+    for tuple_scraper in scraper_result: 
         found_match = 0
-
         name = tuple_scraper[0]
         fortune = tuple_scraper[1]
         
@@ -769,14 +774,17 @@ def get_romania_curata():
                         .filter_by(name=temp_sqlname)
                         .first()
                 )
-                sql_names.remove(temp_sqlname)
                 if(person != None):
                     print("Found a match for %r, %r", name_sql.encode('utf-8'), max_matching)
+                    sql_names.remove(temp_sqlname)
                     found_match = 1
                     person.romania_curata = fortune
                     break
 
         if found_match == 0:
-            print("Not found a match for %r, %r", name.encode('utf-8'), max_matching) 
+            errors.append(temp_sqlname)
+            break
     
+    with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
+        json.dump(errors, f) 
     #models.db.session.commit()
