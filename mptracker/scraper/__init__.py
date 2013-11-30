@@ -702,7 +702,10 @@ def votes(
 @scraper_manager.command
 def get_romania_curata():
     from os import path
+    #This part is commented due to long time scraping Romania Curata
+    #dumping the result
     """ 
+    
     from mptracker.scraper.scraper_curata import RomaniaCurata
     
     scraper = RomaniaCurata()
