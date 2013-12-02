@@ -728,21 +728,21 @@ def get_romania_curata():
 
     my_alfabet = dict()
     my_alfabet.update({'ă': 'a'}) 
-    my_alfabet.update({'â' : 'a'})
-    my_alfabet.update({'Á' : 'A'})
-    my_alfabet.update({'î' : 'i'})
+    my_alfabet.update({'â': 'a'})
+    my_alfabet.update({'Á': 'A'})
+    my_alfabet.update({'î': 'i'})
     my_alfabet.update({'ş': 's'})
-    my_alfabet.update({'Ş' : 'S'})
+    my_alfabet.update({'Ş': 'S'})
     
-    my_alfabet.update({'ţ' : 't'})       
-    my_alfabet.update({'Ţ' : 'T'})
+    my_alfabet.update({'ţ': 't'})       
+    my_alfabet.update({'Ţ': 'T'})
     
     my_alfabet.update({'Ő': 'O'})
-    my_alfabet.update({'ő' : 'o'})
-    my_alfabet.update({'Ö' : 'O'})
+    my_alfabet.update({'ő': 'o'})
+    my_alfabet.update({'Ö': 'O'})
 
-    my_alfabet.update({'á' : 'a'})
-    my_alfabet.update({'é' : 'e'})  
+    my_alfabet.update({'á': 'a'})
+    my_alfabet.update({'é': 'e'})  
     
     def without_diacritcs(string):
         cp_string = []
@@ -756,7 +756,7 @@ def get_romania_curata():
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
     #IMBA matching
-    
+
     errors = []
     for tuple_scraper in scraper_result: 
         found_match = 0
@@ -786,7 +786,8 @@ def get_romania_curata():
 
         if found_match == 0:
             errors.append(temp_sqlname)
-            break
+    
+    #This is where we dump non matching text
     
     with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
         json.dump(errors, f) 
