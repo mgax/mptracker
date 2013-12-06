@@ -59,6 +59,9 @@ class MandateScraper(Scraper):
                 end_date_col = 5 if mandate.minority else 6
                 mandate.end_date = parse_date(cols.eq(end_date_col).text())
 
+            if (mandate.year, mandate.cdep_number) == (2004, 88):
+                mandate.person_name = u"Mălaimare Mihai Adrian"
+
             yield mandate
 
     def fetch(self, year=2012):
