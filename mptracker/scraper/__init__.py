@@ -725,70 +725,82 @@ def get_romania_curata():
      
     with open(path.relpath("mptracker/placename_data/scraper-curata.json"), 'r', encoding='utf-8') as f:
         scraper_result = json.load(f)
+    print (len(sql_names))
+    from unicodedata import normalize
+    """
+    mapped = dict()
+    mapped['a'] = ['â', 'á', 'ă', 'á']
+    mapped['A'] = ['Á']
+    mapped['S'] = ['Ş']
+    mapped['o'] = ['ő']
+    mapped['O'] = ['Ő', 'Ö']
+    mapped['s'] = ['ş']
+    mapped['T'] = ['Ţ']
+    mapped['t'] = ['ţ']
+    mapped['e'] = ['é'] 
+    
 
-    my_alfabet = dict()
-    my_alfabet.update({'ă': 'a'}) 
-    my_alfabet.update({'â': 'a'})
-    my_alfabet.update({'Á': 'A'})
-    my_alfabet.update({'î': 'i'})
-    my_alfabet.update({'ş': 's'})
-    my_alfabet.update({'Ş': 'S'})
-    
-    my_alfabet.update({'ţ': 't'})       
-    my_alfabet.update({'Ţ': 'T'})
-    
-    my_alfabet.update({'Ő': 'O'})
-    my_alfabet.update({'ő': 'o'})
-    my_alfabet.update({'Ö': 'O'})
-
-    my_alfabet.update({'á': 'a'})
-    my_alfabet.update({'é': 'e'})  
-    
+    from pdb import set_trace; set_trace();
+    """
     def without_diacritcs(string):
+        import unicodedata
         cp_string = []
         for char in string:
-            if char in my_alfabet:
-                cp_string.append(my_alfabet[char])
-            else:
-                cp_string.append(char)
+            normalized_character = unicodedata.normalize('NFKD', char).encode(
+                    'ascii', 'ignore').decode('utf-8')
+            cp_string.append(normalized_character)
         return "".join(cp_string)
     
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
     #IMBA matching
-
     errors = []
+    
     for tuple_scraper in scraper_result: 
         found_match = 0
         name = tuple_scraper[0]
         fortune = tuple_scraper[1]
-        
-        max_matching = 0
-        for temp_sqlname in sql_names:
-            name_scraper = without_diacritcs(name)
-            name_sql = without_diacritcs(temp_sqlname)
+        name_scraper = without_diacritcs(name)
+        max_matching = (0, 0) 
+        print (name_scraper)
+        for temporary_sqlname in sql_names:
+            name_sql = without_diacritcs(temporary_sqlname.replace("-", " "))
+            for perm in permutations(name_scraper.split(" ")):
+                current_matching = matching_score(" ".join(perm), name_sql)
 
-            max_matching = max([matching_score(" ".join(perm), " ".join(name_sql.split("-"))) \
-                    for perm in permutations(name_scraper.split(" "))])
+                if max_matching[0] < current_matching:
+                    max_matching = (current_matching, " ".join(perm), name_sql)
+
             
-            if max_matching > 80:
-                person = (
-                    models.Person.query
-                        .filter_by(name=temp_sqlname)
-                        .first()
-                )
-                if(person != None):
-                    print("Found a match for %r, %r", name_sql.encode('utf-8'), max_matching)
-                    sql_names.remove(temp_sqlname)
-                    found_match = 1
-                    person.romania_curata = fortune
-                    break
+        if max_matching[0] > 90:
+            person = (
+                models.Person.query
+                    .filter_by(name=temporary_sqlname)
+                    .first()
+            )
+            if person != None:
+                print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
+                sql_names.remove(temporary_sqlname)
+                found_match = 1
+                person.romania_curata = fortune
+                continue
 
         if found_match == 0:
-            errors.append(temp_sqlname)
-    
+            errors.append(name_scraper)
+    print(len(errors))
     #This is where we dump non matching text
     
+
     with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
-        json.dump(errors, f) 
+        json.dump(errors, f)
+    """
+    
+    import json
+
+    with open(path.relpath("mptracker/placename_data/non_matchers.json"), 'r', encoding='utf-8') as f:
+        errors = json.load(f)
+    for name in errors:
+        print (name.encode('utf-8'))
+    #let's do some crazy tricks wtf 
     #models.db.session.commit()
+    """
