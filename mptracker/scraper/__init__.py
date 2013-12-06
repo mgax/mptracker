@@ -108,6 +108,7 @@ def people(
     cache_name=None,
     throttle=None,
     no_commit=False,
+    add_people=False,
 ):
     from mptracker.scraper.people import MandateScraper
 
@@ -122,6 +123,8 @@ def people(
         models.db.session,
         key_columns=['year', 'cdep_number'],
     )
+
+    new_people = 0
 
     with mandate_patcher.process() as add_mandate:
         for mandate in mandate_scraper.fetch(year):
@@ -141,9 +144,17 @@ def people(
                 models.Person.query
                     .filter_by(name=mandate.person_name)
                     .first())
+
             if person is None:
-                raise RuntimeError("Can't find person named %r"
-                                   % mandate.person_name)
+                if add_people:
+                    person = models.Person(name=mandate.person_name)
+                    models.db.session.add(person)
+                    models.db.session.flush()
+                    new_people += 1
+
+                else:
+                    raise RuntimeError("Can't find person named %r"
+                                       % mandate.person_name)
 
             row['person_id'] = person.id
 
@@ -158,6 +169,9 @@ def people(
                 row['county'] = county
 
             add_mandate(row)
+
+    if new_people:
+        logger.info("%d new people", new_people)
 
     if no_commit:
         logger.warn("Rolling back the transaction")
