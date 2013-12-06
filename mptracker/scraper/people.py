@@ -13,7 +13,15 @@ class MandateScraper(Scraper):
     mandates_url = 'http://www.cdep.ro/pls/parlam/structura.de?leg={year}'
 
     def parse_mandates(self, table, ended=False):
-        for row in list(table.children().items())[2:]:
+        row_list = list(table.children().items())
+        if 'Colegiu uninominal' in row_list[0].text():
+            college_col = 4
+            party_col = 5
+        else:
+            college_col = None
+            party_col = 4
+
+        for row in row_list[2:]:
             cols = row.children()
             link = cols.eq(1).find('a')
             (mandate_year, cdep_number) = parse_cdep_id(link.attr('href'))
@@ -30,13 +38,17 @@ class MandateScraper(Scraper):
                 picture_url=picture.attr('href'),
             )
 
-            if cols.eq(2).text() == "ales la nivel naţional":
+            if (cols.eq(2).text() in ["ales la nivel naţional", ""]
+                    and cols.eq(3).text() in ["Mino.", "Minoritati"]):
                 mandate.minority = True
 
             else:
                 mandate.constituency = int(cols.eq(2).text())
-                mandate.college = int(cols.eq(4).text())
-                mandate.party_name = cols.eq(5).text()
+                if college_col:
+                    mandate.college = int(cols.eq(college_col).text())
+                else:
+                    mandate.college = None
+                mandate.party_name = cols.eq(party_col).text()
 
                 county_name = fix_local_chars(cols.eq(3).text().title())
                 if county_name == "Bistrița-Năsăud":
@@ -44,7 +56,8 @@ class MandateScraper(Scraper):
                 mandate.county_name = county_name
 
             if ended:
-                mandate.end_date = parse_date(cols.eq(6).text())
+                end_date_col = 5 if mandate.minority else 6
+                mandate.end_date = parse_date(cols.eq(end_date_col).text())
 
             yield mandate
 
