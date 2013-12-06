@@ -1,8 +1,10 @@
 from datetime import date
+from collections import defaultdict
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from jinja2 import filters
 from mptracker.models import (
+    County,
     Person,
     Mandate,
     MpGroup,
@@ -20,6 +22,27 @@ from mptracker.models import (
 
 
 class DataAccess:
+
+    def get_county_name_map(self):
+        return {c.code: c.name for c in County.query}
+
+    def get_2012_mandates_by_county(self):
+        mandates = (
+            Mandate.query
+            .filter_by(year=2012)
+            .join(Mandate.person)
+            .join(Mandate.county)
+        )
+
+        mandate_data = defaultdict(list)
+        for m in mandates:
+            key = '%s%d' % (m.county.code, m.college)
+            mandate_data[key].append({
+                'name': m.person.name,
+                'person_id': m.person_id,
+            })
+
+        return dict(mandate_data)
 
     def search_person(self, query):
         sql_query = (

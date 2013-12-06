@@ -73,7 +73,18 @@ def home():
 @pages.route('/persoane/')
 @section('person')
 def person_index():
-    return flask.render_template('person_index.html')
+    mandates_by_county = dal.get_2012_mandates_by_county()
+    for county_list in mandates_by_county.values():
+        for mandate_info in county_list:
+            mandate_info['url'] = flask.url_for(
+                '.person_detail',
+                person_id=mandate_info['person_id'],
+            )
+
+    return flask.render_template('person_index.html', **{
+        'county_name_map': dal.get_county_name_map(),
+        'mandates_by_county': mandates_by_county,
+    })
 
 
 @pages.route('/persoane/_search')
