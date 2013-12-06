@@ -722,26 +722,9 @@ def get_romania_curata():
     
     sql_names = [person.name for person in models.Person.query.all()]
     
-     
     with open(path.relpath("mptracker/placename_data/scraper-curata.json"), 'r', encoding='utf-8') as f:
         scraper_result = json.load(f)
-    print (len(sql_names))
-    from unicodedata import normalize
-    """
-    mapped = dict()
-    mapped['a'] = ['â', 'á', 'ă', 'á']
-    mapped['A'] = ['Á']
-    mapped['S'] = ['Ş']
-    mapped['o'] = ['ő']
-    mapped['O'] = ['Ő', 'Ö']
-    mapped['s'] = ['ş']
-    mapped['T'] = ['Ţ']
-    mapped['t'] = ['ţ']
-    mapped['e'] = ['é'] 
-    
 
-    from pdb import set_trace; set_trace();
-    """
     def without_diacritcs(string):
         import unicodedata
         cp_string = []
@@ -755,14 +738,13 @@ def get_romania_curata():
         return sm(None, first_name, second_name).ratio() * 100
     #IMBA matching
     errors = []
-    
     for tuple_scraper in scraper_result: 
         found_match = 0
         name = tuple_scraper[0]
         fortune = tuple_scraper[1]
         name_scraper = without_diacritcs(name)
         max_matching = (0, 0) 
-        print (name_scraper)
+
         for temporary_sqlname in sql_names:
             name_sql = without_diacritcs(temporary_sqlname.replace("-", " "))
             for perm in permutations(name_scraper.split(" ")):
@@ -772,7 +754,7 @@ def get_romania_curata():
                     max_matching = (current_matching, " ".join(perm), name_sql)
 
             
-        if max_matching[0] > 90:
+        if max_matching[0] > 85:
             person = (
                 models.Person.query
                     .filter_by(name=temporary_sqlname)
@@ -782,15 +764,14 @@ def get_romania_curata():
                 print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
                 sql_names.remove(temporary_sqlname)
                 found_match = 1
+                #next line could be modified for printing purposes in jinje
                 person.romania_curata = fortune
-                continue
 
         if found_match == 0:
             errors.append(name_scraper)
-    print(len(errors))
-    #This is where we dump non matching text
     
-
+    #This is where we dump non matching text
+    print ("Succesful", (len(scraper_result) - len(errors)) / len(scraper_result) * 100)
     with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
         json.dump(errors, f)
     """
