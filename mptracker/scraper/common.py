@@ -165,7 +165,7 @@ def sanitize(html):
 
 
 MONTHS = {'ian': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'mai': 5, 'iun': 6,
-          'iul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12}
+          'iul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'noi': 11, 'dec': 12}
 
 
 def parse_date(txt):
