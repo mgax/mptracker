@@ -704,18 +704,6 @@ def get_romania_curata():
     from os import path
     #This part is commented due to long time scraping Romania Curata
     #dumping the result
-    """ 
-    
-    from mptracker.scraper.scraper_curata import RomaniaCurata
-    
-    scraper = RomaniaCurata()
-    data = scraper.fetch_fortunes()
-    import json
-    
-    with open(path.relpath('mptracker/placename_data/scraper-curata.json'), "w") as f:
-        json.dump(data, f) 
-    return 
-    """
     from difflib import SequenceMatcher as sm
     from itertools import permutations
     import json
