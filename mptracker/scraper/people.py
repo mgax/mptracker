@@ -21,6 +21,8 @@ class MandateScraper(Scraper):
             college_col = None
             party_col = 4
 
+        has_start_date = bool('Membru din' in row_list[0].text())
+
         for row in row_list[2:]:
             cols = row.children()
             link = cols.eq(1).find('a')
@@ -58,6 +60,8 @@ class MandateScraper(Scraper):
 
             if ended:
                 end_date_col = 5 if mandate.minority else 6
+                if not has_start_date:
+                    end_date_col -= 1
                 mandate.end_date = parse_date(cols.eq(end_date_col).text())
 
             if (mandate.year, mandate.cdep_number) == (2004, 88):
