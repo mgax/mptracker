@@ -413,7 +413,7 @@ def proposals(
                 record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
                     'decision_chamber', 'url', 'title', 'date', 'number_bpi',
                     'number_cdep', 'number_senate', 'proposal_type',
-                    'pdf_url'])
+                    'pdf_url', 'status', 'status_text'])
 
                 slug = prop.decision_chamber
                 if slug:
