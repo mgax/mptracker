@@ -14,7 +14,8 @@ class MandateScraper(Scraper):
 
     def parse_mandates(self, table, ended=False):
         row_list = list(table.children().items())
-        if 'Colegiu uninominal' in row_list[0].text():
+        uninominal = bool('Colegiul uninominal' in row_list[1].text())
+        if uninominal:
             college_col = 4
             party_col = 5
         else:
@@ -59,9 +60,13 @@ class MandateScraper(Scraper):
                 mandate.county_name = county_name
 
             if ended:
-                end_date_col = 5 if mandate.minority else 6
+                end_date_col = 6
+                if mandate.minority:
+                    end_date_col -= 1
                 if not has_start_date:
                     end_date_col -= 1
+                if uninominal and not mandate.minority:
+                    end_date_col += 1
                 mandate.end_date = parse_date(cols.eq(end_date_col).text())
 
             if (mandate.year, mandate.cdep_number) == (2004, 88):
