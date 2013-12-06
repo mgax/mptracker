@@ -1,6 +1,6 @@
 from pyquery import PyQuery as pq
 from mptracker.common import fix_local_chars
-from mptracker.scraper.common import (Scraper, GenericModel, parse_cdep_id,
+from mptracker.scraper.common import (Scraper, GenericModel, parse_profile_url,
                                       parse_date)
 
 
@@ -24,14 +24,15 @@ class MandateScraper(Scraper):
         for row in row_list[2:]:
             cols = row.children()
             link = cols.eq(1).find('a')
-            (mandate_year, cdep_number) = parse_cdep_id(link.attr('href'))
+            (year, chamber, number) = parse_profile_url(link.attr('href'))
 
             person_page = self.fetch_url(link.attr('href'))
             picture = person_page.find('a.highslide')
 
             mandate = Mandate(
-                year=mandate_year,
-                cdep_number=cdep_number,
+                year=year,
+                chamber_number=chamber,
+                cdep_number=number,
                 person_name=link.text(),
                 minority=False,
                 end_date=None,

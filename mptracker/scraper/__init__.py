@@ -125,6 +125,7 @@ def people(
     )
 
     new_people = 0
+    chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
     with mandate_patcher.process() as add_mandate:
         for mandate in mandate_scraper.fetch(year):
@@ -136,6 +137,8 @@ def people(
                 'constituency',
                 'picture_url',
             ])
+            assert mandate.chamber_number == 2
+            row['chamber_id'] = chamber_by_slug['cdep'].id
             if year == '2012':
                 end_date = mandate.end_date or date.max
                 row['interval'] = DateRange(TERM_2012_START, end_date)
