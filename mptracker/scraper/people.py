@@ -41,8 +41,8 @@ class MandateScraper(Scraper):
                 picture_url=picture.attr('href'),
             )
 
-            if (cols.eq(2).text() in ["ales la nivel naţional", ""]
-                    and cols.eq(3).text() in ["Mino.", "Minoritati"]):
+            if (cols.eq(2).text() in ["ales la nivel naţional", ""] and
+                cols.eq(3).text() in ["Mino.", "Minoritati", u"Minorităţi"]):
                 mandate.minority = True
 
             else:
