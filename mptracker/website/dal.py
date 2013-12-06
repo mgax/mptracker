@@ -285,7 +285,11 @@ class DataAccess:
             .filter_by(policy_domain_id=policy_id)
         )
         return [
-            {'title': proposal.title, 'id': proposal.id}
+            {
+                'title': proposal.title,
+                'id': proposal.id,
+                'status': proposal.status,
+            }
             for proposal in proposal_query
         ]
 
