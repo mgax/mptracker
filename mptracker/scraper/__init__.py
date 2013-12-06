@@ -718,3 +718,12 @@ def votes(
         logger.info("Scheduling %d jobs", len(new_voting_session_list))
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
+
+
+@scraper_manager.command
+def auto():
+    transcripts(n_sessions=20)
+    questions(autoanalyze=True)
+    votes(days=20)
+    groups()
+    proposals(autoanalyze=True)
