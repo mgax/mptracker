@@ -324,6 +324,8 @@ class Proposal(db.Model):
     number_bpi = db.Column(db.Text)
     date = db.Column(db.Date)
     proposal_type = db.Column(db.Text)
+    status = db.Column(db.Text)
+    status_text = db.Column(db.Text)
 
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
     decision_chamber = db.relationship('Chamber')
