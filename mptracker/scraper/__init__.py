@@ -702,15 +702,6 @@ def votes(
 @scraper_manager.command
 def get_romania_curata():
     from os import path
-    #This part will be commented due to long time scraping Romania Curata
-    from mptracker.scraper.scraper_curata import RomaniaCurata 
-    import json
-
-    scraper = RomaniaCurata()
-    data = scraper.fetch_fortunes()
-    with open(path.relpath('mptracker/placename_data/scraper-curata.json'), "w") as f:
-        json.dump(data, f) 
-    """
     #dumping the result
     from difflib import SequenceMatcher as sm
     from itertools import permutations
@@ -732,7 +723,7 @@ def get_romania_curata():
     
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
-    #IMBA matching
+
     errors = []
     for tuple_scraper in scraper_result: 
         found_match = 0
@@ -773,4 +764,4 @@ def get_romania_curata():
         json.dump(errors, f)
     
     models.db.session.commit()
-    """
+    
