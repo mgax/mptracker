@@ -749,10 +749,11 @@ def get_romania_curata():
                     .first()
             )
             if person != None:
-                print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
+                #Decomment the next line for fun purposes
+                #print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
                 sql_names.remove(temporary_sqlname)
                 found_match = 1
-                #next line could be modified for printing purposes in jinje
+                #next line could be modified for printing purposes in jinja
                 person.romania_curata = fortune
 
         if found_match == 0:
@@ -762,14 +763,5 @@ def get_romania_curata():
     print ("Succesful", (len(scraper_result) - len(errors)) / len(scraper_result) * 100)
     with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
         json.dump(errors, f)
-    """
     
-    import json
-
-    with open(path.relpath("mptracker/placename_data/non_matchers.json"), 'r', encoding='utf-8') as f:
-        errors = json.load(f)
-    for name in errors:
-        print (name.encode('utf-8'))
-    #let's do some crazy tricks wtf 
-    #models.db.session.commit()
-    """
+    
