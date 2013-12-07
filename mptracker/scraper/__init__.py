@@ -764,4 +764,5 @@ def get_romania_curata():
     with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
         json.dump(errors, f)
     
+    models.db.session.commit()
     
