@@ -706,34 +706,28 @@ def get_romania_curata():
     from difflib import SequenceMatcher as sm
     from itertools import permutations
     import json
-    
+    from mptracker.nlp import normalize
+
     sql_names = [person.name for person in models.Person.query.all()]
     
-    with open(path.relpath("mptracker/placename_data/scraper-curata.json"), 'r', encoding='utf-8') as f:
+    with open(path.relpath(
+            "mptracker/placename_data/scraper-curata.json"
+                ), 'r', 
+            encoding='utf-8') as f:
         scraper_result = json.load(f)
 
-    def without_diacritcs(string):
-        import unicodedata
-        cp_string = []
-        for char in string:
-            normalized_character = unicodedata.normalize('NFKD', char).encode(
-                    'ascii', 'ignore').decode('utf-8')
-            cp_string.append(normalized_character)
-        return "".join(cp_string)
-    
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
-
+    
     errors = []
-    for tuple_scraper in scraper_result: 
+    for name,fortune in scraper_result: 
         found_match = 0
-        name = tuple_scraper[0]
-        fortune = tuple_scraper[1]
-        name_scraper = without_diacritcs(name)
-        max_matching = (0, 0) 
+
+        name_scraper = normalize(name)
+        max_matching = (0, 0, 0) 
 
         for temporary_sqlname in sql_names:
-            name_sql = without_diacritcs(temporary_sqlname.replace("-", " "))
+            name_sql = normalize(temporary_sqlname)
             for perm in permutations(name_scraper.split(" ")):
                 current_matching = matching_score(" ".join(perm), name_sql)
 
@@ -741,7 +735,7 @@ def get_romania_curata():
                     max_matching = (current_matching, " ".join(perm), name_sql)
 
             
-        if max_matching[0] > 85:
+        if max_matching[0] > 93:
             person = (
                 models.Person.query
                     .filter_by(name=temporary_sqlname)
@@ -749,18 +743,20 @@ def get_romania_curata():
             )
             if person != None:
                 #Decomment the next line for fun purposes
-                #print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
+                print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
                 sql_names.remove(temporary_sqlname)
                 found_match = 1
                 #next line could be modified for printing purposes in jinja
                 person.romania_curata = fortune
 
         if found_match == 0:
-            errors.append(name_scraper)
+            errors.append(name)
     
     #This is where we dump non matching text
     print ("Succesful", (len(scraper_result) - len(errors)) / len(scraper_result) * 100)
-    with open(path.relpath('mptracker/placename_data/non_matchers.json'), "w") as f:
+    with open(path.relpath(
+        'mptracker/placename_data/non_matchers.json'),
+        "w") as f:
         json.dump(errors, f)
     
     models.db.session.commit()

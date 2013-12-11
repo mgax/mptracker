@@ -16,6 +16,7 @@ name_normalization_map = [
     ('ă', 'a'),
     ('â', 'a'),
     ('î', 'i'),
+    ('ö', 'o')
 ]
 
 stop_words = set([
