@@ -815,6 +815,6 @@ def controversy():
 def auto():
     transcripts(n_sessions=20)
     questions(autoanalyze=True)
-    votes(days=20)
+    votes(days=20, autoanalyze=True)
     groups()
     proposals(autoanalyze=True)
