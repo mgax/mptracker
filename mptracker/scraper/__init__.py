@@ -736,10 +736,7 @@ def get_romania_curata():
             print("Found a match for ", name.encode('utf-8'))
             sql_names.remove(name)
 
-    errors = []
     for name, fortune in scraper_result: 
-        found_match = 0
-
         name_scraper = normalize(name)
         max_matching = (0, 0) 
         
