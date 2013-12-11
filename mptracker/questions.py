@@ -234,12 +234,13 @@ def question_dump():
         )
     )
     def make_row(ask):
+        score = ask.match.score
         return {
             'name': ask.mandate.person.name,
             'legislature': str(ask.mandate.year),
             'date': str(ask.question.date),
             'title': str(ask.question.title),
-            'score': str(ask.match.score or ''),
+            'score': '' if score is None else str(score),
         }
     rows = (make_row(ask) for ask in ask_query.yield_per(10))
     data = buffer_on_disk(csv_lines(cols, rows))
