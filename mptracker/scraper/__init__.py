@@ -741,7 +741,7 @@ def get_romania_curata():
         found_match = 0
 
         name_scraper = normalize(name)
-        max_matching = (0, 0, 0) 
+        max_matching = (0, 0) 
         
         if name_scraper in person_exceptions:
             add_person(person_exceptions[name_scraper], fortune)
