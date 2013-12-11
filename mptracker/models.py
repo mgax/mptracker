@@ -363,6 +363,12 @@ class ProposalActivityItem(db.Model):
         backref=db.backref('activity', lazy='dynamic', cascade='all'))
 
 
+class Controversy(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    slug = db.Column(db.Text, nullable=False, unique=True)
+    title = db.Column(db.Text)
+
+
 class VotingSession(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     date = db.Column(db.Date)
@@ -373,6 +379,10 @@ class VotingSession(db.Model):
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
     proposal = db.relationship('Proposal',
+        backref=db.backref('voting_sessions', lazy='dynamic'))
+
+    controversy_id = db.Column(UUID, db.ForeignKey('controversy.id'))
+    controversy = db.relationship('Controversy',
         backref=db.backref('voting_sessions', lazy='dynamic'))
 
     @property
