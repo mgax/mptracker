@@ -8,7 +8,7 @@ from path import path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import parse_date, model_to_dict
+from mptracker.common import parse_date, model_to_dict, url_args
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -735,6 +735,80 @@ def votes(
         logger.info("Scheduling %d jobs", len(new_voting_session_list))
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
+
+
+@scraper_manager.command
+def controversy():
+    import csv, requests, io, sqlalchemy as sa
+    url = flask.current_app.config['CONTROVERSY_CSV_URL']
+    resp = requests.get(url)
+    csv_file = csv.DictReader(io.StringIO(resp.text))
+
+    old_voting_sessions = set(
+        models.VotingSession.query
+        .filter(models.VotingSession.controversy_id != None)
+        .all()
+    )
+
+    controversy_map = {}
+
+    for line in csv_file:
+        cdeppk = url_args(line['link']).get('idv', type=int)
+        slug = line['slug']
+        if slug not in controversy_map:
+            controversy_map[slug] = {
+                'data': {
+                    'slug': slug,
+                    'title': line['title'],
+                },
+                'voting_session_rows': [],
+            }
+
+        voting_session = (
+            models.VotingSession.query
+            .filter_by(cdeppk=cdeppk)
+            .first()
+        )
+        controversy_map[slug]['voting_session_rows'].append(voting_session)
+
+    controversy_patcher = TablePatcher(
+        models.Controversy,
+        models.db.session,
+        key_columns=['slug'],
+    )
+
+    with controversy_patcher.process(remove=True) as add_controversy:
+        for controversy in controversy_map.values():
+            result = add_controversy(controversy['data'])
+            controversy['row'] = result.row
+
+    models.db.session.flush()
+
+    voting_session_patcher = TablePatcher(
+        models.VotingSession,
+        models.db.session,
+        key_columns=['id'],
+    )
+
+    new_voting_sessions = set()
+
+    with voting_session_patcher.process() as add_voting_session:
+        for controversy in controversy_map.values():
+            for voting_session in controversy['voting_session_rows']:
+                data = {
+                    'id': voting_session.id,
+                    'controversy_id': controversy['row'].id,
+                }
+                add_voting_session(data, create=False)
+                new_voting_sessions.add(voting_session)
+
+        for voting_session in old_voting_sessions - new_voting_sessions:
+            add_voting_session({
+                'id': voting_session.id,
+                'controversy_id': None,
+            })
+
+    models.db.session.commit()
 
 
 @scraper_manager.command
