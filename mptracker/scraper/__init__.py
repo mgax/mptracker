@@ -715,16 +715,36 @@ def get_romania_curata():
                 ), 'r', 
             encoding='utf-8') as f:
         scraper_result = json.load(f)
+    
+    with open(path.relpath(
+            'mptracker/scraper/romania_curata_exceptions.json'),
+            'r', encoding='utf-8') as f:
+        person_exceptions = json.load(f)
+    
 
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
     
+    def add_person(name, fortune): 
+        person = (
+            models.Person.query
+                .filter_by(name=name)
+                .first()
+        )
+        if person != None:
+            person.romania_curata = "\n".join(fortune)
+            print("Found a match for ", name.encode('utf-8'))
+            sql_names.remove(name)
+
     errors = []
-    for name,fortune in scraper_result: 
+    for name, fortune in scraper_result: 
         found_match = 0
 
         name_scraper = normalize(name)
         max_matching = (0, 0, 0) 
+        
+        if name_scraper in person_exceptions:
+            add_person(person_exceptions[name_scraper], fortune)
 
         for temporary_sqlname in sql_names:
             name_sql = normalize(temporary_sqlname)
@@ -732,32 +752,9 @@ def get_romania_curata():
                 current_matching = matching_score(" ".join(perm), name_sql)
 
                 if max_matching[0] < current_matching:
-                    max_matching = (current_matching, " ".join(perm), name_sql)
+                    max_matching = (current_matching, temporary_sqlname)
 
-            
         if max_matching[0] > 93:
-            person = (
-                models.Person.query
-                    .filter_by(name=temporary_sqlname)
-                    .first()
-            )
-            if person != None:
-                #Decomment the next line for fun purposes
-                print("Found a match for ", max_matching[2].encode('utf-8'), max_matching[0], max_matching[1].encode('utf-8'))
-                sql_names.remove(temporary_sqlname)
-                found_match = 1
-                #next line could be modified for printing purposes in jinja
-                person.romania_curata = fortune
-
-        if found_match == 0:
-            errors.append(name)
-    
-    #This is where we dump non matching text
-    print ("Succesful", (len(scraper_result) - len(errors)) / len(scraper_result) * 100)
-    with open(path.relpath(
-        'mptracker/placename_data/non_matchers.json'),
-        "w") as f:
-        json.dump(errors, f)
-    
+            add_person(max_matching[1], fortune)
     models.db.session.commit()
     
