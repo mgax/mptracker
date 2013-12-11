@@ -6,7 +6,7 @@ import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
 from mptracker import models
-from mptracker.common import ocr_url, csv_lines
+from mptracker.common import ocr_url, csv_lines, buffer_on_disk
 from mptracker.nlp import match_text_for_mandate
 from mptracker.auth import require_privilege
 
@@ -233,14 +233,14 @@ def question_dump():
             joinedload('match_row'),
         )
     )
-    rows = (
-        {
+    def make_row(ask):
+        return {
             'name': ask.mandate.person.name,
             'legislature': str(ask.mandate.year),
             'date': str(ask.question.date),
             'title': str(ask.question.title),
             'score': str(ask.match.score or ''),
         }
-        for ask in ask_query
-    )
-    return flask.Response(csv_lines(cols, rows), mimetype='text/csv')
+    rows = (make_row(ask) for ask in ask_query.yield_per(10))
+    data = buffer_on_disk(csv_lines(cols, rows))
+    return flask.Response(data, mimetype='text/csv')

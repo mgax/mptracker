@@ -9,6 +9,7 @@ from itertools import chain
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
 from werkzeug.urls import url_decode, url_parse
+from werkzeug.wsgi import FileWrapper
 from flask.ext.rq import job
 from babel.dates import format_date
 from psycopg2.extras import DateRange
@@ -129,3 +130,12 @@ def model_to_dict(model, namelist):
 
 def url_args(url):
     return url_decode(url_parse(url).query)
+
+
+def buffer_on_disk(data_iter):
+    tmp = tempfile.TemporaryFile(mode='w+', encoding='utf-8')
+    for block in data_iter:
+        tmp.write(block)
+    tmp.flush()
+    tmp.seek(0)
+    return FileWrapper(tmp)
