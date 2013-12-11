@@ -88,7 +88,11 @@ def ocr_url(url, max_pages=MAX_OCR_PAGES):
     http_session = create_session(cache_name=pdf_cache_name, throttle=0.5)
 
     with temp_dir() as tmp:
-        pdf_data = http_session.get(url).content
+        resp = http_session.get(url)
+        if resp.status_code != 200:
+            raise RuntimeError("PDF download failure (%d) at %r"
+                               % (resp.status_code, url))
+        pdf_data = resp.content
         pdf_path = tmp / 'document.pdf'
         with pdf_path.open('wb') as f:
             f.write(pdf_data)
