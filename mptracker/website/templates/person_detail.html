@@ -72,8 +72,10 @@
           <dt>prezență la vot</dt>
           <dd>{{ vote['attendance']|percent }}</dd>
 
-          <dt>loialitate față de partid</dt>
-          <dd>{{ vote['loyalty']|percent }}</dd>
+          {%- if 'loyalty' in vote %}
+            <dt>loialitate față de partid</dt>
+            <dd>{{ vote['loyalty']|percent }}</dd>
+          {%- endif %}
 
           <dt>luări de cuvânt</dt>
           <dd>{{ speeches }}</dd>

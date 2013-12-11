@@ -109,8 +109,9 @@ class DataAccess:
 
         rv['vote'] = {
             'attendance': votes_attended / voting_session_count,
-            'loyalty': votes_loyal / votes_attended,
         }
+        if votes_attended > 0:
+            rv['vote']['loyalty'] = votes_loyal / votes_attended
 
         rv['speeches'] = mandate.transcripts.count()
         rv['proposals'] = mandate.sponsorships.count()
