@@ -1,6 +1,7 @@
 import logging
 from collections import defaultdict
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -218,3 +219,28 @@ def ask_save_flags(ask_id):
     models.db.session.commit()
     url = flask.url_for('.question_detail', question_id=ask.question_id)
     return flask.redirect(url)
+
+
+@questions.route('/questions/_dump/questions.csv')
+def question_dump():
+    cols = ['name', 'legislature', 'date', 'title', 'score']
+    ask_query = (
+        models.Ask.query
+        .options(
+            joinedload('question'),
+            joinedload('mandate'),
+            joinedload('mandate.person'),
+            joinedload('match_row'),
+        )
+    )
+    rows = (
+        {
+            'name': ask.mandate.person.name,
+            'legislature': str(ask.mandate.year),
+            'date': str(ask.question.date),
+            'title': str(ask.question.title),
+            'score': str(ask.match.score or ''),
+        }
+        for ask in ask_query
+    )
+    return flask.Response(csv_lines(cols, rows), mimetype='text/csv')
