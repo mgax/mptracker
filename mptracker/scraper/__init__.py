@@ -710,7 +710,7 @@ def get_romania_curata():
 
     sql_names = [person.name for person in models.Person.query.all()]
 
-    with open(path.relpath("mptracker/placename_data/scraper-curata.json"),
+    with open(path.relpath("mptracker/scraper/scraper_curata_out.json"),
               'r', encoding='utf-8') as f:
         scraper_result = json.load(f)
 
