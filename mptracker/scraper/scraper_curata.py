@@ -27,8 +27,7 @@ class RomaniaCurata(Scraper):
 
         for url in url_set:
             print(url)
-            from time import sleep
-            sleep(2)
+            create_throttle(20)
             main_page = self.fetch_url(url)
 
             name_link = main_page.find('.entry-title').text()
