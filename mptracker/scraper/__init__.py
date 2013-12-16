@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from collections import defaultdict
 import flask
 from flask.ext.script import Manager
@@ -807,6 +807,52 @@ def controversy():
                 'id': voting_session.id,
                 'controversy_id': None,
             })
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def position():
+    import csv, requests, io, sqlalchemy as sa
+    url = flask.current_app.config['POSITION_PONTA2_CSV_URL']
+    resp = requests.get(url)
+    csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
+
+    name_search = models.NameSearch()
+
+    position_patcher = TablePatcher(
+        models.Position,
+        models.db.session,
+        key_columns=['person_id', 'interval', 'title'],
+    )
+
+    with position_patcher.process() as add_position:
+        for row in csv_file:
+            if row['temporary'].strip():
+                continue
+
+            name = row['name'].strip()
+            matches = name_search.find(name)
+
+            if len(matches) == 1:
+                [person] = matches
+                start_date = parse_date(row['start_date'])
+                if row['end_date']:
+                    end_date = parse_date(row['end_date'])
+                else:
+                    end_date = date.max
+
+                add_position({
+                    'person_id': person.id,
+                    'interval': DateRange(start_date, end_date),
+                    'title': row['title'],
+                })
+
+            elif len(matches) > 1:
+                logger.warn("Multiple matches for %r", name)
+
+            else:
+                logger.warn("No matches for %r", name)
 
     models.db.session.commit()
 

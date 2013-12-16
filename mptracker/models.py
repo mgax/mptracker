@@ -484,6 +484,26 @@ class MandateLookup:
         return mandate
 
 
+class NameSearch:
+
+    def __init__(self):
+        self.by_name = [
+            (self.explode(person.name), person)
+            for person in Person.query
+        ]
+
+    def explode(self, name):
+        return frozenset(name.lower().replace('-', ' ').split())
+
+    def find(self, name):
+        exploded_name = self.explode(name)
+        return [
+            person
+            for person_name, person in self.by_name
+            if exploded_name.issubset(person_name)
+        ]
+
+
 def init_app(app):
     register_infinity_adapter()
     db.init_app(app)
