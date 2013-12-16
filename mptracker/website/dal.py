@@ -61,7 +61,10 @@ class DataAccess:
         person = Person.query.get(person_id)
         if person is None:
             raise missing()
-        return {'name': person.name}
+        return {
+            'name': person.name,
+            'romania_curata_text': person.romania_curata,
+        }
 
     def get_mandate2012_details(self, person_id):
         mandate = (
