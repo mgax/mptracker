@@ -812,6 +812,61 @@ def controversy():
 
 
 @scraper_manager.command
+def get_romania_curata():
+    from os import path
+    from difflib import SequenceMatcher as sm
+    from itertools import permutations
+    import json
+    from mptracker.nlp import normalize
+
+    sql_names = [person.name for person in models.Person.query.all()]
+
+    with open(path.relpath("mptracker/scraper/scraper_curata_out.json"),
+              'r', encoding='utf-8') as f:
+        scraper_result = json.load(f)
+
+    with open(path.relpath(
+            'mptracker/scraper/romania_curata_exceptions.json'),
+            'r', encoding='utf-8') as f:
+        person_exceptions = json.load(f)
+
+
+    def matching_score(first_name, second_name):
+        return sm(None, first_name, second_name).ratio() * 100
+
+    def add_person(name, fortune):
+        person = (
+            models.Person.query
+                .filter_by(name=name)
+                .first()
+        )
+        if person != None:
+            person.romania_curata = "\n".join(fortune)
+            print("Found a match for ", name.encode('utf-8'))
+            sql_names.remove(name)
+
+    for name, fortune in scraper_result:
+        name_scraper = normalize(name)
+        max_matching = (0, 0)
+
+        if name_scraper in person_exceptions:
+            add_person(person_exceptions[name_scraper], fortune)
+
+        for temporary_sqlname in sql_names:
+            name_sql = normalize(temporary_sqlname)
+            for perm in permutations(name_scraper.split(" ")):
+                current_matching = matching_score(" ".join(perm), name_sql)
+
+                if max_matching[0] < current_matching:
+                    max_matching = (current_matching, temporary_sqlname)
+
+        if max_matching[0] > 93:
+            add_person(max_matching[1], fortune)
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
 def auto():
     transcripts(n_sessions=20)
     questions(autoanalyze=True)
