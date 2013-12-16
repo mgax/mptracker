@@ -435,6 +435,16 @@ class PolicyDomain(db.Model):
     name = db.Column(db.Text)
 
 
+class Position(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    title = db.Column(db.Text)
+    interval = db.Column(DATERANGE)
+
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    person = db.relationship('Person',
+        backref=db.backref('positions', lazy='dynamic'))
+
+
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
