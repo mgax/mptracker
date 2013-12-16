@@ -15,6 +15,10 @@ logger = logging.getLogger(__name__)
 
 SCRAPER_PACKAGE = path(__file__).abspath().parent
 PROJECT_ROOT = SCRAPER_PACKAGE.parent.parent
+SPREADSHEET_CSV_URL_TEMPLATE = (
+    'https://docs.google.com/spreadsheet/pub'
+    '?key={key}&single=true&gid=0&output=csv'
+)
 
 
 class Scraper(object):
@@ -176,3 +180,7 @@ def parse_date(txt):
         MONTHS[m.group('month')],
         int(m.group('day')),
     )
+
+
+def create_csv_url(key):
+    return SPREADSHEET_CSV_URL_TEMPLATE.format(key=key)

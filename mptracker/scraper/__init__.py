@@ -6,7 +6,8 @@ from flask.ext.script import Manager
 from psycopg2.extras import DateRange
 from path import path
 import requests
-from mptracker.scraper.common import get_cached_session, create_session
+from mptracker.scraper.common import get_cached_session, create_session, \
+                                     create_csv_url
 from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args
 from mptracker.patcher import TablePatcher
@@ -740,7 +741,7 @@ def votes(
 @scraper_manager.command
 def controversy():
     import csv, requests, io, sqlalchemy as sa
-    url = flask.current_app.config['CONTROVERSY_CSV_URL']
+    url = create_csv_url(flask.current_app.config['CONTROVERSY_CSV_KEY'])
     resp = requests.get(url)
     csv_file = csv.DictReader(io.StringIO(resp.text))
 
@@ -815,6 +816,7 @@ def controversy():
 def position():
     import csv, requests, io, sqlalchemy as sa
 
+    config = flask.current_app.config
     name_search = models.NameSearch()
 
     position_patcher = TablePatcher(
@@ -824,7 +826,7 @@ def position():
     )
 
     with position_patcher.process() as add_position:
-        url = flask.current_app.config['POSITION_PONTA2_CSV_URL']
+        url = create_csv_url(config['POSITION_PONTA2_CSV_KEY'])
         resp = requests.get(url)
         csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
         for row in csv_file:
@@ -854,7 +856,7 @@ def position():
             else:
                 logger.warn("No matches for %r", name)
 
-        url = flask.current_app.config['POSITION_BIROU_PERMANENT_CSV_URL']
+        url = create_csv_url(config['POSITION_BIROU_CDEP_CSV_KEY'])
         resp = requests.get(url)
         csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
         for row in csv_file:
