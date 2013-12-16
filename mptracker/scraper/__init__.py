@@ -817,9 +817,8 @@ def get_romania_curata():
     import json
     from mptracker.scraper.scraper_curata import RomaniaCurata
     scraper = RomaniaCurata()
-
-    with open(path.relpath("mptracker/scraper/scraper_curata_out.json",
-        "w")) as f:
+    
+    with open("scraper_curata_out.json", "w") as f:
         json.dump(scraper.fetch_fortunes(), f)
     return ;
     
