@@ -43,6 +43,6 @@ class RomaniaCurata(Scraper):
                 small_fortune = big_fortune.eq(fortune_index)
                 if fortune_index <= 2:
                     continue
-                total_fortunes.append("<p>" + small_fortune.html() + "</p>")
+                total_fortunes.append(small_fortune.text())
             result.append((best_name, total_fortunes))
         return result
