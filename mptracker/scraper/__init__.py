@@ -825,7 +825,7 @@ def position():
         key_columns=['person_id', 'interval', 'title'],
     )
 
-    with position_patcher.process() as add_position:
+    with position_patcher.process(remove=True) as add_position:
         url = create_csv_url(config['POSITION_PONTA2_CSV_KEY'])
         resp = requests.get(url)
         csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
