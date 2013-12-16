@@ -25,6 +25,14 @@
           <li>Ales la nivel național</li>
         {% endif %}
 
+        {% for position in position_list %}
+          <li>
+            {{ position.title }}
+            ({{ position.start_date|datefmt }} &ndash;
+             {{ position.end_date|datefmt or 'prezent' }})
+          </li>
+        {% endfor %}
+
         {% for membership in group_history %}
           <li>
             {%- set url = url_for('.party_detail', party_id=membership.group_id) %}

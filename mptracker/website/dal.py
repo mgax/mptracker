@@ -64,6 +64,14 @@ class DataAccess:
         return {
             'name': person.name,
             'romania_curata_text': person.romania_curata,
+            'position_list': [
+                {
+                    'title': p.title,
+                    'start_date': p.interval.lower,
+                    'end_date': p.interval.upper,
+                }
+                for p in person.positions
+            ],
         }
 
     def get_mandate2012_details(self, person_id):
