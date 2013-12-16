@@ -13,6 +13,7 @@ from path import path
 from mptracker.common import (parse_date, parse_date_range,
                               temp_dir, fix_local_chars)
 from mptracker.dbutil import JsonString, register_infinity_adapter
+from mptracker.nlp import normalize
 from sqlalchemy.dialects.postgresql import UUID, DATERANGE
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy import UniqueConstraint
@@ -486,14 +487,16 @@ class MandateLookup:
 
 class NameSearch:
 
-    def __init__(self):
+    def __init__(self, person_list=None):
+        if person_list is None:
+            person_list = Person.query.all()
         self.by_name = [
             (self.explode(person.name), person)
-            for person in Person.query
+            for person in person_list
         ]
 
     def explode(self, name):
-        return frozenset(name.lower().replace('-', ' ').split())
+        return frozenset(normalize(name).replace('-', ' ').split())
 
     def find(self, name):
         exploded_name = self.explode(name)

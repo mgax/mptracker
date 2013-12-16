@@ -18,6 +18,7 @@ from mptracker.models import (
     VotingSession,
     Vote,
     PolicyDomain,
+    NameSearch,
 )
 
 
@@ -45,16 +46,15 @@ class DataAccess:
         return dict(mandate_data)
 
     def search_person(self, query):
-        sql_query = (
+        name_search = NameSearch(
             Person.query
             .join(Person.mandates)
             .filter_by(year=2012)
-            .filter(func.lower(Person.name).like('%' + query.lower() + '%'))
             .order_by(Person.name)
         )
         return [
             {'name': person.name, 'id': person.id}
-            for person in sql_query.all()
+            for person in name_search.find(query.strip())
         ]
 
     def get_person(self, person_id, missing=KeyError):
