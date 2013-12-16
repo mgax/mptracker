@@ -699,33 +699,31 @@ def votes(
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
 
+
 @scraper_manager.command
 def get_romania_curata():
     from os import path
-    #dumping the result
     from difflib import SequenceMatcher as sm
     from itertools import permutations
     import json
     from mptracker.nlp import normalize
 
     sql_names = [person.name for person in models.Person.query.all()]
-    
-    with open(path.relpath(
-            "mptracker/placename_data/scraper-curata.json"
-                ), 'r', 
-            encoding='utf-8') as f:
+
+    with open(path.relpath("mptracker/placename_data/scraper-curata.json"),
+              'r', encoding='utf-8') as f:
         scraper_result = json.load(f)
-    
+
     with open(path.relpath(
             'mptracker/scraper/romania_curata_exceptions.json'),
             'r', encoding='utf-8') as f:
         person_exceptions = json.load(f)
-    
+
 
     def matching_score(first_name, second_name):
         return sm(None, first_name, second_name).ratio() * 100
-    
-    def add_person(name, fortune): 
+
+    def add_person(name, fortune):
         person = (
             models.Person.query
                 .filter_by(name=name)
@@ -736,10 +734,10 @@ def get_romania_curata():
             print("Found a match for ", name.encode('utf-8'))
             sql_names.remove(name)
 
-    for name, fortune in scraper_result: 
+    for name, fortune in scraper_result:
         name_scraper = normalize(name)
-        max_matching = (0, 0) 
-        
+        max_matching = (0, 0)
+
         if name_scraper in person_exceptions:
             add_person(person_exceptions[name_scraper], fortune)
 
@@ -753,5 +751,5 @@ def get_romania_curata():
 
         if max_matching[0] > 93:
             add_person(max_matching[1], fortune)
+
     models.db.session.commit()
-    
