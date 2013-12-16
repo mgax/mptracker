@@ -47,6 +47,13 @@ def detail(voting_session_id):
     })
 
 
+@votes.route('/votes/controversy')
+def controversy():
+    return flask.render_template('votes/controversy.html', **{
+        'controversy_list': models.Controversy.query.all(),
+    })
+
+
 @job
 def calculate_voting_session_loyalty(voting_session_id):
     voting_session = models.VotingSession.query.get(voting_session_id)

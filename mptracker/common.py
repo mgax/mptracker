@@ -9,6 +9,7 @@ from itertools import chain
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
 from werkzeug.urls import url_decode, url_parse
+from werkzeug.wsgi import FileWrapper
 from flask.ext.rq import job
 from babel.dates import format_date
 from psycopg2.extras import DateRange
@@ -88,7 +89,11 @@ def ocr_url(url, max_pages=MAX_OCR_PAGES):
     http_session = create_session(cache_name=pdf_cache_name, throttle=0.5)
 
     with temp_dir() as tmp:
-        pdf_data = http_session.get(url).content
+        resp = http_session.get(url)
+        if resp.status_code != 200:
+            raise RuntimeError("PDF download failure (%d) at %r"
+                               % (resp.status_code, url))
+        pdf_data = resp.content
         pdf_path = tmp / 'document.pdf'
         with pdf_path.open('wb') as f:
             f.write(pdf_data)
@@ -125,3 +130,12 @@ def model_to_dict(model, namelist):
 
 def url_args(url):
     return url_decode(url_parse(url).query)
+
+
+def buffer_on_disk(data_iter):
+    tmp = tempfile.TemporaryFile(mode='w+', encoding='utf-8')
+    for block in data_iter:
+        tmp.write(block)
+    tmp.flush()
+    tmp.seek(0)
+    return FileWrapper(tmp)

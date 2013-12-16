@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static',
         filename='website.css') }}">
     {% block title %}{% endblock %}
+    {% block styles %}{% endblock %}
     <script>window.app = {};</script>
   </head>
 
@@ -26,5 +27,6 @@
         filename='lib/bootstrap-3.0.2/js/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='website.js') }}"></script>
     {% block scripts %}{% endblock %}
+    {%- include 'analytics.html' %}
   </body>
 </html>

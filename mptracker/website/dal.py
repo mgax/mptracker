@@ -1,8 +1,10 @@
 from datetime import date
+from collections import defaultdict
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from jinja2 import filters
 from mptracker.models import (
+    County,
     Person,
     Mandate,
     MpGroup,
@@ -21,6 +23,27 @@ from mptracker.models import (
 
 class DataAccess:
 
+    def get_county_name_map(self):
+        return {c.code: c.name for c in County.query}
+
+    def get_2012_mandates_by_county(self):
+        mandates = (
+            Mandate.query
+            .filter_by(year=2012)
+            .join(Mandate.person)
+            .join(Mandate.county)
+        )
+
+        mandate_data = defaultdict(list)
+        for m in mandates:
+            key = '%s%d' % (m.county.code, m.college)
+            mandate_data[key].append({
+                'name': m.person.name,
+                'person_id': m.person_id,
+            })
+
+        return dict(mandate_data)
+
     def search_person(self, query):
         sql_query = (
             Person.query
@@ -38,7 +61,10 @@ class DataAccess:
         person = Person.query.get(person_id)
         if person is None:
             raise missing()
-        return {'name': person.name}
+        return {
+            'name': person.name,
+            'romania_curata_text': person.romania_curata,
+        }
 
     def get_mandate2012_details(self, person_id):
         mandate = (
@@ -86,13 +112,17 @@ class DataAccess:
 
         rv['vote'] = {
             'attendance': votes_attended / voting_session_count,
-            'loyalty': votes_loyal / votes_attended,
         }
+        if votes_attended > 0:
+            rv['vote']['loyalty'] = votes_loyal / votes_attended
 
         rv['speeches'] = mandate.transcripts.count()
         rv['proposals'] = mandate.sponsorships.count()
 
         rv['recent_activity'] = self._get_recent_activity(mandate)
+
+        if mandate.picture_url is not None:
+            rv['picture_filename'] = '%s.jpg' % str(mandate.id)
 
         return rv
 
@@ -259,7 +289,11 @@ class DataAccess:
             .filter_by(policy_domain_id=policy_id)
         )
         return [
-            {'title': proposal.title, 'id': proposal.id}
+            {
+                'title': proposal.title,
+                'id': proposal.id,
+                'status': proposal.status,
+            }
             for proposal in proposal_query
         ]
 

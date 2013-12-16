@@ -1,11 +1,12 @@
 import logging
 from collections import defaultdict
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
 from mptracker import models
-from mptracker.common import ocr_url, csv_lines
+from mptracker.common import ocr_url, csv_lines, buffer_on_disk
 from mptracker.nlp import match_text_for_mandate
 from mptracker.auth import require_privilege
 
@@ -218,3 +219,29 @@ def ask_save_flags(ask_id):
     models.db.session.commit()
     url = flask.url_for('.question_detail', question_id=ask.question_id)
     return flask.redirect(url)
+
+
+@questions.route('/questions/_dump/questions.csv')
+def question_dump():
+    cols = ['name', 'legislature', 'date', 'title', 'score']
+    ask_query = (
+        models.Ask.query
+        .options(
+            joinedload('question'),
+            joinedload('mandate'),
+            joinedload('mandate.person'),
+            joinedload('match_row'),
+        )
+    )
+    def make_row(ask):
+        score = ask.match.score
+        return {
+            'name': ask.mandate.person.name,
+            'legislature': str(ask.mandate.year),
+            'date': str(ask.question.date),
+            'title': str(ask.question.title),
+            'score': '' if score is None else str(score),
+        }
+    rows = (make_row(ask) for ask in ask_query.yield_per(10))
+    data = buffer_on_disk(csv_lines(cols, rows))
+    return flask.Response(data, mimetype='text/csv')

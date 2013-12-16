@@ -1,11 +1,14 @@
 import logging
 from datetime import timedelta, date
 from collections import defaultdict
+import flask
 from flask.ext.script import Manager
 from psycopg2.extras import DateRange
+from path import path
+import requests
 from mptracker.scraper.common import get_cached_session, create_session
 from mptracker import models
-from mptracker.common import parse_date, model_to_dict
+from mptracker.common import parse_date, model_to_dict, url_args
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -105,6 +108,7 @@ def people(
     cache_name=None,
     throttle=None,
     no_commit=False,
+    add_people=False,
 ):
     from mptracker.scraper.people import MandateScraper
 
@@ -120,6 +124,9 @@ def people(
         key_columns=['year', 'cdep_number'],
     )
 
+    new_people = 0
+    chamber_by_slug = {c.slug: c for c in models.Chamber.query}
+
     with mandate_patcher.process() as add_mandate:
         for mandate in mandate_scraper.fetch(year):
             row = mandate.as_dict([
@@ -130,6 +137,8 @@ def people(
                 'constituency',
                 'picture_url',
             ])
+            assert mandate.chamber_number == 2
+            row['chamber_id'] = chamber_by_slug['cdep'].id
             if year == '2012':
                 end_date = mandate.end_date or date.max
                 row['interval'] = DateRange(TERM_2012_START, end_date)
@@ -138,9 +147,17 @@ def people(
                 models.Person.query
                     .filter_by(name=mandate.person_name)
                     .first())
+
             if person is None:
-                raise RuntimeError("Can't find person named %r"
-                                   % mandate.person_name)
+                if add_people:
+                    person = models.Person(name=mandate.person_name)
+                    models.db.session.add(person)
+                    models.db.session.flush()
+                    new_people += 1
+
+                else:
+                    raise RuntimeError("Can't find person named %r"
+                                       % mandate.person_name)
 
             row['person_id'] = person.id
 
@@ -156,12 +173,32 @@ def people(
 
             add_mandate(row)
 
+    if new_people:
+        logger.info("%d new people", new_people)
+
     if no_commit:
         logger.warn("Rolling back the transaction")
         models.db.session.rollback()
 
     else:
         models.db.session.commit()
+
+
+@scraper_manager.command
+def download_pictures():
+    localdir = path(flask.current_app.static_folder) / 'mandate-pictures'
+    localdir.mkdir_p()
+    for mandate in models.Mandate.query:
+        if mandate.picture_url is not None:
+            assert mandate.picture_url.endswith('.jpg')
+            filename = '%s.jpg' % str(mandate.id)
+            local_path = localdir / filename
+            if not local_path.isfile():
+                resp = requests.get(mandate.picture_url)
+                assert resp.headers['Content-Type'] == 'image/jpeg'
+                with local_path.open('wb') as f:
+                    f.write(resp.content)
+                logger.info('Saved %s (%d bytes)', filename, len(resp.content))
 
 
 @scraper_manager.command
@@ -376,7 +413,7 @@ def proposals(
                 record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
                     'decision_chamber', 'url', 'title', 'date', 'number_bpi',
                     'number_cdep', 'number_senate', 'proposal_type',
-                    'pdf_url'])
+                    'pdf_url', 'status', 'status_text'])
 
                 slug = prop.decision_chamber
                 if slug:
@@ -699,12 +736,140 @@ def votes(
         for voting_session_id in new_voting_session_list:
             calculate_voting_session_loyalty.delay(voting_session_id)
 
-#this is code from issue#19
-@scraper_manager.command
-def scrapecurata():
-        
-    from mptracker.scraper.scraper_curata import RomaniaCurata
-    my_scraper = RomaniaCurata()
-    my_scraper.fetch_fortunes()
 
-    print("curata called")
+@scraper_manager.command
+def controversy():
+    import csv, requests, io, sqlalchemy as sa
+    url = flask.current_app.config['CONTROVERSY_CSV_URL']
+    resp = requests.get(url)
+    csv_file = csv.DictReader(io.StringIO(resp.text))
+
+    old_voting_sessions = set(
+        models.VotingSession.query
+        .filter(models.VotingSession.controversy_id != None)
+        .all()
+    )
+
+    controversy_map = {}
+
+    for line in csv_file:
+        cdeppk = url_args(line['link']).get('idv', type=int)
+        slug = line['slug']
+        if slug not in controversy_map:
+            controversy_map[slug] = {
+                'data': {
+                    'slug': slug,
+                    'title': line['title'],
+                },
+                'voting_session_rows': [],
+            }
+
+        voting_session = (
+            models.VotingSession.query
+            .filter_by(cdeppk=cdeppk)
+            .first()
+        )
+        controversy_map[slug]['voting_session_rows'].append(voting_session)
+
+    controversy_patcher = TablePatcher(
+        models.Controversy,
+        models.db.session,
+        key_columns=['slug'],
+    )
+
+    with controversy_patcher.process(remove=True) as add_controversy:
+        for controversy in controversy_map.values():
+            result = add_controversy(controversy['data'])
+            controversy['row'] = result.row
+
+    models.db.session.flush()
+
+    voting_session_patcher = TablePatcher(
+        models.VotingSession,
+        models.db.session,
+        key_columns=['id'],
+    )
+
+    new_voting_sessions = set()
+
+    with voting_session_patcher.process() as add_voting_session:
+        for controversy in controversy_map.values():
+            for voting_session in controversy['voting_session_rows']:
+                data = {
+                    'id': voting_session.id,
+                    'controversy_id': controversy['row'].id,
+                }
+                add_voting_session(data, create=False)
+                new_voting_sessions.add(voting_session)
+
+        for voting_session in old_voting_sessions - new_voting_sessions:
+            add_voting_session({
+                'id': voting_session.id,
+                'controversy_id': None,
+            })
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def get_romania_curata():
+    from os import path
+    from difflib import SequenceMatcher as sm
+    from itertools import permutations
+    import json
+    from mptracker.nlp import normalize
+
+    sql_names = [person.name for person in models.Person.query.all()]
+
+    with open(path.relpath("mptracker/scraper/scraper_curata_out.json"),
+              'r', encoding='utf-8') as f:
+        scraper_result = json.load(f)
+
+    with open(path.relpath(
+            'mptracker/scraper/romania_curata_exceptions.json'),
+            'r', encoding='utf-8') as f:
+        person_exceptions = json.load(f)
+
+
+    def matching_score(first_name, second_name):
+        return sm(None, first_name, second_name).ratio() * 100
+
+    def add_person(name, fortune):
+        person = (
+            models.Person.query
+                .filter_by(name=name)
+                .first()
+        )
+        if person != None:
+            person.romania_curata = "\n".join(fortune)
+            print("Found a match for ", name.encode('utf-8'))
+            sql_names.remove(name)
+
+    for name, fortune in scraper_result:
+        name_scraper = normalize(name)
+        max_matching = (0, 0)
+
+        if name_scraper in person_exceptions:
+            add_person(person_exceptions[name_scraper], fortune)
+
+        for temporary_sqlname in sql_names:
+            name_sql = normalize(temporary_sqlname)
+            for perm in permutations(name_scraper.split(" ")):
+                current_matching = matching_score(" ".join(perm), name_sql)
+
+                if max_matching[0] < current_matching:
+                    max_matching = (current_matching, temporary_sqlname)
+
+        if max_matching[0] > 93:
+            add_person(max_matching[1], fortune)
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def auto():
+    transcripts(n_sessions=20)
+    questions(autoanalyze=True)
+    votes(days=20, autoanalyze=True)
+    groups()
+    proposals(autoanalyze=True)

@@ -43,6 +43,7 @@ class Person(db.Model):
     email_value = db.Column(db.Text)
     facebook_url = db.Column(db.Text)
     twitter_url = db.Column(db.Text)
+    romania_curata = db.Column(db.Text)
 
     @property
     def emails(self):
@@ -324,6 +325,8 @@ class Proposal(db.Model):
     number_bpi = db.Column(db.Text)
     date = db.Column(db.Date)
     proposal_type = db.Column(db.Text)
+    status = db.Column(db.Text)
+    status_text = db.Column(db.Text)
 
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
     decision_chamber = db.relationship('Chamber')
@@ -361,6 +364,12 @@ class ProposalActivityItem(db.Model):
         backref=db.backref('activity', lazy='dynamic', cascade='all'))
 
 
+class Controversy(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    slug = db.Column(db.Text, nullable=False, unique=True)
+    title = db.Column(db.Text)
+
+
 class VotingSession(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     date = db.Column(db.Date)
@@ -371,6 +380,10 @@ class VotingSession(db.Model):
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
     proposal = db.relationship('Proposal',
+        backref=db.backref('voting_sessions', lazy='dynamic'))
+
+    controversy_id = db.Column(UUID, db.ForeignKey('controversy.id'))
+    controversy = db.relationship('Controversy',
         backref=db.backref('voting_sessions', lazy='dynamic'))
 
     @property

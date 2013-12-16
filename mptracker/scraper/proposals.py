@@ -107,6 +107,14 @@ class ProposalScraper(Scraper):
             p = Proposal(*cdeppks)
             yield p
 
+    def classify_status(self, text):
+        if 'LEGE' in text:
+            return 'approved'
+        elif u'procedură legislativă încetată' in text:
+            return 'rejected'
+        else:
+            return 'inprogress'
+
     def fetch_proposal_details(self, prop):
         page = self.fetch_url(prop.url)
         page_cdep = page_senate = None
@@ -123,6 +131,8 @@ class ProposalScraper(Scraper):
         prop.number_senate = None
         prop.decision_chamber = None
         prop.pdf_url = None
+        prop.status = None
+        prop.status_text = None
 
         [hook_td] = pqitems(page, ':contains("Nr. înregistrare")')
         metadata_table = pq(hook_td.parents('table')[-1])
@@ -160,6 +170,10 @@ class ProposalScraper(Scraper):
                     prop.decision_chamber = 'common'
                 else:
                     logger.warn("Unknown decision_chamber %r", txt)
+
+            elif label == "Stadiu:":
+                prop.status_text = val_td.text()
+                prop.status = self.classify_status(prop.status_text)
 
         prop.date = get_date_from_numbers([prop.number_bpi,
                                          prop.number_cdep,

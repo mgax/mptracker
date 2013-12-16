@@ -9,5 +9,10 @@
         <a href="{{ url }}">{{ policy.name }}</a>
       </li>
     {% endfor %}
+
+    <li>
+      {%- set url = url_for('.policy_detail', policy_id=None) %}
+      <a href="{{ url }}">Altele</a>
+    </li>
   </ul>
 {% endblock %}

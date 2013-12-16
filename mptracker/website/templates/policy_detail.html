@@ -1,17 +1,39 @@
 {% extends 'layout.html' %}
 
+{% set STATUS_LABEL = {
+    'inprogress': "În lucru",
+    'approved': "Aprobat",
+    'rejected': "Respins",
+  } %}
+
 
 {% block content %}
   <h1>{{ policy_name }}</h1>
 
   <p class="placeholder" style="height: 200px">analiză, hot issues</p>
 
+  <table class="table">
+    <thead>
+    </thead>
+
+    <tbody>
+      {%- for proposal in proposal_list %}
+        <tr>
+          {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
+          <td>
+            <a href="{{ url }}">
+              {{- proposal.title|truncate(80) -}}
+            </a>
+          </td>
+
+          <td class="proposal-status-{{ proposal.status }}">
+            {{- STATUS_LABEL[proposal.status] -}}
+          </td>
+        </tr>
+      {%- endfor %}
+    </tbody>
+  </table>
+
   <ul class="list-unstyled">
-    {%- for proposal in proposal_list %}
-      <li>
-        {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
-        <a href="{{ url }}">{{ proposal.title|truncate(80) }}</a>
-      </li>
-    {%- endfor %}
   </ul>
 {% endblock %}

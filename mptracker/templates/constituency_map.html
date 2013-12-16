@@ -47,16 +47,16 @@
 <script src="{{ url_for('static', filename='lib/topojson/topojson.js') }}"></script>
 <script src="{{ url_for('static', filename='lib/leaflet-pip/leaflet-pip.min.js') }}"></script>
 <script src="{{ url_for('static', filename='lib/leaflet.geocoding/leaflet.geocoding.js') }}"></script>
+<script src="{{ url_for('static', filename='constituency.js') }}"></script>
 <script>
 (function() {
   "use strict";
   {%- set colleges_url = url_for('static', filename='colleges.topojson') %}
-  app.constituency = {
+  app.create_map({
     colleges_url: {{ colleges_url|tojson|safe }},
     county_name: {{ county_name|tojson|safe }},
     mandate_data: {{ mandate_data|tojson|safe }}
-  };
+  });
 })();
 </script>
-<script src="{{ url_for('static', filename='constituency.js') }}"></script>
 {% endblock %}

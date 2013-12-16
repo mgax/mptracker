@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  {%- from 'bits.html' import breadcrumbs %}
+  {%- set breadcrumb_links = [
+        ("mptracker",
+            url_for('pages.home')),
+        ("voturi",
+            None),
+        ("controversate",
+            None),
+      ] %}
+  {{ breadcrumbs(breadcrumb_links) }}
+
+  <h1>Voturi controversate</h1>
+
+  {%- for controversy in controversy_list %}
+    <h3>{{ controversy.title }}</h3>
+
+    <ul>
+    {%- for voting_session in controversy.voting_sessions %}
+      {%- set url = url_for('.detail', voting_session_id=voting_session.id) %}
+      <li><a href="{{ url }}">{{ voting_session.subject }}</a></li>
+    {%- endfor %}
+    </ul>
+  {%- endfor %}
+{% endblock %}

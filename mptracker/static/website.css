@@ -12,3 +12,15 @@
 .proposal-activity-at-se {
     background: #dfefff;
 }
+
+.proposal-status-inprogress {
+    background: #f5f5a6;
+}
+
+.proposal-status-approved {
+    background: #9df39d;
+}
+
+.proposal-status-rejected {
+    background: #fcc1c1;
+}

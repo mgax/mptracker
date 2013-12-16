@@ -3,6 +3,7 @@ import flask
 from werkzeug.exceptions import NotFound
 from mptracker import models
 from mptracker.website.dal import DataAccess
+from path import path
 
 dal = DataAccess()
 
@@ -72,7 +73,18 @@ def home():
 @pages.route('/persoane/')
 @section('person')
 def person_index():
-    return flask.render_template('person_index.html')
+    mandates_by_county = dal.get_2012_mandates_by_county()
+    for county_list in mandates_by_county.values():
+        for mandate_info in county_list:
+            mandate_info['url'] = flask.url_for(
+                '.person_detail',
+                person_id=mandate_info['person_id'],
+            )
+
+    return flask.render_template('person_index.html', **{
+        'county_name_map': dal.get_county_name_map(),
+        'mandates_by_county': mandates_by_county,
+    })
 
 
 @pages.route('/persoane/_search')
@@ -91,9 +103,16 @@ def person_index_search():
 @pages.route('/persoane/<uuid:person_id>')
 @section('person')
 def person_detail(person_id):
-    person = dal.get_person(person_id, missing=NotFound)
-    ctx = {'person_name': person['name']}
+    ctx = dal.get_person(person_id, missing=NotFound)
     ctx.update(dal.get_mandate2012_details(person_id))
+
+    if 'picture_filename' in ctx:
+        picture_rel_path = path('mandate-pictures') / ctx['picture_filename']
+        if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
+            ctx['picture_url'] = flask.url_for(
+                'static',
+                filename=picture_rel_path,
+            )
 
     for item in ctx['recent_activity']:
         if item['type'] == 'proposal':
@@ -144,11 +163,15 @@ def policy_index():
 
 
 @pages.route('/politici/<uuid:policy_id>')
+@pages.route('/politici/altele')
 @section('policy')
-def policy_detail(policy_id):
-    policy = dal.get_policy(policy_id, missing=NotFound)
+def policy_detail(policy_id=None):
+    if policy_id is None:
+        policy_name = "Altele"
+    else:
+        policy_name = dal.get_policy(policy_id, missing=NotFound)['name']
     ctx = {
-        'policy_name': policy['name'],
+        'policy_name': policy_name,
         'proposal_list': dal.get_policy_proposal_list(policy_id),
     }
     return flask.render_template('policy_detail.html', **ctx)
