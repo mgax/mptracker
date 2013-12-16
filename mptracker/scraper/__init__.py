@@ -814,6 +814,16 @@ def controversy():
 @scraper_manager.command
 def get_romania_curata():
     from os import path
+    import json
+    from mptracker.scraper.scraper_curata import RomaniaCurata
+    scraper = RomaniaCurata()
+
+    with open(path.relpath("mptracker/scraper/scraper_curata_out.json",
+        "w") as f:
+        json.dump(scraper.fetch_fortunes(), f)
+    return ;
+    
+    from os import path
     from difflib import SequenceMatcher as sm
     from itertools import permutations
     import json
