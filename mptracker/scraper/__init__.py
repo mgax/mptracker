@@ -819,7 +819,7 @@ def get_romania_curata():
     scraper = RomaniaCurata()
 
     with open(path.relpath("mptracker/scraper/scraper_curata_out.json",
-        "w") as f:
+        "w")) as f:
         json.dump(scraper.fetch_fortunes(), f)
     return ;
     
