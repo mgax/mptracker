@@ -814,9 +814,6 @@ def controversy():
 @scraper_manager.command
 def position():
     import csv, requests, io, sqlalchemy as sa
-    url = flask.current_app.config['POSITION_PONTA2_CSV_URL']
-    resp = requests.get(url)
-    csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
 
     name_search = models.NameSearch()
 
@@ -827,6 +824,9 @@ def position():
     )
 
     with position_patcher.process() as add_position:
+        url = flask.current_app.config['POSITION_PONTA2_CSV_URL']
+        resp = requests.get(url)
+        csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
         for row in csv_file:
             if row['temporary'].strip():
                 continue
@@ -853,6 +853,29 @@ def position():
 
             else:
                 logger.warn("No matches for %r", name)
+
+        url = flask.current_app.config['POSITION_BIROU_PERMANENT_CSV_URL']
+        resp = requests.get(url)
+        csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
+        for row in csv_file:
+            name = row['name'].strip()
+            matches = name_search.find(name)
+
+            assert len(matches) == 1, \
+                "Expected a single match for %r, got %r" % (name, matches)
+
+            [person] = matches
+            start_date = parse_date(row['start_date'])
+            if row['end_date']:
+                end_date = parse_date(row['end_date'])
+            else:
+                end_date = date.max
+
+            add_position({
+                'person_id': person.id,
+                'interval': DateRange(start_date, end_date),
+                'title': row['title'] + ", Biroul Permanent",
+            })
 
     models.db.session.commit()
 
