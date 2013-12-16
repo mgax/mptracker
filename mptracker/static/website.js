@@ -19,13 +19,12 @@ app.PersonSearch = Backbone.View.extend({
 
     initialize: function(options) {
         this.url = options['url'];
-        this.result_list = $('<ul class="list-unstyled">').appendTo(this.el);
     },
 
     on_submit: function(evt) {
         evt.preventDefault();
-        var name = this.$el.find('[name=name]').val();
-        this.update(name);
+        this.query = this.$el.find('[name=query]').val();
+        this.update(this.query);
     },
 
     update: function(query) {
@@ -34,12 +33,26 @@ app.PersonSearch = Backbone.View.extend({
     },
 
     got_update_result: function(data) {
-        this.result_list.empty();
-        _(data['results']).forEach(function(result) {
-            var link = $('<a>').attr('href', result['url']).text(name);
-            var html = this.item_html(result);
-            this.result_list.append(html);
-        }, this);
+        this.$el.find('.results').remove();
+
+        if(data['results'].length > 0) {
+            var result_list = $('<ul class="list-unstyled results">');
+            result_list.appendTo(this.el);
+            _(data['results']).forEach(function(result) {
+                var link = $('<a>').attr('href', result['url']).text(name);
+                var html = this.item_html(result);
+                result_list.append(html);
+            }, this);
+        }
+        else {
+            var message = $('<p class="results">');
+            message.append(
+                "Nu am gasit ",
+                $('<span>').text(this.query),
+                "."
+            );
+            this.$el.append(message);
+        }
     }
 
 });
