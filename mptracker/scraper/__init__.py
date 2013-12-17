@@ -21,6 +21,10 @@ ONE_DAY = timedelta(days=1)
 
 TERM_2012_START = date(2012, 12, 19)
 
+CONTROVERSY_CSV_KEY = '0Aoh2FHzCVVhldEJEMkhEblJCaWdGdy1FWlg5a0dzNEE'
+POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
+POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
+
 
 @scraper_manager.command
 def questions(
@@ -741,7 +745,7 @@ def votes(
 @scraper_manager.command
 def controversy():
     import csv, requests, io, sqlalchemy as sa
-    url = create_csv_url(flask.current_app.config['CONTROVERSY_CSV_KEY'])
+    url = create_csv_url(CONTROVERSY_CSV_KEY)
     resp = requests.get(url)
     csv_file = csv.DictReader(io.StringIO(resp.text))
 
@@ -816,7 +820,6 @@ def controversy():
 def position():
     import csv, requests, io, sqlalchemy as sa
 
-    config = flask.current_app.config
     name_search = models.NameSearch()
 
     position_patcher = TablePatcher(
@@ -826,7 +829,7 @@ def position():
     )
 
     with position_patcher.process(remove=True) as add_position:
-        url = create_csv_url(config['POSITION_PONTA2_CSV_KEY'])
+        url = create_csv_url(POSITION_PONTA2_CSV_KEY)
         resp = requests.get(url)
         csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
         for row in csv_file:
@@ -856,7 +859,7 @@ def position():
             else:
                 logger.warn("No matches for %r", name)
 
-        url = create_csv_url(config['POSITION_BIROU_CDEP_CSV_KEY'])
+        url = create_csv_url(POSITION_BIROU_CDEP_CSV_KEY)
         resp = requests.get(url)
         csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
         for row in csv_file:
