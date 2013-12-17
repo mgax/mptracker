@@ -3,6 +3,8 @@ from datetime import date, timedelta
 from urllib.parse import urlencode, urlparse, parse_qs
 import logging
 import re
+import csv
+import io
 from path import path
 import requests
 from werkzeug.urls import url_decode, url_parse
