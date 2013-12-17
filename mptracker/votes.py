@@ -4,6 +4,7 @@ import logging
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
+from sqlalchemy import or_
 from mptracker import models
 
 
@@ -68,6 +69,7 @@ def calculate_voting_session_loyalty(voting_session_id):
         models.db.session.query(
             models.Vote,
             models.MpGroup,
+            models.CabinetMembership,
         )
         .join(models.Vote.mandate)
         .join(models.Mandate.group_memberships)
@@ -77,6 +79,15 @@ def calculate_voting_session_loyalty(voting_session_id):
                 voting_session.date,
             ),
         )
+        .outerjoin(models.MpGroup.cabinet_memberships)
+        .filter(
+            or_(
+                models.CabinetMembership.interval == None,
+                models.CabinetMembership.interval.contains(
+                    voting_session.date,
+                ),
+            )
+        )
         .filter(
             models.Vote.voting_session == voting_session
         )
@@ -84,9 +95,12 @@ def calculate_voting_session_loyalty(voting_session_id):
 
     vote_map = defaultdict(lambda: defaultdict(list))
 
-    for vote, group in voter_query:
+    for vote, group, cabinet_membership in voter_query:
         if group != indep_group:
             vote_map[group.id][vote.choice].append(vote)
+
+        if cabinet_membership is not None:
+            vote_map['_cabinet'][vote.choice].append(vote)
 
     group_vote_map = {
         gv.mp_group_id: gv for gv in
@@ -102,6 +116,8 @@ def calculate_voting_session_loyalty(voting_session_id):
         )
         return top[1]
 
+    cabinet_top_choice = get_top_choice(vote_map.pop('_cabinet'))
+
     for mp_group_id, votes_by_choice in vote_map.items():
         top_choice = get_top_choice(votes_by_choice)
 
@@ -112,11 +128,14 @@ def calculate_voting_session_loyalty(voting_session_id):
                 voting_session=voting_session,
             )
         group_vote.choice = top_choice
+        group_vote.loyal_to_cabinet = bool(top_choice == cabinet_top_choice)
 
         for choice, votes in votes_by_choice.items():
             loyal = bool(choice == top_choice)
+            loyal_to_cabinet = bool(top_choice == cabinet_top_choice)
             for vote in votes:
                 vote.loyal = loyal
+                vote.loyal_to_cabinet = loyal_to_cabinet
 
     models.db.session.commit()
 
