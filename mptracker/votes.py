@@ -93,14 +93,17 @@ def calculate_voting_session_loyalty(voting_session_id):
         models.GroupVote.query.filter_by(voting_session_id=voting_session.id)
     }
 
-    for mp_group_id, votes_by_choice in vote_map.items():
+    def get_top_choice(votes_by_choice):
         top = max(
             (len(votes), choice)
             for choice, votes
             in votes_by_choice.items()
             if choice != 'novote'
         )
-        top_choice = top[1]
+        return top[1]
+
+    for mp_group_id, votes_by_choice in vote_map.items():
+        top_choice = get_top_choice(votes_by_choice)
 
         group_vote = group_vote_map.get(mp_group_id)
         if group_vote is None:
