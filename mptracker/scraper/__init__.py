@@ -7,7 +7,7 @@ from psycopg2.extras import DateRange
 from path import path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
-                                     create_csv_url
+                                     get_gdrive_csv
 from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args
 from mptracker.patcher import TablePatcher
@@ -744,11 +744,6 @@ def votes(
 
 @scraper_manager.command
 def controversy():
-    import csv, requests, io, sqlalchemy as sa
-    url = create_csv_url(CONTROVERSY_CSV_KEY)
-    resp = requests.get(url)
-    csv_file = csv.DictReader(io.StringIO(resp.text))
-
     old_voting_sessions = set(
         models.VotingSession.query
         .filter(models.VotingSession.controversy_id != None)
@@ -757,7 +752,7 @@ def controversy():
 
     controversy_map = {}
 
-    for line in csv_file:
+    for line in get_gdrive_csv(CONTROVERSY_CSV_KEY):
         cdeppk = url_args(line['link']).get('idv', type=int)
         slug = line['slug']
         if slug not in controversy_map:
@@ -818,8 +813,6 @@ def controversy():
 
 @scraper_manager.command
 def position():
-    import csv, requests, io, sqlalchemy as sa
-
     name_search = models.NameSearch()
 
     position_patcher = TablePatcher(
@@ -829,10 +822,7 @@ def position():
     )
 
     with position_patcher.process(remove=True) as add_position:
-        url = create_csv_url(POSITION_PONTA2_CSV_KEY)
-        resp = requests.get(url)
-        csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
-        for row in csv_file:
+        for row in get_gdrive_csv(POSITION_PONTA2_CSV_KEY):
             if row['temporary'].strip():
                 continue
 
@@ -859,10 +849,7 @@ def position():
             else:
                 logger.warn("No matches for %r", name)
 
-        url = create_csv_url(POSITION_BIROU_CDEP_CSV_KEY)
-        resp = requests.get(url)
-        csv_file = csv.DictReader(io.StringIO(resp.content.decode('utf-8')))
-        for row in csv_file:
+        for row in get_gdrive_csv(POSITION_BIROU_CDEP_CSV_KEY):
             name = row['name'].strip()
             matches = name_search.find(name)
 

@@ -184,3 +184,10 @@ def parse_date(txt):
 
 def create_csv_url(key):
     return SPREADSHEET_CSV_URL_TEMPLATE.format(key=key)
+
+
+def get_gdrive_csv(key):
+    url = create_csv_url(key)
+    resp = requests.get(url)
+    text = resp.content.decode('utf-8')
+    return csv.DictReader(io.StringIO(text))
