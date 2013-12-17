@@ -813,7 +813,12 @@ def controversy():
 
 @scraper_manager.command
 def position():
-    name_search = models.NameSearch()
+    name_search = models.NameSearch(
+        models.Person.query
+        .join(models.Mandate)
+        .filter(models.Mandate.year == 2012)
+        .all()
+    )
 
     position_patcher = TablePatcher(
         models.Position,
