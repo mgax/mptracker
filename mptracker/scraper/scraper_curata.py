@@ -27,7 +27,7 @@ class RomaniaCurata(Scraper):
 
         for url in url_set:
             print(url)
-            create_throttle(10)
+            create_throttle(20)
             main_page = self.fetch_url(url)
 
             name_link = main_page.find('.entry-title').text()
@@ -41,7 +41,8 @@ class RomaniaCurata(Scraper):
 
             for fortune_index in range(len(big_fortune)):
                 small_fortune = big_fortune.eq(fortune_index)
-                if small_fortune('strong') == []:
-                    total_fortunes.append(small_fortune.text())
+                if fortune_index <= 2:
+                    continue
+                total_fortunes.append(small_fortune.text())
             result.append((best_name, total_fortunes))
         return result

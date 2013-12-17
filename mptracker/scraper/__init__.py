@@ -884,6 +884,7 @@ def position():
 
 @scraper_manager.command
 def get_romania_curata():
+        
     from os import path
     from difflib import SequenceMatcher as sm
     from itertools import permutations
