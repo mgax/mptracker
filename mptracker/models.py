@@ -406,6 +406,7 @@ class VotingSession(db.Model):
 class GroupVote(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     choice = db.Column(db.Text)
+    loyal_to_cabinet = db.Column(db.Boolean)
 
     voting_session_id = db.Column(UUID, db.ForeignKey('voting_session.id'),
                                   nullable=False, index=True)
@@ -421,6 +422,7 @@ class Vote(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     choice = db.Column(db.Text)
     loyal = db.Column(db.Boolean)
+    loyal_to_cabinet = db.Column(db.Boolean)
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
