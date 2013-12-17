@@ -24,6 +24,7 @@ TERM_2012_START = date(2012, 12, 19)
 CONTROVERSY_CSV_KEY = '0Aoh2FHzCVVhldEJEMkhEblJCaWdGdy1FWlg5a0dzNEE'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
 POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
+CABINET_PARTY_CSV_KEY = '0AlBmcLkxpBOXdEpZVzZ5MUNvb004b0Z3UGFZUjdzMUE'
 
 
 @scraper_manager.command
@@ -861,6 +862,28 @@ def position():
                 'person_id': person.id,
                 'interval': parse_interval(row['start_date'], row['end_date']),
                 'title': row['title'] + ", Biroul Permanent",
+            })
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def cabinet_party():
+    patcher = TablePatcher(
+        models.CabinetMembership,
+        models.db.session,
+        key_columns=['mp_group_id', 'interval'],
+    )
+
+    group_by_code = {g.short_name: g for g in models.MpGroup.query}
+
+    with patcher.process(remove=True) as add_membership:
+        for row in get_gdrive_csv(CABINET_PARTY_CSV_KEY):
+            assert row['legislature'] == '2012'
+            group = group_by_code[row['code']]
+            add_membership({
+                'mp_group_id': group.id,
+                'interval': parse_interval(row['start_date'], row['end_date']),
             })
 
     models.db.session.commit()
