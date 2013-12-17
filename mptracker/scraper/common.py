@@ -12,6 +12,8 @@ from pyquery import PyQuery as pq
 from lxml.html.clean import clean_html
 from lxml.html import fromstring, HTMLParser
 from lxml import etree
+from psycopg2.extras import DateRange
+from mptracker.common import parse_date as parse_iso_date
 
 logger = logging.getLogger(__name__)
 
@@ -193,3 +195,12 @@ def get_gdrive_csv(key):
     resp = requests.get(url)
     text = resp.content.decode('utf-8')
     return csv.DictReader(io.StringIO(text))
+
+
+def parse_interval(start_txt, end_txt):
+    start_date = parse_iso_date(start_txt)
+    if end_txt:
+        end_date = parse_iso_date(end_txt)
+    else:
+        end_date = date.max
+    return DateRange(start_date, end_date)

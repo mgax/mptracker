@@ -7,7 +7,7 @@ from psycopg2.extras import DateRange
 from path import path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
-                                     get_gdrive_csv
+                                     get_gdrive_csv, parse_interval
 from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args
 from mptracker.patcher import TablePatcher
@@ -836,15 +836,10 @@ def position():
 
             if len(matches) == 1:
                 [person] = matches
-                start_date = parse_date(row['start_date'])
-                if row['end_date']:
-                    end_date = parse_date(row['end_date'])
-                else:
-                    end_date = date.max
-
+                interval = parse_interval(row['start_date'], row['end_date'])
                 add_position({
                     'person_id': person.id,
-                    'interval': DateRange(start_date, end_date),
+                    'interval': interval,
                     'title': row['title'],
                 })
 
@@ -862,15 +857,9 @@ def position():
                 "Expected a single match for %r, got %r" % (name, matches)
 
             [person] = matches
-            start_date = parse_date(row['start_date'])
-            if row['end_date']:
-                end_date = parse_date(row['end_date'])
-            else:
-                end_date = date.max
-
             add_position({
                 'person_id': person.id,
-                'interval': DateRange(start_date, end_date),
+                'interval': parse_interval(row['start_date'], row['end_date']),
                 'title': row['title'] + ", Biroul Permanent",
             })
 
