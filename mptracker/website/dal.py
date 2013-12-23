@@ -146,7 +146,7 @@ class DataAccess:
         rv['recent_activity'] = self._get_recent_activity(mandate)
 
         if mandate.picture_url is not None:
-            rv['picture_filename'] = '%s.jpg' % str(mandate.id)
+            rv['picture_filename'] = '%s-300px.jpg' % str(mandate.id)
 
         return rv
 
