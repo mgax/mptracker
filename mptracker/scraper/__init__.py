@@ -191,20 +191,33 @@ def people(
 
 
 @scraper_manager.command
-def download_pictures():
+def download_pictures(year='2012'):
+    import subprocess
     localdir = path(flask.current_app.static_folder) / 'mandate-pictures'
     localdir.mkdir_p()
-    for mandate in models.Mandate.query:
+    for mandate in models.Mandate.query.filter_by(year=int(year)):
         if mandate.picture_url is not None:
             assert mandate.picture_url.endswith('.jpg')
-            filename = '%s.jpg' % str(mandate.id)
-            local_path = localdir / filename
+            local_path = localdir / ('%s.jpg' % mandate.id)
             if not local_path.isfile():
                 resp = requests.get(mandate.picture_url)
                 assert resp.headers['Content-Type'] == 'image/jpeg'
                 with local_path.open('wb') as f:
                     f.write(resp.content)
-                logger.info('Saved %s (%d bytes)', filename, len(resp.content))
+                logger.info('Saved %s (%d bytes)',
+                            local_path.name, len(resp.content))
+
+            thumb_path = localdir / ('%s-300px.jpg' % mandate.id)
+            if not thumb_path.isfile():
+                subprocess.check_call([
+                    'convert',
+                    local_path,
+                    '-geometry', '300x300^',
+                    '-quality', '85',
+                    thumb_path,
+                ])
+                logger.info('Resized %s (%d bytes)',
+                            thumb_path.name, thumb_path.stat().st_size)
 
 
 @scraper_manager.command
