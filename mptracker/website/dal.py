@@ -17,6 +17,7 @@ from mptracker.models import (
     Ask,
     VotingSession,
     Vote,
+    GroupVote,
     PolicyDomain,
     NameSearch,
 )
@@ -291,6 +292,10 @@ class DataAccess:
         votes_attended = final_votes.count()
         votes_loyal = final_votes.filter(Vote.loyal == True).count()
         rv['member_loyalty'] = votes_loyal / votes_attended
+
+        group_votes = GroupVote.query.filter(GroupVote.mp_group == party)
+        loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
+        rv['cabinet_loyalty'] = loyal_group_votes.count() / group_votes.count()
 
         return rv
 

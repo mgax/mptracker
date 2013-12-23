@@ -14,8 +14,11 @@
         <h4>Statistici</h4>
 
         <dl class="dl-horizontal">
-          <dt>loialitatea la vot</dt>
+          <dt>loialitatea membrilor</dt>
           <dd>{{ party['member_loyalty']|percent }}</dd>
+
+          <dt>loialitate pentru guvern</dt>
+          <dd>{{ party['cabinet_loyalty']|percent }}</dd>
         </dl>
       </div>
 
