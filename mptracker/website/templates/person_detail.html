@@ -95,6 +95,11 @@
             <dd>{{ vote['loyalty']|percent }}</dd>
           {%- endif %}
 
+          {%- if 'cabinet_loyalty' in vote %}
+            <dt>loialitate față de guvern</dt>
+            <dd>{{ vote['cabinet_loyalty']|percent }}</dd>
+          {%- endif %}
+
           <dt>luări de cuvânt</dt>
           <dd>{{ speeches }}</dd>
 

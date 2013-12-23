@@ -124,6 +124,21 @@ class DataAccess:
         if votes_attended > 0:
             rv['vote']['loyalty'] = votes_loyal / votes_attended
 
+            votes_with_cabinet = (
+                final_votes
+                .filter(Vote.loyal_to_cabinet != None)
+                .count()
+            )
+            if votes_with_cabinet:
+                votes_cabinet_loyal = (
+                    final_votes
+                    .filter(Vote.loyal_to_cabinet == True)
+                    .count()
+                )
+                rv['vote']['cabinet_loyalty'] = (
+                    votes_cabinet_loyal / votes_with_cabinet
+                )
+
         rv['speeches'] = mandate.transcripts.count()
         rv['proposals'] = mandate.sponsorships.count()
 
