@@ -226,12 +226,14 @@ def question_dump():
     cols = ['name', 'legislature', 'date', 'title', 'score']
     ask_query = (
         models.Ask.query
+        .join(models.Ask.question)
         .options(
             joinedload('question'),
             joinedload('mandate'),
             joinedload('mandate.person'),
             joinedload('match_row'),
         )
+        .order_by(models.Question.date.desc())
     )
     def make_row(ask):
         score = ask.match.score
