@@ -58,6 +58,21 @@ app.PersonSearch = Backbone.View.extend({
 });
 
 
+app.months_en = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+app.months_ro = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
+    "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"];
+
+
+app.translate_time = function(value) {
+    for(var c = 0; c < 12; c ++) {
+        value = value.replace(app.months_en[c], app.months_ro[c]);
+    }
+    return value;
+};
+
+
+
 app.render_timestream = function(box, data) {
     var margin = 50;
     var width = box.width() - 2*margin;
@@ -136,6 +151,11 @@ app.render_timestream = function(box, data) {
     svg.append("g")
         .attr("class", "person-timestream-axis y")
         .call(yAxis);
+
+    $('.person-timestream-axis.x .tick text').map(function() {
+        var el = $(this);
+        el.text(app.translate_time(el.text()));
+    });
 };
 
 
