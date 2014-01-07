@@ -15,6 +15,7 @@ from mptracker.models import (
     Transcript,
     Question,
     Ask,
+    Match,
     VotingSession,
     Vote,
     GroupVote,
@@ -142,6 +143,20 @@ class DataAccess:
 
         rv['speeches'] = mandate.transcripts.count()
         rv['proposals'] = mandate.sponsorships.count()
+        local_ask_query = (
+            mandate.asked
+            .join(Ask.match_row)
+            .filter(Match.score > 0)
+        )
+        local_sponsorship_query = (
+            mandate.sponsorships
+            .join(Sponsorship.match_row)
+            .filter(Match.score > 0)
+        )
+        rv['local_score'] = (
+            local_ask_query.count() +
+            local_sponsorship_query.count()
+        )
 
         rv['recent_activity'] = self._get_recent_activity(mandate)
 
