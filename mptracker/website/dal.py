@@ -24,6 +24,190 @@ from mptracker.models import (
 )
 
 
+def _get_recent_questions(mandate, limit):
+    recent_questions_query = (
+        Question.query
+        .order_by(Question.date.desc())
+    )
+
+    if mandate is not None:
+        recent_questions_query = (
+            recent_questions_query
+            .join(Question.asked)
+            .filter(Ask.mandate == mandate)
+        )
+
+    return [
+        {
+            'date': q.date,
+            'text': filters.do_truncate(q.title),
+            'type': q.type,
+            'question_id': q.id,
+        }
+        for q in recent_questions_query.limit(limit)
+    ]
+
+
+def _get_recent_proposals(mandate, limit):
+    recent_proposals_query = (
+        Proposal.query
+        .order_by(Proposal.date.desc())
+    )
+
+    if mandate is not None:
+        recent_proposals_query = (
+            recent_proposals_query
+            .join(Proposal.sponsorships)
+            .filter(Sponsorship.mandate == mandate)
+        )
+
+    return [
+        {
+            'date': p.date,
+            'text': p.title,
+            'type': 'proposal',
+            'proposal_id': p.id,
+        }
+        for p in recent_proposals_query.limit(limit)
+    ]
+
+
+def _get_recent_activity(mandate):
+    recent_transcripts_query = (
+        mandate.transcripts
+        .order_by(Transcript.serial.desc())
+        .limit(5)
+        .options(joinedload('chapter'))
+    )
+    recent_transcripts = [
+        {
+            'date': t.chapter.date,
+            'text': filters.do_truncate(t.text, 200),
+            'type': 'speech',
+        }
+        for t in recent_transcripts_query
+    ]
+
+    recent_questions = _get_recent_questions(mandate, 5)
+    recent_proposals = _get_recent_proposals(mandate, 5)
+
+    rv = recent_transcripts + recent_questions + recent_proposals
+    rv.sort(key=lambda r: r['date'], reverse=True)
+    return rv[:10]
+
+
+class DalPerson:
+
+    def __init__(self, person_id, missing=KeyError):
+        self.person = Person.query.get(person_id)
+        if self.person is None:
+            raise missing()
+
+        self.mandate = (
+            Mandate.query
+            .filter_by(person=self.person)
+            .filter_by(year=2012)
+            .first()
+        )
+        if self.mandate is None:
+            raise missing()
+
+    def get_details(self):
+        rv = {
+            'name': self.person.name,
+            'romania_curata_text': self.person.romania_curata,
+            'position_list': [
+                {
+                    'title': p.title,
+                    'start_date': p.interval.lower,
+                    'end_date': p.interval.upper,
+                }
+                for p in self.person.positions
+            ],
+        }
+
+        membership_query = (
+            self.mandate.group_memberships
+            .order_by(MpGroupMembership.interval.desc())
+        )
+        group_history = [
+            {
+                'start_date': membership.interval.lower,
+                'end_date': membership.interval.upper,
+                'role': membership.role,
+                'group_short_name': membership.mp_group.short_name,
+                'group_id': membership.mp_group_id,
+            }
+            for membership in membership_query
+        ]
+
+        rv['group_history'] = group_history
+
+        if self.mandate.county:
+            rv['college'] = {
+                'county_name': self.mandate.county.name,
+                'number': self.mandate.college,
+            }
+
+        voting_session_count = (
+            VotingSession.query
+            .filter(VotingSession.final == True)
+            .count()
+        )
+        final_votes = (
+            self.mandate.votes
+            .join(Vote.voting_session)
+            .filter(VotingSession.final == True)
+        )
+        votes_attended = final_votes.count()
+        votes_loyal = final_votes.filter(Vote.loyal == True).count()
+
+        rv['vote'] = {
+            'attendance': votes_attended / voting_session_count,
+        }
+        if votes_attended > 0:
+            rv['vote']['loyalty'] = votes_loyal / votes_attended
+
+            votes_with_cabinet = (
+                final_votes
+                .filter(Vote.loyal_to_cabinet != None)
+                .count()
+            )
+            if votes_with_cabinet:
+                votes_cabinet_loyal = (
+                    final_votes
+                    .filter(Vote.loyal_to_cabinet == True)
+                    .count()
+                )
+                rv['vote']['cabinet_loyalty'] = (
+                    votes_cabinet_loyal / votes_with_cabinet
+                )
+
+        rv['speeches'] = self.mandate.transcripts.count()
+        rv['proposals'] = self.mandate.sponsorships.count()
+        local_ask_query = (
+            self.mandate.asked
+            .join(Ask.match_row)
+            .filter(Match.score > 0)
+        )
+        local_sponsorship_query = (
+            self.mandate.sponsorships
+            .join(Sponsorship.match_row)
+            .filter(Match.score > 0)
+        )
+        rv['local_score'] = (
+            local_ask_query.count() +
+            local_sponsorship_query.count()
+        )
+
+        rv['recent_activity'] = _get_recent_activity(self.mandate)
+
+        if self.mandate.picture_url is not None:
+            rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
+
+        return rv
+
+
 class DataAccess:
 
     def get_county_name_map(self):
@@ -60,185 +244,13 @@ class DataAccess:
         ]
 
     def get_person(self, person_id, missing=KeyError):
-        person = Person.query.get(person_id)
-        if person is None:
-            raise missing()
-        return {
-            'name': person.name,
-            'romania_curata_text': person.romania_curata,
-            'position_list': [
-                {
-                    'title': p.title,
-                    'start_date': p.interval.lower,
-                    'end_date': p.interval.upper,
-                }
-                for p in person.positions
-            ],
-        }
-
-    def get_mandate2012_details(self, person_id):
-        mandate = (
-            Mandate.query
-            .filter_by(person_id=person_id)
-            .filter_by(year=2012)
-            .first()
-        )
-
-        membership_query = (
-            mandate.group_memberships
-            .order_by(MpGroupMembership.interval.desc())
-        )
-        group_history = [
-            {
-                'start_date': membership.interval.lower,
-                'end_date': membership.interval.upper,
-                'role': membership.role,
-                'group_short_name': membership.mp_group.short_name,
-                'group_id': membership.mp_group_id,
-            }
-            for membership in membership_query
-        ]
-
-        rv = {'group_history': group_history}
-
-        if mandate.county:
-            rv['college'] = {
-                'county_name': mandate.county.name,
-                'number': mandate.college,
-            }
-
-        voting_session_count = (
-            VotingSession.query
-            .filter(VotingSession.final == True)
-            .count()
-        )
-        final_votes = (
-            mandate.votes
-            .join(Vote.voting_session)
-            .filter(VotingSession.final == True)
-        )
-        votes_attended = final_votes.count()
-        votes_loyal = final_votes.filter(Vote.loyal == True).count()
-
-        rv['vote'] = {
-            'attendance': votes_attended / voting_session_count,
-        }
-        if votes_attended > 0:
-            rv['vote']['loyalty'] = votes_loyal / votes_attended
-
-            votes_with_cabinet = (
-                final_votes
-                .filter(Vote.loyal_to_cabinet != None)
-                .count()
-            )
-            if votes_with_cabinet:
-                votes_cabinet_loyal = (
-                    final_votes
-                    .filter(Vote.loyal_to_cabinet == True)
-                    .count()
-                )
-                rv['vote']['cabinet_loyalty'] = (
-                    votes_cabinet_loyal / votes_with_cabinet
-                )
-
-        rv['speeches'] = mandate.transcripts.count()
-        rv['proposals'] = mandate.sponsorships.count()
-        local_ask_query = (
-            mandate.asked
-            .join(Ask.match_row)
-            .filter(Match.score > 0)
-        )
-        local_sponsorship_query = (
-            mandate.sponsorships
-            .join(Sponsorship.match_row)
-            .filter(Match.score > 0)
-        )
-        rv['local_score'] = (
-            local_ask_query.count() +
-            local_sponsorship_query.count()
-        )
-
-        rv['recent_activity'] = self._get_recent_activity(mandate)
-
-        if mandate.picture_url is not None:
-            rv['picture_filename'] = '%s-300px.jpg' % str(mandate.id)
-
-        return rv
-
-    def _get_recent_proposals(self, mandate, limit):
-        recent_proposals_query = (
-            Proposal.query
-            .order_by(Proposal.date.desc())
-        )
-
-        if mandate is not None:
-            recent_proposals_query = (
-                recent_proposals_query
-                .join(Proposal.sponsorships)
-                .filter(Sponsorship.mandate == mandate)
-            )
-
-        return [
-            {
-                'date': p.date,
-                'text': p.title,
-                'type': 'proposal',
-                'proposal_id': p.id,
-            }
-            for p in recent_proposals_query.limit(limit)
-        ]
+        return DalPerson(person_id, missing)
 
     def get_recent_proposals(self):
-        return self._get_recent_proposals(None, 10)
-
-    def _get_recent_questions(self, mandate, limit):
-        recent_questions_query = (
-            Question.query
-            .order_by(Question.date.desc())
-        )
-
-        if mandate is not None:
-            recent_questions_query = (
-                recent_questions_query
-                .join(Question.asked)
-                .filter(Ask.mandate == mandate)
-            )
-
-        return [
-            {
-                'date': q.date,
-                'text': filters.do_truncate(q.title),
-                'type': q.type,
-                'question_id': q.id,
-            }
-            for q in recent_questions_query.limit(limit)
-        ]
+        return _get_recent_proposals(None, 10)
 
     def get_recent_questions(self):
-        return self._get_recent_questions(None, 10)
-
-    def _get_recent_activity(self, mandate):
-        recent_transcripts_query = (
-            mandate.transcripts
-            .order_by(Transcript.serial.desc())
-            .limit(5)
-            .options(joinedload('chapter'))
-        )
-        recent_transcripts = [
-            {
-                'date': t.chapter.date,
-                'text': filters.do_truncate(t.text, 200),
-                'type': 'speech',
-            }
-            for t in recent_transcripts_query
-        ]
-
-        recent_questions = self._get_recent_questions(mandate, 5)
-        recent_proposals = self._get_recent_proposals(mandate, 5)
-
-        rv = recent_transcripts + recent_questions + recent_proposals
-        rv.sort(key=lambda r: r['date'], reverse=True)
-        return rv[:10]
+        return _get_recent_questions(None, 10)
 
     def get_question_details(self, question_id, missing=KeyError):
         question = Question.query.get(question_id)

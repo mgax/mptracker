@@ -103,8 +103,7 @@ def person_index_search():
 @pages.route('/persoane/<uuid:person_id>')
 @section('person')
 def person_detail(person_id):
-    ctx = dal.get_person(person_id, missing=NotFound)
-    ctx.update(dal.get_mandate2012_details(person_id))
+    ctx = dal.get_person(person_id, missing=NotFound).get_details()
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('mandate-pictures') / ctx['picture_filename']
