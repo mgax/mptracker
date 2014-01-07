@@ -103,8 +103,10 @@ def person_index_search():
 @pages.route('/persoane/<uuid:person_id>')
 @section('person')
 def person_detail(person_id):
-    ctx = dal.get_person(person_id, missing=NotFound).get_details()
+    person = dal.get_person(person_id, missing=NotFound)
+    ctx = person.get_details()
     ctx['person_id'] = person_id
+    ctx['timestream_data'] = person.get_timestream_data()
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('mandate-pictures') / ctx['picture_filename']

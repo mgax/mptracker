@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from collections import defaultdict
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
@@ -21,6 +21,7 @@ from mptracker.models import (
     GroupVote,
     PolicyDomain,
     NameSearch,
+    db,
 )
 
 
@@ -248,6 +249,44 @@ class DalPerson:
                 )
             ],
         }
+
+    def get_timestream_data(self):
+        DAYS = 120
+        today = date.today()
+        days = [today - timedelta(days=d)
+                for d in sorted(range(DAYS), reverse=True)]
+
+        proposals_by_day = dict(
+            db.session.query(
+                Proposal.date,
+                func.count('*'),
+            )
+            .join(Proposal.sponsorships)
+            .filter(Sponsorship.mandate_id == self.mandate.id)
+            .filter(Proposal.date >= days[0])
+            .group_by(Proposal.date)
+        )
+
+        questions_by_day = dict(
+            db.session.query(
+                Question.date,
+                func.count('*'),
+            )
+            .join(Question.asked)
+            .filter(Ask.mandate_id == self.mandate.id)
+            .filter(Question.date >= days[0])
+            .group_by(Question.date)
+        )
+
+        series = []
+        for day in days:
+            series.append({
+                'date': day.isoformat(),
+                'proposals': proposals_by_day.get(day, 0),
+                'questions': questions_by_day.get(day, 0),
+            })
+
+        return series
 
 
 class DataAccess:

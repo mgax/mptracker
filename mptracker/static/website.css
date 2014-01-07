@@ -24,3 +24,25 @@
 .proposal-status-rejected {
     background: #fcc1c1;
 }
+
+
+/*************************
+ *   person-timestream   *
+ *************************/
+
+.person-timestream-axis line,
+.person-timestream-axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.person-timestream-axis.y line {
+    display: none;
+}
+
+.person-timestream-line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}

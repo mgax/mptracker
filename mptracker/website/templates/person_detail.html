@@ -16,7 +16,7 @@
 
   <div class="row">
     <div class="col-sm-8">
-      <p class="placeholder">stream graph cu activitatea</p>
+      <div class="person-timestream"></div>
 
       <ul class="list-unstyled">
         {% if college %}
@@ -122,4 +122,16 @@
       <p class="placeholder" style="height: 300px">word cloud</p>
     </div>
   </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script>
+  $(document).ready(function() {
+    var timestream_data = {{ timestream_data|tojson|safe }};
+    app.render_timestream($('.person-timestream'), timestream_data);
+  });
+</script>
 {% endblock %}
