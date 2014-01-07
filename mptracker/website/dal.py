@@ -112,6 +112,22 @@ class DalPerson:
         if self.mandate is None:
             raise missing()
 
+    @property
+    def _local_ask_query(self):
+        return (
+            self.mandate.asked
+            .join(Ask.match_row)
+            .filter(Match.score > 0)
+        )
+
+    @property
+    def _local_sponsorship_query(self):
+        return (
+            self.mandate.sponsorships
+            .join(Sponsorship.match_row)
+            .filter(Match.score > 0)
+        )
+
     def get_details(self):
         rv = {
             'name': self.person.name,
@@ -185,19 +201,9 @@ class DalPerson:
 
         rv['speeches'] = self.mandate.transcripts.count()
         rv['proposals'] = self.mandate.sponsorships.count()
-        local_ask_query = (
-            self.mandate.asked
-            .join(Ask.match_row)
-            .filter(Match.score > 0)
-        )
-        local_sponsorship_query = (
-            self.mandate.sponsorships
-            .join(Sponsorship.match_row)
-            .filter(Match.score > 0)
-        )
         rv['local_score'] = (
-            local_ask_query.count() +
-            local_sponsorship_query.count()
+            self._local_ask_query.count() +
+            self._local_sponsorship_query.count()
         )
 
         rv['recent_activity'] = _get_recent_activity(self.mandate)
