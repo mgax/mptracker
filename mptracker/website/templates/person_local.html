@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% set TYPE_MAP = {
+    'question': "întrebare",
+    'interpelation': "interpelare",
+    'proposal': "propunere legislativă",
+    'speech': "luare de cuvânt",
+  } %}
+
+
+{% block title %}{{ super() }} – {{ name }} - activitate locală{% endblock %}
+
+
+{% block content %}
+  {%- set url = url_for('.person_detail', person_id=person_id) %}
+  <h1><a href="{{ url }}">{{ name }}</a></h1>
+
+  <h3>Propuneri legislative</h3>
+  <ul>
+    {%- for proposal in proposal_list %}
+      <li>
+        {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
+        {{ proposal['date']|datefmt }}:
+        <a href="{{ url }}">
+          {{- proposal.title|truncate(80) -}}
+        </a>
+      </li>
+    {%- endfor %}
+  </ul>
+
+  <h3>Întrebări și interpelări</h3>
+  <ul>
+    {%- for question in question_list %}
+      <li>
+        {%- set url = url_for('.person_question', question_id=question.id) %}
+        {{ question['date']|datefmt }}:
+        <a href="{{ url }}">
+          {{- question.title|truncate(80) -}}
+        </a>
+      </li>
+    {%- endfor %}
+  </ul>
+{% endblock %}

@@ -110,7 +110,10 @@
           <dd>{{ proposals }}</dd>
 
           <dt>reprezentare locală</dt>
-          <dd>{{ local_score }}</dd>
+          <dd>
+            {%- set url = url_for('.person_local', person_id=person_id) %}
+            <a href="{{ url }}">{{ local_score }}</a>
+          </dd>
         </dl>
       </div>
 

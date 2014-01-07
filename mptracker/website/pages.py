@@ -104,6 +104,7 @@ def person_index_search():
 @section('person')
 def person_detail(person_id):
     ctx = dal.get_person(person_id, missing=NotFound).get_details()
+    ctx['person_id'] = person_id
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('mandate-pictures') / ctx['picture_filename']
@@ -127,6 +128,16 @@ def person_detail(person_id):
             )
 
     return flask.render_template('person_detail.html', **ctx)
+
+
+@pages.route('/persoane/<uuid:person_id>/local')
+@section('person')
+def person_local(person_id):
+    person = dal.get_person(person_id, missing=NotFound)
+    ctx = person.get_main_details()
+    ctx.update(person.get_local_activity())
+    ctx['person_id'] = person_id
+    return flask.render_template('person_local.html', **ctx)
 
 
 @pages.route('/persoane/intrebari-interpelari/<uuid:question_id>')

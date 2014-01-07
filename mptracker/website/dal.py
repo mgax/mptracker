@@ -112,6 +112,11 @@ class DalPerson:
         if self.mandate is None:
             raise missing()
 
+    def get_main_details(self):
+        return {
+            'name': self.person.name,
+        }
+
     @property
     def _local_ask_query(self):
         return (
@@ -129,8 +134,8 @@ class DalPerson:
         )
 
     def get_details(self):
-        rv = {
-            'name': self.person.name,
+        rv = self.get_main_details()
+        rv.update({
             'romania_curata_text': self.person.romania_curata,
             'position_list': [
                 {
@@ -140,7 +145,7 @@ class DalPerson:
                 }
                 for p in self.person.positions
             ],
-        }
+        })
 
         membership_query = (
             self.mandate.group_memberships
@@ -212,6 +217,37 @@ class DalPerson:
             rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
 
         return rv
+
+    def get_local_activity(self):
+        return {
+            'proposal_list': [
+                {
+                    'id': sp.proposal.id,
+                    'date': sp.proposal.date,
+                    'title': sp.proposal.title,
+                }
+                for sp in (
+                    self._local_sponsorship_query
+                    .options(joinedload('proposal'))
+                    .join(Sponsorship.proposal)
+                    .order_by(Proposal.date.desc())
+                )
+            ],
+
+            'question_list': [
+                {
+                    'id': ask.question.id,
+                    'date': ask.question.date,
+                    'title': ask.question.title,
+                }
+                for ask in (
+                    self._local_ask_query
+                    .options(joinedload('question'))
+                    .join(Ask.question)
+                    .order_by(Question.date.desc())
+                )
+            ],
+        }
 
 
 class DataAccess:
