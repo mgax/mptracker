@@ -101,6 +101,7 @@ app.render_timestream = function(box, data) {
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
+        .ticks(3)
         .tickFormat(d3.format("d"))
         .scale(y)
         .orient("left");
