@@ -144,12 +144,9 @@ app.render_timestream = function(box, data) {
         .attr("class", "person-timestream-vacation")
         .attr("d", function(d) { return vacation_blocks(d); });
 
-    var activity = svg.selectAll(".activity")
+    svg.selectAll(".activity")
         .data(activities)
-      .enter().append("g")
-        .attr("class", "activity");
-
-    activity.append("path")
+      .enter().append("path")
         .attr("class", "person-timestream-line")
         .attr("d", function(d) { return line(d.values); })
         .style("stroke", function(d) { return color(d.name); });
