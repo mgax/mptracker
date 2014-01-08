@@ -30,14 +30,14 @@
  *   activitychart   *
  *************************/
 
-.activitychart-axis line,
-.activitychart-axis path {
+.chart-axis line,
+.chart-axis path {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
 
-.activitychart-axis.y line {
+.chart-axis.y line {
     display: none;
 }
 

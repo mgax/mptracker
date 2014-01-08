@@ -81,15 +81,15 @@ app.render_activitychart = function(box, data) {
         .style("stroke", function(d) { return color(d.name); });
 
     svg.append("g")
-        .attr("class", "activitychart-axis x")
+        .attr("class", "chart-axis x")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
     svg.append("g")
-        .attr("class", "activitychart-axis y")
+        .attr("class", "chart-axis y")
         .call(yAxis);
 
-    $('.activitychart-axis.x .tick text').map(function() {
+    $('.chart-axis.x .tick text').map(function() {
         var el = $(this);
         el.text(app.translate_time(el.text()));
     });
