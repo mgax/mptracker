@@ -54,6 +54,9 @@ app.render_membershipchart = function(box, data) {
 
     x.domain([parseDate('2012-12-17'), parseDate('2016-12-5')]);
 
+    var tooltip = d3.tip().html(function(d) { return d.group_short_name; });
+    svg.call(tooltip);
+
     svg.selectAll(".activity")
         .data(data)
       .enter().append("rect")
@@ -62,6 +65,9 @@ app.render_membershipchart = function(box, data) {
         .attr('width', function(d) { return x(d.end_date) - x(d.start_date); })
         .attr('y', 0)
         .attr('height', height)
+        .on('mouseover', tooltip.show)
+        .on('mouseout', tooltip.hide)
+        .on('click', function(d) { navigate_to_group(d); })
         .style("fill", function(d) { return color[d.group_short_name]; });
 
     svg.append("g")
@@ -73,6 +79,12 @@ app.render_membershipchart = function(box, data) {
         var el = $(this);
         el.text(app.translate_time(el.text()));
     });
+
+    function navigate_to_group(d) {
+        if(d.group_short_name != 'Indep.') {
+            window.location.href = '/partide/' + d.group_id;
+        }
+    }
 };
 
 })();

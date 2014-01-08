@@ -17,6 +17,7 @@
   <div class="row">
     <div class="col-sm-8">
       <div class="activitychart"></div>
+      <div class="membershipchart"></div>
 
       <ul class="list-unstyled">
         {% if college %}
@@ -128,11 +129,17 @@
 {% block scripts %}
 <script src="{{ url_for('static',
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static',
+    filename='lib/d3-tip-70b1cf3/d3-tip.js') }}"></script>
 <script src="{{ url_for('static', filename='activitychart.js') }}"></script>
+<script src="{{ url_for('static', filename='membershipchart.js') }}"></script>
 <script>
   $(document).ready(function() {
     var activitychart_data = {{ activitychart_data|tojson|safe }};
     app.render_activitychart($('.activitychart'), activitychart_data);
+
+    var group_history = {{ group_history|tojson|safe }};
+    app.render_membershipchart($('.membershipchart'), group_history);
   });
 </script>
 {% endblock %}

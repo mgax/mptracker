@@ -51,3 +51,7 @@
     fill: #bbb;
     stroke: none;
 }
+
+.membershipchart-rect {
+    cursor: pointer;
+}
