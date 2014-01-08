@@ -46,6 +46,10 @@ app.render_activitychart = function(box, data) {
         .y(function(d) { return d.vacation ? height : 0 });
 
     var labels = ['proposals', 'questions'];
+    var name_ro = {
+        'proposals': 'propuneri',
+        'questions': 'întrebări'
+    };
     color.domain(labels);
 
     data.forEach(function(d) {
@@ -73,7 +77,8 @@ app.render_activitychart = function(box, data) {
     svg.append("path")
         .datum(data)
         .attr("class", "activitychart-vacation")
-        .attr("d", function(d) { return vacation_blocks(d); });
+        .attr("d", function(d) { return vacation_blocks(d); })
+        .style('fill', '#bbb');
 
     svg.selectAll(".activity")
         .data(activities)
@@ -90,6 +95,46 @@ app.render_activitychart = function(box, data) {
     svg.append("g")
         .attr("class", "chart-axis y")
         .call(yAxis);
+
+    var legend_data = [{name: 'vacanță', color: '#bbb'}];
+    _(labels).forEach(function(name) {
+        legend_data.push({name: name_ro[name], color: color(name)});
+    });
+
+    var legend_item = svg.append('g')
+      .selectAll('.activitychart-legend-item')
+        .attr('class', 'legend')
+        .data(legend_data)
+      .enter().append('g')
+        .attr('transform', function(d, n) {
+            return 'translate(' + (width - (n + 1) * 100) + ', 0)'})
+        .each(function(d, i) {
+            var g = d3.select(this);
+
+            if(d.name == 'vacanță') {
+                g.append('rect')
+                    .attr('height', 10)
+                    .attr('width', 20)
+                    .attr('class', 'activitychart-vacation')
+                    .style('fill', d.color);
+            }
+            else {
+                g.append('line')
+                    .attr('x1', 0)
+                    .attr('x2', 20)
+                    .attr('y1', 5)
+                    .attr('y2', 5)
+                    .attr('class', 'activitychart-line')
+                    .style('stroke', d.color);
+            }
+
+            g.append('text')
+                .attr('x', 30)
+                .attr('y', 5)
+                .attr('dy', '.35em')
+                .text(d.name);
+        });
+
 
     $('.chart-axis.x .tick text').map(function() {
         var el = $(this);
