@@ -128,6 +128,7 @@
 {% block scripts %}
 <script src="{{ url_for('static',
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static', filename='activitychart.js') }}"></script>
 <script>
   $(document).ready(function() {
     var activitychart_data = {{ activitychart_data|tojson|safe }};
