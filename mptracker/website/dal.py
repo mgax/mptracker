@@ -97,6 +97,14 @@ def _get_recent_activity(mandate):
     return rv[:10]
 
 
+def group_by_week(data_iter):
+    rv = defaultdict(int)
+    for day, value in data_iter:
+        monday = day - timedelta(days=day.weekday())
+        rv[monday] += value
+    return dict(rv)
+
+
 class DalPerson:
 
     def __init__(self, person_id, missing=KeyError):
@@ -251,12 +259,9 @@ class DalPerson:
         }
 
     def get_timestream_data(self):
-        DAYS = 120
-        today = date.today()
-        days = [today - timedelta(days=d)
-                for d in sorted(range(DAYS), reverse=True)]
+        days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
 
-        proposals_by_day = dict(
+        proposals_by_day = group_by_week(
             db.session.query(
                 Proposal.date,
                 func.count('*'),
@@ -267,7 +272,7 @@ class DalPerson:
             .group_by(Proposal.date)
         )
 
-        questions_by_day = dict(
+        questions_by_day = group_by_week(
             db.session.query(
                 Question.date,
                 func.count('*'),
