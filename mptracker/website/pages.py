@@ -106,7 +106,7 @@ def person_detail(person_id):
     person = dal.get_person(person_id, missing=NotFound)
     ctx = person.get_details()
     ctx['person_id'] = person_id
-    ctx['timestream_data'] = person.get_timestream_data()
+    ctx['activitychart_data'] = person.get_activitychart_data()
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('mandate-pictures') / ctx['picture_filename']

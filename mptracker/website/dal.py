@@ -258,7 +258,7 @@ class DalPerson:
             ],
         }
 
-    def get_timestream_data(self):
+    def get_activitychart_data(self):
         days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
 
         vacations = [

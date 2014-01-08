@@ -16,7 +16,7 @@
 
   <div class="row">
     <div class="col-sm-8">
-      <div class="person-timestream"></div>
+      <div class="activitychart"></div>
 
       <ul class="list-unstyled">
         {% if college %}
@@ -130,8 +130,8 @@
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script>
   $(document).ready(function() {
-    var timestream_data = {{ timestream_data|tojson|safe }};
-    app.render_timestream($('.person-timestream'), timestream_data);
+    var activitychart_data = {{ activitychart_data|tojson|safe }};
+    app.render_activitychart($('.activitychart'), activitychart_data);
   });
 </script>
 {% endblock %}

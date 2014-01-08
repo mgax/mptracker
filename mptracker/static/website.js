@@ -73,7 +73,7 @@ app.translate_time = function(value) {
 
 
 
-app.render_timestream = function(box, data) {
+app.render_activitychart = function(box, data) {
     var margin = 50;
     var width = box.width() - 2*margin;
     var height = 100;
@@ -141,26 +141,26 @@ app.render_timestream = function(box, data) {
 
     svg.append("path")
         .datum(data)
-        .attr("class", "person-timestream-vacation")
+        .attr("class", "activitychart-vacation")
         .attr("d", function(d) { return vacation_blocks(d); });
 
     svg.selectAll(".activity")
         .data(activities)
       .enter().append("path")
-        .attr("class", "person-timestream-line")
+        .attr("class", "activitychart-line")
         .attr("d", function(d) { return line(d.values); })
         .style("stroke", function(d) { return color(d.name); });
 
     svg.append("g")
-        .attr("class", "person-timestream-axis x")
+        .attr("class", "activitychart-axis x")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
     svg.append("g")
-        .attr("class", "person-timestream-axis y")
+        .attr("class", "activitychart-axis y")
         .call(yAxis);
 
-    $('.person-timestream-axis.x .tick text').map(function() {
+    $('.activitychart-axis.x .tick text').map(function() {
         var el = $(this);
         el.text(app.translate_time(el.text()));
     });

@@ -27,27 +27,27 @@
 
 
 /*************************
- *   person-timestream   *
+ *   activitychart   *
  *************************/
 
-.person-timestream-axis line,
-.person-timestream-axis path {
+.activitychart-axis line,
+.activitychart-axis path {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
 
-.person-timestream-axis.y line {
+.activitychart-axis.y line {
     display: none;
 }
 
-.person-timestream-line {
+.activitychart-line {
     fill: none;
     stroke: steelblue;
     stroke-width: 1.5px;
 }
 
-.person-timestream-vacation {
+.activitychart-vacation {
     fill: #bbb;
     stroke: none;
 }
