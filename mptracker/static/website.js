@@ -74,7 +74,7 @@ app.translate_time = function(value) {
 
 
 app.render_activitychart = function(box, data) {
-    var margin = 50;
+    var margin = 25;
     var width = box.width() - 2*margin;
     var height = 100;
 
