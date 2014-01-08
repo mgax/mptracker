@@ -139,3 +139,17 @@ def buffer_on_disk(data_iter):
     tmp.flush()
     tmp.seek(0)
     return FileWrapper(tmp)
+
+
+class DateAwareJSONEncoder(flask.json.JSONEncoder):
+
+    def default(self, o):
+        if isinstance(o, date):
+            return o.isoformat()
+
+        return JSONEncoder.default(self, o)
+
+
+@common.record
+def override_json_encoder(state):
+    state.app.json_encoder = DateAwareJSONEncoder

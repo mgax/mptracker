@@ -292,7 +292,7 @@ class DalPerson:
         series = []
         for day in days:
             series.append({
-                'date': day.isoformat(),
+                'date': day,
                 'proposals': proposals_by_day.get(day, 0),
                 'questions': questions_by_day.get(day, 0),
                 'vacation': any(d0 <= day < d1 for d0, d1 in vacations),
