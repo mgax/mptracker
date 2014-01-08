@@ -46,3 +46,8 @@
     stroke: steelblue;
     stroke-width: 1.5px;
 }
+
+.person-timestream-vacation {
+    fill: #bbb;
+    stroke: none;
+}

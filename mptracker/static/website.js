@@ -111,7 +111,12 @@ app.render_timestream = function(box, data) {
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.value); });
 
-    var labels = d3.keys(data[0]).filter(function(key) { return key !== "date"; });
+    var vacation_blocks = d3.svg.line()
+        .interpolate("step")
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return d.vacation ? height : 0 });
+
+    var labels = ['proposals', 'questions'];
     color.domain(labels);
 
     data.forEach(function(d) {
@@ -133,6 +138,11 @@ app.render_timestream = function(box, data) {
       d3.min(activities, function(c) { return d3.min(c.values, function(v) { return v.value; }); }),
       d3.max(activities, function(c) { return d3.max(c.values, function(v) { return v.value; }); })
     ]);
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "person-timestream-vacation")
+        .attr("d", function(d) { return vacation_blocks(d); });
 
     var activity = svg.selectAll(".activity")
         .data(activities)

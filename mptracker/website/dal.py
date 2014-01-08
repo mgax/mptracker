@@ -261,6 +261,12 @@ class DalPerson:
     def get_timestream_data(self):
         days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
 
+        vacations = [
+            (date(2012, 12, 24), date(2013, 1, 21)),
+            (date(2013, 7, 1), date(2013, 9, 2)),
+            (date(2013, 12, 30), date(2014, 2, 3)),
+        ]
+
         proposals_by_day = group_by_week(
             db.session.query(
                 Proposal.date,
@@ -289,6 +295,7 @@ class DalPerson:
                 'date': day.isoformat(),
                 'proposals': proposals_by_day.get(day, 0),
                 'questions': questions_by_day.get(day, 0),
+                'vacation': any(d0 <= day < d1 for d0, d1 in vacations),
             })
 
         return series
