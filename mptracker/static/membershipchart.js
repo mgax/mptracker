@@ -7,7 +7,7 @@ var color = {
     "Mino.": "#888",
     "PC": "#3e99ff",
     "PDL": "#ff962d",
-    "PNL": "#fafa6a",
+    "PNL": "#e9e900",
     "PP-DD": "#5a167b",
     "PSD": "#f00",
     "UDMR": "#005900"
