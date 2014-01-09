@@ -224,6 +224,25 @@ class DalPerson:
 
         rv['recent_activity'] = _get_recent_activity(self.mandate)
 
+        controversy_query = (
+            db.session.query(
+                Vote,
+                VotingSession,
+            )
+            .join(Vote.voting_session)
+            .filter(Vote.mandate == self.mandate)
+            .join(VotingSession.controversy)
+            .options(joinedload(VotingSession.controversy))
+        )
+        rv['controversy_list'] = [
+            {
+                'title': vs.controversy.title,
+                'date': vs.date,
+                'choice': vote.choice,
+            }
+            for vote, vs in controversy_query
+        ]
+
         if self.mandate.picture_url is not None:
             rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
 
