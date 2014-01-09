@@ -388,6 +388,7 @@ class VotingSession(db.Model):
     subject_html = db.Column(db.Text)
     cdeppk = db.Column(db.Integer)
     final = db.Column(db.Boolean, nullable=False, default=False)
+    cabinet_choice = db.Column(db.Text)
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
     proposal = db.relationship('Proposal',
