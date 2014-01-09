@@ -11,6 +11,16 @@
 {% block title %}{{ super() }} – {{ name }}{% endblock %}
 
 
+{%- macro ordinal(n) %}
+  {%- if n == 1 %}primul
+  {%- elif n == 2 %}al doilea
+  {%- elif n == 3 %}al treilea
+  {%- elif n == 4 %}al patrulea
+  {%- else %}al {{ n }}-lea
+  {%- endif %}
+{%- endmacro %}
+
+
 {% block content %}
   <h1>{{ name }}</h1>
 
@@ -24,7 +34,8 @@
           <li>
             {% set url = url_for('.person_county', county_id=college.county_id) %}
             Deputat de <a href="{{ url }}">{{ college.county_name }}</a>,
-            colegiul D{{ college.number }}
+            colegiul D{{ college.number }},
+            {{ ordinal(mandate_count) }} mandat
           </li>
         {% else %}
           <li>Ales la nivel național</li>

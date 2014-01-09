@@ -154,6 +154,7 @@ class DalPerson:
                 }
                 for p in self.person.positions
             ],
+            'mandate_count': self.person.mandates.count(),
         })
 
         membership_query = (
