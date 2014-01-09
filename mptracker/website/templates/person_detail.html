@@ -34,7 +34,8 @@
           <li>
             {% set url = url_for('.person_county', county_id=college.county_id) %}
             Deputat de <a href="{{ url }}">{{ college.county_name }}</a>,
-            colegiul D{{ college.number }},
+            colegiul D{{ college.number }}
+            ({{ college.election_votes_fraction|percent }} din voturi),
             {{ ordinal(mandate_count) }} mandat
           </li>
         {% else %}

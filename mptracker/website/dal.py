@@ -175,10 +175,12 @@ class DalPerson:
         rv['group_history'] = group_history
 
         if self.mandate.county:
+            votes_percent = self.mandate.election_votes_percent
             rv['college'] = {
                 'county_name': self.mandate.county.name,
                 'county_id': self.mandate.county.id,
                 'number': self.mandate.college,
+                'election_votes_fraction': votes_percent and votes_percent/100,
             }
 
         voting_session_count = (
