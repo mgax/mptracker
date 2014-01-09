@@ -60,6 +60,43 @@
         {% endfor %}
       </ul>
 
+      <dl class="dl-horizontal">
+        {%- if contact.website_url %}
+          <dt>site</dt>
+          <dd>{{ contact.website_url|urlize }}</dd>
+        {%- endif %}
+
+        {%- if contact.blog_url %}
+          <dt>blog</dt>
+          <dd>{{ contact.blog_url|urlize }}</dd>
+        {%- endif %}
+
+        {%- if contact.email_value %}
+          <dt>email</dt>
+          <dd>{{ contact.email_value|urlize }}</dd>
+        {%- endif %}
+
+        {%- if contact.facebook_url %}
+          <dt>facebook</dt>
+          <dd>{{ contact.facebook_url|urlize }}</dd>
+        {%- endif %}
+
+        {%- if contact.twitter_url %}
+          <dt>twitter</dt>
+          <dd>{{ contact.twitter_url|urlize }}</dd>
+        {%- endif %}
+
+        {%- if contact.phone %}
+          <dt>phone</dt>
+          <dd>{{ contact.phone }}</dd>
+        {%- endif %}
+
+        {%- if contact.address %}
+          <dt>address</dt>
+          <dd>{{ contact.address }}</dd>
+        {%- endif %}
+      </dl>
+
       <div>
         <h3>Activitate recentă</h3>
 

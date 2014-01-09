@@ -243,6 +243,16 @@ class DalPerson:
             for vote, vs in controversy_query
         ]
 
+        rv['contact'] = {
+            'website_url': self.person.website_url,
+            'blog_url': self.person.blog_url,
+            'email_value': self.person.email_value,
+            'facebook_url': self.person.facebook_url,
+            'twitter_url': self.person.twitter_url,
+            'phone': self.mandate.phone,
+            'address': self.mandate.address,
+        }
+
         if self.mandate.picture_url is not None:
             rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
 
