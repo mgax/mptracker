@@ -383,7 +383,7 @@ class DalCounty:
             .filter_by(year=2012)
             .filter_by(county=self.county)
             .options(joinedload('person'))
-            .order_by(Mandate.college)
+            .order_by(Mandate.college, Mandate.election_votes.desc())
         )
         return [
             {
