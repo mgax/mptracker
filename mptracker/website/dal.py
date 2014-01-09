@@ -291,6 +291,21 @@ class DalPerson:
             ],
         }
 
+    def get_proposals(self):
+        return [
+            {
+                'id': sp.proposal.id,
+                'date': sp.proposal.date,
+                'title': sp.proposal.title,
+            }
+            for sp in (
+                self.mandate.sponsorships
+                .options(joinedload('proposal'))
+                .join(Sponsorship.proposal)
+                .order_by(Proposal.date.desc())
+            )
+        ]
+
     def get_activitychart_data(self):
         days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
 

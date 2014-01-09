@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}{{ super() }} – {{ name }} - propuneri legislative{% endblock %}
+
+
+{% block content %}
+  {%- set url = url_for('.person_detail', person_id=person_id) %}
+  <h1><a href="{{ url }}">{{ name }}</a></h1>
+
+  <h3>Propuneri legislative</h3>
+  <ul>
+    {%- for proposal in proposal_list %}
+      <li>
+        {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
+        {{ proposal['date']|datefmt }}:
+        <a href="{{ url }}">
+          {{- proposal.title|truncate(80) -}}
+        </a>
+      </li>
+    {%- endfor %}
+  </ul>
+{% endblock %}
