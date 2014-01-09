@@ -22,7 +22,8 @@
       <ul class="list-unstyled">
         {% if college %}
           <li>
-            Deputat de {{ college.county_name }},
+            {% set url = url_for('.person_county', county_id=college.county_id) %}
+            Deputat de <a href="{{ url }}">{{ college.county_name }}</a>,
             colegiul D{{ college.number }}
           </li>
         {% else %}

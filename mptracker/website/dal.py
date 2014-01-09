@@ -176,6 +176,7 @@ class DalPerson:
         if self.mandate.county:
             rv['college'] = {
                 'county_name': self.mandate.county.name,
+                'county_id': self.mandate.county.id,
                 'number': self.mandate.college,
             }
 
@@ -301,6 +302,19 @@ class DalPerson:
         return series
 
 
+class DalCounty:
+
+    def __init__(self, county_id, missing=KeyError):
+        self.county = County.query.get(county_id)
+        if self.county is None:
+            raise missing()
+
+    def get_details(self):
+        return {
+            'name': self.county.name,
+        }
+
+
 class DataAccess:
 
     def get_county_name_map(self):
@@ -338,6 +352,9 @@ class DataAccess:
 
     def get_person(self, person_id, missing=KeyError):
         return DalPerson(person_id, missing)
+
+    def get_county(self, county_id, missing=KeyError):
+        return DalCounty(county_id, missing)
 
     def get_recent_proposals(self):
         return _get_recent_proposals(None, 10)

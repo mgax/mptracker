@@ -149,6 +149,14 @@ def person_question(question_id):
     })
 
 
+@pages.route('/persoane/judet/<uuid:county_id>')
+@section('person')
+def person_county(county_id):
+    county = dal.get_county(county_id, missing=NotFound)
+    ctx = county.get_details()
+    return flask.render_template('person_county.html', **ctx)
+
+
 @pages.route('/partide/')
 @section('party')
 def party_index():
