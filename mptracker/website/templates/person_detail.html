@@ -92,17 +92,22 @@
         <h4>Statistici</h4>
 
         <dl class="dl-horizontal">
+          {%- set url = url_for('.person_votes', person_id=person_id) %}
           <dt>prezență la vot</dt>
           <dd>{{ vote['attendance']|percent }}</dd>
 
           {%- if 'loyalty' in vote %}
             <dt>loialitate față de partid</dt>
-            <dd>{{ vote['loyalty']|percent }}</dd>
+            <dd>
+              <a href="{{ url }}">{{ vote['loyalty']|percent }}</a>
+            </dd>
           {%- endif %}
 
           {%- if 'cabinet_loyalty' in vote %}
             <dt>loialitate față de guvern</dt>
-            <dd>{{ vote['cabinet_loyalty']|percent }}</dd>
+            <dd>
+              <a href="{{ url }}">{{ vote['cabinet_loyalty']|percent }}</a>
+            </dd>
           {%- endif %}
 
           <dt>luări de cuvânt</dt>

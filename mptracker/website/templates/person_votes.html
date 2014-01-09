@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}{{ super() }} – {{ name }} – voturi{% endblock %}
+
+
+{% block content %}
+  <h1>{{ name }}</h1>
+
+  <table class="table">
+    <thead>
+      <td>dată</td>
+      <td>vot</td>
+      <td>{{ name }}</td>
+      <td>partid</td>
+      <td>guvern</td>
+    </thead>
+
+    <tbody>
+    {%- for vote in voting_session_list %}
+      <tr>
+        <td>{{ vote.date|datefmt }}</td>
+        <td>{{ vote.subject|truncate(80) }}</td>
+        <td>{{ vote.person_choice }}</td>
+        <td>{{ vote.group_choice }}</td>
+        <td>{{ vote.cabinet_choice }}</td>
+      </tr>
+    {%- endfor %}
+    </tbody>
+  </table>
+{% endblock %}

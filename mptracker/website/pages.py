@@ -142,6 +142,15 @@ def person_local(person_id):
     return flask.render_template('person_local.html', **ctx)
 
 
+@pages.route('/persoane/<uuid:person_id>/voturi')
+@section('person')
+def person_votes(person_id):
+    person = dal.get_person(person_id, missing=NotFound)
+    ctx = person.get_main_details()
+    ctx['voting_session_list'] = person.get_votes_data()
+    return flask.render_template('person_votes.html', **ctx)
+
+
 @pages.route('/persoane/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
     return flask.render_template('person_question.html', **{

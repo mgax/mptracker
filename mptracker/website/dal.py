@@ -301,6 +301,35 @@ class DalPerson:
 
         return series
 
+    def get_votes_data(self):
+        query = (
+            db.session.query(
+                VotingSession,
+                Vote,
+                GroupVote,
+                MpGroup,
+            )
+            .join(Vote)
+            .filter(Vote.mandate == self.mandate)
+            .join(VotingSession.group_votes)
+            .join(GroupVote.mp_group)
+            .join(MpGroup.memberships)
+            .filter(MpGroupMembership.interval.contains(VotingSession.date))
+            .filter(MpGroupMembership.mandate == self.mandate)
+            .order_by(VotingSession.date.desc(), VotingSession.cdeppk.desc())
+        )
+
+        return [
+            {
+                'subject': vs.subject,
+                'date': vs.date,
+                'person_choice': vote.choice,
+                'group_choice': '?',
+                'cabinet_choice': '?',
+            }
+            for vs, vote, group_vote, mp_group in query
+        ]
+
 
 class DalCounty:
 
