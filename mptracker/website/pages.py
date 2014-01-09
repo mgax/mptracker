@@ -154,6 +154,7 @@ def person_question(question_id):
 def person_county(county_id):
     county = dal.get_county(county_id, missing=NotFound)
     ctx = county.get_details()
+    ctx['mandate_list'] = county.get_mandates_data()
     return flask.render_template('person_county.html', **ctx)
 
 

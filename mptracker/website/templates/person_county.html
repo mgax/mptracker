@@ -6,4 +6,17 @@
 
 {% block content %}
   <h1>{{ name }}</h1>
+
+  <dl class="dl-horizontal">
+  {%- for college, mandate_group in mandate_list|groupby('college') %}
+    <dt>D{{ college }}</dt>
+
+    {%- for mandate in mandate_group %}
+      <dd>
+        {%- set url = url_for('.person_detail', person_id=mandate.person_id) %}
+        <a href="{{ url }}">{{ mandate.person_name }}</a>
+      </dd>
+    {%- endfor %}
+  {%- endfor %}
+  </dl>
 {% endblock %}

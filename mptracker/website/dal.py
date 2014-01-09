@@ -314,6 +314,23 @@ class DalCounty:
             'name': self.county.name,
         }
 
+    def get_mandates_data(self):
+        query = (
+            Mandate.query
+            .filter_by(year=2012)
+            .filter_by(county=self.county)
+            .options(joinedload('person'))
+            .order_by(Mandate.college)
+        )
+        return [
+            {
+                'college': m.college,
+                'person_name': m.person.name,
+                'person_id': m.person.id,
+            }
+            for m in query
+        ]
+
 
 class DataAccess:
 
