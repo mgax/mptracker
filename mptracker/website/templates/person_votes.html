@@ -23,7 +23,7 @@
         <td>{{ vote.subject|truncate(80) }}</td>
         <td>{{ VOTE_LABEL[vote.person_choice] }}</td>
         <td>{{ VOTE_LABEL[vote.group_choice] }} ({{ vote.group_short_name }})</td>
-        <td>{{ vote.cabinet_choice }}</td>
+        <td>{{ VOTE_LABEL[vote.cabinet_choice] }}</td>
       </tr>
     {%- endfor %}
     </tbody>

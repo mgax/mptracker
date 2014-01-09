@@ -327,7 +327,7 @@ class DalPerson:
                 'person_choice': vote.choice,
                 'group_short_name': mp_group.short_name,
                 'group_choice': group_vote.choice,
-                'cabinet_choice': '?',
+                'cabinet_choice': vs.cabinet_choice,
             }
             for vs, vote, group_vote, mp_group in query
         ]

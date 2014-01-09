@@ -117,6 +117,7 @@ def calculate_voting_session_loyalty(voting_session_id):
         return top[1]
 
     cabinet_top_choice = get_top_choice(vote_map.pop('_cabinet'))
+    voting_session.cabinet_choice = cabinet_top_choice
 
     for mp_group_id, votes_by_choice in vote_map.items():
         top_choice = get_top_choice(votes_by_choice)
