@@ -53,6 +53,18 @@ def bust_cache(endpoint, values):
             values['t'] = key
 
 
+@common.app_context_processor
+def inject_constants():
+    return {
+        'VOTE_LABEL': {
+          'yes': "da",
+          'no': "nu",
+          'abstain': "abținere",
+          'novote': "\u2014",  # em-dash
+        },
+    }
+
+
 def parse_date(date_str):
     return date_str and datetime.strptime(date_str, '%Y-%m-%d').date()
 
