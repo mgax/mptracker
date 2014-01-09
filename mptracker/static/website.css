@@ -25,6 +25,14 @@
     background: #fcc1c1;
 }
 
+.person-image-box {
+    text-align: center;
+}
+
+.person-image-box img {
+    width: 200px;
+}
+
 
 /*************************
  *   activitychart   *
