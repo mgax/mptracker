@@ -218,6 +218,7 @@ class DalPerson:
                 )
 
         rv['speeches'] = self.mandate.transcripts.count()
+        rv['questions'] = self.mandate.asked.count()
         rv['proposals'] = self.mandate.sponsorships.count()
         rv['local_score'] = (
             self._local_ask_query.count() +
@@ -290,6 +291,21 @@ class DalPerson:
                 )
             ],
         }
+
+    def get_questions(self):
+        return [
+            {
+                'id': ask.question.id,
+                'date': ask.question.date,
+                'title': ask.question.title,
+            }
+            for ask in (
+                self.mandate.asked
+                .options(joinedload('question'))
+                .join(Ask.question)
+                .order_by(Question.date.desc())
+            )
+        ]
 
     def get_proposals(self):
         return [

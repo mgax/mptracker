@@ -174,6 +174,10 @@
           <dt>luări de cuvânt</dt>
           <dd>{{ speeches }}</dd>
 
+          {%- set url = url_for('.person_questions', person_id=person_id) %}
+          <dt>întrebări și interpelări</dt>
+          <dd><a href="{{ url }}">{{ questions }}</a></dd>
+
           {%- set url = url_for('.person_proposals', person_id=person_id) %}
           <dt>propuneri legislative</dt>
           <dd><a href="{{ url }}">{{ proposals }}</a></dd>
