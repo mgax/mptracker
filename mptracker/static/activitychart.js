@@ -46,10 +46,6 @@ app.render_activitychart = function(box, data) {
         .y(function(d) { return d.vacation ? height : 0 });
 
     var labels = ['proposals', 'questions'];
-    var name_ro = {
-        'proposals': 'propuneri',
-        'questions': 'întrebări'
-    };
     color.domain(labels);
 
     data.forEach(function(d) {
@@ -96,10 +92,11 @@ app.render_activitychart = function(box, data) {
         .attr("class", "chart-axis y")
         .call(yAxis);
 
-    var legend_data = [{name: 'vacanță', color: '#bbb'}];
-    _(labels).forEach(function(name) {
-        legend_data.push({name: name_ro[name], color: color(name)});
-    });
+    var legend_data = [
+        {name: 'întrebări (săptămânal)', color: color('questions')},
+        {name: 'propuneri', color: color('proposals')},
+        {name: 'vacanță', render: 'block', color: '#bbb'},
+    ];
 
     var legend_item = svg.append('g')
       .selectAll('.activitychart-legend-item')
@@ -107,11 +104,11 @@ app.render_activitychart = function(box, data) {
         .data(legend_data)
       .enter().append('g')
         .attr('transform', function(d, n) {
-            return 'translate(' + (width - (n + 1) * 100) + ', 0)'})
+            return 'translate(' + (width - 160 - n * 100) + ', -15)'})
         .each(function(d, i) {
             var g = d3.select(this);
 
-            if(d.name == 'vacanță') {
+            if(d.render == 'block') {
                 g.append('rect')
                     .attr('height', 10)
                     .attr('width', 20)
