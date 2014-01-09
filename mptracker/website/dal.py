@@ -309,6 +309,7 @@ class DalPerson:
                 GroupVote,
                 MpGroup,
             )
+            .filter(VotingSession.final == True)
             .join(Vote)
             .filter(Vote.mandate == self.mandate)
             .join(VotingSession.group_votes)
@@ -324,7 +325,8 @@ class DalPerson:
                 'subject': vs.subject,
                 'date': vs.date,
                 'person_choice': vote.choice,
-                'group_choice': '?',
+                'group_short_name': mp_group.short_name,
+                'group_choice': group_vote.choice,
                 'cabinet_choice': '?',
             }
             for vs, vote, group_vote, mp_group in query

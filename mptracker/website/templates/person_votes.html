@@ -22,7 +22,7 @@
         <td>{{ vote.date|datefmt }}</td>
         <td>{{ vote.subject|truncate(80) }}</td>
         <td>{{ vote.person_choice }}</td>
-        <td>{{ vote.group_choice }}</td>
+        <td>{{ vote.group_choice }} ({{ vote.group_short_name }})</td>
         <td>{{ vote.cabinet_choice }}</td>
       </tr>
     {%- endfor %}
