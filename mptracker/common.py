@@ -165,3 +165,14 @@ class DateAwareJSONEncoder(flask.json.JSONEncoder):
 @common.record
 def override_json_encoder(state):
     state.app.json_encoder = DateAwareJSONEncoder
+
+
+def generate_slug(text, unique=lambda v: True):
+    no_spaces = re.sub(r'\s+', '-', text.strip().lower())
+    base_slug = re.sub(r'[^a-z0-9-]', '', no_spaces)
+    for n in range(100):
+        rv = '%s-%s' % (base_slug, n) if n > 0 else base_slug
+        if unique(rv):
+            return rv
+    else:
+        raise RuntimeError("Could not find a unique slug, giving up.")
