@@ -11,6 +11,11 @@ def test_simple_slug():
     assert generate_slug("___-%") == '-'
 
 
+def test_diacritics():
+    from mptracker.common import generate_slug
+    assert generate_slug('șțuâîâü') == 'stuaiau'
+
+
 def test_sequential():
     from mptracker.common import generate_slug
     values = []

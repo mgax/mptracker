@@ -6,6 +6,7 @@ import csv
 import re
 from io import StringIO
 from itertools import chain
+import unicodedata
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
 from werkzeug.urls import url_decode, url_parse
@@ -168,7 +169,8 @@ def override_json_encoder(state):
 
 
 def generate_slug(text, unique=lambda v: True):
-    no_spaces = re.sub(r'\s+', '-', text.strip().lower())
+    normalized = unicodedata.normalize('NFKD', text).strip().lower()
+    no_spaces = re.sub(r'\s+', '-', normalized)
     base_slug = re.sub(r'[^a-z0-9-]', '', no_spaces)
     for n in range(100):
         rv = '%s-%s' % (base_slug, n) if n > 0 else base_slug
