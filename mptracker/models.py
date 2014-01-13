@@ -36,6 +36,7 @@ class Chamber(db.Model):
 
 class Person(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
+    slug = db.Column(db.Text, nullable=False, unique=True)
     name = db.Column(db.Text)
     year_born = db.Column(db.Integer)
     education = db.Column(db.Text)
