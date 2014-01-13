@@ -94,6 +94,22 @@ class MpCommittee(db.Model):
         backref=db.backref('committees', lazy='dynamic', cascade='all'))
 
 
+class MpCommitteeMembership(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    role = db.Column(db.Text)
+    interval = db.Column(DATERANGE, nullable=False)
+
+    mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
+    mandate = db.relationship('Mandate',
+        backref=db.backref('committee_memberships', lazy='dynamic',
+                           cascade='all'))
+
+    mp_committee_id = db.Column(UUID, db.ForeignKey('mp_committee.id'),
+                                nullable=False)
+    mp_committee = db.relationship('MpCommittee',
+        backref=db.backref('memberships', lazy='dynamic', cascade='all'))
+
+
 class CabinetMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     interval = db.Column(DATERANGE, nullable=False)
