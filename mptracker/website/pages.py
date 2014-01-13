@@ -178,10 +178,10 @@ def person_question(question_id):
     })
 
 
-@pages.route('/persoane/judet/<uuid:county_id>')
+@pages.route('/persoane/judet/<county_code>')
 @section('person')
-def person_county(county_id):
-    county = dal.get_county(county_id, missing=NotFound)
+def person_county(county_code):
+    county = dal.get_county(county_code, missing=NotFound)
     ctx = county.get_details()
     ctx['mandate_list'] = county.get_mandates_data()
     return flask.render_template('person_county.html', **ctx)

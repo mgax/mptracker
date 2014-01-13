@@ -177,7 +177,7 @@ class DalPerson:
             votes_percent = self.mandate.election_votes_percent
             rv['college'] = {
                 'county_name': self.mandate.county.name,
-                'county_id': self.mandate.county.id,
+                'county_code': self.mandate.county.code,
                 'number': self.mandate.college,
                 'election_votes_fraction': votes_percent and votes_percent/100,
             }
@@ -397,8 +397,8 @@ class DalPerson:
 
 class DalCounty:
 
-    def __init__(self, county_id, missing=KeyError):
-        self.county = County.query.get(county_id)
+    def __init__(self, county_code, missing=KeyError):
+        self.county = County.query.filter_by(code=county_code).first()
         if self.county is None:
             raise missing()
 
@@ -463,8 +463,8 @@ class DataAccess:
     def get_person(self, person_slug, missing=KeyError):
         return DalPerson(person_slug, missing)
 
-    def get_county(self, county_id, missing=KeyError):
-        return DalCounty(county_id, missing)
+    def get_county(self, county_code, missing=KeyError):
+        return DalCounty(county_code, missing)
 
     def get_recent_proposals(self):
         return _get_recent_proposals(None, 10)
