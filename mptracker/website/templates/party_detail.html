@@ -28,7 +28,7 @@
         <ul class="list-unstyled">
           {%- for member in party['member_list'] %}
             <li>
-              {%- set url = url_for('.person_detail', person_id=member['id']) %}
+              {%- set url = url_for('.person_detail', person_slug=member['slug']) %}
               <a href="{{ url }}">{{ member['name'] }}</a>
             </li>
           {%- endfor %}

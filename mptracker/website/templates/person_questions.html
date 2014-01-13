@@ -5,7 +5,7 @@
 
 
 {% block content %}
-  {%- set url = url_for('.person_detail', person_id=person_id) %}
+  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
   <h1><a href="{{ url }}">{{ name }}</a></h1>
 
   <h3>Întrebări și interpelări</h3>

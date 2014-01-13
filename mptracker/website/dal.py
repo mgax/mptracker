@@ -107,8 +107,8 @@ def group_by_week(data_iter):
 
 class DalPerson:
 
-    def __init__(self, person_id, missing=KeyError):
-        self.person = Person.query.get(person_id)
+    def __init__(self, person_slug, missing=KeyError):
+        self.person = Person.query.filter_by(slug=person_slug).first()
         if self.person is None:
             raise missing()
 
@@ -420,7 +420,7 @@ class DalCounty:
             {
                 'college': m.college,
                 'person_name': m.person.name,
-                'person_id': m.person.id,
+                'person_slug': m.person.slug,
             }
             for m in query
         ]
@@ -444,7 +444,7 @@ class DataAccess:
             key = '%s%d' % (m.county.code, m.college)
             mandate_data[key].append({
                 'name': m.person.name,
-                'person_id': m.person_id,
+                'person_slug': m.person.slug,
             })
 
         return dict(mandate_data)
@@ -457,12 +457,12 @@ class DataAccess:
             .order_by(Person.name)
         )
         return [
-            {'name': person.name, 'id': person.id}
+            {'name': person.name, 'slug': person.slug}
             for person in name_search.find(query.strip())
         ]
 
-    def get_person(self, person_id, missing=KeyError):
-        return DalPerson(person_id, missing)
+    def get_person(self, person_slug, missing=KeyError):
+        return DalPerson(person_slug, missing)
 
     def get_county(self, county_id, missing=KeyError):
         return DalCounty(county_id, missing)
@@ -490,7 +490,7 @@ class DataAccess:
         for person in asked_query:
             rv['asked_by'].append({
                 'name': person.name,
-                'id': person.id,
+                'slug': person.slug,
             })
 
         return rv
@@ -526,7 +526,7 @@ class DataAccess:
             person = membership.mandate.person
             rv['member_list'].append({
                 'name': person.name,
-                'id': person.id,
+                'slug': person.slug,
             })
 
         final_votes = (
@@ -601,7 +601,7 @@ class DataAccess:
         for person in sponsors_query:
             rv['sponsors'].append({
                 'name': person.name,
-                'id': person.id,
+                'slug': person.slug,
             })
 
         return rv

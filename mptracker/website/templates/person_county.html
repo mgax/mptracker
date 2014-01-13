@@ -13,7 +13,7 @@
 
     {%- for mandate in mandate_group %}
       <dd>
-        {%- set url = url_for('.person_detail', person_id=mandate.person_id) %}
+        {%- set url = url_for('.person_detail', person_slug=mandate.person_slug) %}
         <a href="{{ url }}">{{ mandate.person_name }}</a>
       </dd>
     {%- endfor %}

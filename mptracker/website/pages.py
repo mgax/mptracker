@@ -78,7 +78,7 @@ def person_index():
         for mandate_info in county_list:
             mandate_info['url'] = flask.url_for(
                 '.person_detail',
-                person_id=mandate_info['person_id'],
+                person_slug=mandate_info['person_slug'],
             )
 
     return flask.render_template('person_index.html', **{
@@ -93,19 +93,19 @@ def person_index_search():
     results = [
         {
             'name': person['name'],
-            'url': flask.url_for('.person_detail', person_id=person['id']),
+            'url': flask.url_for('.person_detail', person_slug=person['slug']),
         }
         for person in dal.search_person(query)
     ]
     return flask.jsonify(results=results)
 
 
-@pages.route('/persoane/<uuid:person_id>')
+@pages.route('/persoane/<person_slug>')
 @section('person')
-def person_detail(person_id):
-    person = dal.get_person(person_id, missing=NotFound)
+def person_detail(person_slug):
+    person = dal.get_person(person_slug, missing=NotFound)
     ctx = person.get_details()
-    ctx['person_id'] = person_id
+    ctx['person_slug'] = person_slug
     ctx['activitychart_data'] = person.get_activitychart_data()
 
     if 'picture_filename' in ctx:
@@ -132,40 +132,40 @@ def person_detail(person_id):
     return flask.render_template('person_detail.html', **ctx)
 
 
-@pages.route('/persoane/<uuid:person_id>/local')
+@pages.route('/persoane/<person_slug>/local')
 @section('person')
-def person_local(person_id):
-    person = dal.get_person(person_id, missing=NotFound)
+def person_local(person_slug):
+    person = dal.get_person(person_slug, missing=NotFound)
     ctx = person.get_main_details()
     ctx.update(person.get_local_activity())
-    ctx['person_id'] = person_id
+    ctx['person_slug'] = person_slug
     return flask.render_template('person_local.html', **ctx)
 
 
-@pages.route('/persoane/<uuid:person_id>/intrebari')
+@pages.route('/persoane/<person_slug>/intrebari')
 @section('person')
-def person_questions(person_id):
-    person = dal.get_person(person_id, missing=NotFound)
+def person_questions(person_slug):
+    person = dal.get_person(person_slug, missing=NotFound)
     ctx = person.get_main_details()
     ctx['question_list'] = person.get_questions()
-    ctx['person_id'] = person_id
+    ctx['person_slug'] = person_slug
     return flask.render_template('person_questions.html', **ctx)
 
 
-@pages.route('/persoane/<uuid:person_id>/propuneri')
+@pages.route('/persoane/<person_slug>/propuneri')
 @section('person')
-def person_proposals(person_id):
-    person = dal.get_person(person_id, missing=NotFound)
+def person_proposals(person_slug):
+    person = dal.get_person(person_slug, missing=NotFound)
     ctx = person.get_main_details()
     ctx['proposal_list'] = person.get_proposals()
-    ctx['person_id'] = person_id
+    ctx['person_slug'] = person_slug
     return flask.render_template('person_proposals.html', **ctx)
 
 
-@pages.route('/persoane/<uuid:person_id>/voturi')
+@pages.route('/persoane/<person_slug>/voturi')
 @section('person')
-def person_votes(person_id):
-    person = dal.get_person(person_id, missing=NotFound)
+def person_votes(person_slug):
+    person = dal.get_person(person_slug, missing=NotFound)
     ctx = person.get_main_details()
     ctx['voting_session_list'] = person.get_votes_data()
     return flask.render_template('person_votes.html', **ctx)
