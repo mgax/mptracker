@@ -167,7 +167,6 @@ class DalPerson:
                 'end_date': membership.interval.upper,
                 'role': membership.role,
                 'group_short_name': membership.mp_group.short_name,
-                'group_id': membership.mp_group_id,
             }
             for membership in membership_query
         ]
@@ -497,13 +496,13 @@ class DataAccess:
 
     def get_party_list(self):
         return [
-            {'name': group.name, 'id': group.id}
+            {'name': group.name, 'short_name': group.short_name}
             for group in MpGroup.query.order_by(MpGroup.name)
             if group.short_name not in ['Indep.', 'Mino.']
         ]
 
-    def get_party_details(self, party_id, missing=KeyError):
-        party = MpGroup.query.get(party_id)
+    def get_party_details(self, party_short_name, missing=KeyError):
+        party = MpGroup.query.filter_by(short_name=party_short_name).first()
         if party is None:
             raise missing()
         rv = {'name': party.name}
@@ -535,7 +534,7 @@ class DataAccess:
             .filter(VotingSession.final == True)
             .join(Vote.mandate)
             .join(Mandate.group_memberships)
-            .filter(MpGroupMembership.mp_group_id == party_id)
+            .filter(MpGroupMembership.mp_group == party)
         )
         votes_attended = final_votes.count()
         votes_loyal = final_votes.filter(Vote.loyal == True).count()

@@ -195,10 +195,10 @@ def party_index():
     })
 
 
-@pages.route('/partide/<uuid:party_id>')
+@pages.route('/partide/<party_short_name>')
 @section('party')
-def party_detail(party_id):
-    party = dal.get_party_details(party_id, missing=NotFound)
+def party_detail(party_short_name):
+    party = dal.get_party_details(party_short_name, missing=NotFound)
     return flask.render_template('party_detail.html', **{
         'party': party,
     })

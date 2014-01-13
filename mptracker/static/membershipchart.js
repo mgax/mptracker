@@ -82,7 +82,7 @@ app.render_membershipchart = function(box, data) {
 
     function navigate_to_group(d) {
         if(d.group_short_name != 'Indep.') {
-            window.location.href = '/partide/' + d.group_id;
+            window.location.href = '/partide/' + d.group_short_name;
         }
     }
 };
