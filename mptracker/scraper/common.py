@@ -5,6 +5,7 @@ import logging
 import re
 import csv
 import io
+from collections import namedtuple
 from path import path
 import requests
 from werkzeug.urls import url_decode, url_parse
@@ -130,12 +131,15 @@ def get_cdep_id(href, fail='raise'):
     return '%s-%03d' % (int(qs['leg'][0]), int(qs['idm'][0]))
 
 
+ProfileIdent = namedtuple('ProfileIdent', ['year', 'chamber', 'number'])
+
+
 def parse_profile_url(href):
     qs = parse_qs(urlparse(href).query)
     year = int(qs['leg'][0])
     chamber = int(qs.get('cam')[0])
     number = int(qs['idm'][0])
-    return (year, chamber, number)
+    return ProfileIdent(year, chamber, number)
 
 
 def parse_cdep_id(href):
