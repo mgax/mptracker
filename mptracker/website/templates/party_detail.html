@@ -17,8 +17,10 @@
           <dt>loialitatea membrilor</dt>
           <dd>{{ party['member_loyalty']|percent }}</dd>
 
-          <dt>loialitate pentru guvern</dt>
-          <dd>{{ party['cabinet_loyalty']|percent }}</dd>
+          {%- if 'cabinet_loyalty' in party %}
+            <dt>loialitate pentru guvern</dt>
+            <dd>{{ party['cabinet_loyalty']|percent }}</dd>
+          {%- endif %}
         </dl>
       </div>
 

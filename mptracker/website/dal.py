@@ -541,8 +541,10 @@ class DataAccess:
         rv['member_loyalty'] = votes_loyal / votes_attended
 
         group_votes = GroupVote.query.filter(GroupVote.mp_group == party)
-        loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
-        rv['cabinet_loyalty'] = loyal_group_votes.count() / group_votes.count()
+        n_group_votes = group_votes.count()
+        if n_group_votes > 0:
+            loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
+            rv['cabinet_loyalty'] = loyal_group_votes.count() / n_group_votes
 
         return rv
 
