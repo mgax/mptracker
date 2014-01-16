@@ -177,6 +177,8 @@ MONTHS = {'ian': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'mai': 5, 'iun': 6,
 
 
 def parse_date(txt):
+    if not txt:
+        return None
     m = re.match(r'^(?P<day>\d{1,2}) (?P<month>\w+)\.? (?P<year>\d{4})$', txt)
     assert m is not None, "can't parse date: %r" % txt
     return date(
@@ -255,3 +257,23 @@ class TableParser:
             )
             up_text_values = table_row.text_or_up_values
             yield table_row
+
+
+class MembershipParser:
+
+    member_cls = GenericModel
+    role_txt = "Funcţia"
+    person_txt = "Nume şi prenume"
+    start_date_txt = "Membru din"
+    end_date_txt = "Membru până"
+
+    def parse_table(self, table_root):
+        for row in TableParser(table_root):
+            name_link = row.td(self.person_txt).find('a')
+            yield self.member_cls(
+                role=row.text(self.role_txt, inherit=True),
+                mp_name=name_link.text(),
+                mp_ident=parse_profile_url(name_link.attr('href')),
+                start_date=parse_date(row.text(self.start_date_txt)),
+                end_date=parse_date(row.text(self.end_date_txt)),
+            )
