@@ -29,6 +29,9 @@ class CommitteeMembershipParser(MembershipParser):
     }
 
     def parse_table(self, table_root):
+        self.table_parser_args = {}
+        if len(table_root.children('tr.rowh')) > 1:
+            self.table_parser_args['double_header'] = True
         for member in super().parse_table(table_root):
             if member.mp_ident[1] == 2:  # only deputies, not senators
                 member.role = self.role_map[member.role]
@@ -89,6 +92,5 @@ class CommitteeScraper(Scraper):
             membership_parser.parse_table(mp_tables[0]))
 
         if len(mp_tables) > 1:
-            membership_parser.table_parser_args = {'double_header': True}
             committee.former_members.extend(
                 membership_parser.parse_table(mp_tables[-1]))
