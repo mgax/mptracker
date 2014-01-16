@@ -124,6 +124,8 @@ class DalPerson:
     def get_main_details(self):
         return {
             'name': self.person.name,
+            'person_id': self.person.id,
+            'mandate_id': self.mandate.id,
         }
 
     @property
