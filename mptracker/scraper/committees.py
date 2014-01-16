@@ -12,32 +12,37 @@ class Member(GenericModel):
     pass
 
 
-class CdepCommitteeMembershipParser(MembershipParser):
+class CommitteeMembershipParser(MembershipParser):
 
     member_cls = Member
+    date_fmt = 'eu_dots'
+    start_date_txt = "Membru al comisiei din data"
+    end_date_txt = "Membru al comisiei până în data"
+
+    role_map = {
+        "": "",
+        "Preşedinte": "Preşedinte",
+        "Vicepreşedinţi": "Vicepreşedinte",
+        "Secretari": "Secretar",
+        "Membri": "Membru",
+        "Membri supleanţi": "Membru supleant",
+    }
+
+    def parse_table(self, table_root):
+        for member in super().parse_table(table_root):
+            if member.mp_ident[1] == 2:  # only deputies, not senators
+                member.role = self.role_map[member.role]
+                yield member
+
+
+class CdepCommitteeMembershipParser(CommitteeMembershipParser):
+
     person_txt = "Deputatul"
-    start_date_txt = "Membru al comisiei din data"
-    end_date_txt = "Membru al comisiei până în data"
-    date_fmt = 'eu_dots'
-
-    def parse_table(self, table_root):
-        for member in super().parse_table(table_root):
-            if member.mp_ident[1] == 2:  # only deputies, not senators
-                yield member
 
 
-class CommonCommitteeMembershipParser(MembershipParser):
+class CommonCommitteeMembershipParser(CommitteeMembershipParser):
 
-    member_cls = Member
     person_txt = "Numele şi prenumele"
-    start_date_txt = "Membru al comisiei din data"
-    end_date_txt = "Membru al comisiei până în data"
-    date_fmt = 'eu_dots'
-
-    def parse_table(self, table_root):
-        for member in super().parse_table(table_root):
-            if member.mp_ident[1] == 2:  # only deputies, not senators
-                yield member
 
 
 class CommitteeScraper(Scraper):
