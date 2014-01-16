@@ -32,9 +32,18 @@
       <ul class="list-unstyled">
         {% if college %}
           <li>
-            {% set url = url_for('.person_county', county_code=college.county_code) %}
-            Deputat de <a href="{{ url }}">{{ college.county_name }}</a>,
+            Deputat de
+            {%- if college.county_code %}
+              {% set url = url_for(
+                  '.person_county',
+                  county_code=college.county_code,
+                ) %}
+              <a href="{{ url }}">{{ college.county_name }}</a>
+            {%- else %}
+              {{ college.county_name }}
+            {%- endif %},
             colegiul D{{ college.number }}
+
             {%- if college.election_votes_fraction %}
               ({{ college.election_votes_fraction|percent }} din voturi)
             {%- endif %},
