@@ -204,3 +204,54 @@ def parse_interval(start_txt, end_txt):
     else:
         end_date = date.max
     return DateRange(start_date, end_date)
+
+
+class TableRow:
+
+    def __init__(self, headings, tdpq, up_text_values):
+        self.headings = headings
+        self.tdpq = tdpq
+        self.text_values = [td.text() for td in self.tdpq.items()]
+        self.text_or_up_values = [
+            t or ut for t, ut in
+            zip(self.text_values, up_text_values)
+        ]
+
+    def _find_column(self, text):
+        for n, col_text in enumerate(self.headings):
+            if text in col_text:
+                return n
+
+    def td(self, header_text):
+        col = self._find_column(header_text)
+        assert col is not None, "No column named %r" % header_text
+        return self.tdpq.eq(col)
+
+    def text(self, header_text, inherit=False):
+        col = self._find_column(header_text)
+        if col is None:
+            return ""
+        values = self.text_or_up_values if inherit else self.text_values
+        return values[col]
+
+
+class TableParser:
+
+    def __init__(self, table_html):
+        self.table = pq(table_html)
+        self.headings = [
+            td.text() for td in
+            self.table.children('tr').eq(0).children().items()
+        ]
+
+    def __iter__(self):
+        tr_iter = iter(self.table.children('tr').items())
+        up_text_values = [""] * len(next(tr_iter).children('td'))
+        for tr in tr_iter:
+            table_row = TableRow(
+                self.headings,
+                tr.children('td'),
+                up_text_values,
+            )
+            up_text_values = table_row.text_or_up_values
+            yield table_row
