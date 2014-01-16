@@ -18,6 +18,7 @@ from mptracker.models import (
     Ask,
     Match,
     VotingSession,
+    Controversy,
     Vote,
     GroupVote,
     PolicyDomain,
@@ -244,23 +245,23 @@ class DalPerson:
 
         rv['recent_activity'] = _get_recent_activity(self.mandate)
 
+        vote_subquery = Vote.query.filter_by(mandate=self.mandate).subquery()
         controversy_query = (
             db.session.query(
-                Vote,
-                VotingSession,
+                Controversy.title,
+                VotingSession.date,
+                vote_subquery.c.choice,
             )
-            .join(Vote.voting_session)
-            .filter(Vote.mandate == self.mandate)
-            .join(VotingSession.controversy)
-            .options(joinedload(VotingSession.controversy))
+            .join(Controversy.voting_sessions)
+            .outerjoin(vote_subquery)
         )
         rv['controversy_list'] = [
             {
-                'title': vs.controversy.title,
-                'date': vs.date,
-                'choice': vote.choice,
+                'title': contro_title,
+                'date': vs_date,
+                'choice': vote_choice or 'novote',
             }
-            for vote, vs in controversy_query
+            for contro_title, vs_date, vote_choice in controversy_query
         ]
 
         rv['contact'] = {
