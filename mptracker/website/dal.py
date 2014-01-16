@@ -9,6 +9,7 @@ from mptracker.models import (
     Mandate,
     MpGroup,
     MpGroupMembership,
+    MpCommitteeMembership,
     Proposal,
     ProposalActivityItem,
     Sponsorship,
@@ -158,6 +159,21 @@ class DalPerson:
             ],
             'mandate_count': self.person.mandates.count(),
         })
+
+        committee_membership_query = (
+            self.mandate.committee_memberships
+            .options(joinedload('mp_committee'))
+            .order_by(MpCommitteeMembership.interval.desc())
+        )
+        rv['committee_list'] = [
+            {
+                'start_date': cm.interval.lower,
+                'end_date': cm.interval.upper,
+                'role': cm.role,
+                'committee_name': cm.mp_committee.name,
+            }
+            for cm in committee_membership_query
+        ]
 
         membership_query = (
             self.mandate.group_memberships
