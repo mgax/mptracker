@@ -335,20 +335,62 @@ def committees(
 ):
     from mptracker.scraper.committees import CommitteeScraper
 
-    patcher = TablePatcher(
-        models.MpCommittee,
-        models.db.session,
-        key_columns=['chamber_id', 'cdep_id'],
-    )
+    mandate_lookup = models.MandateLookup()
 
     http_session = create_session(
         cache_name=cache_name,
         throttle=throttle and float(throttle),
     )
+
     scraper = CommitteeScraper(http_session)
-    with patcher.process(autoflush=1000, remove=True) as add:
+
+    committee_patcher = TablePatcher(
+        models.MpCommittee,
+        models.db.session,
+        key_columns=['chamber_id', 'cdep_id'],
+    )
+
+    membership_patcher = TablePatcher(
+        models.MpCommitteeMembership,
+        models.db.session,
+        key_columns=['mandate_id', 'mp_committee_id', 'interval'],
+    )
+
+    with committee_patcher.process(remove=True) as add_committee, \
+         membership_patcher.process(remove=True) as add_membership:
         for committee in scraper.fetch_committees():
-            add(committee.as_dict(['chamber_id', 'cdep_id', 'name']))
+            res = add_committee(
+                committee.as_dict(['chamber_id', 'cdep_id', 'name']),
+            )
+            if res.is_new:
+                models.db.session.flush()
+            mp_committee = res.row
+
+            for member in committee.current_members + committee.former_members:
+                if member.end_date and member.end_date < TERM_2012_START:
+                    logger.warn(
+                        "Membership end date is before the 2012 "
+                        "term started, skipping: %r %r %r",
+                        member.mp_name, committee.name, member.end_date,
+                    )
+                    continue
+                interval = DateRange(
+                    member.start_date or TERM_2012_START,
+                    member.end_date or date.max,
+                )
+                if interval.lower > interval.upper:
+                    import pdb; pdb.set_trace()
+                mandate = mandate_lookup.find(
+                    member.mp_name,
+                    member.mp_ident.year,
+                    member.mp_ident.number,
+                )
+                add_membership({
+                    'role': member.role,
+                    'interval': interval,
+                    'mandate_id': mandate.id,
+                    'mp_committee_id': mp_committee.id,
+                })
 
     if no_commit:
         logger.warn("Rolling back the transaction")
