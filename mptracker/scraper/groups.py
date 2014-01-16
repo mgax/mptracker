@@ -1,7 +1,9 @@
 from collections import namedtuple
 from pyquery import PyQuery as pq
-from mptracker.scraper.common import (Scraper, url_args, GenericModel,
-                                      parse_profile_url, parse_date)
+from mptracker.scraper.common import (
+    Scraper, url_args, GenericModel, parse_profile_url, parse_date,
+    TableParser,
+)
 
 
 Interval = namedtuple('Interval', ['start', 'end', 'group'])
@@ -73,11 +75,8 @@ class GroupScraper(Scraper):
         return group
 
     def fetch_current_independent_members(self, table):
-        rows = list(table.items('tr'))
-        cols = {k: n for n, k in enumerate(self.parse_cols(rows[0]))}
-        for row in rows[1:]:
-            row_children = row.children()
-            name_link = row_children.eq(cols['person']).find('a')
+        for row in TableParser(table_root):
+            name_link = row.td("Nume şi prenume").find('a')
 
             member = Member(
                 mp_name=name_link.text(),
@@ -88,59 +87,37 @@ class GroupScraper(Scraper):
 
             yield member
 
-    def parse_cols(self, row):
-        names = {
-            "Funcţia": 'title',
-            "Nume şi prenume": 'person',
-            "Membru din": 'start_date',
-            "Membru până": 'end_date',
-        }
-        for col in row.items('td'):
-            yield names.get(col.text(), '??')
-
-    def fetch_current_members(self, table):
-        current_title = None
-        rows = list(table.items('tr'))
-        cols = {k: n for n, k in enumerate(self.parse_cols(rows[0]))}
-        for row in rows[1:]:
-            row_children = row.children()
-            next_title = row_children.eq(cols['title']).text()
-            if next_title:
-                current_title = next_title
-            name_link = row_children.eq(cols['person']).find('a')
+    def fetch_current_members(self, table_root):
+        for row in TableParser(table_root):
+            name_link = row.td("Nume şi prenume").find('a')
 
             member = Member(
-                title=current_title,
+                title=row.text("Funcţia", inherit=True),
                 mp_name=name_link.text(),
                 mp_ident=parse_profile_url(name_link.attr('href')),
                 start_date=None,
                 end_date=None,
             )
 
-            if 'start_date' in cols:
-                date_txt = row_children.eq(cols['start_date']).text()
-                if date_txt:
-                    member.start_date = parse_date(date_txt)
+            date_txt = row.text("Membru din")
+            if date_txt:
+                member.start_date = parse_date(date_txt)
 
             yield member
 
-    def fetch_former_members(self, table):
-        rows = list(table.items('tr'))
-        cols = {k: n for n, k in enumerate(self.parse_cols(rows[0]))}
-        for row in rows[1:]:
-            row_children = row.children()
-            name_link = row_children.eq(cols['person']).find('a')
+    def fetch_former_members(self, table_root):
+        for row in TableParser(table_root):
+            name_link = row.td("Nume şi prenume").find('a')
 
             member = Member(
                 mp_name=name_link.text(),
                 mp_ident=parse_profile_url(name_link.attr('href')),
                 start_date=None,
-                end_date=parse_date(row_children.eq(cols['end_date']).text()),
+                end_date=parse_date(row.text("Membru până")),
             )
 
-            if 'start_date' in cols:
-                start_txt = row_children.eq(cols['start_date']).text()
-                if start_txt:
-                    member.start_date = parse_date(start_txt)
+            start_txt = row.text("Membru din")
+            if start_txt:
+                member.start_date = parse_date(start_txt)
 
             yield member
