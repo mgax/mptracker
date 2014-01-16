@@ -239,16 +239,35 @@ class TableRow:
 
 class TableParser:
 
-    def __init__(self, table_html):
+    def __init__(self, table_html, double_header=False):
         self.table = pq(table_html)
-        self.headings = [
-            td.text() for td in
-            self.table.children('tr').eq(0).children().items()
-        ]
+        self.double_header = double_header
+        if double_header:
+            self.headings = []
+            skip_row2_cell = []
+            for td in self.table.children('tr').eq(0).children().items():
+                n = int(td.attr('colspan') or 1)
+                skip = int(td.attr('rowspan') or 1) > 1
+                self.headings += [td.text()] * n
+                skip_row2_cell += [skip] * n
+            offset = 0
+            for td in self.table.children('tr').eq(1).children().items():
+                while skip_row2_cell[offset]:
+                    offset += 1
+                self.headings[offset] += ' | ' + td.text()
+                offset += 1
+        else:
+            self.headings = [
+                td.text() for td in
+                self.table.children('tr').eq(0).children().items()
+            ]
 
     def __iter__(self):
         tr_iter = iter(self.table.children('tr').items())
-        up_text_values = [""] * len(next(tr_iter).children('td'))
+        next(tr_iter)
+        if self.double_header:
+            next(tr_iter)
+        up_text_values = [""] * len(self.headings)
         for tr in tr_iter:
             table_row = TableRow(
                 self.headings,

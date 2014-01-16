@@ -8,6 +8,8 @@ def test_row_data():
     from mptracker.scraper.common import TableParser
     table_html = (PAGES_DIR / 'table_ppdd_members.html').text()
     table = TableParser(table_html)
+    assert table.headings == ["", "Funcţia", "Nume şi prenume", "Membru din"]
+
     rows = list(table)
     assert len(rows) == 24
     assert rows[3].td("Funcţia").text() == "Secretari"
@@ -22,3 +24,18 @@ def test_row_data():
 
     assert rows[3].text("foo bar") == ""
     assert rows[3].text("foo bar", inherit=True) == ""
+
+
+def test_double_header():
+    from mptracker.scraper.common import TableParser
+    table_html = (PAGES_DIR / 'table_committee_former_members.html').text()
+    table = TableParser(table_html, double_header=True)
+    assert table.headings == [
+        "", "Deputatul", "Grupul parlamentar",
+        "Membru al comisiei | din data", "Membru al comisiei | până în data",
+    ]
+
+    rows = list(table)
+    assert len(rows) == 3
+
+    assert rows[1].text("Membru al comisiei | până în data") == "08.10.2013"
