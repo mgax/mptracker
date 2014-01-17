@@ -8,6 +8,14 @@ class Mandate(GenericModel):
     pass
 
 
+def match_split_name(last_first, first_last_upper):
+    bits = first_last_upper.split()
+    first_name = ' '.join(b for b in bits if not b.isupper())
+    last_name = ' '.join(b.title() for b in bits if b.isupper())
+    assert last_first == "%s %s" % (last_name, first_name)
+    return (first_name, last_name)
+
+
 class MandateScraper(Scraper):
 
     mandates_url = 'http://www.cdep.ro/pls/parlam/structura.de?leg={year}'
