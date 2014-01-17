@@ -44,6 +44,7 @@ class MandateScraper(Scraper):
                 person_page.find('.headline').html()
                 .split('<br/>')[0]
                 .split(',')[0]
+                .split('\xa0\xa0\xa0\xa0')[0]
             )
             (first_name, last_name) = match_split_name(last_first, first_last)
 
