@@ -127,7 +127,7 @@ class DalPerson:
 
     def get_main_details(self):
         return {
-            'name': self.person.name,
+            'name': self.person.name_first_last,
             'person_id': self.person.id,
             'mandate_id': self.mandate.id,
         }
@@ -441,7 +441,7 @@ class DalCounty:
         return [
             {
                 'college': m.college,
-                'person_name': m.person.name,
+                'person_name': m.person.name_first_last,
                 'person_slug': m.person.slug,
             }
             for m in query
@@ -468,7 +468,7 @@ class DataAccess:
         for m in mandates:
             key = '%s%d' % (m.county.code, m.college)
             mandate_data[key].append({
-                'name': m.person.name,
+                'name': m.person.name_first_last,
                 'person_slug': m.person.slug,
             })
 
@@ -479,10 +479,10 @@ class DataAccess:
             Person.query
             .join(Person.mandates)
             .filter_by(year=2012)
-            .order_by(Person.name)
+            .order_by(Person.first_name, Person.last_name)
         )
         return [
-            {'name': person.name, 'slug': person.slug}
+            {'name': person.name_first_last, 'slug': person.slug}
             for person in name_search.find(query.strip())
         ]
 
@@ -514,7 +514,7 @@ class DataAccess:
         rv['asked_by'] = []
         for person in asked_query:
             rv['asked_by'].append({
-                'name': person.name,
+                'name': person.name_first_last,
                 'slug': person.slug,
             })
 
@@ -545,12 +545,12 @@ class DataAccess:
             )
             .join(MpGroupMembership.mandate)
             .join(Mandate.person)
-            .order_by(Person.name)
+            .order_by(Person.first_name, Person.last_name)
         )
         for membership in memberships_query:
             person = membership.mandate.person
             rv['member_list'].append({
-                'name': person.name,
+                'name': person.name_first_last,
                 'slug': person.slug,
             })
 
@@ -627,7 +627,7 @@ class DataAccess:
         rv['sponsors'] = []
         for person in sponsors_query:
             rv['sponsors'].append({
-                'name': person.name,
+                'name': person.name_first_last,
                 'slug': person.slug,
             })
 
@@ -661,7 +661,7 @@ class DataAccess:
         rv['transcript_list'] = [
             {
                 'text': transcript.text,
-                'person_name': person.name,
+                'person_name': person.name_first_last,
                 'person_slug': person.slug,
             }
             for transcript, person in transcript_query

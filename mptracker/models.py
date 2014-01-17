@@ -50,6 +50,10 @@ class Person(db.Model):
     romania_curata = db.Column(db.Text)
 
     @property
+    def name_first_last(self):
+        return "{s.first_name} {s.last_name}".format(s=self)
+
+    @property
     def emails(self):
         return (self.email_value or '').split()
 
