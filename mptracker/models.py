@@ -69,6 +69,23 @@ class Person(db.Model):
         return "<%s>" % self
 
 
+class AssetStatement(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    date = db.Column(db.Date)
+    raw_data = db.Column(JsonString)
+
+    net_worth_eur = db.Column(db.Integer)
+    land_agri_area = db.Column(db.Integer)
+    land_city_area = db.Column(db.Integer)
+    realty_count = db.Column(db.Integer)
+    vehicle_count = db.Column(db.Integer)
+    year_income_eur = db.Column(db.Integer)
+
+    person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
+    person = db.relationship('Person',
+        backref=db.backref('asset_statements', lazy='dynamic'))
+
+
 class MpGroup(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
