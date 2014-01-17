@@ -67,7 +67,10 @@ class MandateScraper(Scraper):
                     end_date_col -= 1
                 if uninominal and not mandate.minority:
                     end_date_col += 1
-                mandate.end_date = parse_date(cols.eq(end_date_col).text())
+                mandate.end_date = parse_date(
+                    cols.eq(end_date_col).text(),
+                    fmt='ro_short_month',
+                )
 
             if (mandate.year, mandate.cdep_number) == (2004, 88):
                 mandate.person_name = u"Mălaimare Mihai Adrian"
