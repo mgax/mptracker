@@ -147,6 +147,19 @@
         <p class="romania-curata-text">{{ romania_curata_text }}</p>
       {%- endif %}
 
+      {%- if assets %}
+        <h3>Declarația de avere</h3>
+        <p>
+          avere: €{{ assets['net_worth_eur'] }};
+          terenuri:
+            {{ "%.2f"|format(assets['land_agri_area']/100000) }} ha agricol,
+            {{ assets['land_city_area'] }} m<sup>2</sup> intravilan;
+          imobile: {{ assets['realty_count'] }};
+          vehicule: {{ assets['vehicle_count'] }};
+          venit anul trecut: €{{ assets['year_income_eur'] }}
+        </p>
+      {%- endif %}
+
       <h3>Voturi controversate</h3>
 
       <ul>
