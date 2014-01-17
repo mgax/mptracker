@@ -1015,6 +1015,45 @@ def get_romania_curata():
 
 
 @scraper_manager.command
+def assets(file_path, no_commit=False):
+    from mptracker.scraper.assets import parse_assets
+    from mptracker.nlp import normalize
+
+    asset_patcher = TablePatcher(
+        models.AssetStatement,
+        models.db.session,
+        key_columns=['person_id', 'date'],
+    )
+
+    people_map = {
+        normalize(person.name): person.id
+        for person in (
+            models.Person.query
+            .join(models.Person.mandates)
+            .filter_by(year=2012)
+        )
+    }
+
+    with asset_patcher.process(remove=True) as add_asset:
+        for record in parse_assets(file_path):
+            person_name = normalize(record.pop('person_name'))
+            person_id = people_map[person_name]
+            res = add_asset({
+                'person_id': person_id,
+                'date': date(2012, 11, 1),
+                'raw_data': record,
+            })
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
+
+
+
+@scraper_manager.command
 def auto():
     transcripts(n_sessions=20)
     questions(autoanalyze=True)
