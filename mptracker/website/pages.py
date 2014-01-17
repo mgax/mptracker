@@ -123,7 +123,7 @@ def person_detail(person_slug):
                 proposal_id=item['proposal_id'],
             )
 
-        elif item['type'] == 'question':
+        elif item['type'] in ['question', 'interpelation']:
             item['url'] = flask.url_for(
                 '.person_question',
                 question_id=item['question_id'],
