@@ -157,6 +157,7 @@ class DalPerson:
                     'title': p.title,
                     'start_date': p.interval.lower,
                     'end_date': p.interval.upper,
+                    'url': p.url,
                 }
                 for p in self.person.positions
             ],

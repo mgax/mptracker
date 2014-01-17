@@ -897,6 +897,7 @@ def position():
                     'person_id': person.id,
                     'interval': interval,
                     'title': row['title'],
+                    'url': row['url'] or None,
                 })
 
             elif len(matches) > 1:

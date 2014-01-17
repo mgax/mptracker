@@ -57,7 +57,7 @@
 
         {% for position in position_list %}
           <li>
-            {{ position.title }}
+            {{ position.title|maybe_url(position.url) }}
             ({{ position.start_date|datefmt }} &ndash;
              {{ position.end_date|datefmt or 'prezent' }})
           </li>
