@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ super() }} – {{ name }}{% endblock %}
+
+
+{% block content %}
+  <h1>{{ date|datefmt }} – {{ headline }}</h1>
+
+  {%- for transcript in transcript_list %}
+    <p>
+      {%- set url = url_for(
+          '.person_detail',
+          person_slug=transcript.person_slug,
+        ) %}
+      <a href="{{ url }}">{{ transcript.person_name }}</a>
+
+      {{ transcript.text }}
+    </p>
+  {%- endfor %}
+{% endblock %}

@@ -129,6 +129,12 @@ def person_detail(person_slug):
                 question_id=item['question_id'],
             )
 
+        elif item['type'] == 'speech':
+            item['url'] = flask.url_for(
+                '.transcript',
+                serial=item['chapter_serial'],
+            )
+
     return flask.render_template('person_detail.html', **ctx)
 
 
@@ -176,6 +182,12 @@ def person_question(question_id):
     return flask.render_template('question.html', **{
         'question': dal.get_question_details(question_id),
     })
+
+
+@pages.route('/stenograme/<path:serial>')
+def transcript(serial):
+    ctx = dal.get_transcript_details(serial, missing=NotFound)
+    return flask.render_template('transcript.html', **ctx)
 
 
 @pages.route('/persoane/judet/<county_code>')

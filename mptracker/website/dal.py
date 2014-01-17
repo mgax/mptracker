@@ -13,6 +13,7 @@ from mptracker.models import (
     Proposal,
     ProposalActivityItem,
     Sponsorship,
+    TranscriptChapter,
     Transcript,
     Question,
     Ask,
@@ -87,6 +88,7 @@ def _get_recent_activity(mandate):
             'date': t.chapter.date,
             'text': filters.do_truncate(t.text, 200),
             'type': 'speech',
+            'chapter_serial': t.chapter.serial,
         }
         for t in recent_transcripts_query
     ]
@@ -624,4 +626,39 @@ class DataAccess:
                 'slug': person.slug,
             })
 
+        return rv
+
+    def get_transcript_details(self, serial, missing=KeyError):
+        transcript_chapter = (
+            TranscriptChapter.query
+            .filter_by(serial=serial)
+            .first()
+        )
+        if transcript_chapter is None:
+            raise missing()
+
+        rv = {
+            'serial': transcript_chapter.serial,
+            'date': transcript_chapter.date,
+            'headline': transcript_chapter.headline,
+        }
+
+        transcript_query = (
+            db.session.query(
+                Transcript,
+                Person,
+            )
+            .filter_by(chapter=transcript_chapter)
+            .join(Transcript.mandate)
+            .join(Mandate.person)
+            .order_by(Transcript.serial)
+        )
+        rv['transcript_list'] = [
+            {
+                'text': transcript.text,
+                'person_name': person.name,
+                'person_slug': person.slug,
+            }
+            for transcript, person in transcript_query
+        ]
         return rv
