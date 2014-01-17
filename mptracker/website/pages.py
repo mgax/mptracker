@@ -5,7 +5,7 @@ from mptracker import models
 from mptracker.website.dal import DataAccess
 from path import path
 
-dal = DataAccess()
+dal = DataAccess(missing=NotFound)
 
 pages = flask.Blueprint('pages', __name__)
 
@@ -103,7 +103,7 @@ def person_index_search():
 @pages.route('/persoane/<person_slug>')
 @section('person')
 def person_detail(person_slug):
-    person = dal.get_person(person_slug, missing=NotFound)
+    person = dal.get_person(person_slug)
     ctx = person.get_details()
     ctx['person_slug'] = person_slug
     ctx['activitychart_data'] = person.get_activitychart_data()
@@ -141,7 +141,7 @@ def person_detail(person_slug):
 @pages.route('/persoane/<person_slug>/local')
 @section('person')
 def person_local(person_slug):
-    person = dal.get_person(person_slug, missing=NotFound)
+    person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx.update(person.get_local_activity())
     ctx['person_slug'] = person_slug
@@ -151,7 +151,7 @@ def person_local(person_slug):
 @pages.route('/persoane/<person_slug>/intrebari')
 @section('person')
 def person_questions(person_slug):
-    person = dal.get_person(person_slug, missing=NotFound)
+    person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['question_list'] = person.get_questions()
     ctx['person_slug'] = person_slug
@@ -161,7 +161,7 @@ def person_questions(person_slug):
 @pages.route('/persoane/<person_slug>/propuneri')
 @section('person')
 def person_proposals(person_slug):
-    person = dal.get_person(person_slug, missing=NotFound)
+    person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['proposal_list'] = person.get_proposals()
     ctx['person_slug'] = person_slug
@@ -171,7 +171,7 @@ def person_proposals(person_slug):
 @pages.route('/persoane/<person_slug>/voturi')
 @section('person')
 def person_votes(person_slug):
-    person = dal.get_person(person_slug, missing=NotFound)
+    person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['voting_session_list'] = person.get_votes_data()
     return flask.render_template('person_votes.html', **ctx)
@@ -186,14 +186,14 @@ def person_question(question_id):
 
 @pages.route('/stenograme/<path:serial>')
 def transcript(serial):
-    ctx = dal.get_transcript_details(serial, missing=NotFound)
+    ctx = dal.get_transcript_details(serial)
     return flask.render_template('transcript.html', **ctx)
 
 
 @pages.route('/persoane/judet/<county_code>')
 @section('person')
 def person_county(county_code):
-    county = dal.get_county(county_code, missing=NotFound)
+    county = dal.get_county(county_code)
     ctx = county.get_details()
     ctx['mandate_list'] = county.get_mandates_data()
     return flask.render_template('person_county.html', **ctx)
@@ -210,7 +210,7 @@ def party_index():
 @pages.route('/partide/<party_short_name>')
 @section('party')
 def party_detail(party_short_name):
-    party = dal.get_party_details(party_short_name, missing=NotFound)
+    party = dal.get_party_details(party_short_name)
     return flask.render_template('party_detail.html', **{
         'party': party,
     })
@@ -231,7 +231,7 @@ def policy_detail(policy_id=None):
     if policy_id is None:
         policy_name = "Altele"
     else:
-        policy_name = dal.get_policy(policy_id, missing=NotFound)['name']
+        policy_name = dal.get_policy(policy_id)['name']
     ctx = {
         'policy_name': policy_name,
         'proposal_list': dal.get_policy_proposal_list(policy_id),
@@ -242,5 +242,5 @@ def policy_detail(policy_id=None):
 @pages.route('/politici/propuneri/<uuid:proposal_id>')
 @section('policy')
 def policy_proposal(proposal_id):
-    proposal = dal.get_proposal_details(proposal_id, missing=NotFound)
+    proposal = dal.get_proposal_details(proposal_id)
     return flask.render_template('policy_proposal.html', proposal=proposal)

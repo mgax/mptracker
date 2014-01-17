@@ -448,6 +448,9 @@ class DalCounty:
 
 class DataAccess:
 
+    def __init__(self, missing=KeyError):
+        self.missing = missing
+
     def get_county_name_map(self):
         return {c.code: c.name for c in County.query}
 
@@ -481,11 +484,11 @@ class DataAccess:
             for person in name_search.find(query.strip())
         ]
 
-    def get_person(self, person_slug, missing=KeyError):
-        return DalPerson(person_slug, missing)
+    def get_person(self, person_slug):
+        return DalPerson(person_slug, self.missing)
 
-    def get_county(self, county_code, missing=KeyError):
-        return DalCounty(county_code, missing)
+    def get_county(self, county_code):
+        return DalCounty(county_code, self.missing)
 
     def get_recent_proposals(self):
         return _get_recent_proposals(None, 10)
@@ -493,10 +496,10 @@ class DataAccess:
     def get_recent_questions(self):
         return _get_recent_questions(None, 10)
 
-    def get_question_details(self, question_id, missing=KeyError):
+    def get_question_details(self, question_id):
         question = Question.query.get(question_id)
         if question is None:
-            raise missing()
+            raise self.missing()
 
         rv = {'title': question.title, 'text': question.text}
 
@@ -522,10 +525,10 @@ class DataAccess:
             if group.short_name not in ['Indep.', 'Mino.']
         ]
 
-    def get_party_details(self, party_short_name, missing=KeyError):
+    def get_party_details(self, party_short_name):
         party = MpGroup.query.filter_by(short_name=party_short_name).first()
         if party is None:
-            raise missing()
+            raise self.missing()
         rv = {'name': party.name}
 
         rv['member_list'] = []
@@ -575,10 +578,10 @@ class DataAccess:
             for policy in PolicyDomain.query
         ]
 
-    def get_policy(self, policy_id, missing=KeyError):
+    def get_policy(self, policy_id):
         policy = PolicyDomain.query.get(policy_id)
         if policy is None:
-            raise missing()
+            raise self.missing()
         return {'name': policy.name}
 
     def get_policy_proposal_list(self, policy_id):
@@ -595,10 +598,10 @@ class DataAccess:
             for proposal in proposal_query
         ]
 
-    def get_proposal_details(self, proposal_id, missing=KeyError):
+    def get_proposal_details(self, proposal_id):
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
-            raise missing()
+            raise self.missing()
         rv = {'title': proposal.title}
 
         rv['activity'] = []
@@ -628,14 +631,14 @@ class DataAccess:
 
         return rv
 
-    def get_transcript_details(self, serial, missing=KeyError):
+    def get_transcript_details(self, serial):
         transcript_chapter = (
             TranscriptChapter.query
             .filter_by(serial=serial)
             .first()
         )
         if transcript_chapter is None:
-            raise missing()
+            raise self.missing()
 
         rv = {
             'serial': transcript_chapter.serial,
