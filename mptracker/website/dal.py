@@ -174,6 +174,7 @@ class DalPerson:
                 'end_date': cm.interval.upper,
                 'role': cm.role,
                 'committee_name': cm.mp_committee.name,
+                'committee_url': cm.mp_committee.cdep_url,
             }
             for cm in committee_membership_query
         ]

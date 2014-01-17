@@ -93,6 +93,14 @@ class MpCommittee(db.Model):
     policy_domain = db.relationship('PolicyDomain',
         backref=db.backref('committees', lazy='dynamic', cascade='all'))
 
+    @property
+    def cdep_url(self):
+        return (
+            "http://www.cdep.ro/pls/parlam/structura.co"
+            "?cam={s.chamber_id}&leg=2012&idc={s.cdep_id}"
+            .format(s=self)
+        )
+
 
 class MpCommitteeMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)

@@ -66,7 +66,7 @@
         {% for membership in committee_list %}
           <li>
             {% if membership.role %}{{ membership.role }}, {% endif %}
-            {{ membership.committee_name }}
+            {{ membership.committee_name|maybe_url(membership.committee_url) }}
             ({{ membership.start_date|datefmt }} &ndash;
              {{ membership.end_date|datefmt or 'prezent' }})
           </li>
