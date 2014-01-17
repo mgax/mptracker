@@ -59,7 +59,15 @@ def convert(col, value, n):
 
 
 def land_area(value):
-    return value
+    if isinstance(value, str):
+        if '+' in value:
+            return sum(land_area(v) for v in value.split('+'))
+        if 'ha' in value:
+            return number(value.replace('ha', '')) * 10000
+        if '/' in value:
+            a, b = value.split('/')
+            return number(a) / number(b)
+    return number(value)
 
 
 def integer(value):
