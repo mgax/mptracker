@@ -171,9 +171,9 @@ def person_votes(person_slug):
     return flask.render_template('person_votes.html', **ctx)
 
 
-@pages.route('/persoane/intrebari-interpelari/<uuid:question_id>')
+@pages.route('/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
-    return flask.render_template('person_question.html', **{
+    return flask.render_template('question.html', **{
         'question': dal.get_question_details(question_id),
     })
 
