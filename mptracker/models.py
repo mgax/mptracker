@@ -478,6 +478,7 @@ class Position(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     title = db.Column(db.Text)
     interval = db.Column(DATERANGE)
+    url = db.Column(db.Text)
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
     person = db.relationship('Person',
