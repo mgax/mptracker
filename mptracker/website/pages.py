@@ -1,6 +1,7 @@
 import functools
 import flask
 from werkzeug.exceptions import NotFound
+import jinja2
 from mptracker import models
 from mptracker.website.dal import DataAccess
 from path import path
@@ -23,6 +24,17 @@ def section(name):
 @pages.app_template_filter('percent')
 def percent(value):
     return "%.0f%%" % (value * 100)
+
+
+@pages.app_template_filter('maybe_url')
+def percent(text, url):
+    if url:
+        return (
+            jinja2.Markup('<a href="%s">%s</a>')
+            % (jinja2.escape(url), jinja2.escape(text))
+        )
+    else:
+        return jinja2.escape(text)
 
 
 @pages.app_context_processor

@@ -131,11 +131,7 @@
                 {{ TYPE_MAP.get(item['type']) }}
               </strong>:
 
-              {% if 'url' in item %}
-                <a href="{{ item['url'] }}">{{ item['text'] }}</a>
-              {% else %}
-                {{ item['text'] }}
-              {% endif %}
+              {{ item['text']|maybe_url(item['url']) }}
             </li>
           {% endfor %}
         </ul>
