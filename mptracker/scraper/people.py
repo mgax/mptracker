@@ -37,14 +37,23 @@ class MandateScraper(Scraper):
             link = cols.eq(1).find('a')
             (year, chamber, number) = parse_profile_url(link.attr('href'))
 
+            last_first = link.text()
             person_page = self.fetch_url(link.attr('href'))
             picture = person_page.find('a.highslide')
+            first_last = (
+                person_page.find('.headline').html()
+                .split('<br/>')[0]
+                .split(',')[0]
+            )
+            (first_name, last_name) = match_split_name(last_first, first_last)
 
             mandate = Mandate(
                 year=year,
                 chamber_number=chamber,
                 cdep_number=number,
-                person_name=link.text(),
+                person_name=last_first,
+                person_first_name=first_name,
+                person_last_name=last_name,
                 minority=False,
                 end_date=None,
                 picture_url=picture.attr('href'),

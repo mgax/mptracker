@@ -130,10 +130,17 @@ def people(
         key_columns=['year', 'cdep_number'],
     )
 
+    person_patcher = TablePatcher(
+        models.Person,
+        models.db.session,
+        key_columns=['id'],
+    )
+
     new_people = 0
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
-    with mandate_patcher.process() as add_mandate:
+    with mandate_patcher.process() as add_mandate, \
+         person_patcher.process() as add_person:
         for mandate in mandate_scraper.fetch(year):
             row = mandate.as_dict([
                 'year',
@@ -164,6 +171,12 @@ def people(
                 else:
                     raise RuntimeError("Can't find person named %r"
                                        % mandate.person_name)
+
+            assert not add_person({
+                'id': person.id,
+                'first_name': mandate.person_first_name,
+                'last_name': mandate.person_last_name,
+            }).is_new
 
             row['person_id'] = person.id
 
