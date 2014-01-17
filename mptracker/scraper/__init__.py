@@ -1038,10 +1038,31 @@ def assets(file_path, no_commit=False):
         for record in parse_assets(file_path):
             person_name = normalize(record.pop('person_name'))
             person_id = people_map[person_name]
+            del record['constituency']
+            del record['county']
             res = add_asset({
                 'person_id': person_id,
                 'date': date(2012, 11, 1),
                 'raw_data': record,
+                'net_worth_eur': (
+                    record['acct_value']['TOTAL_EUR']
+                    - record['debt_value']['TOTAL_EUR']
+                    + record['invest_value']['TOTAL_EUR']
+                    + record['valuables_value']['TOTAL_EUR']
+                ),
+                'land_agri_area': record['land_agri_area'],
+                'land_city_area': record['land_city_area'],
+                'realty_count': (
+                    record['realty_apartment_count'] +
+                    record['realty_business_count'] +
+                    record['realty_house_count']
+                ),
+                'vehicle_count': record['vehicle_count'],
+                'year_income_eur': (
+                    record['family_income_value']['TOTAL_EUR'] +
+                    record['gift_value']['TOTAL_EUR'] +
+                    record['sales_value']['TOTAL_EUR']
+                ),
             })
 
     if no_commit:
