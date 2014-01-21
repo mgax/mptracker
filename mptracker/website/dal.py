@@ -281,18 +281,25 @@ class DalPerson:
         if self.mandate.picture_url is not None:
             rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
 
+        rv['assets'] = self.get_assets_data()
+
+        return rv
+
+    def get_assets_data(self):
         assets = self.person.asset_statements.order_by('date').first()
         if assets:
-            rv['assets'] = {
+            return {
                 'net_worth_eur': assets.net_worth_eur,
                 'land_agri_area': assets.land_agri_area,
                 'land_city_area': assets.land_city_area,
                 'realty_count': assets.realty_count,
                 'vehicle_count': assets.vehicle_count,
                 'year_income_eur': assets.year_income_eur,
+                'raw_data': assets.raw_data,
             }
 
-        return rv
+        else:
+            return {}
 
     def get_local_activity(self):
         return {

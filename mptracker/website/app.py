@@ -11,6 +11,7 @@ def create_website_app():
 
     app = flask.Flask(__name__, static_folder='../static')
     app.config.from_pyfile('../../settings.py', silent=True)
+    app.jinja_env.add_extension('jinja2.ext.do')
     app._logger = logger
     models.init_app(app)
     app.register_blueprint(common)

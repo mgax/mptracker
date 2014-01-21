@@ -2,6 +2,7 @@ import functools
 import flask
 from werkzeug.exceptions import NotFound
 import jinja2
+from babel.numbers import format_currency
 from mptracker import models
 from mptracker.website.dal import DataAccess
 from path import path
@@ -40,6 +41,16 @@ def maybe_url(text, url):
 @pages.app_template_filter('link_for')
 def link_for(*args, **kwargs):
     return maybe_url(args[0], flask.url_for(*args[1:], **kwargs))
+
+
+@pages.app_template_filter('money')
+def money(value, currency):
+    return format_currency(
+        value,
+        format='¤¤\xa0#,##0',
+        currency=currency,
+        locale='ro',
+    )
 
 
 @pages.app_context_processor
@@ -200,6 +211,7 @@ def person_votes(person_slug):
 def person_assets(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
+    ctx['assets'] = person.get_assets_data()
     return flask.render_template('person_assets.html', **ctx)
 
 
