@@ -156,7 +156,8 @@
             {{ assets['land_city_area'] }} m<sup>2</sup> intravilan;
           imobile: {{ assets['realty_count'] }};
           vehicule: {{ assets['vehicle_count'] }};
-          venit anul trecut: €{{ assets['year_income_eur'] }}
+          venit anul trecut: €{{ assets['year_income_eur'] }};
+          {{ "detalii"|link_for('.person_assets', person_slug=person_slug) }}
         </p>
       {%- endif %}
 

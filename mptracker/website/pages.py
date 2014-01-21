@@ -37,6 +37,11 @@ def maybe_url(text, url):
         return jinja2.escape(text)
 
 
+@pages.app_template_filter('link_for')
+def link_for(*args, **kwargs):
+    return maybe_url(args[0], flask.url_for(*args[1:], **kwargs))
+
+
 @pages.app_context_processor
 def inject_nav_links():
     return {
@@ -187,6 +192,14 @@ def person_votes(person_slug):
     ctx = person.get_main_details()
     ctx['voting_session_list'] = person.get_votes_data()
     return flask.render_template('person_votes.html', **ctx)
+
+
+@pages.route('/persoane/<person_slug>/avere')
+@section('person')
+def person_assets(person_slug):
+    person = dal.get_person(person_slug)
+    ctx = person.get_main_details()
+    return flask.render_template('person_assets.html', **ctx)
 
 
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
