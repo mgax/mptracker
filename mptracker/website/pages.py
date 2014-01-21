@@ -62,6 +62,7 @@ def inject_nav_links():
                 label="Domenii de politici publice",
             ),
         ],
+        'MP_HA': 10000,
     }
 
 

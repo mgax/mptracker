@@ -152,7 +152,7 @@
         <p>
           avere: €{{ assets['net_worth_eur'] }};
           terenuri:
-            {{ "%.2f"|format(assets['land_agri_area']/100000) }} ha agricol,
+            {{ "%.2f"|format(assets['land_agri_area'] / MP_HA) }} ha agricol,
             {{ assets['land_city_area'] }} m<sup>2</sup> intravilan;
           imobile: {{ assets['realty_count'] }};
           vehicule: {{ assets['vehicle_count'] }};
