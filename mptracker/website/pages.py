@@ -27,7 +27,7 @@ def percent(value):
 
 
 @pages.app_template_filter('maybe_url')
-def percent(text, url):
+def maybe_url(text, url):
     if url:
         return (
             jinja2.Markup('<a href="%s">%s</a>')
