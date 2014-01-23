@@ -18,4 +18,11 @@
       <li>{{ person_link(person) }}</li>
     {%- endfor %}
   </ul>
+
+  <h2>Din același grup parlamentar ({{ party_short_name }})</h2>
+  <ul>
+    {%- for person in same_party %}
+      <li>{{ person_link(person) }}</li>
+    {%- endfor %}
+  </ul>
 {% endblock %}

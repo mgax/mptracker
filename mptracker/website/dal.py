@@ -489,6 +489,8 @@ class DalPerson:
         def person_data(person):
             return {'slug': person.slug, 'name': person.name_first_last}
 
+        today = date.today()
+
         same_county_query = (
             Person.query
             .join(Person.mandates)
@@ -496,9 +498,28 @@ class DalPerson:
             .filter_by(county=self.mandate.county)
         )
 
+        mp_group = (
+            MpGroup.query
+            .join(MpGroup.memberships)
+            .filter_by(mandate=self.mandate)
+            .filter(MpGroupMembership.interval.contains(today))
+            .first()
+        )
+
+        same_party_query = (
+            Person.query
+            .join(Person.mandates)
+            .filter_by(year=2012)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.interval.contains(today))
+            .filter_by(mp_group=mp_group)
+        )
+
         return {
             'county_name': self.mandate.county.name,
             'same_county': [person_data(p) for p in same_county_query],
+            'party_short_name': mp_group.short_name,
+            'same_party': [person_data(p) for p in same_party_query],
         }
 
 
