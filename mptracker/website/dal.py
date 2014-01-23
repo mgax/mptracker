@@ -205,6 +205,46 @@ class DalPerson:
                 'election_votes_fraction': votes_percent and votes_percent/100,
             }
 
+        rv['recent_activity'] = _get_recent_activity(self.mandate)
+
+        vote_subquery = Vote.query.filter_by(mandate=self.mandate).subquery()
+        controversy_query = (
+            db.session.query(
+                Controversy.title,
+                VotingSession.date,
+                vote_subquery.c.choice,
+            )
+            .join(Controversy.voting_sessions)
+            .outerjoin(vote_subquery)
+        )
+        rv['controversy_list'] = [
+            {
+                'title': contro_title,
+                'date': vs_date,
+                'choice': vote_choice or 'novote',
+            }
+            for contro_title, vs_date, vote_choice in controversy_query
+        ]
+
+        rv['contact'] = {
+            'website_url': self.person.website_url,
+            'blog_url': self.person.blog_url,
+            'email_value': self.person.email_value,
+            'facebook_url': self.person.facebook_url,
+            'twitter_url': self.person.twitter_url,
+            'phone': self.mandate.phone,
+            'address': self.mandate.address,
+        }
+
+        if self.mandate.picture_url is not None:
+            rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
+
+        rv['assets'] = self.get_assets_data()
+
+        return rv
+
+    def get_stats(self):
+        rv = {}
         voting_session_count = (
             VotingSession.query
             .filter(VotingSession.final == True)
@@ -246,43 +286,6 @@ class DalPerson:
             self._local_ask_query.count() +
             self._local_sponsorship_query.count()
         )
-
-        rv['recent_activity'] = _get_recent_activity(self.mandate)
-
-        vote_subquery = Vote.query.filter_by(mandate=self.mandate).subquery()
-        controversy_query = (
-            db.session.query(
-                Controversy.title,
-                VotingSession.date,
-                vote_subquery.c.choice,
-            )
-            .join(Controversy.voting_sessions)
-            .outerjoin(vote_subquery)
-        )
-        rv['controversy_list'] = [
-            {
-                'title': contro_title,
-                'date': vs_date,
-                'choice': vote_choice or 'novote',
-            }
-            for contro_title, vs_date, vote_choice in controversy_query
-        ]
-
-        rv['contact'] = {
-            'website_url': self.person.website_url,
-            'blog_url': self.person.blog_url,
-            'email_value': self.person.email_value,
-            'facebook_url': self.person.facebook_url,
-            'twitter_url': self.person.twitter_url,
-            'phone': self.mandate.phone,
-            'address': self.mandate.address,
-        }
-
-        if self.mandate.picture_url is not None:
-            rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
-
-        rv['assets'] = self.get_assets_data()
-
         return rv
 
     def get_assets_data(self):

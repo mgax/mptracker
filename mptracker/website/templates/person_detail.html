@@ -186,42 +186,8 @@
 
         <h4>Statistici</h4>
 
-        <dl class="dl-horizontal">
-          {%- set url = url_for('.person_votes', person_slug=person_slug) %}
-          <dt>prezență la vot</dt>
-          <dd>{{ vote['attendance']|percent }}</dd>
-
-          {%- if 'loyalty' in vote %}
-            <dt>loialitate față de partid</dt>
-            <dd>
-              <a href="{{ url }}">{{ vote['loyalty']|percent }}</a>
-            </dd>
-          {%- endif %}
-
-          {%- if 'cabinet_loyalty' in vote %}
-            <dt>loialitate față de guvern</dt>
-            <dd>
-              <a href="{{ url }}">{{ vote['cabinet_loyalty']|percent }}</a>
-            </dd>
-          {%- endif %}
-
-          <dt>luări de cuvânt</dt>
-          <dd>{{ speeches }}</dd>
-
-          {%- set url = url_for('.person_questions', person_slug=person_slug) %}
-          <dt>întrebări și interpelări</dt>
-          <dd><a href="{{ url }}">{{ questions }}</a></dd>
-
-          {%- set url = url_for('.person_proposals', person_slug=person_slug) %}
-          <dt>propuneri legislative</dt>
-          <dd><a href="{{ url }}">{{ proposals }}</a></dd>
-
-          <dt>reprezentare locală</dt>
-          <dd>
-            {%- set url = url_for('.person_local', person_slug=person_slug) %}
-            <a href="{{ url }}">{{ local_score }}</a>
-          </dd>
-        </dl>
+        {%- from '_person_bits.html' import person_stats %}
+        {{ person_stats(person_slug, stats) }}
 
         <p>
           {%- set url = url_for('.person_compare_index', person_slug=person_slug) %}

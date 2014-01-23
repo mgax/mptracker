@@ -135,6 +135,7 @@ def person_detail(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_details()
     ctx['person_slug'] = person_slug
+    ctx['stats'] = person.get_stats()
     ctx['activitychart_data'] = person.get_activitychart_data()
     ctx['policy_domains'] = person.get_policy_data()
 
