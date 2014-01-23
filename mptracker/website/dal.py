@@ -452,6 +452,20 @@ class DalPerson:
         for policy_domain_id, count in question_query:
             count_map[policy_domain_id] += count
 
+        proposal_query = (
+            db.session.query(
+                PolicyDomain.id,
+                func.count('*'),
+            )
+            .select_from(Proposal)
+            .join(Proposal.sponsorships)
+            .filter_by(mandate=self.mandate)
+            .outerjoin(Proposal.policy_domain)
+            .group_by(PolicyDomain.id)
+        )
+        for policy_domain_id, count in proposal_query:
+            count_map[policy_domain_id] += count
+
         total = sum(count_map.values())
 
         policy_list = []
