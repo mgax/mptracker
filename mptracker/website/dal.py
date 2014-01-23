@@ -486,7 +486,19 @@ class DalPerson:
         )
 
     def get_comparison_lists(self):
+        def person_data(person):
+            return {'slug': person.slug, 'name': person.name_first_last}
+
+        same_county_query = (
+            Person.query
+            .join(Person.mandates)
+            .filter_by(year=2012)
+            .filter_by(county=self.mandate.county)
+        )
+
         return {
+            'county_name': self.mandate.county.name,
+            'same_county': [person_data(p) for p in same_county_query],
         }
 
 

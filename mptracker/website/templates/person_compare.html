@@ -4,6 +4,18 @@
 {% block title %}{{ super() }} – {{ name }} – comparație{% endblock %}
 
 
+{%- macro person_link(person) %}
+  {{ person.name|link_for('.person_detail', person_slug=person.slug) }}
+{%- endmacro %}
+
+
 {% block content %}
   <h1>{{ name }}</h1>
+
+  <h2>Din același județ ({{ county_name }})</h2>
+  <ul>
+    {%- for person in same_county %}
+      <li>{{ person_link(person) }}</li>
+    {%- endfor %}
+  </ul>
 {% endblock %}
