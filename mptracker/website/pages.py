@@ -233,7 +233,11 @@ def person_compare(person_slug, other_person_slug):
     person = dal.get_person(person_slug)
     other_person = dal.get_person(other_person_slug)
     ctx = person.get_main_details()
+    ctx['person_slug'] = person_slug
+    ctx['stats'] = person.get_stats()
     ctx['other'] = other_person.get_main_details()
+    ctx['other']['person_slug'] = other_person_slug
+    ctx['other']['stats'] = other_person.get_stats()
     return flask.render_template('person_compare.html', **ctx)
 
 
