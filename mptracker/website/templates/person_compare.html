@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}
+  {{- super() }} – {{ name }} – comparație cu {{ other.name }}
+{%- endblock %}
+
+
+{% block content %}
+  <h1>{{ name }} – {{ other.name }}</h1>
+{% endblock %}

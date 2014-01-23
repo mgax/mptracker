@@ -222,8 +222,19 @@ def person_assets(person_slug):
 def person_compare_index(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
+    ctx['person_slug'] = person_slug
     ctx.update(person.get_comparison_lists())
     return flask.render_template('person_compare_index.html', **ctx)
+
+
+@pages.route('/persoane/<person_slug>/comparatie/<other_person_slug>')
+@section('person')
+def person_compare(person_slug, other_person_slug):
+    person = dal.get_person(person_slug)
+    other_person = dal.get_person(other_person_slug)
+    ctx = person.get_main_details()
+    ctx['other'] = other_person.get_main_details()
+    return flask.render_template('person_compare.html', **ctx)
 
 
 @pages.route('/intrebari-interpelari/<uuid:question_id>')

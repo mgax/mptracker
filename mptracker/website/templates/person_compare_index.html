@@ -4,8 +4,12 @@
 {% block title %}{{ super() }} – {{ name }} – comparație{% endblock %}
 
 
-{%- macro person_link(person) %}
-  {{ person.name|link_for('.person_detail', person_slug=person.slug) }}
+{%- macro comparison_link(person_slug, other_person) %}
+  {{ other_person.name|link_for(
+    '.person_compare',
+    person_slug=person_slug,
+    other_person_slug=other_person.slug,
+    ) }}
 {%- endmacro %}
 
 
@@ -15,21 +19,21 @@
   <h2>Din același județ ({{ county_name }})</h2>
   <ul>
     {%- for person in same_county %}
-      <li>{{ person_link(person) }}</li>
+      <li>{{ comparison_link(person_slug, person) }}</li>
     {%- endfor %}
   </ul>
 
   <h2>Din același grup parlamentar ({{ party_short_name }})</h2>
   <ul>
     {%- for person in same_party %}
-      <li>{{ person_link(person) }}</li>
+      <li>{{ comparison_link(person_slug, person) }}</li>
     {%- endfor %}
   </ul>
 
   <h2>Cu același număr de mandate ({{ mandate_count }})</h2>
   <ul>
     {%- for person in same_mandate_count %}
-      <li>{{ person_link(person) }}</li>
+      <li>{{ comparison_link(person_slug, person) }}</li>
     {%- endfor %}
   </ul>
 {% endblock %}
