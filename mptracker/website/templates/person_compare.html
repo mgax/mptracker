@@ -11,13 +11,14 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <h2>{{ name }}</h2>
+      <h2>{{ name|link_for('.person_detail', person_slug=person_slug) }}</h2>
 
       {{ person_stats(person_slug, stats) }}
     </div>
 
     <div class="col-sm-6">
-      <h2>{{ other.name }}</h2>
+      <h2>{{ other.name|link_for('.person_detail',
+              person_slug=other.person_slug) }}</h2>
 
       {{ person_stats(other.person_slug, other.stats) }}
     </div>
