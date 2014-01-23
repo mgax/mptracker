@@ -5,13 +5,13 @@
   <ul class="list-unstyled">
     {% for policy in policy_list %}
       <li>
-        {%- set url = url_for('.policy_detail', policy_id=policy.id) %}
+        {%- set url = url_for('.policy_detail', policy_slug=policy.slug) %}
         <a href="{{ url }}">{{ policy.name }}</a>
       </li>
     {% endfor %}
 
     <li>
-      {%- set url = url_for('.policy_detail', policy_id=None) %}
+      {%- set url = url_for('.policy_detail', policy_slug=None) %}
       <a href="{{ url }}">Altele</a>
     </li>
   </ul>

@@ -263,17 +263,17 @@ def policy_index():
     })
 
 
-@pages.route('/politici/<uuid:policy_id>')
+@pages.route('/politici/<policy_slug>')
 @pages.route('/politici/altele')
 @section('policy')
-def policy_detail(policy_id=None):
-    if policy_id is None:
+def policy_detail(policy_slug=None):
+    if policy_slug is None:
         policy_name = "Altele"
     else:
-        policy_name = dal.get_policy(policy_id)['name']
+        policy_name = dal.get_policy(policy_slug)['name']
     ctx = {
         'policy_name': policy_name,
-        'proposal_list': dal.get_policy_proposal_list(policy_id),
+        'proposal_list': dal.get_policy_proposal_list(policy_slug),
     }
     return flask.render_template('policy_detail.html', **ctx)
 

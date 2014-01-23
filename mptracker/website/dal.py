@@ -474,7 +474,7 @@ class DalPerson:
                 interest = count_map.get(policy_domain.id, 0) / total
                 if interest > cutoff:
                     policy_list.append({
-                        'id': policy_domain.id,
+                        'slug': policy_domain.slug,
                         'name': policy_domain.name,
                         'interest': interest,
                     })
@@ -648,16 +648,17 @@ class DataAccess:
             for policy in PolicyDomain.query
         ]
 
-    def get_policy(self, policy_id):
-        policy = PolicyDomain.query.get(policy_id)
+    def get_policy(self, policy_slug):
+        policy = PolicyDomain.query.filter_by(slug=policy_slug).first()
         if policy is None:
             raise self.missing()
         return {'name': policy.name}
 
-    def get_policy_proposal_list(self, policy_id):
+    def get_policy_proposal_list(self, policy_slug):
         proposal_query = (
             Proposal.query
-            .filter_by(policy_domain_id=policy_id)
+            .join(Proposal.policy_domain)
+            .filter_by(slug=policy_slug)
         )
         return [
             {
