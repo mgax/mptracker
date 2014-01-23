@@ -215,6 +215,7 @@ def create_csv_url(key):
 def get_gdrive_csv(key):
     url = create_csv_url(key)
     resp = requests.get(url)
+    assert resp.headers['Content-Type'] == 'text/csv'
     text = resp.content.decode('utf-8')
     return csv.DictReader(io.StringIO(text))
 
