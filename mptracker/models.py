@@ -494,6 +494,7 @@ class Ministry(db.Model):
 
 class PolicyDomain(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
+    slug = db.Column(db.Text, unique=True)
     name = db.Column(db.Text)
 
 
