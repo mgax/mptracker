@@ -136,6 +136,7 @@ def person_detail(person_slug):
     ctx = person.get_details()
     ctx['person_slug'] = person_slug
     ctx['activitychart_data'] = person.get_activitychart_data()
+    ctx['policy_domains'] = person.get_policy_data()
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('mandate-pictures') / ctx['picture_filename']

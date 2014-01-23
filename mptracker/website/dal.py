@@ -435,6 +435,42 @@ class DalPerson:
             for vs, vote, group_vote, mp_group in query
         ]
 
+    def get_policy_data(self, cutoff=0.1):
+        count_map = defaultdict(int)
+
+        question_query = (
+            db.session.query(
+                PolicyDomain.id,
+                func.count('*'),
+            )
+            .select_from(Question)
+            .join(Question.asked)
+            .filter_by(mandate=self.mandate)
+            .outerjoin(Question.policy_domain)
+            .group_by(PolicyDomain.id)
+        )
+        for policy_domain_id, count in question_query:
+            count_map[policy_domain_id] += count
+
+        total = sum(count_map.values())
+
+        policy_list = []
+        if total:
+            for policy_domain in PolicyDomain.query:
+                interest = count_map.get(policy_domain.id, 0) / total
+                if interest > cutoff:
+                    policy_list.append({
+                        'id': policy_domain.id,
+                        'name': policy_domain.name,
+                        'interest': interest,
+                    })
+
+        return sorted(
+            policy_list,
+            reverse=True,
+            key=lambda p: p['interest'],
+        )
+
 
 class DalCounty:
 

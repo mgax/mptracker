@@ -224,7 +224,16 @@
         </dl>
       </div>
 
-      <p class="placeholder" style="height: 200px">politici publice</p>
+      <h4>Domenii de politici publice</h4>
+
+      <ul>
+        {%- for policy in policy_domains %}
+          <li>
+            {{ policy.name|link_for('.policy_detail', policy_id=policy.id) }}
+            ({{ policy.interest|percent }})
+          </li>
+        {%- endfor %}
+      </ul>
 
       <p class="placeholder" style="height: 300px">word cloud</p>
     </div>
