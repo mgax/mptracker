@@ -964,7 +964,7 @@ def policy_domain():
     patcher = TablePatcher(
         models.PolicyDomain,
         models.db.session,
-        key_columns=['name'],
+        key_columns=['slug'],
     )
 
     with patcher.process(remove=True) as add_policy_domain:
