@@ -218,11 +218,11 @@ def person_assets(person_slug):
 
 @pages.route('/persoane/<person_slug>/comparatie')
 @section('person')
-def person_compare(person_slug):
+def person_compare_index(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx.update(person.get_comparison_lists())
-    return flask.render_template('person_compare.html', **ctx)
+    return flask.render_template('person_compare_index.html', **ctx)
 
 
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
