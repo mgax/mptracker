@@ -485,6 +485,10 @@ class DalPerson:
             key=lambda p: p['interest'],
         )
 
+    def get_comparison_lists(self):
+        return {
+        }
+
 
 class DalCounty:
 
