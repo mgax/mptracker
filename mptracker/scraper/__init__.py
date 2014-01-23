@@ -971,7 +971,7 @@ def policy_domain():
         for row in get_gdrive_csv(POLICY_DOMAIN_CSV_KEY):
             add_policy_domain(row)
 
-    #models.db.session.commit()
+    models.db.session.commit()
 
 
 @scraper_manager.command
