@@ -25,4 +25,11 @@
       <li>{{ person_link(person) }}</li>
     {%- endfor %}
   </ul>
+
+  <h2>Cu același număr de mandate ({{ mandate_count }})</h2>
+  <ul>
+    {%- for person in same_mandate_count %}
+      <li>{{ person_link(person) }}</li>
+    {%- endfor %}
+  </ul>
 {% endblock %}

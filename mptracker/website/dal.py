@@ -515,11 +515,30 @@ class DalPerson:
             .filter_by(mp_group=mp_group)
         )
 
+        mandate_count = Mandate.query.filter_by(person=self.person).count()
+
+        mandate_count_subquery = (
+            db.session.query(Mandate.person_id)
+            .group_by(Mandate.person_id)
+            .having(func.count(Mandate.id) == mandate_count)
+            .subquery()
+        )
+
+        same_mandate_count_query = (
+            Person.query
+            .join(mandate_count_subquery)
+            .join(Person.mandates)
+            .filter_by(year=2012)
+        )
+
         return {
             'county_name': self.mandate.county.name,
             'same_county': [person_data(p) for p in same_county_query],
             'party_short_name': mp_group.short_name,
             'same_party': [person_data(p) for p in same_party_query],
+            'mandate_count': mandate_count,
+            'same_mandate_count': [person_data(p) for p in
+                                   same_mandate_count_query],
         }
 
 
