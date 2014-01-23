@@ -25,6 +25,7 @@ CONTROVERSY_CSV_KEY = '0Aoh2FHzCVVhldEJEMkhEblJCaWdGdy1FWlg5a0dzNEE'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
 POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
 CABINET_PARTY_CSV_KEY = '0AlBmcLkxpBOXdEpZVzZ5MUNvb004b0Z3UGFZUjdzMUE'
+POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
 
 
 @scraper_manager.command
@@ -956,6 +957,21 @@ def cabinet_party():
             })
 
     models.db.session.commit()
+
+
+@scraper_manager.command
+def policy_domain():
+    patcher = TablePatcher(
+        models.PolicyDomain,
+        models.db.session,
+        key_columns=['name'],
+    )
+
+    with patcher.process(remove=True) as add_policy_domain:
+        for row in get_gdrive_csv(POLICY_DOMAIN_CSV_KEY):
+            add_policy_domain(row)
+
+    #models.db.session.commit()
 
 
 @scraper_manager.command
