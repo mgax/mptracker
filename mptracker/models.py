@@ -509,6 +509,10 @@ class Position(db.Model):
         backref=db.backref('positions', lazy='dynamic'))
 
 
+class Stopword(db.Model):
+    id = db.Column(db.Text, primary_key=True)
+
+
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
