@@ -206,9 +206,7 @@
         {%- endfor %}
       </ul>
 
-      <p style="height: 300px">
-        {{ top_words }}
-      </p>
+      <div class="wordcloud"></div>
     </div>
   </div>
 {% endblock %}
@@ -219,8 +217,11 @@
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static',
     filename='lib/d3-tip-70b1cf3/d3-tip.js') }}"></script>
+<script src="{{ url_for('static',
+    filename='lib/d3-cloud-1.0.5/d3.layout.cloud.js') }}"></script>
 <script src="{{ url_for('static', filename='activitychart.js') }}"></script>
 <script src="{{ url_for('static', filename='membershipchart.js') }}"></script>
+<script src="{{ url_for('static', filename='wordcloud.js') }}"></script>
 <script>
   $(document).ready(function() {
     var activitychart_data = {{ activitychart_data|tojson|safe }};
@@ -228,6 +229,9 @@
 
     var group_history = {{ group_history|tojson|safe }};
     app.render_membershipchart($('.membershipchart'), group_history);
+
+    var top_words = {{ top_words|tojson|safe }};
+    app.render_wordcloud($('.wordcloud'), top_words);
   });
 </script>
 {% endblock %}
