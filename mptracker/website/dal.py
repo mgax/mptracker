@@ -241,6 +241,8 @@ class DalPerson:
 
         rv['assets'] = self.get_assets_data()
 
+        rv['top_words'] = get_top_words(self.mandate.id, 50)
+
         return rv
 
     def get_stats(self):
@@ -795,3 +797,25 @@ class DataAccess:
             for transcript, person in transcript_query
         ]
         return rv
+
+
+def get_top_words(mandate_id, number):
+    query = WORDCLOUD_SQL % {'mandate_id': mandate_id, 'number': number}
+    return list(tuple(r) for r in db.session.execute(query))
+
+
+WORDCLOUD_SQL = """\
+WITH words AS (
+    SELECT unnest(regexp_split_to_array(lower(text), '\M\W*\m')) AS word
+    FROM ocr_text
+    JOIN proposal ON ocr_text.id = proposal.id
+    JOIN sponsorship ON proposal.id = sponsorship.proposal_id
+    WHERE sponsorship.mandate_id = '%(mandate_id)s'
+)
+SELECT word, count(*) as n FROM words
+WHERE char_length(word) > 4
+  AND word NOT IN (SELECT id FROM stopword)
+GROUP BY word
+ORDER BY n DESC
+LIMIT %(number)d;
+"""
