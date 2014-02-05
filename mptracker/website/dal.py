@@ -801,7 +801,7 @@ class DataAccess:
 
 def get_top_words(mandate_id, number):
     query = WORDCLOUD_SQL % {'mandate_id': mandate_id, 'number': number}
-    return list(db.session.execute(query))
+    return list(tuple(r) for r in db.session.execute(query))
 
 
 WORDCLOUD_SQL = """\
