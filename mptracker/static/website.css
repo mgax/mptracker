@@ -66,3 +66,7 @@
 .membershipchart-rect {
     cursor: pointer;
 }
+
+.wordcloud {
+    height: 250px;
+}

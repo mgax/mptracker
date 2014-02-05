@@ -241,7 +241,7 @@ class DalPerson:
 
         rv['assets'] = self.get_assets_data()
 
-        rv['top_words'] = get_top_words(self.mandate.id, 20)
+        rv['top_words'] = get_top_words(self.mandate.id, 50)
 
         return rv
 
