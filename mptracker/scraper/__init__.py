@@ -43,7 +43,8 @@ def questions(
     if reimport_existing:
         known_urls = set()
     else:
-        known_urls = set(q.url for q in models.Question.query)
+        url_query = models.db.session.query(models.Question.url)
+        known_urls = set(row[0] for row in url_query)
 
     def skip_question(url):
         return url in known_urls
