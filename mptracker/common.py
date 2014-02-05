@@ -160,7 +160,7 @@ class DateAwareJSONEncoder(flask.json.JSONEncoder):
         if isinstance(o, date):
             return o.isoformat()
 
-        return JSONEncoder.default(self, o)
+        return super().default(o)
 
 
 @common.record
