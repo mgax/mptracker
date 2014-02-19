@@ -705,7 +705,7 @@ class DataAccess:
 
     def get_policy_list(self):
         return [
-            {'name': policy.name, 'id': policy.id}
+            {'name': policy.name, 'slug': policy.slug}
             for policy in PolicyDomain.query
         ]
 
