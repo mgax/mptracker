@@ -299,6 +299,7 @@ def policy_detail(policy_slug=None):
     ctx = {
         'policy_name': policy_name,
         'proposal_list': dal.get_policy_proposal_list(policy_slug),
+        'question_list': dal.get_policy_question_list(policy_slug),
     }
     return flask.render_template('policy_detail.html', **ctx)
 

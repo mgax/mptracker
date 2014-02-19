@@ -730,6 +730,24 @@ class DataAccess:
             for proposal in proposal_query
         ]
 
+    def get_policy_question_list(self, policy_slug):
+        question_query = (
+            Question.query
+            .join(Question.policy_domain)
+            .filter_by(slug=policy_slug)
+            .filter(Question.date >= date(2012, 12, 17))
+            .order_by(Question.date.desc())
+        )
+        return [
+            {
+                'title': question.title,
+                'id': question.id,
+                'date': question.date,
+                'type': question.type,
+            }
+            for question in question_query
+        ]
+
     def get_proposal_details(self, proposal_id):
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
