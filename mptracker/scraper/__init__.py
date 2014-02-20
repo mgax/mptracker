@@ -26,6 +26,7 @@ POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
 POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
 CABINET_PARTY_CSV_KEY = '0AlBmcLkxpBOXdEpZVzZ5MUNvb004b0Z3UGFZUjdzMUE'
 POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
+STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
 
 
 @scraper_manager.command
@@ -971,6 +972,21 @@ def policy_domain():
     with patcher.process(remove=True) as add_policy_domain:
         for row in get_gdrive_csv(POLICY_DOMAIN_CSV_KEY):
             add_policy_domain(row)
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def stop_words():
+    patcher = TablePatcher(
+        models.Stopword,
+        models.db.session,
+        key_columns=['id'],
+    )
+
+    with patcher.process(remove=True) as add_stop_word:
+        for row in get_gdrive_csv(STOP_WORDS_CSV_KEY):
+            add_stop_word(row)
 
     models.db.session.commit()
 
