@@ -2,14 +2,6 @@
 "use strict";
 
 
-function random_angle() {
-  var steps = 7;
-  var max_deviation_angle = 30;
-  var angle_step = max_deviation_angle * 2 / (steps - 1);
-  return ~~(Math.random() * steps) * angle_step - 2*angle_step;
-}
-
-
 app.render_wordcloud = function(box, word_data) {
   // based on example from https://github.com/jasondavies/d3-cloud
   // and http://www.jasondavies.com/wordcloud/about/
@@ -26,8 +18,8 @@ app.render_wordcloud = function(box, word_data) {
           return {text: pair[0], freq: pair[1]};
         })
       )
-      .padding(1)
-      .rotate(random_angle)
+      .padding(2)
+      .rotate(0)
       .font("Impact")
       .fontSize(function(d) { return sizeScale(d.freq); })
       .on("end", draw)
