@@ -96,8 +96,7 @@ def calculate_voting_session_loyalty(voting_session_id):
     vote_map = defaultdict(lambda: defaultdict(list))
 
     for vote, group, cabinet_membership in voter_query:
-        if group != indep_group:
-            vote_map[group.id][vote.choice].append(vote)
+        vote_map[group.id][vote.choice].append(vote)
 
         if cabinet_membership is not None:
             vote_map['_cabinet'][vote.choice].append(vote)
