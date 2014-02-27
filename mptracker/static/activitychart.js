@@ -63,7 +63,15 @@ app.render_activitychart = function(options) {
       };
     });
 
-    x.domain(d3.extent(data, function(d) { return d.date; }));
+    if(options.one_year) {
+      var today = new Date();
+      var one_year_ago = new Date();
+      one_year_ago.setFullYear(today.getFullYear() - 1);
+      x.domain([one_year_ago, today]);
+    }
+    else {
+      x.domain(d3.extent(data, function(d) { return d.date; }));
+    }
 
     y.domain([
         d3.min(activities, function(c) {

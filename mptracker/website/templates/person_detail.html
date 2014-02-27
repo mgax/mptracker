@@ -212,12 +212,14 @@
   $(document).ready(function() {
     app.render_activitychart({
       container: $('.activitychart'),
-      data: {{ activitychart_data|tojson|safe }}
+      data: {{ activitychart_data|tojson|safe }},
+      one_year: true
     });
 
     app.render_membershipchart({
       container: $('.membershipchart'),
-      data: {{ group_history|tojson|safe }}
+      data: {{ group_history|tojson|safe }},
+      one_year: true
     });
 
     var top_words = {{ top_words|tojson|safe }};

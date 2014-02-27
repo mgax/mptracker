@@ -38,11 +38,6 @@ app.render_membershipchart = function(options) {
         .scale(x)
         .orient("bottom");
 
-    var vacation_blocks = d3.svg.line()
-        .interpolate("step")
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return d.vacation ? height : 0 });
-
     var labels = ['proposals', 'questions'];
 
     var last_day = new Date();
@@ -54,7 +49,15 @@ app.render_membershipchart = function(options) {
       d.end_date = _.min([parseDate(d.end_date), last_day]);
     });
 
-    x.domain([parseDate('2012-12-17'), parseDate('2016-12-5')]);
+    if(options.one_year) {
+      var today = new Date();
+      var one_year_ago = new Date();
+      one_year_ago.setFullYear(today.getFullYear() - 1);
+      x.domain([one_year_ago, today]);
+    }
+    else {
+      x.domain([parseDate('2012-12-17'), parseDate('2016-12-5')]);
+    }
 
     var tooltip = d3.tip().html(function(d) { return d.group_short_name; });
     svg.call(tooltip);
