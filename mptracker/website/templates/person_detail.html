@@ -88,40 +88,26 @@
       <div class="wordcloud"></div>
 
       <dl class="dl-horizontal">
-        {%- if contact.website_url %}
-          <dt>site</dt>
-          <dd>{{ contact.website_url|urlize }}</dd>
-        {%- endif %}
+        <dt>site</dt>
+        <dd>{{ (contact.website_url or '')|urlize }}</dd>
 
-        {%- if contact.blog_url %}
-          <dt>blog</dt>
-          <dd>{{ contact.blog_url|urlize }}</dd>
-        {%- endif %}
+        <dt>blog</dt>
+        <dd>{{ (contact.blog_url or '')|urlize }}</dd>
 
-        {%- if contact.email_value %}
-          <dt>email</dt>
-          <dd>{{ contact.email_value|urlize }}</dd>
-        {%- endif %}
+        <dt>email</dt>
+        <dd>{{ (contact.email_value or '')|urlize }}</dd>
 
-        {%- if contact.facebook_url %}
-          <dt>facebook</dt>
-          <dd>{{ contact.facebook_url|urlize }}</dd>
-        {%- endif %}
+        <dt>facebook</dt>
+        <dd>{{ (contact.facebook_url or '')|urlize }}</dd>
 
-        {%- if contact.twitter_url %}
-          <dt>twitter</dt>
-          <dd>{{ contact.twitter_url|urlize }}</dd>
-        {%- endif %}
+        <dt>twitter</dt>
+        <dd>{{ (contact.twitter_url or '')|urlize }}</dd>
 
-        {%- if contact.phone %}
-          <dt>phone</dt>
-          <dd>{{ contact.phone }}</dd>
-        {%- endif %}
+        <dt>phone</dt>
+        <dd>{{ contact.phone or '' }}</dd>
 
-        {%- if contact.address %}
-          <dt>address</dt>
-          <dd>{{ contact.address }}</dd>
-        {%- endif %}
+        <dt>address</dt>
+        <dd>{{ contact.address or '' }}</dd>
       </dl>
 
       <div>
