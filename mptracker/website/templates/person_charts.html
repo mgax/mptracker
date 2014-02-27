@@ -5,9 +5,7 @@
 
 
 {% block content %}
-  <h1>{{ name }}</h1>
-  <!-- person_id='{{ person_id }}' -->
-  <!-- mandate_id='{{ mandate_id }}' -->
+  <h1>{{ name|link_for('.person_detail', person_slug=person_slug) }}</h1>
 
   <div class="row">
     <div class="activitychart"></div>
