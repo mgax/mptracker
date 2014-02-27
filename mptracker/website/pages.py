@@ -137,6 +137,7 @@ def person_detail(person_slug):
     ctx['person_slug'] = person_slug
     ctx['stats'] = person.get_stats()
     ctx['activitychart_data'] = person.get_activitychart_data()
+    ctx['group_history'] = person.get_group_history()
     ctx['policy_domains'] = person.get_policy_data()
 
     if 'picture_filename' in ctx:

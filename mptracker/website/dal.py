@@ -180,22 +180,6 @@ class DalPerson:
             for cm in committee_membership_query
         ]
 
-        membership_query = (
-            self.mandate.group_memberships
-            .order_by(MpGroupMembership.interval.desc())
-        )
-        group_history = [
-            {
-                'start_date': membership.interval.lower,
-                'end_date': membership.interval.upper,
-                'role': membership.role,
-                'group_short_name': membership.mp_group.short_name,
-            }
-            for membership in membership_query
-        ]
-
-        rv['group_history'] = group_history
-
         if self.mandate.county:
             votes_percent = self.mandate.election_votes_percent
             rv['college'] = {
@@ -366,6 +350,22 @@ class DalPerson:
                 .order_by(Proposal.date.desc())
             )
         ]
+
+    def get_group_history(self):
+        membership_query = (
+            self.mandate.group_memberships
+            .order_by(MpGroupMembership.interval.desc())
+        )
+        group_history = [
+            {
+                'start_date': membership.interval.lower,
+                'end_date': membership.interval.upper,
+                'role': membership.role,
+                'group_short_name': membership.mp_group.short_name,
+            }
+            for membership in membership_query
+        ]
+        return group_history
 
     def get_activitychart_data(self):
         days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
