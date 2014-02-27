@@ -148,6 +148,7 @@ def person_detail(person_slug):
                 filename=picture_rel_path,
             )
 
+    ctx['recent_activity'] = person.get_recent_activity(limit=3, limit_each=2)
     for item in ctx['recent_activity']:
         if item['type'] == 'proposal':
             item['url'] = flask.url_for(

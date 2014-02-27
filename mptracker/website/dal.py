@@ -41,6 +41,9 @@ def _get_recent_questions(mandate, limit):
             .filter(Ask.mandate == mandate)
         )
 
+    if limit is not None:
+        recent_questions_query = recent_questions_query.limit(limit)
+
     return [
         {
             'date': q.date,
@@ -48,7 +51,7 @@ def _get_recent_questions(mandate, limit):
             'type': q.type,
             'question_id': q.id,
         }
-        for q in recent_questions_query.limit(limit)
+        for q in recent_questions_query
     ]
 
 
@@ -65,6 +68,9 @@ def _get_recent_proposals(mandate, limit):
             .filter(Sponsorship.mandate == mandate)
         )
 
+    if limit is not None:
+        recent_proposals_query = recent_proposals_query.limit(limit)
+
     return [
         {
             'date': p.date,
@@ -72,33 +78,8 @@ def _get_recent_proposals(mandate, limit):
             'type': 'proposal',
             'proposal_id': p.id,
         }
-        for p in recent_proposals_query.limit(limit)
+        for p in recent_proposals_query
     ]
-
-
-def _get_recent_activity(mandate):
-    recent_transcripts_query = (
-        mandate.transcripts
-        .order_by(Transcript.serial.desc())
-        .limit(5)
-        .options(joinedload('chapter'))
-    )
-    recent_transcripts = [
-        {
-            'date': t.chapter.date,
-            'text': filters.do_truncate(t.text, 200),
-            'type': 'speech',
-            'chapter_serial': t.chapter.serial,
-        }
-        for t in recent_transcripts_query
-    ]
-
-    recent_questions = _get_recent_questions(mandate, 5)
-    recent_proposals = _get_recent_proposals(mandate, 5)
-
-    rv = recent_transcripts + recent_questions + recent_proposals
-    rv.sort(key=lambda r: r['date'], reverse=True)
-    return rv[:10]
 
 
 def group_by_week(data_iter):
@@ -189,8 +170,6 @@ class DalPerson:
                 'election_votes_fraction': votes_percent and votes_percent/100,
             }
 
-        rv['recent_activity'] = _get_recent_activity(self.mandate)
-
         vote_subquery = Vote.query.filter_by(mandate=self.mandate).subquery()
         controversy_query = (
             db.session.query(
@@ -226,6 +205,37 @@ class DalPerson:
         rv['assets'] = self.get_assets_data()
 
         rv['top_words'] = get_top_words(self.mandate.id, 50)
+
+        return rv
+
+    def get_recent_activity(self, limit=None, limit_each=None):
+        recent_transcripts_query = (
+            self.mandate.transcripts
+            .order_by(Transcript.serial.desc())
+            .options(joinedload('chapter'))
+        )
+        if limit_each is not None:
+            recent_transcripts_query = (
+                recent_transcripts_query
+                .limit(limit_each)
+            )
+        recent_transcripts = [
+            {
+                'date': t.chapter.date,
+                'text': filters.do_truncate(t.text, 200),
+                'type': 'speech',
+                'chapter_serial': t.chapter.serial,
+            }
+            for t in recent_transcripts_query
+        ]
+
+        recent_questions = _get_recent_questions(self.mandate, limit_each)
+        recent_proposals = _get_recent_proposals(self.mandate, limit_each)
+
+        rv = recent_transcripts + recent_questions + recent_proposals
+        rv.sort(key=lambda r: r['date'], reverse=True)
+        if limit is not None:
+            rv = rv[:limit]
 
         return rv
 
