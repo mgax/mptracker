@@ -19,8 +19,8 @@ app.create_map = function(options) {
   var deputati_layer = L.geoJson(null, {
     style: function() {
       return {
-        weight: '1px',
-        opacity: 1,
+        weight: 1,
+        opacity: .4,
         fillOpacity: 0,
         clickable: false
       };
@@ -29,8 +29,8 @@ app.create_map = function(options) {
   var senatori_layer = L.geoJson(null, {
     style: function() {
       return {
-        weight: '2px',
-        opacity: 1,
+        weight: 1,
+        opacity: .5,
         fillOpacity: 0,
         clickable: false
       };

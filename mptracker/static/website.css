@@ -5,6 +5,10 @@
     padding: 20px;
 }
 
+.leaflet-popup-content {
+    font-size: 130%;
+}
+
 .proposal-activity-at-cd {
     background: #fff0d8;
 }
