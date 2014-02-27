@@ -73,12 +73,7 @@ app.render_activitychart = function(options) {
       x.domain(d3.extent(data, function(d) { return d.date; }));
     }
 
-    y.domain([
-        d3.min(activities, function(c) {
-            return d3.min(c.values, function(v) { return v.value; }); }),
-        d3.max(activities, function(c) {
-            return d3.max(c.values, function(v) { return v.value; }); })
-    ]);
+    y.domain([0, 15]);
 
     svg.append("path")
         .datum(data)
