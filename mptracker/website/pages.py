@@ -170,6 +170,16 @@ def person_detail(person_slug):
     return flask.render_template('person_detail.html', **ctx)
 
 
+@pages.route('/persoane/<person_slug>/charts')
+@section('person')
+def person_charts(person_slug):
+    person = dal.get_person(person_slug)
+    ctx = person.get_main_details()
+    ctx['activitychart_data'] = person.get_activitychart_data()
+    ctx['group_history'] = person.get_group_history()
+    return flask.render_template('person_charts.html', **ctx)
+
+
 @pages.route('/persoane/<person_slug>/local')
 @section('person')
 def person_local(person_slug):

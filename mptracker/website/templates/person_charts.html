@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}{{ super() }} – {{ name }}{% endblock %}
+
+
+{% block content %}
+  <h1>{{ name }}</h1>
+  <!-- person_id='{{ person_id }}' -->
+  <!-- mandate_id='{{ mandate_id }}' -->
+
+  <div class="row">
+    <div class="activitychart"></div>
+    <div class="membershipchart"></div>
+  </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static',
+    filename='lib/d3-tip-70b1cf3/d3-tip.js') }}"></script>
+<script src="{{ url_for('static',
+    filename='lib/d3-cloud-1.0.5/d3.layout.cloud.js') }}"></script>
+<script src="{{ url_for('static', filename='activitychart.js') }}"></script>
+<script src="{{ url_for('static', filename='membershipchart.js') }}"></script>
+<script>
+  $(document).ready(function() {
+    app.render_activitychart({
+      container: $('.activitychart'),
+      data: {{ activitychart_data|tojson|safe }},
+      one_year: false
+    });
+
+    app.render_membershipchart({
+      container: $('.membershipchart'),
+      data: {{ group_history|tojson|safe }},
+      one_year: false
+    });
+  });
+</script>
+{% endblock %}
