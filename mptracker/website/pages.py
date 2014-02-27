@@ -175,6 +175,15 @@ def person_detail(person_slug):
     return flask.render_template('person_detail.html', **ctx)
 
 
+@pages.route('/persoane/<person_slug>/contact')
+@section('person')
+def person_contact(person_slug):
+    person = dal.get_person(person_slug)
+    ctx = person.get_details()
+    ctx['person_slug'] = person_slug
+    return flask.render_template('person_contact.html', **ctx)
+
+
 @pages.route('/persoane/<person_slug>/activity')
 @section('person')
 def person_activity(person_slug):

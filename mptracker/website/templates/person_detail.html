@@ -87,29 +87,6 @@
 
       <div class="wordcloud"></div>
 
-      <dl class="dl-horizontal">
-        <dt>site</dt>
-        <dd>{{ (contact.website_url or '')|urlize }}</dd>
-
-        <dt>blog</dt>
-        <dd>{{ (contact.blog_url or '')|urlize }}</dd>
-
-        <dt>email</dt>
-        <dd>{{ (contact.email_value or '')|urlize }}</dd>
-
-        <dt>facebook</dt>
-        <dd>{{ (contact.facebook_url or '')|urlize }}</dd>
-
-        <dt>twitter</dt>
-        <dd>{{ (contact.twitter_url or '')|urlize }}</dd>
-
-        <dt>phone</dt>
-        <dd>{{ contact.phone or '' }}</dd>
-
-        <dt>address</dt>
-        <dd>{{ contact.address or '' }}</dd>
-      </dl>
-
       <div>
         <h3>Activitate recentă</h3>
 
@@ -167,6 +144,11 @@
             <img src="{{ picture_url }}">
           </div>
         {%- endif %}
+
+        <p>
+          {% set url = url_for('.person_contact', person_slug=person_slug) %}
+          <a href="{{ url }}" class="btn btn-primary">contact</a>
+        </p>
 
         <h4>Statistici</h4>
 
