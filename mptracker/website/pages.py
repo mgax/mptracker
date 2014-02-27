@@ -129,6 +129,26 @@ def person_index_search():
     return flask.jsonify(results=results)
 
 
+def _add_activity_url(item):
+    if item['type'] == 'proposal':
+        item['url'] = flask.url_for(
+            '.policy_proposal',
+            proposal_id=item['proposal_id'],
+        )
+
+    elif item['type'] in ['question', 'interpelation']:
+        item['url'] = flask.url_for(
+            '.person_question',
+            question_id=item['question_id'],
+        )
+
+    elif item['type'] == 'speech':
+        item['url'] = flask.url_for(
+            '.transcript',
+            serial=item['chapter_serial'],
+        )
+
+
 @pages.route('/persoane/<person_slug>')
 @section('person')
 def person_detail(person_slug):
@@ -150,35 +170,23 @@ def person_detail(person_slug):
 
     ctx['recent_activity'] = person.get_recent_activity(limit=3, limit_each=2)
     for item in ctx['recent_activity']:
-        if item['type'] == 'proposal':
-            item['url'] = flask.url_for(
-                '.policy_proposal',
-                proposal_id=item['proposal_id'],
-            )
-
-        elif item['type'] in ['question', 'interpelation']:
-            item['url'] = flask.url_for(
-                '.person_question',
-                question_id=item['question_id'],
-            )
-
-        elif item['type'] == 'speech':
-            item['url'] = flask.url_for(
-                '.transcript',
-                serial=item['chapter_serial'],
-            )
+        _add_activity_url(item)
 
     return flask.render_template('person_detail.html', **ctx)
 
 
-@pages.route('/persoane/<person_slug>/charts')
+@pages.route('/persoane/<person_slug>/activity')
 @section('person')
-def person_charts(person_slug):
+def person_activity(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['activitychart_data'] = person.get_activitychart_data()
     ctx['group_history'] = person.get_group_history()
-    return flask.render_template('person_charts.html', **ctx)
+    ctx['recent_activity'] = person.get_recent_activity()
+    ctx['person_slug'] = person_slug
+    for item in ctx['recent_activity']:
+        _add_activity_url(item)
+    return flask.render_template('person_activity.html', **ctx)
 
 
 @pages.route('/persoane/<person_slug>/local')

@@ -36,3 +36,23 @@
     </dd>
   </dl>
 {%- endmacro %}
+
+
+{% set TYPE_MAP = {
+    'question': "întrebare",
+    'interpelation': "interpelare",
+    'proposal': "propunere legislativă",
+    'speech': "luare de cuvânt",
+  } %}
+
+
+{%- macro activity_item(item) %}
+  <li>
+    <strong>
+      {{ item['date']|datefmt }},
+      {{ TYPE_MAP.get(item['type']) }}
+    </strong>:
+
+    {{ item['text']|maybe_url(item['url']) }}
+  </li>
+{%- endmacro %}

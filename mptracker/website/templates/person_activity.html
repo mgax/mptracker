@@ -13,6 +13,13 @@
 
     <h3>Afiliere politică</h3>
     <div class="membershipchart"></div>
+
+    {% from '_person_bits.html' import activity_item %}
+    <ul class="list-unstyled">
+      {% for item in recent_activity %}
+        {{ activity_item(item) }}
+      {% endfor %}
+    </ul>
   </div>
 {% endblock %}
 

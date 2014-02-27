@@ -1,12 +1,5 @@
 {% extends 'layout.html' %}
 
-{% set TYPE_MAP = {
-    'question': "întrebare",
-    'interpelation': "interpelare",
-    'proposal': "propunere legislativă",
-    'speech': "luare de cuvânt",
-  } %}
-
 
 {% block title %}{{ super() }} – {{ name }}{% endblock %}
 
@@ -34,11 +27,9 @@
       <h3>Afiliere politică</h3>
       <div class="membershipchart"></div>
 
-      <p>
-        <a href="{{ url_for('.person_charts', person_slug=person_slug) }}">
-          grafice pentru întregul mandat
-        </a>
-      </p>
+      {%- set activity_url = url_for('.person_activity',
+                                     person_slug=person_slug) %}
+      <p><a href="{{ activity_url }}">grafice pentru întregul mandat</a></p>
 
       <ul class="list-unstyled">
         {% if college %}
@@ -122,18 +113,14 @@
       <div>
         <h3>Activitate recentă</h3>
 
+        {% from '_person_bits.html' import activity_item %}
         <ul class="list-unstyled">
           {% for item in recent_activity %}
-            <li>
-              <strong>
-                {{ item['date']|datefmt }},
-                {{ TYPE_MAP.get(item['type']) }}
-              </strong>:
-
-              {{ item['text']|maybe_url(item['url']) }}
-            </li>
+            {{ activity_item(item) }}
           {% endfor %}
         </ul>
+
+        <p><a href="{{ activity_url }}">întreaga activitate</a></p>
       </div>
 
       {%- if romania_curata_text %}
