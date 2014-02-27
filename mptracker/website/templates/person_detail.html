@@ -210,11 +210,15 @@
 <script src="{{ url_for('static', filename='wordcloud.js') }}"></script>
 <script>
   $(document).ready(function() {
-    var activitychart_data = {{ activitychart_data|tojson|safe }};
-    app.render_activitychart($('.activitychart'), activitychart_data);
+    app.render_activitychart({
+      container: $('.activitychart'),
+      data: {{ activitychart_data|tojson|safe }}
+    });
 
-    var group_history = {{ group_history|tojson|safe }};
-    app.render_membershipchart($('.membershipchart'), group_history);
+    app.render_membershipchart({
+      container: $('.membershipchart'),
+      data: {{ group_history|tojson|safe }}
+    });
 
     var top_words = {{ top_words|tojson|safe }};
     app.render_wordcloud($('.wordcloud'), top_words);

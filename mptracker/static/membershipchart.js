@@ -14,7 +14,9 @@ var color = {
 };
 
 
-app.render_membershipchart = function(box, data) {
+app.render_membershipchart = function(options) {
+    var box = options.container;
+    var data = options.data;
     var margin = 25;
     var width = box.width() - 2*margin;
     var height = 20;
