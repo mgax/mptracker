@@ -158,7 +158,7 @@ def person_detail(person_slug):
     ctx['stats'] = person.get_stats()
     ctx['activitychart_data'] = person.get_activitychart_data()
     ctx['group_history'] = person.get_group_history()
-    ctx['policy_domains'] = person.get_policy_data()
+    ctx['policy_domains'] = person.get_top_policies()
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('mandate-pictures') / ctx['picture_filename']

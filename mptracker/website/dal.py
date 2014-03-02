@@ -451,7 +451,7 @@ class DalPerson:
             for vs, vote, group_vote, mp_group in query
         ]
 
-    def get_policy_data(self, cutoff=0.1):
+    def get_top_policies(self, cutoff=0.1):
         count_map = defaultdict(int)
 
         question_query = (
