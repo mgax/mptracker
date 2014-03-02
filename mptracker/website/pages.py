@@ -288,6 +288,14 @@ def person_transcript(person_slug, serial):
     return flask.render_template('person_transcript.html', **ctx)
 
 
+@pages.route('/persoane/<person_slug>/politici/<policy_slug>')
+def person_policy(person_slug, policy_slug):
+    person = dal.get_person(person_slug)
+    ctx = person.get_main_details()
+    ctx['policy'] = person.get_policy(policy_slug)
+    return flask.render_template('person_policy.html', **ctx)
+
+
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
     return flask.render_template('question.html', **{

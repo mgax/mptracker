@@ -7,11 +7,7 @@
   } %}
 
 
-{% block content %}
-  <h1>{{ policy_name }}</h1>
-
-  <p class="placeholder" style="height: 200px">analiză, hot issues</p>
-
+{% macro policy_tables(proposal_list, question_list) %}
   <h2>Propuneri legislative</h2>
 
   <table class="table">
@@ -53,4 +49,13 @@
       {%- endfor %}
     </tbody>
   </table>
+{% endmacro %}
+
+
+{% block content %}
+  <h1>{{ policy_name }}</h1>
+
+  <p class="placeholder" style="height: 200px">analiză, hot issues</p>
+
+  {{ policy_tables(proposal_list, question_list) }}
 {% endblock %}

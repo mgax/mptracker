@@ -166,7 +166,11 @@
       <ul>
         {%- for policy in policy_domains %}
           <li>
-            {{ policy.name|link_for('.policy_detail', policy_slug=policy.slug) }}
+            {{ policy.name|link_for(
+                '.person_policy',
+                person_slug=person_slug,
+                policy_slug=policy.slug,
+              ) }}
             ({{ policy.interest|percent }})
           </li>
         {%- endfor %}

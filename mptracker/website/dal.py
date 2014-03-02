@@ -92,7 +92,9 @@ def group_by_week(data_iter):
 
 class DalPerson:
 
-    def __init__(self, person_slug, missing=KeyError):
+    def __init__(self, person_slug, dal, missing=KeyError):
+        self.dal = dal
+
         self.person = Person.query.filter_by(slug=person_slug).first()
         if self.person is None:
             raise missing()
@@ -501,6 +503,21 @@ class DalPerson:
             key=lambda p: p['interest'],
         )
 
+    def get_policy(self, policy_slug):
+        policy = PolicyDomain.query.filter_by(slug=policy_slug).first()
+        if policy is None:
+            raise self.missing()
+
+        print(self.dal.get_policy_proposal_list(
+                policy_slug, self.mandate))
+        return {
+            'name': policy.name,
+            'proposal_list': self.dal.get_policy_proposal_list(
+                policy_slug, self.mandate),
+            'question_list': self.dal.get_policy_question_list(
+                policy_slug, self.mandate),
+        }
+
     def get_comparison_lists(self):
         def person_data(person):
             return {'slug': person.slug, 'name': person.name_first_last}
@@ -642,7 +659,7 @@ class DataAccess:
         ]
 
     def get_person(self, person_slug):
-        return DalPerson(person_slug, self.missing)
+        return DalPerson(person_slug, self, self.missing)
 
     def get_county(self, county_code):
         return DalCounty(county_code, self.missing)
@@ -741,12 +758,18 @@ class DataAccess:
             raise self.missing()
         return {'name': policy.name}
 
-    def get_policy_proposal_list(self, policy_slug):
+    def get_policy_proposal_list(self, policy_slug, mandate=None):
         proposal_query = (
             Proposal.query
             .join(Proposal.policy_domain)
             .filter_by(slug=policy_slug)
         )
+        if mandate is not None:
+            proposal_query = (
+                proposal_query
+                .join(Proposal.sponsorships)
+                .filter_by(mandate=mandate)
+            )
         return [
             {
                 'title': proposal.title,
@@ -756,7 +779,7 @@ class DataAccess:
             for proposal in proposal_query
         ]
 
-    def get_policy_question_list(self, policy_slug):
+    def get_policy_question_list(self, policy_slug, mandate=None):
         question_query = (
             Question.query
             .join(Question.policy_domain)
@@ -764,6 +787,12 @@ class DataAccess:
             .filter(Question.date >= date(2012, 12, 17))
             .order_by(Question.date.desc())
         )
+        if mandate is not None:
+            question_query = (
+                question_query
+                .join(Question.asked)
+                .filter_by(mandate=mandate)
+            )
         return [
             {
                 'title': question.title,
