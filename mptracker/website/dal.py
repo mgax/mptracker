@@ -791,7 +791,7 @@ class DataAccess:
 
         return rv
 
-    def get_transcript_details(self, serial):
+    def get_transcript_chapter(self, serial):
         transcript_chapter = (
             TranscriptChapter.query
             .filter_by(serial=serial)

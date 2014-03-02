@@ -278,9 +278,9 @@ def person_question(question_id):
 
 
 @pages.route('/stenograme/<path:serial>')
-def transcript(serial):
-    ctx = dal.get_transcript_details(serial)
-    return flask.render_template('transcript.html', **ctx)
+def transcript_chapter(serial):
+    ctx = dal.get_transcript_chapter(serial)
+    return flask.render_template('transcript_chapter.html', **ctx)
 
 
 @pages.route('/persoane/judet/<county_code>')
