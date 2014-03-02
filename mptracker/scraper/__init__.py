@@ -31,7 +31,7 @@ STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
 
 @scraper_manager.command
 def questions(
-        year='2013',
+        year='2014',
         reimport_existing=False,
         cache_name=None,
         throttle=None,
@@ -417,7 +417,7 @@ def committees(
 
 
 @scraper_manager.command
-def committee_summaries(year=2013):
+def committee_summaries(year=2014):
     from mptracker.scraper.committee_summaries import SummaryScraper
 
     patcher = TablePatcher(models.CommitteeSummary,
