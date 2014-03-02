@@ -270,6 +270,15 @@ def person_compare(person_slug, other_person_slug):
     return flask.render_template('person_compare.html', **ctx)
 
 
+@pages.route('/persoane/<person_slug>/stenograme')
+@section('person')
+def person_transcript_list(person_slug):
+    person = dal.get_person(person_slug)
+    ctx = person.get_main_details()
+    ctx['transcript_list'] = person.get_transcript_list()
+    return flask.render_template('person_transcript_list.html', **ctx)
+
+
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
     return flask.render_template('question.html', **{

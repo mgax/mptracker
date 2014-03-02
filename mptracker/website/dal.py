@@ -556,6 +556,21 @@ class DalPerson:
                                    same_mandate_count_query],
         }
 
+    def get_transcript_list(self):
+        transcripts_query = (
+            self.mandate.transcripts
+            .options(joinedload('chapter'))
+            .order_by(Transcript.serial)
+        )
+        return [
+            {
+                'date': tr.chapter.date,
+                'serial': tr.serial,
+                'text': tr.text,
+            }
+            for tr in transcripts_query
+        ]
+
 
 class DalCounty:
 

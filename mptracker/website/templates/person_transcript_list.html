@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}{{ super() }} – {{ name }} - activitate locală{% endblock %}
+
+
+{% block content %}
+  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
+  <h1><a href="{{ url }}">{{ name }}</a></h1>
+
+  <h3>Luări de cuvânt</h3>
+
+  <table class="table">
+    <thread>
+      <th>dată</th>
+      <th>text</th>
+    </thread>
+
+    <tbody>
+      {% for transcript in transcript_list %}
+        <tr>
+          <td>{{ transcript.date }}</td>
+          <td>{{ transcript.text|truncate(120) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
