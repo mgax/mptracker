@@ -129,7 +129,7 @@ def person_index_search():
     return flask.jsonify(results=results)
 
 
-def _add_activity_url(item):
+def _add_activity_url(person_slug, item):
     if item['type'] == 'proposal':
         item['url'] = flask.url_for(
             '.policy_proposal',
@@ -144,7 +144,8 @@ def _add_activity_url(item):
 
     elif item['type'] == 'speech':
         item['url'] = flask.url_for(
-            '.transcript',
+            '.person_transcript',
+            person_slug=person_slug,
             serial=item['chapter_serial'],
         )
 
@@ -170,7 +171,7 @@ def person_detail(person_slug):
 
     ctx['recent_activity'] = person.get_recent_activity(limit=3, limit_each=2)
     for item in ctx['recent_activity']:
-        _add_activity_url(item)
+        _add_activity_url(person_slug, item)
 
     return flask.render_template('person_detail.html', **ctx)
 
@@ -194,7 +195,7 @@ def person_activity(person_slug):
     ctx['recent_activity'] = person.get_recent_activity()
     ctx['person_slug'] = person_slug
     for item in ctx['recent_activity']:
-        _add_activity_url(item)
+        _add_activity_url(person_slug, item)
     return flask.render_template('person_activity.html', **ctx)
 
 
