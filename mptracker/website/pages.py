@@ -279,6 +279,15 @@ def person_transcript_list(person_slug):
     return flask.render_template('person_transcript_list.html', **ctx)
 
 
+@pages.route('/persoane/<person_slug>/stenograme/<path:serial>')
+@section('person')
+def person_transcript(person_slug, serial):
+    person = dal.get_person(person_slug)
+    ctx = person.get_main_details()
+    ctx['transcript'] = dal.get_transcript(serial)
+    return flask.render_template('person_transcript.html', **ctx)
+
+
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
     return flask.render_template('question.html', **{

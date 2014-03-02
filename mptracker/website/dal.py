@@ -110,6 +110,7 @@ class DalPerson:
         return {
             'name': self.person.name_first_last,
             'person_id': self.person.id,
+            'person_slug': self.person.slug,
             'mandate_id': self.mandate.id,
         }
 
@@ -840,6 +841,20 @@ class DataAccess:
             for transcript, person in transcript_query
         ]
         return rv
+
+    def get_transcript(self, serial):
+        transcript = (
+            Transcript.query
+            .filter_by(serial=serial)
+            .first()
+        )
+        if transcript is None:
+            raise self.missing()
+
+        return {
+            'date': transcript.chapter.date,
+            'text': transcript.text,
+        }
 
 
 def get_top_words(mandate_id, number):

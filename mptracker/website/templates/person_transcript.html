@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}{{ super() }} – {{ name }} - activitate locală{% endblock %}
+
+
+{% block content %}
+  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
+  <h1><a href="{{ url }}">{{ name }}</a></h1>
+
+  <h3>Luare de cuvânt ({{ transcript.date }})</h3>
+
+  <p class="transcript-text">{{ transcript.text }}</p>
+{% endblock %}

@@ -18,9 +18,14 @@
 
     <tbody>
       {% for transcript in transcript_list %}
+        {% set url = url_for(
+            '.person_transcript',
+            person_slug=person_slug,
+            serial=transcript.serial,
+          ) %}
         <tr>
           <td>{{ transcript.date }}</td>
-          <td>{{ transcript.text|truncate(120) }}</td>
+          <td><a href="{{ url }}">{{ transcript.text|truncate(120) }}</a></td>
         </tr>
       {% endfor %}
     </tbody>
