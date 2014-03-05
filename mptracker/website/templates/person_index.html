@@ -13,22 +13,25 @@
 
 
 {% block content %}
-  <form name="search-by-name">
+  <h2>Căutare după nume</h2>
+
+  <form name="search-by-name" class="person-index-search-form">
     <div class="form-group">
-      <label for="search-by-name-input">Căutare după nume</label>
+      <label for="search-by-name-input" class="sr-only">nume</label>
       <input type="search" class="form-control"
              id="search-by-name-input" name="query"
-             placeholder="Nume deputat">
+             tabindex="1" placeholder="Nume deputat">
     </div>
     <button type="submit" class="btn btn-primary">Caută</button>
   </form>
 
-  <div class="row">
+  <div class="row" class="person-index-search-form">
     <div class="col-sm-4">
       <form name="geocode">
         <div class="form-group">
-          <label for="frm-address">adresă</label>
-          <input type="search" name="address" autofocus
+          <label for="frm-address" class="sr-only">adresă</label>
+          <input type="search" name="address"
+                 tabindex="2" placeholder="Adresă"
                  id="frm-address" class="form-control">
         </div>
         <button type="submit" class="btn btn-default">caută</button>
