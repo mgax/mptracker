@@ -116,15 +116,15 @@ def person_index():
     })
 
 
-@pages.route('/persoane/_search')
-def person_index_search():
-    query = flask.request.args['q']
+@pages.route('/persoane/_search_by_name')
+def person_index_search_name():
+    name_query = flask.request.args['name_query']
     results = [
         {
             'name': person['name'],
             'url': flask.url_for('.person_detail', person_slug=person['slug']),
         }
-        for person in dal.search_person(query)
+        for person in dal.search_person_by_name(name_query)
     ]
     return flask.jsonify(results=results)
 

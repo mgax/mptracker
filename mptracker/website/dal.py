@@ -629,7 +629,7 @@ class DataAccess:
 
         return dict(mandate_data)
 
-    def search_person(self, query):
+    def search_person_by_name(self, name_query):
         name_search = NameSearch(
             Person.query
             .join(Person.mandates)
@@ -638,7 +638,7 @@ class DataAccess:
         )
         return [
             {'name': person.name_first_last, 'slug': person.slug}
-            for person in name_search.find(query.strip())
+            for person in name_search.find(name_query.strip())
         ]
 
     def get_person(self, person_slug):

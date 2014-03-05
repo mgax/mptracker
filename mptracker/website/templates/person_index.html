@@ -19,7 +19,7 @@
     <div class="form-group">
       <label for="search-by-name-input" class="sr-only">nume</label>
       <input type="search" class="form-control"
-             id="search-by-name-input" name="query"
+             id="search-by-name-input" name="name_query"
              tabindex="1" placeholder="Nume deputat">
     </div>
     <button type="submit" class="btn btn-primary">Caută</button>
@@ -49,11 +49,9 @@
 (function() {
   "use strict";
 
-  var person_query_url = {{ url_for('.person_index_search')|tojson|safe }};
-  var form = $('form[name=search-by-name]');
   app.person_search = new app.PersonSearch({
-    el: form,
-    url: person_query_url
+    el: $('form[name=search-by-name]'),
+    url: {{ url_for('.person_index_search_name')|tojson|safe }}
   });
 
 })();

@@ -23,12 +23,13 @@ app.PersonSearch = Backbone.View.extend({
 
     on_submit: function(evt) {
         evt.preventDefault();
-        this.query = this.$el.find('[name=query]').val();
-        this.update(this.query);
+        var pairs = _.values(this.$el.serializeArray());
+        var query = _.object(_.pluck(pairs, 'name'), _.pluck(pairs, 'value'));
+        this.update(query);
     },
 
     update: function(query) {
-        this.request = $.getJSON(this.url, {q: query});
+        this.request = $.getJSON(this.url, query);
         this.request.done(_.bind(this.got_update_result, this));
     },
 
@@ -46,11 +47,7 @@ app.PersonSearch = Backbone.View.extend({
         }
         else {
             var message = $('<p class="results">');
-            message.append(
-                "Nu am gasit ",
-                $('<span>').text(this.query),
-                "."
-            );
+            message.text("Nu am găsit nicio persoană.");
             this.$el.append(message);
         }
     }
