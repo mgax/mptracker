@@ -281,10 +281,7 @@ class DalPerson:
         rv['speeches'] = self.mandate.transcripts.count()
         rv['questions'] = self.mandate.asked.count()
         rv['proposals'] = self.mandate.sponsorships.count()
-        rv['local_score'] = (
-            self._local_ask_query.count() +
-            self._local_sponsorship_query.count()
-        )
+        rv['local_score'] = self._local_ask_query.count()
         return rv
 
     def get_assets_data(self):
@@ -305,20 +302,6 @@ class DalPerson:
 
     def get_local_activity(self):
         return {
-            'proposal_list': [
-                {
-                    'id': sp.proposal.id,
-                    'date': sp.proposal.date,
-                    'title': sp.proposal.title,
-                }
-                for sp in (
-                    self._local_sponsorship_query
-                    .options(joinedload('proposal'))
-                    .join(Sponsorship.proposal)
-                    .order_by(Proposal.date.desc())
-                )
-            ],
-
             'question_list': [
                 {
                     'id': ask.question.id,
