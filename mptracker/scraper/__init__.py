@@ -914,6 +914,7 @@ def position():
                     'interval': interval,
                     'title': row['title'],
                     'url': row['url'] or None,
+                    'category': 'minister',
                 })
 
             elif len(matches) > 1:
@@ -934,6 +935,7 @@ def position():
                 'person_id': person.id,
                 'interval': parse_interval(row['start_date'], row['end_date']),
                 'title': row['title'] + ", Biroul Permanent",
+                'category': 'permanent-bureau',
             })
 
     models.db.session.commit()
