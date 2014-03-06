@@ -568,6 +568,29 @@ class DalPerson:
                     'person_list': person_list,
                 })
 
+        committee_president_query = (
+            Person.query
+            .join(Person.mandates)
+            .filter(Mandate.year == 2012)
+            .join(Mandate.committee_memberships)
+            .filter(
+                func.lower(MpCommitteeMembership.role)
+                .contains('preşedinte')
+            )
+        )
+
+        is_committee_president = (
+            committee_president_query
+            .filter(Person.id == self.person.id)
+            .count() > 0
+        )
+        if is_committee_president:
+            same_position_category.append({
+                'category': 'committee-president',
+                'person_list': [person_data(p) for p in
+                                committee_president_query],
+            })
+
         return {
             'county_name': self.mandate.county.name,
             'same_county': [person_data(p) for p in same_county_query],
