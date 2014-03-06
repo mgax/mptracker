@@ -41,6 +41,18 @@
     <button type="submit" class="btn btn-primary">Caută</button>
   </form>
 
+  <h2>Căutare după contracte cu statul</h2>
+
+  <form name="search-by-contracts" class="person-index-search-form">
+    <div class="form-group">
+      <label for="search-by-contracts-input" class="sr-only">text</label>
+      <input type="search" class="form-control"
+             id="search-by-contracts-input" name="contracts_query"
+             tabindex="3" placeholder="text">
+    </div>
+    <button type="submit" class="btn btn-primary">Caută</button>
+  </form>
+
   <h2>Căutare după circumscripție</h2>
 
   <div class="row" class="person-index-search-form">
@@ -49,7 +61,7 @@
         <div class="form-group">
           <label for="frm-address" class="sr-only">adresă</label>
           <input type="search" name="address"
-                 tabindex="3" placeholder="Adresă"
+                 tabindex="4" placeholder="Adresă"
                  id="frm-address" class="form-control">
         </div>
         <button type="submit" class="btn btn-default">caută</button>
@@ -75,6 +87,11 @@
   app.person_search = new app.PersonPolicySearch({
     el: $('form[name=search-by-policy]'),
     url: {{ url_for('.person_index_search_policy')|tojson|safe }}
+  });
+
+  app.person_search = new app.PersonSearch({
+    el: $('form[name=search-by-contracts]'),
+    url: {{ url_for('.person_index_search_contracts')|tojson|safe }}
   });
 })();
 </script>

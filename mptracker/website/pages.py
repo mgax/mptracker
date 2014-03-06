@@ -142,6 +142,18 @@ def person_index_search_policy():
     return flask.jsonify(results=results)
 
 
+@pages.route('/persoane/_search_by_contracts')
+def person_index_search_contracts():
+    contracts_query = flask.request.args['contracts_query']
+    results = dal.search_person_by_contracts(contracts_query)
+    for person in results:
+        person['url'] = flask.url_for(
+            '.person_detail',
+            person_slug=person['slug'],
+        )
+    return flask.jsonify(results=results)
+
+
 def _add_activity_url(person_slug, item):
     if item['type'] == 'proposal':
         item['url'] = flask.url_for(

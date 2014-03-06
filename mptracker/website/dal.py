@@ -698,6 +698,20 @@ class DataAccess:
             for person, count in activity_query
         ]
 
+    def search_person_by_contracts(self, contracts_query):
+        match = func.to_tsvector(Person.romania_curata).match(contracts_query)
+
+        person_query = (
+            Person.query
+            .join(Mandate.person)
+            .filter(Mandate.year == 2012)
+            .filter(match == True)
+        )
+        return [
+            {'name': person.name_first_last, 'slug': person.slug}
+            for person in person_query
+        ]
+
     def get_person(self, person_slug):
         return DalPerson(person_slug, self, self.missing)
 
