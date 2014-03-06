@@ -4,6 +4,12 @@
 {% block title %}{{ super() }} – {{ name }} – comparație{% endblock %}
 
 
+{% set category_title = {
+      'minister': "ministru",
+      'permanent-bureau': "membru al biroului permanent",
+    } %}
+
+
 {%- macro comparison_link(person_slug, other_person) %}
   {{ other_person.name|link_for(
     '.person_compare',
@@ -15,6 +21,16 @@
 
 {% block content %}
   <h1>{{ name }}</h1>
+
+  {% for similar_position in same_position_category %}
+    {%- set category = similar_position.category %}
+    <h2>Cu funcții similare ({{ category_title.get(category, category) }})</h2>
+    <ul>
+      {%- for person in similar_position.person_list %}
+        <li>{{ comparison_link(person_slug, person) }}</li>
+      {%- endfor %}
+    </ul>
+  {% endfor %}
 
   <h2>Din același județ ({{ county_name }})</h2>
   <ul>

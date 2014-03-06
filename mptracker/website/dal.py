@@ -23,6 +23,7 @@ from mptracker.models import (
     Vote,
     GroupVote,
     PolicyDomain,
+    Position,
     NameSearch,
     db,
 )
@@ -547,6 +548,26 @@ class DalPerson:
             .filter_by(year=2012)
         )
 
+        same_position_category = []
+        category_query = (
+            self.person.positions
+            .filter(Position.interval.contains(date.today()))
+        )
+        for position in category_query:
+            same_category_query = (
+                Person.query
+                .join(Person.positions)
+                .filter(Position.category == position.category)
+                .join(Person.mandates)
+                .filter(Mandate.year == 2012)
+            )
+            person_list = [person_data(p) for p in same_category_query]
+            if person_list:
+                same_position_category.append({
+                    'category': position.category,
+                    'person_list': person_list,
+                })
+
         return {
             'county_name': self.mandate.county.name,
             'same_county': [person_data(p) for p in same_county_query],
@@ -555,6 +576,7 @@ class DalPerson:
             'mandate_count': mandate_count,
             'same_mandate_count': [person_data(p) for p in
                                    same_mandate_count_query],
+            'same_position_category': same_position_category,
         }
 
     def get_transcript_list(self):
