@@ -23,4 +23,22 @@
       {{ person_stats(other.person_slug, other.stats) }}
     </div>
   </div>
+
+  <div class="similaritychart"></div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static', filename='similaritychart.js') }}"></script>
+<script>
+  $(document).ready(function() {
+    app.render_similaritychart({container: $('.similaritychart'), overlap: 0});
+    app.render_similaritychart({container: $('.similaritychart'), overlap: 0.25});
+    app.render_similaritychart({container: $('.similaritychart'), overlap: 0.50});
+    app.render_similaritychart({container: $('.similaritychart'), overlap: 0.75});
+    app.render_similaritychart({container: $('.similaritychart'), overlap: 1});
+  });
+</script>
 {% endblock %}

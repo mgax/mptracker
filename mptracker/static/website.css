@@ -82,3 +82,7 @@
 .wordcloud {
     height: 250px;
 }
+
+.similarity-circle {
+    fill-opacity: 0.5;
+}
