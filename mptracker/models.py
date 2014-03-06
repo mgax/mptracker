@@ -503,6 +503,7 @@ class Position(db.Model):
     title = db.Column(db.Text)
     interval = db.Column(DATERANGE)
     url = db.Column(db.Text)
+    category = db.Column(db.Text)
 
     person_id = db.Column(UUID, db.ForeignKey('person.id'), nullable=False)
     person = db.relationship('Person',
