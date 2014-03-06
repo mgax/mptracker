@@ -683,6 +683,7 @@ class DataAccess:
                 activity_count,
             )
             .join(Mandate.person)
+            .filter(Mandate.year == 2012)
             .join(proposals_cte, proposals_cte.c.mandate_id == Mandate.id)
             .join(questions_cte, questions_cte.c.mandate_id == Mandate.id)
             .order_by(activity_count.desc())
