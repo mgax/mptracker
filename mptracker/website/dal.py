@@ -704,8 +704,8 @@ class DataAccess:
             .join(Mandate.person)
             .filter(Mandate.year == 2012)
             .filter(
-                'to_tsvector(person.romania_curata)'
-                ' @@ plainto_tsquery(:contracts_query)'
+                "to_tsvector('romanian', person.romania_curata) "
+                "@@ plainto_tsquery('romanian', :contracts_query)"
             )
             .params(contracts_query=contracts_query)
         )
