@@ -113,6 +113,7 @@ def person_index():
     return flask.render_template('person_index.html', **{
         'county_name_map': dal.get_county_name_map(),
         'mandates_by_county': mandates_by_county,
+        'policy_list': dal.get_policy_list(),
     })
 
 
@@ -126,6 +127,18 @@ def person_index_search_name():
         }
         for person in dal.search_person_by_name(name_query)
     ]
+    return flask.jsonify(results=results)
+
+
+@pages.route('/persoane/_search_by_policy')
+def person_index_search_policy():
+    policy_slug = flask.request.args['policy_slug']
+    results = dal.search_person_by_policy(policy_slug)
+    for person in results:
+        person['url'] = flask.url_for(
+            '.person_detail',
+            person_slug=person['slug'],
+        )
     return flask.jsonify(results=results)
 
 

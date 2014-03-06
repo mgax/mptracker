@@ -25,13 +25,31 @@
     <button type="submit" class="btn btn-primary">Caută</button>
   </form>
 
+  <h2>Căutare după politici publice</h2>
+
+  <form name="search-by-policy" class="person-index-search-form">
+    <div class="form-group">
+      <label for="search-by-policy-input" class="sr-only">politică</label>
+      <select name="policy_slug" id="search-by-policy-input"
+              class="form-control" tabindex="2">
+        <option>--</option>
+        {% for policy in policy_list %}
+          <option value="{{ policy.slug }}">{{ policy.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Caută</button>
+  </form>
+
+  <h2>Căutare după adresă</h2>
+
   <div class="row" class="person-index-search-form">
     <div class="col-sm-4">
       <form name="geocode">
         <div class="form-group">
           <label for="frm-address" class="sr-only">adresă</label>
           <input type="search" name="address"
-                 tabindex="2" placeholder="Adresă"
+                 tabindex="3" placeholder="Adresă"
                  id="frm-address" class="form-control">
         </div>
         <button type="submit" class="btn btn-default">caută</button>
@@ -54,6 +72,10 @@
     url: {{ url_for('.person_index_search_name')|tojson|safe }}
   });
 
+  app.person_search = new app.PersonSearch({
+    el: $('form[name=search-by-policy]'),
+    url: {{ url_for('.person_index_search_policy')|tojson|safe }}
+  });
 })();
 </script>
 

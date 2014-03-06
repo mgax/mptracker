@@ -3,15 +3,23 @@
 
 
 app.template = function(src) {
+    var options = {
+        interpolate: /{{([\s\S]+?)}}/g,
+        evaluate: /{%([\s\S]+?)%}/,
+    };
     return function(vars) {
-        return _.template(src, vars, {interpolate: /{{([\s\S]+?)}}/g});
+        return _.template(src, vars, options);
     };
 };
 
 
 app.PersonSearch = Backbone.View.extend({
 
-    item_html: app.template('<li><a href="{{ url }}">{{ name }}</a></li>'),
+    item_html: app.template(
+        '<li>' + '<a href="{{ url }}">{{ name }}</a> ' +
+        '{% if(count) { %}({{ count }}){% } %}' +
+        '</li>'
+    ),
 
     events: {
         'submit': 'on_submit'

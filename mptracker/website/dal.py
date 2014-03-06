@@ -641,6 +641,62 @@ class DataAccess:
             for person in name_search.find(name_query.strip())
         ]
 
+    def search_person_by_policy(self, policy_slug):
+        policy_domain = (
+            PolicyDomain.query
+            .filter_by(slug=policy_slug)
+            .first()
+        )
+        if policy_domain is None:
+            return []
+
+        proposals_cte = (
+            db.session.query(
+                Sponsorship.mandate_id,
+                func.count('*').label('proposal_count')
+            )
+            .join(Sponsorship.proposal)
+            .filter_by(policy_domain=policy_domain)
+            .group_by(Sponsorship.mandate_id)
+            .cte()
+        )
+
+        questions_cte = (
+            db.session.query(
+                Ask.mandate_id,
+                func.count('*').label('question_count')
+            )
+            .join(Ask.question)
+            .filter_by(policy_domain=policy_domain)
+            .group_by(Ask.mandate_id)
+            .cte()
+        )
+
+        activity_count = (
+            proposals_cte.c.proposal_count +
+            questions_cte.c.question_count
+        )
+
+        activity_query = (
+            db.session.query(
+                Person,
+                activity_count,
+            )
+            .join(Mandate.person)
+            .join(proposals_cte, proposals_cte.c.mandate_id == Mandate.id)
+            .join(questions_cte, questions_cte.c.mandate_id == Mandate.id)
+            .order_by(activity_count.desc())
+        )
+
+        return [
+            {
+                'name': person.name_first_last,
+                'slug': person.slug,
+                'count': count,
+            }
+            for person, count in activity_query
+        ]
+
     def get_person(self, person_slug):
         return DalPerson(person_slug, self, self.missing)
 
