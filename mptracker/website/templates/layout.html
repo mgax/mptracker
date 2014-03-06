@@ -19,6 +19,7 @@
 
     <script src="{{ url_for('static',
         filename='lib/jquery-1.10.1/jquery.min.js') }}"></script>
+    {% include '_raven_js.html' with context %}
     <script src="{{ url_for('static',
         filename='lib/lodash-2.3.0/lodash.js') }}"></script>
     <script src="{{ url_for('static',

@@ -1,0 +1,10 @@
+<script src="//cdn.ravenjs.com/1.1.2/jquery,native/raven.min.js"></script>
+<script>
+(function() {
+  'use strict';
+  var sentry_dsn = {{ config.get('SENTRY_JS_DSN')|tojson|safe }};
+  if(sentry_dsn) {
+      Raven.config(sentry_dsn).install();
+  }
+})();
+</script>
