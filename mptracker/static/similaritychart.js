@@ -44,7 +44,7 @@ app.render_similaritychart = function(options) {
         .append("g")
           .attr("transform", "translate(" + (margin + 4*r) + "," + margin + ")");
 
-    var x = calculateVennDistance(options.overlap, true);
+    var x = calculateVennDistance(options.overlap);
 
     var circle = svg.selectAll("circle")
         .data([{name: 'one', value: 0}, {name: 'two', value: x}]);

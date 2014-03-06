@@ -34,11 +34,7 @@
 <script src="{{ url_for('static', filename='similaritychart.js') }}"></script>
 <script>
   $(document).ready(function() {
-    app.render_similaritychart({container: $('.similaritychart'), overlap: 0});
-    app.render_similaritychart({container: $('.similaritychart'), overlap: 0.25});
     app.render_similaritychart({container: $('.similaritychart'), overlap: 0.50});
-    app.render_similaritychart({container: $('.similaritychart'), overlap: 0.75});
-    app.render_similaritychart({container: $('.similaritychart'), overlap: 1});
   });
 </script>
 {% endblock %}
