@@ -15,11 +15,7 @@ app.template = function(src) {
 
 app.PersonSearch = Backbone.View.extend({
 
-    item_html: app.template(
-        '<li>' + '<a href="{{ url }}">{{ name }}</a> ' +
-        '{% if(count) { %}({{ count }}){% } %}' +
-        '</li>'
-    ),
+    item_html: app.template('<li><a href="{{ url }}">{{ name }}</a></li>'),
 
     events: {
         'submit': 'on_submit'
@@ -59,6 +55,14 @@ app.PersonSearch = Backbone.View.extend({
             this.$el.append(message);
         }
     }
+
+});
+
+
+app.PersonPolicySearch = app.PersonSearch.extend({
+
+    item_html: app.template(
+        '<li><a href="{{ url }}">{{ name }}</a> ({{ count }})</li>')
 
 });
 
