@@ -34,7 +34,10 @@
 <script src="{{ url_for('static', filename='similaritychart.js') }}"></script>
 <script>
   $(document).ready(function() {
-    app.render_similaritychart({container: $('.similaritychart'), overlap: 0.50});
+    app.render_similaritychart({
+        container: $('.similaritychart'),
+        overlap: {{ similarity|tojson|safe }}
+    });
   });
 </script>
 {% endblock %}

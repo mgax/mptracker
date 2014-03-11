@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from collections import defaultdict
 from sqlalchemy import func
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
 from mptracker.models import (
     County,
@@ -616,6 +616,27 @@ class DalPerson:
             }
             for tr in transcripts_query
         ]
+
+    def get_voting_similarity(self, other_person):
+        vote_1 = aliased(Vote)
+        vote_2 = aliased(Vote)
+        vote_query = (
+            db.session.query(VotingSession.id)
+            .join(vote_1)
+            .filter(vote_1.mandate == self.mandate)
+            .join(vote_2)
+            .filter(vote_2.mandate == other_person.mandate)
+            .filter((vote_1.choice != None) | (vote_2.choice != None))
+        )
+        similar_vote_query = (
+            vote_query
+            .filter(vote_1.choice == vote_2.choice)
+        )
+        vote_count = vote_query.count()
+        if vote_count > 0:
+            return similar_vote_query.count() / vote_count
+        else:
+            return None
 
 
 class DalCounty:

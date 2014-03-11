@@ -293,6 +293,7 @@ def person_compare(person_slug, other_person_slug):
     ctx['other'] = other_person.get_main_details()
     ctx['other']['person_slug'] = other_person_slug
     ctx['other']['stats'] = other_person.get_stats()
+    ctx['similarity'] = person.get_voting_similarity(other_person)
     return flask.render_template('person_compare.html', **ctx)
 
 
