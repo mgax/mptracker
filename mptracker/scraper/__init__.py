@@ -1114,4 +1114,4 @@ def auto():
     questions(autoanalyze=True)
     votes(days=20, autoanalyze=True)
     groups()
-    proposals(autoanalyze=True)
+    #proposals(autoanalyze=True)
