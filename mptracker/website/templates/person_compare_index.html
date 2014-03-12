@@ -25,32 +25,69 @@
 
   {% for similar_position in same_position_category %}
     {%- set category = similar_position.category %}
-    <h2>Cu funcții similare ({{ category_title.get(category, category) }})</h2>
-    <ul>
+    {%- set headline_list_id = 'compare-similar-position-' + category %}
+
+    <h2 class="compare-headline" data-list="{{ headline_list_id }}">
+      Cu funcții similare ({{ category_title.get(category, category) }})
+    </h2>
+
+    <ul class="compare-list" id="{{ headline_list_id }}">
       {%- for person in similar_position.person_list %}
         <li>{{ comparison_link(person_slug, person) }}</li>
       {%- endfor %}
     </ul>
   {% endfor %}
 
-  <h2>Din același județ ({{ county_name }})</h2>
-  <ul>
+  <h2 class="compare-headline" data-list="compare-same-country">
+    Din același județ ({{ county_name }})
+  </h2>
+
+  <ul class="compare-list" id="compare-same-country">
     {%- for person in same_county %}
       <li>{{ comparison_link(person_slug, person) }}</li>
     {%- endfor %}
   </ul>
 
-  <h2>Din același grup parlamentar ({{ party_short_name }})</h2>
-  <ul>
+  <h2 class="compare-headline" data-list="compare-same-party">
+    Din același grup parlamentar ({{ party_short_name }})
+  </h2>
+
+  <ul class="compare-list" id="compare-same-party">
     {%- for person in same_party %}
       <li>{{ comparison_link(person_slug, person) }}</li>
     {%- endfor %}
   </ul>
 
-  <h2>Cu același număr de mandate ({{ mandate_count }})</h2>
-  <ul>
+  <h2 class="compare-headline" data-list="compare-same-mandate-count">
+    Cu același număr de mandate ({{ mandate_count }})
+  </h2>
+
+  <ul class="compare-list" id="compare-same-mandate-count">
     {%- for person in same_mandate_count %}
       <li>{{ comparison_link(person_slug, person) }}</li>
     {%- endfor %}
   </ul>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+  (function() {
+    'use strict';
+    $('.compare-headline').click(function(evt) {
+      var headline = $(this);
+      var list = $('#' + headline.data('list'));
+      list.toggle();
+      headline.toggleClass('expanded');
+    });
+
+    _.forEach($('.compare-headline'), function(h2) {
+      $(h2).prepend(
+        $('<span>').addClass('compare-headline-expanded').text('▼'),
+        $('<span>').addClass('compare-headline-collapsed').text('▶︎')
+      );
+    });
+  })();
+</script>
 {% endblock %}

@@ -49,6 +49,18 @@
     margin-bottom: 40px;
 }
 
+.compare-headline {
+    cursor: pointer;
+}
+
+.compare-headline-expanded { display: none; }
+.compare-headline.expanded .compare-headline-expanded { display: inline; }
+.compare-headline.expanded .compare-headline-collapsed { display: none; }
+
+.compare-list {
+    display: none;
+}
+
 
 /*************************
  *   activitychart   *
