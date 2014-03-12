@@ -71,7 +71,7 @@ def analyze(ask_id):
     text = ask.question.title + ' ' + ask.question.text
     result = match_text_for_mandate(ask.mandate, text)
     ask.match.data = flask.json.dumps(result)
-    ask.match.score = len(result['top_matches'])
+    ask.match.score = ask.match.get_score_from_data()
     models.db.session.commit()
 
 
@@ -196,6 +196,14 @@ def new():
 @questions.route('/questions/<uuid:question_id>')
 def question_detail(question_id):
     question = models.Question.query.get_or_404(question_id)
+    def get_flags(ask):
+        rv = dict(ask.get_meta_dict())
+        match_row = ask.match_row
+        if match_row and match_row.manual:
+            print(match_row.manual)
+            rv['is_local_topic'] = bool(match_row.score > 0)
+        print('flags:', rv)
+        return rv
     return flask.render_template('questions/detail.html', **{
         'question': question,
         'policy_domain': question.policy_domain,
@@ -203,7 +211,7 @@ def question_detail(question_id):
                 'id': ask.id,
                 'mandate': ask.mandate,
                 'match_data': flask.json.loads(ask.match.data or '{}'),
-                'flags': ask.get_meta_dict(),
+                'flags': get_flags(ask),
             } for ask in question.asked],
     })
 
@@ -212,10 +220,25 @@ def question_detail(question_id):
 @require_privilege
 def ask_save_flags(ask_id):
     ask = models.Ask.query.get_or_404(ask_id)
-    for name in ['is_local_topic', 'is_bug', 'new']:
+
+    for name in ['is_bug', 'new']:
         if name in flask.request.form:
             value = flask.json.loads(flask.request.form[name])
             ask.set_meta(name, value)
+
+    match = ask.match
+    is_local_topic = flask.json.loads(flask.request.form.get('is_local_topic'))
+    print('is_local_topic:', is_local_topic)
+    if is_local_topic is None:
+        if match.data is None:
+            models.db.session.delete(match)
+        else:
+            match.manual = False
+            match.score = ask.match.get_score_from_data()
+    else:
+        match.manual = True
+        match.score = 11 if is_local_topic else 0
+
     models.db.session.commit()
     url = flask.url_for('.question_detail', question_id=ask.question_id)
     return flask.redirect(url)

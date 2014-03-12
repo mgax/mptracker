@@ -332,6 +332,9 @@ class Match(db.Model):
     def all_ids_for(cls, parent):
         return set(row.id for row in cls.query.filter_by(parent=parent))
 
+    def get_score_from_data(self):
+        return len(flask.json.loads(self.data)['top_matches'])
+
 
 class Meta(db.Model):
     __table_args__ = (
