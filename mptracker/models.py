@@ -325,6 +325,7 @@ class Match(db.Model):
     id = db.Column(UUID, primary_key=True)
     parent = db.Column(db.Text, nullable=False)
     data = db.Column(db.Text)
+    manual = db.Column(db.Boolean, nullable=False, default=False)
     score = db.Column(db.Float)
 
     @classmethod
