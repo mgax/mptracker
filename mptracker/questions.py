@@ -71,7 +71,8 @@ def analyze(ask_id):
     text = ask.question.title + ' ' + ask.question.text
     result = match_text_for_mandate(ask.mandate, text)
     ask.match.data = flask.json.dumps(result)
-    ask.match.score = ask.match.get_score_from_data()
+    if not ask.match.manual:
+        ask.match.score = ask.match.get_score_from_data()
     models.db.session.commit()
 
 

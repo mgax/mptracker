@@ -108,7 +108,8 @@ def analyze_sponsorship(sponsorship_id):
     text = proposal.title + ' ' + proposal.text
     result = match_text_for_mandate(sponsorship.mandate, text)
     sponsorship.match.data = flask.json.dumps(result)
-    sponsorship.match.score = len(result['top_matches'])
+    if not sponsorship.match.manual:
+        sponsorship.match.score = ask.match.get_score_from_data()
     models.db.session.commit()
 
 
