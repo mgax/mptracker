@@ -44,6 +44,13 @@ app.render_similaritychart = function(options) {
         .append("g")
           .attr("transform", "translate(" + (margin + 4*r) + "," + margin + ")");
 
+    var percent = Math.round(options.overlap * 100);
+    var text = svg
+        .append('text')
+        .attr('x', -210)
+        .attr('y', 30)
+        .text("Similaritate la vot: " + percent + "%");
+
     var x = calculateVennDistance(options.overlap);
 
     var circle = svg.selectAll("circle")
