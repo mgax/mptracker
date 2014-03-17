@@ -19,7 +19,17 @@ scraper_manager = Manager()
 
 ONE_DAY = timedelta(days=1)
 
-TERM_2012_START = date(2012, 12, 19)
+TERM_INTERVAL = {
+    1990: DateRange(date(1990,  6, 18), date(1992, 10, 21)),
+    1992: DateRange(date(1992, 10, 21), date(1996, 11, 22)),
+    1996: DateRange(date(1996, 11, 22), date(2000, 12, 11)),
+    2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
+    2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
+    2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
+    2012: DateRange(date(2012, 12, 19), date.max),
+}
+
+TERM_2012_START = TERM_INTERVAL[2012].lower
 
 CONTROVERSY_CSV_KEY = '0Aoh2FHzCVVhldEJEMkhEblJCaWdGdy1FWlg5a0dzNEE'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
