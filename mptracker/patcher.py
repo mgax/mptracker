@@ -38,9 +38,12 @@ class TablePatcher:
     def _mark_seen(self, row_id):
         self.seen.add(row_id)
 
-    def _get_unseen_ids(self):
+    def _get_unseen_ids(self, filter):
         self.session.flush()
-        for row in self.session.query(self.model.id):
+        query = self.session.query(self.model.id)
+        if filter:
+            query = query.filter_by(**filter)
+        for row in query:
             row_id = row[0]
             if row_id not in self.seen:
                 yield row_id
@@ -88,7 +91,7 @@ class TablePatcher:
         return AddResult(row, is_new, is_changed)
 
     @contextmanager
-    def process(self, autoflush=None, remove=False):
+    def process(self, autoflush=None, remove=False, filter=None):
         counters = {'n_add': 0, 'n_update': 0,
                     'n_remove': 0, 'n_ok': 0, 'total': 0}
 
@@ -115,7 +118,7 @@ class TablePatcher:
         yield add
 
         if remove:
-            unseen = list(self._get_unseen_ids())
+            unseen = list(self._get_unseen_ids(filter))
             if unseen:
                 unseen_items = (
                     self.model.query
@@ -132,7 +135,7 @@ class TablePatcher:
             counters['n_remove'], counters['n_ok'],
         )
 
-    def update(self, data, create=True, remove=False):
-        with self.process(autoflush=1000, remove=remove) as add:
+    def update(self, data, create=True, remove=False, filter=None):
+        with self.process(autoflush=1000, remove=remove, filter=filter) as add:
             for record in data:
                 add(record, create=create)
