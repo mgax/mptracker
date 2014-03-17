@@ -501,7 +501,9 @@ def proposals(
                 if idc and ids and idc != ids:
                     logger.warn("Two different records for the same proposal: "
                                 "(%s, %s). Removing the 2nd.", idc, ids)
-                    models.db.session.delete(models.Proposal.query.get(ids))
+                    proposal_s = models.Proposal.query.get(ids)
+                    if proposal_s is not None:
+                        models.db.session.delete(proposal_s)
                     ids = None
                 record['id'] = idc or ids or models.random_uuid()
 
