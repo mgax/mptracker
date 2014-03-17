@@ -4,6 +4,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
 from mptracker.models import (
+    Chamber,
     County,
     Person,
     Mandate,
@@ -104,6 +105,8 @@ class DalPerson:
             Mandate.query
             .filter_by(person=self.person)
             .filter_by(year=2012)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .first()
         )
         if self.mandate is None:
@@ -560,6 +563,8 @@ class DalPerson:
                 .filter(Position.category == position.category)
                 .join(Person.mandates)
                 .filter(Mandate.year == 2012)
+                .join(Mandate.chamber)
+                .filter_by(slug='cdep')
             )
             person_list = [person_data(p) for p in same_category_query]
             if person_list:
@@ -572,6 +577,8 @@ class DalPerson:
             Person.query
             .join(Person.mandates)
             .filter(Mandate.year == 2012)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .join(Mandate.committee_memberships)
             .filter(
                 func.lower(MpCommitteeMembership.role)
@@ -662,6 +669,8 @@ class DalCounty:
             Mandate.query
             .filter_by(year=2012)
             .filter_by(county=self.county)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .options(joinedload('person'))
             .order_by(Mandate.college, Mandate.election_votes.desc())
         )
@@ -689,6 +698,8 @@ class DataAccess:
             .filter_by(year=2012)
             .join(Mandate.person)
             .join(Mandate.county)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
         )
 
         mandate_data = defaultdict(list)
@@ -756,6 +767,8 @@ class DataAccess:
             )
             .join(Mandate.person)
             .filter(Mandate.year == 2012)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .join(proposals_cte, proposals_cte.c.mandate_id == Mandate.id)
             .join(questions_cte, questions_cte.c.mandate_id == Mandate.id)
             .order_by(activity_count.desc())
@@ -775,6 +788,8 @@ class DataAccess:
             Person.query
             .join(Mandate.person)
             .filter(Mandate.year == 2012)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .filter(
                 "to_tsvector('romanian', person.romania_curata) "
                 "@@ plainto_tsquery('romanian', :contracts_query)"
@@ -844,6 +859,8 @@ class DataAccess:
                 joinedload('mandate.person'),
             )
             .join(MpGroupMembership.mandate)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .join(Mandate.person)
             .order_by(Person.first_name, Person.last_name)
         )
@@ -859,6 +876,8 @@ class DataAccess:
             .join(Vote.voting_session)
             .filter(VotingSession.final == True)
             .join(Vote.mandate)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == party)
         )
@@ -952,6 +971,8 @@ class DataAccess:
         sponsors_query = (
             Person.query
             .join(Person.mandates)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .join(Mandate.sponsorships)
             .filter(Sponsorship.proposal == proposal)
         )
@@ -986,6 +1007,8 @@ class DataAccess:
             )
             .filter_by(chapter=transcript_chapter)
             .join(Transcript.mandate)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
             .join(Mandate.person)
             .order_by(Transcript.serial)
         )
