@@ -1109,9 +1109,9 @@ def assets(file_path, no_commit=False):
 
 
 @scraper_manager.command
-def auto():
-    transcripts(n_sessions=20)
-    questions(autoanalyze=True)
-    votes(days=20, autoanalyze=True)
-    groups()
-    #proposals(autoanalyze=True)
+def auto(cache_name=None):
+    transcripts(n_sessions=20, cache_name=cache_name)
+    questions(autoanalyze=True, cache_name=cache_name)
+    votes(days=20, autoanalyze=True, cache_name=cache_name)
+    groups(cache_name=cache_name)
+    #proposals(autoanalyze=True, cache_name=cache_name)
