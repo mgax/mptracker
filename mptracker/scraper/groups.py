@@ -27,10 +27,10 @@ class GroupMembershipParser(MembershipParser):
 
 class GroupScraper(Scraper):
 
-    index_url = 'http://www.cdep.ro/pls/parlam/structura.gp'
+    index_url = 'http://www.cdep.ro/pls/parlam/structura.gp?leg={}'
 
-    def fetch(self):
-        index_page = self.fetch_url(self.index_url)
+    def fetch(self, year):
+        index_page = self.fetch_url(self.index_url.format(year))
         headline = index_page.find('td.headline')
         parent_table = pq(headline.parents('table')[-2])
         table = list(parent_table.items('table'))[-1]
@@ -39,10 +39,11 @@ class GroupScraper(Scraper):
         for link in table.items('tr > td > b > a'):
             url_set.add(link.attr('href'))
 
-        for url in sorted(url_set):
-            yield self.fetch_group(url)
+        group_list = [self.fetch_group(url, year) for url in sorted(url_set)]
+        group_list.sort(key=lambda g: g.idg)
+        return group_list
 
-    def fetch_group(self, group_url):
+    def fetch_group(self, group_url, year):
         group_page = self.fetch_url(group_url)
         headline = group_page.find('td.headline')
         parent_td = pq(headline.parents('td')[-1])
@@ -50,17 +51,18 @@ class GroupScraper(Scraper):
         short_name = group_page.find('.cale2').text().split('>')[-1].strip()
 
         group = Group(
+            idg=url_args(group_url).get('idg', type=int),
             is_independent=False,
             current_members=[],
             former_members=[],
             name=headline.text(),
             short_name=short_name,
+            year=year,
         )
 
         membership_parser = GroupMembershipParser()
 
-        idg = url_args(group_url).get('idg', type=int)
-        if idg == 0:
+        if group.idg == 0:
             # group of unaffiliated MPs
             group.is_independent = True
             group.short_name = "Indep."

@@ -149,6 +149,7 @@ def people(
         key_columns=['id'],
     )
 
+    term_interval = TERM_INTERVAL[int(year)]
     new_people = 0
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
@@ -165,9 +166,8 @@ def people(
             ])
             assert mandate.chamber_number == 2
             row['chamber_id'] = chamber_by_slug['cdep'].id
-            if year == '2012':
-                end_date = mandate.end_date or date.max
-                row['interval'] = DateRange(TERM_2012_START, end_date)
+            end_date = mandate.end_date or term_interval.upper
+            row['interval'] = DateRange(term_interval.lower, end_date)
 
             person = (
                 models.Person.query
@@ -251,6 +251,7 @@ def groups(
         cache_name=None,
         throttle=None,
         no_commit=False,
+        year=2012,
         ):
     from mptracker.scraper.groups import GroupScraper, Interval
 
@@ -261,7 +262,7 @@ def groups(
     mandate_lookup = models.MandateLookup()
     mandate_intervals = defaultdict(list)
 
-    groups = list(group_scraper.fetch())
+    groups = list(group_scraper.fetch(int(year)))
     independents = groups[0]
     assert independents.is_independent
     for group in groups[1:] + [independents]:
@@ -318,7 +319,7 @@ def groups(
 
     with group_patcher.process(remove=True) as add_group:
         for group in groups:
-            record = group.as_dict(['name', 'short_name'])
+            record = group.as_dict(['name', 'short_name', 'year'])
             group.row = add_group(record).row
 
         models.db.session.flush()
