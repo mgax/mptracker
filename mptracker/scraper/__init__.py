@@ -251,8 +251,10 @@ def groups(
         cache_name=None,
         throttle=None,
         no_commit=False,
-        year=2012,
+        year='2012',
         ):
+    year = int(year)
+
     from mptracker.scraper.groups import GroupScraper, Interval
 
     http_session = create_session(cache_name=cache_name,
@@ -261,20 +263,24 @@ def groups(
 
     mandate_lookup = models.MandateLookup()
     mandate_intervals = defaultdict(list)
+    term_interval = TERM_INTERVAL[year]
 
-    groups = list(group_scraper.fetch(int(year)))
+    groups = list(group_scraper.fetch(year))
     independents = groups[0]
     assert independents.is_independent
     for group in groups[1:] + [independents]:
         for member in group.current_members + group.former_members:
-            (year, chamber, number) = member.mp_ident
+            (myear, chamber, number) = member.mp_ident
             assert chamber == 2
-            mandate = mandate_lookup.find(member.mp_name, year, number)
+            mandate = mandate_lookup.find(member.mp_name, myear, number)
             interval_list = mandate_intervals[mandate]
 
             interval = member.get_interval()
             if interval.start is None:
-                interval = interval._replace(start=TERM_2012_START)
+                interval = interval._replace(start=term_interval.lower)
+
+            if interval.end is None:
+                interval = interval._replace(end=term_interval.upper)
 
             if group.is_independent:
                 if interval_list:
@@ -299,6 +305,7 @@ def groups(
                 )
                 new_intervals.append(interval)
             elif interval_one.end > interval_two.start:
+                import pdb; pdb.set_trace()
                 raise RuntimeError("Overlapping intervals")
 
         interval_list.extend(new_intervals)
@@ -314,10 +321,10 @@ def groups(
     group_patcher = TablePatcher(
         models.MpGroup,
         models.db.session,
-        key_columns=['short_name'],
+        key_columns=['short_name', 'year'],
     )
 
-    with group_patcher.process(remove=True) as add_group:
+    with group_patcher.process(remove=True, filter={'year': year}) as add_group:
         for group in groups:
             record = group.as_dict(['name', 'short_name', 'year'])
             group.row = add_group(record).row
@@ -330,21 +337,34 @@ def groups(
         key_columns=['mandate_id', 'mp_group_id', 'interval'],
     )
 
-    with membership_patcher.process(
-            autoflush=1000,
-            remove=True,
-        ) as add_membership:
+    current_membership_query = (
+        models.db.session.query(models.MpGroupMembership.id)
+        .join(models.MpGroupMembership.mandate)
+        .filter_by(year=year)
+    )
 
+    remove_membership_ids = set(row.id for row in current_membership_query)
+    with membership_patcher.process(autoflush=1000) as add_membership:
         for mandate, interval_list in mandate_intervals.items():
             for interval in interval_list:
-                row = add_membership({
+                res = add_membership({
                     'mandate_id': mandate.id,
                     'mp_group_id': interval.group.row.id,
                     'interval': DateRange(
                         interval.start or date.min,
                         interval.end or date.max,
                     ),
-                }).row
+                })
+                if not res.is_new:
+                    remove_membership_ids.pop(res.row.id)
+
+    if remove_membership_ids:
+        unseen_items = (
+            models.MpGroupMembership.query
+            .filter(models.MpGroupMembership.id.in_(remove_membership_ids))
+        )
+        unseen_items.delete(synchronize_session=False)
+        logger.info("Deleted %d stale memberships", len(remove_membership_ids))
 
     if no_commit:
         logger.warn("Rolling back the transaction")
