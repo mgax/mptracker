@@ -90,9 +90,6 @@ class MandateScraper(Scraper):
                     fmt='ro_short_month',
                 )
 
-            if (mandate.year, mandate.cdep_number) == (2004, 88):
-                mandate.person_name = u"Mălaimare Mihai Adrian"
-
             yield mandate
 
     def fetch(self, year=2012):
