@@ -1116,4 +1116,4 @@ def auto(cache_name=None):
     questions(autoanalyze=True, cache_name=cache_name)
     votes(days=20, autoanalyze=True, cache_name=cache_name)
     groups(cache_name=cache_name)
-    #proposals(autoanalyze=True, cache_name=cache_name)
+    proposals(autoanalyze=True, cache_name=cache_name)
