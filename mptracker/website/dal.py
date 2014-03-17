@@ -591,9 +591,7 @@ class DalPerson:
                                 committee_president_query],
             })
 
-        return {
-            'county_name': self.mandate.county.name,
-            'same_county': [person_data(p) for p in same_county_query],
+        rv = {
             'party_short_name': mp_group.short_name,
             'same_party': [person_data(p) for p in same_party_query],
             'mandate_count': mandate_count,
@@ -601,6 +599,14 @@ class DalPerson:
                                    same_mandate_count_query],
             'same_position_category': same_position_category,
         }
+
+        if self.mandate.county:
+            rv.update({
+                'county_name': self.mandate.county.name,
+                'same_county': [person_data(p) for p in same_county_query],
+            })
+
+        return rv
 
     def get_transcript_list(self):
         transcripts_query = (

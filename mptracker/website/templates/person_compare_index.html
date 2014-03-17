@@ -38,9 +38,11 @@
     </ul>
   {% endfor %}
 
-  <h2 class="compare-headline" data-list="compare-same-country">
-    Din același județ ({{ county_name }})
-  </h2>
+  {% if county_name %}
+    <h2 class="compare-headline" data-list="compare-same-country">
+      Din același județ ({{ county_name }})
+    </h2>
+  {% endif %}
 
   <ul class="compare-list" id="compare-same-country">
     {%- for person in same_county %}
