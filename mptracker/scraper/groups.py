@@ -1,7 +1,8 @@
+from datetime import date
 from collections import namedtuple
 from pyquery import PyQuery as pq
 from mptracker.scraper.common import (
-    Scraper, url_args, GenericModel, MembershipParser,
+    Scraper, url_args, GenericModel, MembershipParser, ProfileIdent,
 )
 
 
@@ -76,10 +77,11 @@ class GroupScraper(Scraper):
                 group.former_members.extend(
                     membership_parser.parse_table(mp_tables[-1]))
 
+        to_remove = []
+
         for member in group.current_members + group.former_members:
             member.group = group
 
-        for member in group.current_members + group.former_members:
             if year == 2000 and member.mp_ident.number == 170:
                 member.mp_name = "Mălaimare Mihai"
 
@@ -91,5 +93,39 @@ class GroupScraper(Scraper):
 
             if year == 2004 and member.mp_ident.number == 329:
                 member.mp_name = "Bónis István"
+
+            if year == 2008 and group.idg == 6:
+                if member.start_date is None:
+                    member.start_date = date(2011, 9, 5)
+
+            if year == 2008 and group.idg == 7:
+                if member.end_date is None:
+                    to_remove.append(member)
+
+            if year == 2008 and member.mp_name == "Balcan Viorel":
+                if group.idg == 3:
+                    member.start_date = date(2012, 9, 3)
+
+        for member in to_remove:
+            group.current_members.remove(member)
+
+        if year == 2008 and group.idg == 0:
+            group.current_members.append(Member(
+                role='Membri',
+                mp_name="Cherecheş Cătălin",
+                mp_ident=ProfileIdent(year=2008, chamber=2, number=65),
+                group=group,
+                start_date=date(2010, 9, 8),
+                end_date=date(2011, 5, 30),
+            ))
+
+            group.current_members.append(Member(
+                role='Membri',
+                mp_name="Boldea Mihail",
+                mp_ident=ProfileIdent(year=2008, chamber=2, number=38),
+                group=group,
+                start_date=date(2012, 3, 19),
+                end_date=date(2012, 9, 25),
+            ))
 
         return group
