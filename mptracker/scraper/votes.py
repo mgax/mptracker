@@ -66,6 +66,7 @@ class VoteScraper(Scraper):
 
         td_nr_crt = page.find(':contains("Nr. Crt.")')
         table = pq(td_nr_crt.parents().filter('table')[-1])
+        role_call = bool(voting_session.subject.startswith('Prezenţă'))
         for row in list(table.items('tr'))[1:]:
             link = row.find('a')
             (year, chamber, number) = parse_profile_url(link.attr('href'))
@@ -77,7 +78,7 @@ class VoteScraper(Scraper):
                 mandate_name=link.text(),
                 choice=None,
             )
-            if voting_session.subject != 'Prezenţă':
+            if not role_call:
                 vote.choice = parse_choice(choice_td.text())
             voting_session.votes.append(vote)
 
