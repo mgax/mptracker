@@ -9,14 +9,14 @@ def test_simple_scraping(session):
     from mptracker.scraper.groups import GroupScraper
 
     session.url_map.update({
-        STRUCTURE_URL: PAGES_DIR / 'structura-index-modified',
+        STRUCTURE_URL + '?leg=2012': PAGES_DIR / 'structura-index-modified',
         STRUCTURE_URL + '?idg=0': PAGES_DIR / 'structura-group0',
         STRUCTURE_URL + '?idg=1': PAGES_DIR / 'structura-group1',
         STRUCTURE_URL + '?idg=4': PAGES_DIR / 'structura-group4',
     })
 
     scraper = GroupScraper(session)
-    groups = list(scraper.fetch())
+    groups = list(scraper.fetch(2012))
 
     indep = groups[0]
     assert indep.is_independent
