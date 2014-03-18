@@ -26,7 +26,7 @@ TERM_INTERVAL = {
     2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
     2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
     2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
-    2012: DateRange(date(2012, 12, 19), date.max),
+    2012: DateRange(date(2012, 12, 19), None),
 }
 
 TERM_2012_START = TERM_INTERVAL[2012].lower
