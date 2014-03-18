@@ -356,7 +356,7 @@ def groups(
                     ),
                 })
                 if not res.is_new:
-                    remove_membership_ids.pop(res.row.id)
+                    remove_membership_ids.remove(res.row.id)
 
     if remove_membership_ids:
         unseen_items = (
