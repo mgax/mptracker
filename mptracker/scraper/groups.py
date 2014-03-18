@@ -71,8 +71,10 @@ class GroupScraper(Scraper):
             membership_parser.parse_table(mp_tables[0]))
 
         if len(mp_tables) > 1:
-            group.former_members.extend(
-                membership_parser.parse_table(mp_tables[-1]))
+            headline = mp_tables[-1].prev().prev()
+            if "Foşti membri ai grupului" in headline.text():
+                group.former_members.extend(
+                    membership_parser.parse_table(mp_tables[-1]))
 
         for member in group.current_members + group.former_members:
             member.group = group
