@@ -77,15 +77,17 @@ class GroupScraper(Scraper):
         for member in group.current_members + group.former_members:
             member.group = group
 
-        if year == 2004:
-            for member in group.current_members + group.former_members:
-                if member.mp_ident.number == 58:
+        for member in group.current_members + group.former_members:
+            if year == 2000 and member.mp_ident.number == 170:
+                member.mp_name = "Mălaimare Mihai"
+
+            if year == 2004 and member.mp_ident.number == 58:
                     member.mp_name = "Chiper Constantin Cătălin"
 
-                if member.mp_ident.number == 88:
-                    member.mp_name = "Mălaimare Mihai"
+            if year == 2004 and member.mp_ident.number == 88:
+                member.mp_name = "Mălaimare Mihai"
 
-                if member.mp_ident.number == 329:
-                    member.mp_name = "Bónis István"
+            if year == 2004 and member.mp_ident.number == 329:
+                member.mp_name = "Bónis István"
 
         return group
