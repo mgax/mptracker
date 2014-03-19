@@ -15,11 +15,11 @@
 
         <dl class="dl-horizontal">
           <dt>loialitatea membrilor</dt>
-          <dd>{{ party['member_loyalty']|percent }}</dd>
+          <dd>{{ party['loyalty']['all']|percent }}</dd>
 
-          {%- if 'cabinet_loyalty' in party %}
+          {%- if 'to-cabinet' in party['loyalty'] %}
             <dt>loialitate pentru guvern</dt>
-            <dd>{{ party['cabinet_loyalty']|percent }}</dd>
+            <dd>{{ party['loyalty']['to-cabinet']|percent }}</dd>
           {%- endif %}
 
           {%- for category, value in party['loyalty']['by-category'].items() %}

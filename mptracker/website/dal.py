@@ -887,6 +887,11 @@ class DataAccess:
             else:
                 return None
 
+        rv['loyalty'] = {
+            'by-category': {},
+            'by-mandate-count': {},
+        }
+
         final_votes = (
             Vote.query
             .join(Vote.voting_session)
@@ -897,18 +902,13 @@ class DataAccess:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == party)
         )
-        rv['member_loyalty'] = _loyal_percent(final_votes)
+        rv['loyalty']['all'] = _loyal_percent(final_votes)
 
         group_votes = GroupVote.query.filter(GroupVote.mp_group == party)
         n_group_votes = group_votes.count()
         if n_group_votes > 0:
             loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
-            rv['cabinet_loyalty'] = loyal_group_votes.count() / n_group_votes
-
-        rv['loyalty'] = {
-            'by-category': {},
-            'by-mandate-count': {},
-        }
+            rv['loyalty']['to-cabinet'] = loyal_group_votes.count() / n_group_votes
 
         position_category_list = [
             row[0] for row in
