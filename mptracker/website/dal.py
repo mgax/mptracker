@@ -495,8 +495,6 @@ class DalPerson:
         if policy is None:
             raise self.missing()
 
-        print(self.dal.get_policy_proposal_list(
-                policy_slug, self.mandate))
         return {
             'name': policy.name,
             'proposal_list': self.dal.get_policy_proposal_list(
