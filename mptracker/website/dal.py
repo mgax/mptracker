@@ -907,6 +907,7 @@ class DataAccess:
             .filter_by(slug='cdep')
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == party)
+            .filter(MpGroupMembership.interval.contains(VotingSession.date))
         )
         rv['all'] = _loyal_percent(final_votes)
 
@@ -922,11 +923,13 @@ class DataAccess:
         ]
         for category in position_category_list:
             members_with_position_cte = (
-                db.session.query(distinct(Mandate.id).label('mandate_id'))
+                db.session.query(
+                    distinct(Mandate.id).label('mandate_id'),
+                    Position.interval.label('interval'),
+                )
                 .join(Mandate.person)
                 .join(Person.positions)
                 .filter(Position.category == category)
-                .filter(Position.interval.contains(date.today()))
                 .cte()
             )
 
@@ -935,6 +938,11 @@ class DataAccess:
                 .join(
                     members_with_position_cte,
                     Mandate.id == members_with_position_cte.c.mandate_id,
+                )
+                .filter(
+                    members_with_position_cte.c.interval.contains(
+                        VotingSession.date
+                    )
                 )
             )
 
