@@ -879,6 +879,12 @@ class DataAccess:
                 'slug': person.slug,
             })
 
+        rv['loyalty'] = self._get_party_loyalty(party)
+
+        return rv
+
+    def _get_party_loyalty(self, party):
+
         def _loyal_percent(vote_query):
             total = vote_query.count()
             loyal = vote_query.filter(Vote.loyal == True).count()
@@ -887,7 +893,7 @@ class DataAccess:
             else:
                 return None
 
-        rv['loyalty'] = {
+        rv = {
             'by-category': {},
             'by-mandate-count': {},
         }
@@ -902,13 +908,13 @@ class DataAccess:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == party)
         )
-        rv['loyalty']['all'] = _loyal_percent(final_votes)
+        rv['all'] = _loyal_percent(final_votes)
 
         group_votes = GroupVote.query.filter(GroupVote.mp_group == party)
         n_group_votes = group_votes.count()
         if n_group_votes > 0:
             loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
-            rv['loyalty']['to-cabinet'] = loyal_group_votes.count() / n_group_votes
+            rv['to-cabinet'] = loyal_group_votes.count() / n_group_votes
 
         position_category_list = [
             row[0] for row in
@@ -934,7 +940,7 @@ class DataAccess:
 
             loyalty = _loyal_percent(category_final_votes)
             if loyalty is not None:
-                rv['loyalty']['by-category'][category] = loyalty
+                rv['by-category'][category] = loyalty
 
         mandate_count_cte = (
             db.session.query(
@@ -963,7 +969,7 @@ class DataAccess:
             )
         )
         loyalty = _loyal_percent(one_mandate_final_votes)
-        rv['loyalty']['by-mandate-count']['one'] = loyalty
+        rv['by-mandate-count']['one'] = loyalty
 
         multiple_mandate_cte = (
             db.session.query(Mandate.id.label('mandate_id'))
@@ -983,7 +989,7 @@ class DataAccess:
             )
         )
         loyalty = _loyal_percent(one_mandate_final_votes)
-        rv['loyalty']['by-mandate-count']['multiple'] = loyalty
+        rv['by-mandate-count']['multiple'] = loyalty
 
         return rv
 
