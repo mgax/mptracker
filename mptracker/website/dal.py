@@ -907,6 +907,7 @@ class DataAccess:
 
         rv['loyalty'] = {
             'by-category': {},
+            'by-mandate-count': {},
         }
 
         position_category_list = [
@@ -934,6 +935,55 @@ class DataAccess:
             loyalty = _loyal_percent(category_final_votes)
             if loyalty is not None:
                 rv['loyalty']['by-category'][category] = loyalty
+
+        mandate_count_cte = (
+            db.session.query(
+                Mandate.person_id.label('person_id'),
+                func.count('*').label('mandate_count'),
+            )
+            .group_by(Mandate.person_id)
+            .cte()
+        )
+
+        one_mandate_cte = (
+            db.session.query(Mandate.id.label('mandate_id'))
+            .join(
+                mandate_count_cte,
+                Mandate.person_id == mandate_count_cte.c.person_id,
+            )
+            .filter(mandate_count_cte.c.mandate_count == 1)
+            .cte()
+        )
+
+        one_mandate_final_votes = (
+            final_votes
+            .join(
+                one_mandate_cte,
+                Mandate.id == one_mandate_cte.c.mandate_id,
+            )
+        )
+        loyalty = _loyal_percent(one_mandate_final_votes)
+        rv['loyalty']['by-mandate-count']['one'] = loyalty
+
+        multiple_mandate_cte = (
+            db.session.query(Mandate.id.label('mandate_id'))
+            .join(
+                mandate_count_cte,
+                Mandate.person_id == mandate_count_cte.c.person_id,
+            )
+            .filter(mandate_count_cte.c.mandate_count > 1)
+            .cte()
+        )
+
+        one_mandate_final_votes = (
+            final_votes
+            .join(
+                multiple_mandate_cte,
+                Mandate.id == multiple_mandate_cte.c.mandate_id,
+            )
+        )
+        loyalty = _loyal_percent(one_mandate_final_votes)
+        rv['loyalty']['by-mandate-count']['multiple'] = loyalty
 
         return rv
 

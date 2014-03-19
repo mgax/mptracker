@@ -27,6 +27,12 @@
             <dt>{{ title }}</dt>
             <dd>{{ value|percent }}</dd>
           {%- endfor %}
+
+          <dt>membri la primul mandat</dt>
+          <dd>{{ party['loyalty']['by-mandate-count']['one']|percent }}</dd>
+
+          <dt>membri cu mai multe mandate</dt>
+          <dd>{{ party['loyalty']['by-mandate-count']['multiple']|percent }}</dd>
         </dl>
       </div>
 
