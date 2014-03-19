@@ -916,14 +916,21 @@ class DataAccess:
             db.session.query(distinct(Position.category))
         ]
         for category in position_category_list:
-            loyalty = .5
-
-            category_final_votes = (
-                final_votes
+            members_with_position_cte = (
+                db.session.query(distinct(Mandate.id).label('mandate_id'))
                 .join(Mandate.person)
                 .join(Person.positions)
                 .filter(Position.category == category)
                 .filter(Position.interval.contains(date.today()))
+                .cte()
+            )
+
+            category_final_votes = (
+                final_votes
+                .join(
+                    members_with_position_cte,
+                    Mandate.id == members_with_position_cte.c.mandate_id,
+                )
             )
 
             loyalty = _loyal_percent(category_final_votes)
