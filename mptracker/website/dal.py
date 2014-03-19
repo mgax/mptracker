@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from collections import defaultdict
-from sqlalchemy import func
+from sqlalchemy import func, distinct
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
 from mptracker.models import (
@@ -881,6 +881,14 @@ class DataAccess:
                 'slug': person.slug,
             })
 
+        def _loyal_percent(vote_query):
+            total = vote_query.count()
+            loyal = vote_query.filter(Vote.loyal == True).count()
+            if total:
+                return loyal / total
+            else:
+                return None
+
         final_votes = (
             Vote.query
             .join(Vote.voting_session)
@@ -891,15 +899,36 @@ class DataAccess:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == party)
         )
-        votes_attended = final_votes.count()
-        votes_loyal = final_votes.filter(Vote.loyal == True).count()
-        rv['member_loyalty'] = votes_loyal / votes_attended
+        rv['member_loyalty'] = _loyal_percent(final_votes)
 
         group_votes = GroupVote.query.filter(GroupVote.mp_group == party)
         n_group_votes = group_votes.count()
         if n_group_votes > 0:
             loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
             rv['cabinet_loyalty'] = loyal_group_votes.count() / n_group_votes
+
+        rv['loyalty'] = {
+            'by-category': {},
+        }
+
+        position_category_list = [
+            row[0] for row in
+            db.session.query(distinct(Position.category))
+        ]
+        for category in position_category_list:
+            loyalty = .5
+
+            category_final_votes = (
+                final_votes
+                .join(Mandate.person)
+                .join(Person.positions)
+                .filter(Position.category == category)
+                .filter(Position.interval.contains(date.today()))
+            )
+
+            loyalty = _loyal_percent(category_final_votes)
+            if loyalty is not None:
+                rv['loyalty']['by-category'][category] = loyalty
 
         return rv
 

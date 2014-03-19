@@ -21,6 +21,12 @@
             <dt>loialitate pentru guvern</dt>
             <dd>{{ party['cabinet_loyalty']|percent }}</dd>
           {%- endif %}
+
+          {%- for category, value in party['loyalty']['by-category'].items() %}
+            {%- set title = POSITION_CATEGORY_TITLE.get(category, category) %}
+            <dt>{{ title }}</dt>
+            <dd>{{ value|percent }}</dd>
+          {%- endfor %}
         </dl>
       </div>
 
