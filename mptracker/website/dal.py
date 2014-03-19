@@ -836,14 +836,24 @@ class DataAccess:
         return rv
 
     def get_party_list(self):
+        mp_group_query = (
+            MpGroup.query
+            .filter_by(year=2012)
+            .order_by(MpGroup.name)
+        )
         return [
             {'name': group.name, 'short_name': group.short_name}
-            for group in MpGroup.query.order_by(MpGroup.name)
+            for group in mp_group_query
             if group.short_name not in ['Indep.', 'Mino.']
         ]
 
     def get_party_details(self, party_short_name):
-        party = MpGroup.query.filter_by(short_name=party_short_name).first()
+        party = (
+            MpGroup.query
+            .filter_by(short_name=party_short_name)
+            .filter_by(year=2012)
+            .first()
+        )
         if party is None:
             raise self.missing()
         rv = {'name': party.name}
