@@ -63,6 +63,12 @@ def inject_constants():
           'abstain': "abținere",
           'novote': "\u2014",  # em-dash
         },
+
+        'POSITION_CATEGORY_TITLE': {
+          'minister': "ministru",
+          'permanent-bureau': "membru al biroului permanent",
+          'committee-president': "președinte de comisie parlamentară",
+        },
     }
 
 

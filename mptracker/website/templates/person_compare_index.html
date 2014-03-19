@@ -4,13 +4,6 @@
 {% block title %}{{ super() }} – {{ name }} – comparație{% endblock %}
 
 
-{% set category_title = {
-      'minister': "ministru",
-      'permanent-bureau': "membru al biroului permanent",
-      'committee-president': "președinte de comisie parlamentară",
-    } %}
-
-
 {%- macro comparison_link(person_slug, other_person) %}
   {{ other_person.name|link_for(
     '.person_compare',
@@ -28,7 +21,8 @@
     {%- set headline_list_id = 'compare-similar-position-' + category %}
 
     <h2 class="compare-headline" data-list="{{ headline_list_id }}">
-      Cu funcții similare ({{ category_title.get(category, category) }})
+      {%- set title = POSITION_CATEGORY_TITLE.get(category, category) %}
+      Cu funcții similare ({{ title }})
     </h2>
 
     <ul class="compare-list" id="{{ headline_list_id }}">
