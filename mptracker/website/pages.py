@@ -24,7 +24,8 @@ def section(name):
 
 @pages.app_template_filter('percent')
 def percent(value):
-    return "%.0f%%" % (value * 100)
+    fmt = "%.0f%%" if (.1 < value < .9) else "%.1f%%"
+    return fmt % (value * 100)
 
 
 @pages.app_template_filter('maybe_url')
