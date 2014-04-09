@@ -33,6 +33,7 @@ TERM_2012_START = TERM_INTERVAL[2012].lower
 
 CONTROVERSY_CSV_KEY = '0Aoh2FHzCVVhldEJEMkhEblJCaWdGdy1FWlg5a0dzNEE'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
+POSITION_PONTA3_CSV_KEY = '0AlBmcLkxpBOXdGhMT0h2Vl9lWENlLUpJZm5jZUpYNlE'
 POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
 CABINET_PARTY_CSV_KEY = '0AlBmcLkxpBOXdEpZVzZ5MUNvb004b0Z3UGFZUjdzMUE'
 POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
@@ -920,7 +921,7 @@ def controversy():
 
 
 @scraper_manager.command
-def position():
+def position(no_commit=False):
     name_search = models.NameSearch(
         models.Person.query
         .join(models.Mandate)
@@ -934,8 +935,12 @@ def position():
         key_columns=['person_id', 'interval', 'title'],
     )
 
+    def cabinet_position_row_iter():
+        yield from get_gdrive_csv(POSITION_PONTA2_CSV_KEY)
+        yield from get_gdrive_csv(POSITION_PONTA3_CSV_KEY)
+
     with position_patcher.process(remove=True) as add_position:
-        for row in get_gdrive_csv(POSITION_PONTA2_CSV_KEY):
+        for row in cabinet_position_row_iter():
             if row['temporary'].strip():
                 continue
 
@@ -974,7 +979,12 @@ def position():
                 'category': 'permanent-bureau',
             })
 
-    models.db.session.commit()
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
 
 
 @scraper_manager.command
