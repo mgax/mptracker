@@ -1026,6 +1026,7 @@ def policy_domain():
 
 @scraper_manager.command
 def stop_words():
+    from mptracker.nlp import normalize_to_ascii
     patcher = TablePatcher(
         models.Stopword,
         models.db.session,
@@ -1034,7 +1035,7 @@ def stop_words():
 
     with patcher.process(remove=True) as add_stop_word:
         for row in get_gdrive_csv(STOP_WORDS_CSV_KEY):
-            add_stop_word(row)
+            add_stop_word({'id': normalize_to_ascii(row['id'])})
 
     models.db.session.commit()
 

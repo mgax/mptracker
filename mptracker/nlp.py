@@ -19,6 +19,13 @@ name_normalization_map = [
     ('ö', 'o')
 ]
 
+
+def normalize_to_ascii(txt):
+    for ch, new_ch in name_normalization_map:
+        txt = txt.replace(ch, new_ch)
+    return txt
+
+
 stop_words = set([
     'romani',
     'valea',
@@ -69,8 +76,7 @@ def simple_stem(word):
 
 def normalize(name, stem=False):
     name = name.lower()
-    for ch, new_ch in name_normalization_map:
-        name = name.replace(ch, new_ch)
+    name = normalize_to_ascii(name)
     if stem:
         name = ' '.join(simple_stem(w) for w in name.split())
     return name

@@ -1160,7 +1160,7 @@ WITH words AS (
 )
 SELECT word, count(*) as n FROM words
 WHERE char_length(word) > 4
-  AND word NOT IN (SELECT id FROM stopword)
+  AND unaccent(word) NOT IN (SELECT id FROM stopword)
 GROUP BY word
 ORDER BY n DESC
 LIMIT %(number)d;
