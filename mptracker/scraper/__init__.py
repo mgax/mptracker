@@ -99,7 +99,10 @@ def questions(
             if result.is_changed:
                 changed.append(q)
 
-            assert not old_asked
+            if old_asked:
+                logger.warn("Removing %d old 'ask' records", len(old_asked))
+                for ask in old_asked.values():
+                    models.db.session.delete(ask)
 
     models.db.session.commit()
 
