@@ -22,12 +22,6 @@ def section(name):
     return decorator
 
 
-@pages.app_template_filter('percent')
-def percent(value):
-    fmt = "%.0f%%" if (.1 < value < .9) else "%.1f%%"
-    return fmt % (value * 100)
-
-
 @pages.app_template_filter('maybe_url')
 def maybe_url(text, url):
     if url:

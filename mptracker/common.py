@@ -72,6 +72,12 @@ def inject_constants():
     }
 
 
+@common.app_template_filter('percent')
+def percent(value):
+    fmt = "%.0f%%" if (.1 < value < .9) else "%.1f%%"
+    return fmt % (value * 100)
+
+
 def parse_date(date_str):
     return date_str and datetime.strptime(date_str, '%Y-%m-%d').date()
 
