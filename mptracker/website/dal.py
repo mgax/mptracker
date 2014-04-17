@@ -1014,6 +1014,15 @@ class DataAccess:
         return {'name': policy.name}
 
     def get_policy_proposal_list(self, policy_slug, mandate=None):
+        tacit_approval_query = (
+            ProposalActivityItem.query
+            .filter(ProposalActivityItem.html.like('%art.75%'))
+        )
+        tacit_approval = {
+            item.proposal_id: {'date': item.date, 'location': item.location}
+            for item in tacit_approval_query
+        }
+
         proposal_query = (
             Proposal.query
             .join(Proposal.policy_domain)
@@ -1030,6 +1039,7 @@ class DataAccess:
                 'title': proposal.title,
                 'id': proposal.id,
                 'status': proposal.status,
+                'tacit_approval': tacit_approval.get(proposal.id),
             }
             for proposal in proposal_query
         ]

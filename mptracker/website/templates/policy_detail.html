@@ -26,6 +26,15 @@
 
           <td class="proposal-status-{{ proposal.status }}">
             {{- STATUS_LABEL[proposal.status] -}}
+            {%- if proposal.tacit_approval %}
+              {%- set title =
+                  "Aprobare tacită, " +
+                  proposal.tacit_approval.date|datefmt + ", " +
+                  proposal.tacit_approval.location %}
+              <span title="{{ title }}">
+                <i class="fa fa-exclamation-triangle"></i>
+              </span>
+            {%- endif %}
           </td>
         </tr>
       {%- endfor %}
