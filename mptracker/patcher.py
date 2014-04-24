@@ -39,7 +39,7 @@ class TablePatcher:
     def _mark_seen(self, row_id):
         self.seen.add(row_id)
 
-    def _get_unseen_ids(self):
+    def ids_to_delete(self):
         self.session.flush()
         query = self.session.query(self.model.id)
         if self.filter:
@@ -119,7 +119,7 @@ class TablePatcher:
         yield add
 
         if remove:
-            unseen = list(self._get_unseen_ids())
+            unseen = list(self.ids_to_delete())
             if unseen:
                 unseen_items = (
                     self.model.query

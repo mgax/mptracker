@@ -601,6 +601,22 @@ def proposals(
                         record['id'] = models.random_uuid()
                     add_activity(record)
 
+        for proposal_id in proposal_patcher.ids_to_delete():
+            logger.warn(
+                "Deleting activity and sponsorship for old proposal %s",
+                proposal_id,
+            )
+            old_activity = (
+                models.ProposalActivityItem.query
+                .filter_by(proposal_id=proposal_id)
+            )
+            old_activity.delete(synchronize_session=False)
+            old_sponsorships = (
+                models.Sponsorship.query
+                .filter_by(proposal_id=proposal_id)
+            )
+            old_sponsorships.delete(synchronize_session=False)
+
     models.db.session.commit()
 
     logger.info("Updated sponsorship for %d proposals (+%d, -%d)",
