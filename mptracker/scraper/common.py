@@ -24,6 +24,9 @@ SPREADSHEET_CSV_URL_TEMPLATE = (
     'https://docs.google.com/spreadsheet/pub'
     '?key={key}&single=true&gid=0&output=csv'
 )
+SPREADSHEET_NEW_CSV_URL_TEMPLATE = (
+    'https://docs.google.com/spreadsheets/d/{key}/export?format=csv'
+)
 
 
 class Scraper(object):
@@ -209,7 +212,10 @@ def parse_date(txt, fmt):
 
 
 def create_csv_url(key):
-    return SPREADSHEET_CSV_URL_TEMPLATE.format(key=key)
+    if key.startswith('0A'):
+        return SPREADSHEET_CSV_URL_TEMPLATE.format(key=key)
+    else:
+        return SPREADSHEET_NEW_CSV_URL_TEMPLATE.format(key=key)
 
 
 def get_gdrive_csv(key):
