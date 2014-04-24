@@ -507,6 +507,8 @@ class DalPerson:
         def person_data(person):
             return {'slug': person.slug, 'name': person.name_first_last}
 
+        rv = {}
+
         today = date.today()
 
         same_county_query = (
@@ -516,22 +518,28 @@ class DalPerson:
             .filter_by(county=self.mandate.county)
         )
 
-        mp_group = (
-            MpGroup.query
-            .join(MpGroup.memberships)
-            .filter_by(mandate=self.mandate)
-            .filter(MpGroupMembership.interval.contains(today))
-            .first()
-        )
+        if today in self.mandate.interval:
+            mp_group = (
+                MpGroup.query
+                .join(MpGroup.memberships)
+                .filter_by(mandate=self.mandate)
+                .filter(MpGroupMembership.interval.contains(today))
+                .first()
+            )
 
-        same_party_query = (
-            Person.query
-            .join(Person.mandates)
-            .filter_by(year=2012)
-            .join(Mandate.group_memberships)
-            .filter(MpGroupMembership.interval.contains(today))
-            .filter_by(mp_group=mp_group)
-        )
+            same_party_query = (
+                Person.query
+                .join(Person.mandates)
+                .filter_by(year=2012)
+                .join(Mandate.group_memberships)
+                .filter(MpGroupMembership.interval.contains(today))
+                .filter_by(mp_group=mp_group)
+            )
+
+            rv.update({
+                'party_short_name': mp_group.short_name,
+                'same_party': [person_data(p) for p in same_party_query],
+            })
 
         mandate_count = Mandate.query.filter_by(person=self.person).count()
 
@@ -596,14 +604,12 @@ class DalPerson:
                                 committee_president_query],
             })
 
-        rv = {
-            'party_short_name': mp_group.short_name,
-            'same_party': [person_data(p) for p in same_party_query],
+        rv.update({
             'mandate_count': mandate_count,
             'same_mandate_count': [person_data(p) for p in
                                    same_mandate_count_query],
             'same_position_category': same_position_category,
-        }
+        })
 
         if self.mandate.county:
             rv.update({
