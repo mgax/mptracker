@@ -40,6 +40,10 @@ POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
 STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
 
 
+def _get_config_cache_name():
+    return flask.current_app.config.get('PAGE_CACHE')
+
+
 @scraper_manager.command
 def questions(
         year='2014',
@@ -61,7 +65,8 @@ def questions(
     def skip_question(url):
         return url in known_urls
 
-    http_session = create_session(cache_name=cache_name,
+    http_session = create_session(cache_name=cache_name or
+                                       _get_config_cache_name(),
                                   throttle=throttle and float(throttle),
                                   counters=True)
     questions_scraper = QuestionScraper(session=http_session,
@@ -136,7 +141,7 @@ def people(
     from mptracker.scraper.people import MandateScraper
 
     http_session = create_session(
-        cache_name=cache_name,
+        cache_name=cache_name or _get_config_cache_name(),
         throttle=throttle and float(throttle),
     )
     mandate_scraper = MandateScraper(http_session)
@@ -261,7 +266,8 @@ def groups(
 
     from mptracker.scraper.groups import GroupScraper, Interval
 
-    http_session = create_session(cache_name=cache_name,
+    http_session = create_session(cache_name=cache_name or
+                                       _get_config_cache_name(),
                                   throttle=throttle and float(throttle))
     group_scraper = GroupScraper(http_session)
 
@@ -389,7 +395,7 @@ def committees(
     mandate_lookup = models.MandateLookup()
 
     http_session = create_session(
-        cache_name=cache_name,
+        cache_name=cache_name or _get_config_cache_name(),
         throttle=throttle and float(throttle),
     )
 
@@ -479,7 +485,7 @@ def proposals(
     from mptracker.policy import calculate_proposal
 
     proposal_scraper = ProposalScraper(create_session(
-            cache_name=cache_name,
+            cache_name=cache_name or _get_config_cache_name(),
             throttle=float(throttle) if throttle else None))
 
     def cdep_id(mandate):
@@ -625,7 +631,8 @@ def transcripts(start=None, n_sessions=1, cache_name=None, throttle=None):
     n_sessions = int(n_sessions)
 
     transcript_scraper = TranscriptScraper(
-            session=create_session(cache_name=cache_name,
+            session=create_session(cache_name=cache_name or
+                                               _get_config_cache_name(),
                                    throttle=throttle and float(throttle)))
 
     mandate_lookup = models.MandateLookup()
@@ -779,7 +786,8 @@ def votes(
 
     days = int(days)
 
-    http_session = create_session(cache_name=cache_name,
+    http_session = create_session(cache_name=cache_name or
+                                       _get_config_cache_name(),
                                   throttle=throttle and float(throttle))
     vote_scraper = VoteScraper(http_session)
 
