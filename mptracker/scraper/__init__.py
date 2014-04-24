@@ -332,9 +332,10 @@ def groups(
         models.MpGroup,
         models.db.session,
         key_columns=['short_name', 'year'],
+        filter={'year': year},
     )
 
-    with group_patcher.process(remove=True, filter={'year': year}) as add_group:
+    with group_patcher.process(remove=True) as add_group:
         for group in groups:
             record = group.as_dict(['name', 'short_name', 'year'])
             group.row = add_group(record).row

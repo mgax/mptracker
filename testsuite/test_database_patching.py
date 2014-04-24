@@ -68,13 +68,20 @@ def test_remove_extra_records(patcher):
     assert sorted([t.name for t in Thing.query]) == ["Anne"]
 
 
-def test_remove_extra_records_honors_filter(patcher):
+def test_remove_extra_records_honors_filter(db_app):
     records = [{'code': 'an', 'number': 1, 'name': "Anne"},
                {'code': 'bo', 'number': 1, 'name': "Bob"},
                {'code': 'cl', 'number': 2, 'name': "Claire"},
                {'code': 'da', 'number': 2, 'name': "Dan"}]
-    patcher.update(records)
-    patcher.update(records[:1], remove=True, filter={'number': 1})
+    from mptracker.patcher import TablePatcher
+    filter_patcher = TablePatcher(
+        Thing,
+        db.session,
+        key_columns=['code'],
+        filter={'number': 1},
+    )
+    filter_patcher.update(records)
+    filter_patcher.update(records[:1], remove=True)
     assert sorted([t.name for t in Thing.query]) == ["Anne", "Claire", "Dan"]
 
 

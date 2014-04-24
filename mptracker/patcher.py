@@ -15,7 +15,7 @@ class TablePatcher:
     logger = logging.getLogger(__name__ + '.TablePatcher')
     logger.setLevel(logging.INFO)
 
-    def __init__(self, model, session, key_columns):
+    def __init__(self, model, session, key_columns, filter=None):
         from mptracker.models import random_uuid
         self.random_uuid = random_uuid
         self.model = model
@@ -23,6 +23,7 @@ class TablePatcher:
         self.session = session
         self.key_columns = key_columns
         self.seen = set()
+        self.filter = filter
 
     def _dict_key(self, record):
         return tuple(record.get(k) for k in self.key_columns)
@@ -38,11 +39,11 @@ class TablePatcher:
     def _mark_seen(self, row_id):
         self.seen.add(row_id)
 
-    def _get_unseen_ids(self, filter):
+    def _get_unseen_ids(self):
         self.session.flush()
         query = self.session.query(self.model.id)
-        if filter:
-            query = query.filter_by(**filter)
+        if self.filter:
+            query = query.filter_by(**self.filter)
         for row in query:
             row_id = row[0]
             if row_id not in self.seen:
@@ -91,7 +92,7 @@ class TablePatcher:
         return AddResult(row, is_new, is_changed)
 
     @contextmanager
-    def process(self, autoflush=None, remove=False, filter=None):
+    def process(self, autoflush=None, remove=False):
         counters = {'n_add': 0, 'n_update': 0,
                     'n_remove': 0, 'n_ok': 0, 'total': 0}
 
@@ -118,7 +119,7 @@ class TablePatcher:
         yield add
 
         if remove:
-            unseen = list(self._get_unseen_ids(filter))
+            unseen = list(self._get_unseen_ids())
             if unseen:
                 unseen_items = (
                     self.model.query
@@ -135,7 +136,7 @@ class TablePatcher:
             counters['n_remove'], counters['n_ok'],
         )
 
-    def update(self, data, create=True, remove=False, filter=None):
-        with self.process(autoflush=1000, remove=remove, filter=filter) as add:
+    def update(self, data, create=True, remove=False):
+        with self.process(autoflush=1000, remove=remove) as add:
             for record in data:
                 add(record, create=create)
