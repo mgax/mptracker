@@ -689,6 +689,37 @@ class DalCounty:
         ]
 
 
+class DalParty:
+
+    def __init__(self, short_name, year=2012, missing=KeyError):
+        self.party = (
+            MpGroup.query
+            .filter_by(short_name=short_name)
+            .filter_by(year=year)
+            .first()
+        )
+        if self.party is None:
+            raise missing()
+
+    def get_members(self):
+        memberships_query = (
+            self.party.memberships
+            .filter(
+                MpGroupMembership.interval.contains(date.today())
+            )
+            .options(
+                joinedload('mandate'),
+                joinedload('mandate.person'),
+            )
+            .join(MpGroupMembership.mandate)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
+            .join(Mandate.person)
+            .order_by(Person.first_name, Person.last_name)
+        )
+        return memberships_query
+
+
 class DataAccess:
 
     def __init__(self, missing=KeyError):
@@ -840,12 +871,21 @@ class DataAccess:
 
         return rv
 
-    def get_party_list(self):
-        mp_group_query = (
+    def get_party_qs(self, year=2012):
+        return (
             MpGroup.query
-            .filter_by(year=2012)
+            .filter_by(year=year)
             .order_by(MpGroup.name)
         )
+
+    def get_parties(self):
+        return [
+            DalParty(p.short_name, missing=self.missing)
+            for p in self.get_party_qs()
+        ]
+
+    def get_party_list(self):
+        mp_group_query = self.get_party_qs()
         return [
             {'name': group.name, 'short_name': group.short_name}
             for group in mp_group_query
@@ -853,32 +893,14 @@ class DataAccess:
         ]
 
     def get_party_details(self, party_short_name):
-        party = (
-            MpGroup.query
-            .filter_by(short_name=party_short_name)
-            .filter_by(year=2012)
-            .first()
-        )
-        if party is None:
-            raise self.missing()
+        dal_party = DalParty(short_name=party_short_name,
+                             missing=self.missing)
+        party = dal_party.party
+
         rv = {'name': party.name}
 
         rv['member_list'] = []
-        memberships_query = (
-            party.memberships
-            .filter(
-                MpGroupMembership.interval.contains(date.today())
-            )
-            .options(
-                joinedload('mandate'),
-                joinedload('mandate.person'),
-            )
-            .join(MpGroupMembership.mandate)
-            .join(Mandate.chamber)
-            .filter_by(slug='cdep')
-            .join(Mandate.person)
-            .order_by(Person.first_name, Person.last_name)
-        )
+        memberships_query = dal_party.get_members()
         for membership in memberships_query:
             person = membership.mandate.person
             rv['member_list'].append({
