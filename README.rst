@@ -45,7 +45,7 @@ The hard way, by hand
 Requirements:
 
 * Python 3.3
-* PostgreSQL
+* PostgreSQL 9.3 (debian/ubuntu: https://wiki.postgresql.org/wiki/Apt )
 * libxml, libxslt (debian/ubuntu: ``apt-get install libxml2-dev libxslt-dev``)
 
 Install dependencies (consider using virtualenv_, it makes life easier
