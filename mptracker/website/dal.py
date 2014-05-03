@@ -892,7 +892,7 @@ class DataAccess:
         return [
             {'name': group.name, 'short_name': group.short_name}
             for group in mp_group_query
-            if group.short_name not in ['Indep.', 'Mino.']
+            if group.short_name not in ['Indep.']
         ]
 
     def get_party_details(self, party_short_name):
