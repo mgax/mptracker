@@ -7,7 +7,7 @@
   <h1>{{ date|datefmt }} – {{ headline }}</h1>
 
   {%- for transcript in transcript_list %}
-    <p>
+    <p id="{{ transcript.serial_id }}">
       {%- set url = url_for(
           '.person_detail',
           person_slug=transcript.person_slug,
@@ -17,4 +17,15 @@
       {{ transcript.text }}
     </p>
   {%- endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    var para_id = window.location.hash;
+    if (para_id) {
+      $(para_id).addClass('alert-warning');
+    }
+  })
+</script>
 {% endblock %}

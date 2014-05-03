@@ -222,6 +222,10 @@ class Transcript(db.Model):
     mandate = db.relationship('Mandate',
         backref=db.backref('transcripts', lazy='dynamic'))
 
+    @property
+    def serial_id(self):
+        return self.serial.split('-')[-1]
+
 
 class Question(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)

@@ -164,10 +164,9 @@ def _add_activity_url(person_slug, item):
 
     elif item['type'] == 'speech':
         item['url'] = flask.url_for(
-            '.person_transcript',
-            person_slug=person_slug,
+            '.transcript_chapter',
             serial=item['chapter_serial'],
-        )
+        ) + '#' + item['serial_id']
 
 
 @pages.route('/persoane/<person_slug>')

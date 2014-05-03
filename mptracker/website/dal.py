@@ -232,6 +232,7 @@ class DalPerson:
                 'text': filters.do_truncate(t.text, 200),
                 'type': 'speech',
                 'chapter_serial': t.chapter.serial,
+                'serial_id': t.serial_id,
             }
             for t in recent_transcripts_query
         ]
@@ -1141,6 +1142,7 @@ class DataAccess:
                 'text': transcript.text,
                 'person_name': person.name_first_last,
                 'person_slug': person.slug,
+                'serial_id': transcript.serial_id,
             }
             for transcript, person in transcript_query
         ]
