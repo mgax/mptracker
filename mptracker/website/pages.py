@@ -4,6 +4,7 @@ from werkzeug.exceptions import NotFound
 import jinja2
 from babel.numbers import format_currency
 from mptracker import models
+from mptracker.common import csv_lines
 from mptracker.website.dal import DataAccess
 from path import path
 
@@ -385,3 +386,22 @@ def policy_detail(policy_slug=None):
 def policy_proposal(proposal_id):
     proposal = dal.get_proposal_details(proposal_id)
     return flask.render_template('policy_proposal.html', proposal=proposal)
+
+
+@pages.route('/export')
+@pages.route('/export/<type>')
+@section('export')
+def export(type=None):
+    if type == 'componenta':
+        cols = ['partid', 'nume']
+        persons = []
+        for party in dal.get_parties():
+            members = [
+                dict(zip(cols, (party.get_name(), person.mandate.person.name)))
+                for person in party.get_members()
+            ]
+            persons += members
+
+        return flask.Response(csv_lines(cols, persons),
+                              mimetype='text/csv')
+    return flask.render_template('export.html')

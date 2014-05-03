@@ -701,6 +701,9 @@ class DalParty:
         if self.party is None:
             raise missing()
 
+    def get_name(self):
+        return self.party.short_name
+
     def get_members(self):
         memberships_query = (
             self.party.memberships

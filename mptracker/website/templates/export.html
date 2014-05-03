@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <h1>Export de date</h1>
+
+  <table class="table">
+    <tr>
+      <th>Date</th>
+      <th>Export</th>
+    </tr>
+    <tr>
+      <td>Componența curentă a partidelor</td>
+      <td>
+        {% set url = url_for('.export', type='componenta') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary"><i class="icon-download"> </i> csv</a>
+      </td>
+    </tr>
+  </table>
+{% endblock %}
