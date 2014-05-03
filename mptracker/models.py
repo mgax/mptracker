@@ -796,7 +796,9 @@ def create_backup(backup_path):
         zip_archive = zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED)
         dump_tables(tmp)
         for file_path in tmp.listdir():
-            zip_archive.write(file_path, file_name)
+            file_name = file_path.relpath(tmp)
+            if file_name != 'dump.zip':
+                zip_archive.write(file_path, file_name)
         zip_archive.close()
         zip_path.rename(backup_path)
 
