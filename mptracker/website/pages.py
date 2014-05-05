@@ -393,15 +393,19 @@ def policy_proposal(proposal_id):
 @section('export')
 def export(type=None):
     if type == 'componenta':
-        cols = ['partid', 'nume']
         persons = []
         for party in dal.get_parties():
             members = [
-                dict(zip(cols, (party.get_name(), person.mandate.person.name)))
+                {
+                    'partid': party.get_name(),
+                    'nume': person.mandate.person.name,
+                }
                 for person in party.get_members()
             ]
             persons += members
 
-        return flask.Response(csv_lines(cols, persons),
-                              mimetype='text/csv')
+        return flask.Response(
+            csv_lines(['partid', 'nume'], persons),
+            mimetype='text/csv',
+        )
     return flask.render_template('export.html')
