@@ -389,6 +389,11 @@ def policy_proposal(proposal_id):
 
 
 @pages.route('/export')
+@section('export')
+def export_index():
+    return flask.render_template('export.html')
+
+
 @pages.route('/export/<type>')
 @section('export')
 def export(type=None):
@@ -408,4 +413,6 @@ def export(type=None):
             csv_lines(['partid', 'nume'], persons),
             mimetype='text/csv',
         )
-    return flask.render_template('export.html')
+
+    else:
+        flask.abort(404)
