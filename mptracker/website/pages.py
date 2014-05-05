@@ -68,6 +68,11 @@ def inject_nav_links():
                 section='policy',
                 label="Domenii de politici publice",
             ),
+            dict(
+                url=flask.url_for('.export_index'),
+                section='export',
+                label="Export date",
+            ),
         ],
         'MP_HA': 10000,
     }
