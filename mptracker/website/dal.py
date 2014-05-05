@@ -528,19 +528,20 @@ class DalPerson:
                 .first()
             )
 
-            same_party_query = (
-                Person.query
-                .join(Person.mandates)
-                .filter_by(year=2012)
-                .join(Mandate.group_memberships)
-                .filter(MpGroupMembership.interval.contains(today))
-                .filter_by(mp_group=mp_group)
-            )
+            if mp_group is not None:
+                same_party_query = (
+                    Person.query
+                    .join(Person.mandates)
+                    .filter_by(year=2012)
+                    .join(Mandate.group_memberships)
+                    .filter(MpGroupMembership.interval.contains(today))
+                    .filter_by(mp_group=mp_group)
+                )
 
-            rv.update({
-                'party_short_name': mp_group.short_name,
-                'same_party': [person_data(p) for p in same_party_query],
-            })
+                rv.update({
+                    'party_short_name': mp_group.short_name,
+                    'same_party': [person_data(p) for p in same_party_query],
+                })
 
         mandate_count = Mandate.query.filter_by(person=self.person).count()
 

@@ -49,11 +49,13 @@
       Din același grup parlamentar ({{ party_short_name }})
     </h2>
 
-    <ul class="compare-list" id="compare-same-party">
-      {%- for person in same_party %}
-        <li>{{ comparison_link(person_slug, person) }}</li>
-      {%- endfor %}
-    </ul>
+    {% if same_party %}
+      <ul class="compare-list" id="compare-same-party">
+        {%- for person in same_party %}
+          <li>{{ comparison_link(person_slug, person) }}</li>
+        {%- endfor %}
+      </ul>
+    {% endif %}
   {% endif %}
 
   <h2 class="compare-headline" data-list="compare-same-mandate-count">
