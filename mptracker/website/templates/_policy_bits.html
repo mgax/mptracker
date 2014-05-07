@@ -1,0 +1,40 @@
+{% set STATUS_LABEL = {
+    'inprogress': "În lucru",
+    'approved': "Aprobat",
+    'rejected': "Respins",
+  } %}
+
+{% macro policy_tables(proposal_list) %}
+  <h2>Propuneri legislative</h2>
+
+  <table class="table">
+    <thead>
+    </thead>
+
+    <tbody>
+      {%- for proposal in proposal_list %}
+        <tr>
+          {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
+          <td>
+            <a href="{{ url }}">
+              {{- proposal.title|truncate(80) -}}
+            </a>
+          </td>
+
+          <td class="proposal-status-{{ proposal.status }}">
+            {{- STATUS_LABEL[proposal.status] -}}
+            {%- if proposal.tacit_approval %}
+              {%- set title =
+                  "Aprobare tacită, " +
+                  proposal.tacit_approval.date|datefmt + ", " +
+                  proposal.tacit_approval.location %}
+              <span title="{{ title }}">
+                <i class="fa fa-exclamation-triangle"></i>
+              </span>
+            {%- endif %}
+          </td>
+        </tr>
+      {%- endfor %}
+    </tbody>
+  </table>
+{% endmacro %}

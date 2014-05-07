@@ -1,46 +1,8 @@
 {% extends 'layout.html' %}
 
-{% set STATUS_LABEL = {
-    'inprogress': "În lucru",
-    'approved': "Aprobat",
-    'rejected': "Respins",
-  } %}
+{% from '_policy_bits.html' import policy_tables %}
 
-
-{% macro policy_tables(proposal_list, question_list) %}
-  <h2>Propuneri legislative</h2>
-
-  <table class="table">
-    <thead>
-    </thead>
-
-    <tbody>
-      {%- for proposal in proposal_list %}
-        <tr>
-          {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
-          <td>
-            <a href="{{ url }}">
-              {{- proposal.title|truncate(80) -}}
-            </a>
-          </td>
-
-          <td class="proposal-status-{{ proposal.status }}">
-            {{- STATUS_LABEL[proposal.status] -}}
-            {%- if proposal.tacit_approval %}
-              {%- set title =
-                  "Aprobare tacită, " +
-                  proposal.tacit_approval.date|datefmt + ", " +
-                  proposal.tacit_approval.location %}
-              <span title="{{ title }}">
-                <i class="fa fa-exclamation-triangle"></i>
-              </span>
-            {%- endif %}
-          </td>
-        </tr>
-      {%- endfor %}
-    </tbody>
-  </table>
-
+{% macro question_tables(question_list) %}
   <h2>Întrebări și interpelări</h2>
 
   <table class="table">
@@ -66,5 +28,6 @@
 
   <p class="placeholder" style="height: 200px">analiză, hot issues</p>
 
-  {{ policy_tables(proposal_list, question_list) }}
+  {{ policy_tables(proposal_list) }}
+  {{ question_tables(question_list) }}
 {% endblock %}
