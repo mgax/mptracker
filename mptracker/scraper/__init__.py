@@ -705,6 +705,8 @@ def transcripts(start=None, n_sessions=1, cache_name=None, throttle=None):
 
 @scraper_manager.command
 def import_person_xls(xls_path):
+    """ Import persons, committees and groups from a csv.
+    """
     from mptracker.scraper.person_xls import read_person_xls
 
     mandate_lookup = models.MandateLookup()
@@ -1187,3 +1189,33 @@ def auto(cache_name=None):
     votes(days=20, autoanalyze=True, cache_name=cache_name)
     groups(cache_name=cache_name)
     proposals(autoanalyze=True, cache_name=cache_name)
+
+
+@scraper_manager.command
+def update_person_xls(xls_path):
+    """ Update person contact data from csv"""
+    from mptracker.scraper.person_xls import read_person_contact
+
+    mandate_lookup = models.MandateLookup()
+
+    people_data = []
+    mandate_patcher = TablePatcher(models.Mandate,
+                                   models.db.session,
+                                   key_columns=['year', 'cdep_number'])
+    with mandate_patcher.process() as add:
+        for record in read_person_contact(xls_path):
+            mandate = mandate_lookup.find(record.pop('name'), record['year'],
+                                          record['cdep_number'])
+            person_data = record.pop('person_data')
+            person_data['id'] = mandate.person_id
+            people_data.append(person_data)
+            add(record)
+
+    person_patcher = TablePatcher(models.Person,
+                                  models.db.session,
+                                  key_columns=['id'])
+    with person_patcher.process() as add:
+        for person_data in people_data:
+            add(person_data)
+
+    models.db.session.commit()
