@@ -630,8 +630,11 @@ class DalPerson:
         return [
             {
                 'date': tr.chapter.date,
-                'serial': tr.serial,
                 'text': tr.text,
+                'serial': tr.serial,
+                'serial_id': tr.serial_id,
+                'chapter_serial': tr.chapter.serial,
+                'type': 'speech',
             }
             for tr in transcripts_query
         ]

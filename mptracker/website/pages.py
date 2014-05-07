@@ -304,6 +304,9 @@ def person_transcript_list(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['transcript_list'] = person.get_transcript_list()
+    for item in ctx['transcript_list']:
+        _add_activity_url(person_slug, item)
+
     return flask.render_template('person_transcript_list.html', **ctx)
 
 
