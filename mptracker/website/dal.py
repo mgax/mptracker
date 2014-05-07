@@ -1083,6 +1083,22 @@ class DataAccess:
             for proposal in proposal_query
         ]
 
+    def get_policy_tacit_approval_list(self):
+        qs = (
+            self.get_policy_tacit_approval_qs()
+            .join(Proposal)
+            .order_by(ProposalActivityItem.date.desc())
+        )
+        return [
+            {
+                'title': pi.proposal.title,
+                'id': pi.proposal.id,
+                'status': pi.proposal.status,
+                'tacit_approval': pi
+            }
+            for pi in qs
+        ]
+
     def get_policy_question_list(self, policy_slug, mandate=None):
         question_query = (
             Question.query

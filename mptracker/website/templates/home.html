@@ -5,7 +5,8 @@
   <h1>Open Parlament</h1>
 
   <p>
-    Legi adoptate tacit ({{ tacit_approvals_count }})
+    {% set url = url_for('.policy_tacit') %}
+    <a href="{{ url }}">Legi adoptate tacit ({{ tacit_approvals_count }})</a>
   </p>
 
   <h3>Propuneri legislative</h3>

@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% from '_policy_bits.html' import policy_tables %}
+
+{% block content %}
+  <h1>Legi aprobate tacit</h1>
+
+  {{ policy_tables(proposal_list) }}
+{% endblock %}

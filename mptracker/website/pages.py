@@ -370,6 +370,13 @@ def policy_index():
         'policy_list': dal.get_policy_list(),
     })
 
+@pages.route('/politici/aprobate-tacit')
+@section('policy')
+def policy_tacit():
+    return flask.render_template(
+        'policy_tacit.html',
+        proposal_list=dal.get_policy_tacit_approval_list(),
+    )
 
 @pages.route('/politici/<policy_slug>')
 @pages.route('/politici/altele')
