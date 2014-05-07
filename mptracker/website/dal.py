@@ -853,6 +853,9 @@ class DataAccess:
     def get_recent_questions(self):
         return _get_recent_questions(None, 10)
 
+    def get_tacit_approvals_count(self):
+        return self.get_policy_tacit_approval_qs().count()
+
     def get_question_details(self, question_id):
         question = Question.query.get(question_id)
         if question is None:
@@ -1046,11 +1049,14 @@ class DataAccess:
             raise self.missing()
         return {'name': policy.name}
 
-    def get_policy_proposal_list(self, policy_slug, mandate=None):
-        tacit_approval_query = (
+    def get_policy_tacit_approval_qs(self):
+        return (
             ProposalActivityItem.query
             .filter(ProposalActivityItem.html.like('%art.75%'))
         )
+
+    def get_policy_proposal_list(self, policy_slug, mandate=None):
+        tacit_approval_query = self.get_policy_tacit_approval_qs()
         tacit_approval = {
             item.proposal_id: {'date': item.date, 'location': item.location}
             for item in tacit_approval_query

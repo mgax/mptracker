@@ -95,6 +95,7 @@ def ping():
 @pages.route('/')
 def home():
     return flask.render_template('home.html', **{
+        'tacit_approvals_count': dal.get_tacit_approvals_count(),
         'recent_proposals': dal.get_recent_proposals(),
         'recent_questions': dal.get_recent_questions(),
     })
