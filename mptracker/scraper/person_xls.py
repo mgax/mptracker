@@ -1,6 +1,7 @@
 import csv
 import re
 from decimal import Decimal
+from mptracker.scraper import get_gdrive_csv
 
 
 def txtval(val):
@@ -18,6 +19,8 @@ def emailval(val):
     if not val:
         return None
     else:
+        if 'mailto:' in val:
+            val = val.replace('mailto:', '')
         return ' '.join([v.strip(',;') for v in val.split()])
 
 
@@ -86,49 +89,40 @@ def read_person_xls(xls_path):
             }
 
 
-def read_person_contact(csv_path):
-    header = ['Nume', 'Link pagina pers cdep.ro', 'Adresa birou parlamentar',
-              'Telefon birou parlamentar', 'Anul nasterii', 'Educatie',
-              'Website ', 'Blog', 'Email', 'Facebook', 'Twitter']
-    with open(csv_path, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for field in header:
-            if field not in reader.fieldnames:
-                raise ValueError(
-                    'Invalid file, field {0} missing from header'.format(field)
-                )
-        for n, row in enumerate(reader, 1):
-            name = row['Nume']
-            cdep_url = row['Link pagina pers cdep.ro']
-            url_match = re.match(r'http://www.cdep.ro/pls/parlam/structura.mp'
-                                 r'\?idm=(?P<cdep_number>\d+)&cam=2'
-                                 r'&leg=(?P<year>\d{4})',
-                                 cdep_url)
-            if url_match is None:
-                print("Skipping record", n, "name:", name)
-                continue
-            year = int(url_match.group('year'))
-            cdep_number = int(url_match.group('cdep_number'))
-            if year != 2012:
-                print("Ignoring year", year, "name:", name)
-                continue
+def read_person_contact(csv_key):
+    reader = get_gdrive_csv(csv_key)
+    for n, row in enumerate(reader, 1):
+        name = row['Nume']
+        cdep_url = row['Link pagina pers cdep.ro']
+        url_match = re.match(r'http://www.cdep.ro/pls/parlam/structura.mp'
+                             r'\?idm=(?P<cdep_number>\d+)&cam=2'
+                             r'&leg=(?P<year>\d{4})',
+                             cdep_url)
+        if url_match is None:
+            print("Skipping record", n, "name:", name)
+            continue
+        year = int(url_match.group('year'))
+        cdep_number = int(url_match.group('cdep_number'))
+        if year != 2012:
+            print("Ignoring year", year, "name:", name)
+            continue
 
-            if name == 'Varol AMET':
-                name = 'Amet Varol'
+        if name == 'Varol AMET':
+            name = 'Amet Varol'
 
-            yield {
-                'name': name,
-                'year': year,
-                'cdep_number': cdep_number,
-                'address': txtval(row['Adresa birou parlamentar']),
-                'phone': txtval(row['Telefon birou parlamentar']),
-                'person_data': {
-                    'year_born': int(row['Anul nasterii']),
-                    'education': txtval(row['Educatie']),
-                    'website_url': txtval(row['Website ']),
-                    'blog_url': txtval(row['Blog']),
-                    'email_value': emailval(row['Email']),
-                    'facebook_url': txtval(row['Facebook']),
-                    'twitter_url': txtval(row['Twitter']),
-                },
-            }
+        yield {
+            'name': name,
+            'year': year,
+            'cdep_number': cdep_number,
+            'address': txtval(row['Adresa birou parlamentar']),
+            'phone': txtval(row['Telefon birou parlamentar']),
+            'person_data': {
+                'year_born': int(row['Anul nasterii']),
+                'education': txtval(row['Educatie']),
+                'website_url': txtval(row['Website ']),
+                'blog_url': txtval(row['Blog']),
+                'email_value': emailval(row['Email']),
+                'facebook_url': txtval(row['Facebook']),
+                'twitter_url': txtval(row['Twitter']),
+            },
+        }

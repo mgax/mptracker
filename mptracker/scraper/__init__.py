@@ -38,6 +38,7 @@ POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
 CABINET_PARTY_CSV_KEY = '0AlBmcLkxpBOXdEpZVzZ5MUNvb004b0Z3UGFZUjdzMUE'
 POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
 STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
+MINORITIES_CSV_KEY = '0Ao01Fbm0wOCAdC1neEk0RXV1Z05hRG9QU2FPTlNYZ0E'
 
 
 def _get_config_cache_name():
@@ -1192,7 +1193,7 @@ def auto(cache_name=None):
 
 
 @scraper_manager.command
-def update_person_xls(xls_path):
+def update_person_xls():
     """ Update person contact data from csv"""
     from mptracker.scraper.person_xls import read_person_contact
 
@@ -1203,7 +1204,7 @@ def update_person_xls(xls_path):
                                    models.db.session,
                                    key_columns=['year', 'cdep_number'])
     with mandate_patcher.process() as add:
-        for record in read_person_contact(xls_path):
+        for record in read_person_contact(MINORITIES_CSV_KEY):
             mandate = mandate_lookup.find(record.pop('name'), record['year'],
                                           record['cdep_number'])
             person_data = record.pop('person_data')
