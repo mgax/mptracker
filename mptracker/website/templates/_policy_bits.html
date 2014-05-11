@@ -38,3 +38,23 @@
     </tbody>
   </table>
 {% endmacro %}
+
+{% macro question_tables(question_list) %}
+  <h2>Întrebări și interpelări</h2>
+
+  <table class="table">
+    <tbody>
+      {%- for question in question_list %}
+        <tr>
+          <td>
+            {{- question.title
+                    |truncate(80)
+                    |link_for('.person_question', question_id=question.id) -}}
+          </td>
+
+          <td>{{ question.date|datefmt }}</td>
+        </tr>
+      {%- endfor %}
+    </tbody>
+  </table>
+{% endmacro %}

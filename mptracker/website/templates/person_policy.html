@@ -8,6 +8,6 @@
   {%- set url = url_for('.person_detail', person_slug=person_slug) %}
   <h1><a href="{{ url }}">{{ name }}</a> – {{ policy.name }}</h1>
 
-  {% from 'policy_detail.html' import policy_tables %}
+  {% from '_policy_bits.html' import policy_tables, question_tables %}
   {{ policy_tables(policy.proposal_list, policy.question_list) }}
 {% endblock %}
