@@ -110,6 +110,7 @@ class MpGroupMembership(db.Model):
 class MpCommittee(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
+    meetings_2013 = db.Column(db.Integer)
     cdep_id = db.Column(db.Integer)
     chamber_id = db.Column(db.Integer)
     policy_domain_id = db.Column(UUID, db.ForeignKey('policy_domain.id'))
@@ -130,6 +131,7 @@ class MpCommitteeMembership(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     role = db.Column(db.Text)
     interval = db.Column(DATERANGE, nullable=False)
+    attended_2013 = db.Column(db.Integer)
 
     mandate_id = db.Column(UUID, db.ForeignKey('mandate.id'), nullable=False)
     mandate = db.relationship('Mandate',
