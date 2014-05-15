@@ -69,6 +69,9 @@
             {{ membership.committee_name|maybe_url(membership.committee_url) }}
             ({{ membership.start_date|datefmt }} &ndash;
              {{ membership.end_date|datefmt or 'prezent' }})
+            {% if membership.attendance_2013 is not none %}
+              prezență {{ membership.attendance_2013|percent }}
+            {% endif %}
           </li>
         {% endfor %}
 

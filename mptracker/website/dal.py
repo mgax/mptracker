@@ -158,12 +158,18 @@ class DalPerson:
             .order_by(MpCommitteeMembership.interval.desc())
         )
         rv['committee_list'] = [
+
             {
                 'start_date': cm.interval.lower,
                 'end_date': cm.interval.upper,
                 'role': cm.role,
                 'committee_name': cm.mp_committee.name,
                 'committee_url': cm.mp_committee.cdep_url,
+                'attendance_2013': (
+                    None
+                    if cm.attended_2013 is None else
+                    cm.mp_committee.meetings_2013 / cm.attended_2013
+                ),
             }
             for cm in committee_membership_query
         ]
