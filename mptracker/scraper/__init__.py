@@ -1,6 +1,7 @@
 import logging
 from datetime import timedelta, date, datetime
 from collections import defaultdict
+import re
 import flask
 from flask.ext.script import Manager
 from psycopg2.extras import DateRange
@@ -39,6 +40,7 @@ CABINET_PARTY_CSV_KEY = '0AlBmcLkxpBOXdEpZVzZ5MUNvb004b0Z3UGFZUjdzMUE'
 POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
 STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
 MINORITIES_CSV_KEY = '0Ao01Fbm0wOCAdC1neEk0RXV1Z05hRG9QU2FPTlNYZ0E'
+COMMITTEE_ROLL_CALL_CSV_KEY = '1w4IufznSMLMxMOxfS-ggp3IwXePEoDHiTAjAsHgMOpE'
 
 
 def _get_config_cache_name():
@@ -1066,6 +1068,104 @@ def stop_words():
             add_stop_word({'id': normalize_to_ascii(row['id'])})
 
     models.db.session.commit()
+
+
+@scraper_manager.command
+def committee_roll_call(no_commit=False):
+    # Nume
+    # Comisia Permanenta 1
+    # Numar sedinte comisia permanenta 1
+    # Numar prezente deputat la sedintele comisiei 1 in 2013
+    # Comisia Permanenta 2
+    # Numar sedinte comisia permanenta 2
+    # Numar prezente deputat la sedintele comisiei 2 in 2013
+    # Comisia Speciala
+    # Numar sedinte comisia speciala
+    # Numar prezente deputat la sedintele comisiei speciale in 2013
+
+    person_map = {
+        p.name: p
+        for p in (
+            models.Person.query
+            .join(models.Person.mandates)
+            .filter_by(year=2012)
+        )
+    }
+
+    committee_map = {
+        re.sub(r'\s+', ' ', c.name): c
+        for c in (
+            models.MpCommittee.query
+            .filter(models.MpCommittee.chamber_id.in_([0, 2]))
+        )
+    }
+
+    def parse_committee_data(row, number):
+        name = row['Comisia Permanenta %d' % number].strip()
+        name = re.sub(r'\s+', ' ', name)
+        if name in ['', '0']:
+            return None
+
+        if 'Subcomisia pentru' in name:
+            logger.warn("Skipping committee %r", name)
+            return None
+
+        if name not in committee_map:
+            logger.warn("Skipping membership %r %r", row['Nume'], name)
+            return None
+
+        committee = committee_map[name]
+
+        meetings_2013_txt = row['Numar sedinte comisia permanenta %d' % number]
+        attended_2013_txt = row['Numar prezente deputat la sedintele '
+                                'comisiei %d in 2013' % number]
+
+        try:
+            meetings_2013 = int(meetings_2013_txt)
+            attended_2013 = int(attended_2013_txt)
+
+        except ValueError:
+            #logger.warn("Skipping numbers: %r %r",
+            #            meetings_2013_txt, attended_2013_txt)
+            return None
+
+        return (committee, meetings_2013, attended_2013)
+
+    for row in get_gdrive_csv(COMMITTEE_ROLL_CALL_CSV_KEY):
+        person = person_map[row['Nume'].strip()]
+        mandate = person.mandates.filter_by(year=2012).one()
+
+        for n in [1, 2]:
+            _data = parse_committee_data(row, n)
+            if _data is None:
+                continue
+
+            (committee, meetings_2013, attended_2013) = _data
+
+            if committee.meetings_2013 is not None:
+                if committee.meetings_2013 != meetings_2013:
+                    logger.warn(
+                        "Updating committee meeting count: %r %d -> %d",
+                        committee.name, committee.meetings_2013, meetings_2013,
+                    )
+            committee.meetings_2013 = meetings_2013
+
+            membership = committee.memberships.filter_by(mandate=mandate).one()
+
+            if membership.attended_2013 is not None:
+                if membership.attended_2013 != attended_2013:
+                    logger.warn(
+                        "Updating attendance count: %r %d -> %d",
+                        person.name, membership.attended_2013, attended_2013,
+                    )
+            membership.attended_2013 = attended_2013
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
 
 
 @scraper_manager.command

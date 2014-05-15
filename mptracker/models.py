@@ -172,6 +172,7 @@ class Mandate(db.Model):
     person = db.relationship('Person',
         backref=db.backref('mandates', lazy='dynamic'))
 
+    # chamber_id values: 0=common, 1=senate, 2=cdep
     chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'), nullable=False)
     chamber = db.relationship('Chamber')
 
