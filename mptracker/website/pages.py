@@ -410,7 +410,7 @@ def export_index():
     return flask.render_template('export.html')
 
 
-@pages.route('/export/componenta')
+@pages.route('/export/componenta.csv')
 @section('export')
 def export_mp_list():
     persons = []
@@ -418,7 +418,7 @@ def export_mp_list():
         members = [
             {
                 'partid': party.get_name(),
-                'nume': person.mandate.person.name,
+                'nume': person.mandate.person.name_first_last,
             }
             for person in party.get_members()
         ]
