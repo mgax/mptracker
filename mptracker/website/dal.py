@@ -292,6 +292,12 @@ class DalPerson:
         rv['speeches'] = self.mandate.transcripts.count()
         rv['questions'] = self.mandate.asked.count()
         rv['proposals'] = self.mandate.sponsorships.count()
+        rv['proposals_accepted'] = (
+            self.mandate.sponsorships
+            .join(Sponsorship.proposal)
+            .filter_by(status='approved')
+            .count()
+        )
         rv['local_score'] = self._local_ask_query.count()
         return rv
 
