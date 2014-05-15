@@ -410,25 +410,21 @@ def export_index():
     return flask.render_template('export.html')
 
 
-@pages.route('/export/<type>')
+@pages.route('/export/componenta')
 @section('export')
-def export(type=None):
-    if type == 'componenta':
-        persons = []
-        for party in dal.get_parties():
-            members = [
-                {
-                    'partid': party.get_name(),
-                    'nume': person.mandate.person.name,
-                }
-                for person in party.get_members()
-            ]
-            persons += members
+def export_mp_list():
+    persons = []
+    for party in dal.get_parties():
+        members = [
+            {
+                'partid': party.get_name(),
+                'nume': person.mandate.person.name,
+            }
+            for person in party.get_members()
+        ]
+        persons += members
 
-        return flask.Response(
-            csv_lines(['partid', 'nume'], persons),
-            mimetype='text/csv',
-        )
-
-    else:
-        flask.abort(404)
+    return flask.Response(
+        csv_lines(['partid', 'nume'], persons),
+        mimetype='text/csv',
+    )
