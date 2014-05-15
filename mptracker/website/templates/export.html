@@ -18,5 +18,15 @@
         </a>
       </td>
     </tr>
+
+    <tr>
+      <td>Componența istorică a partidelor</td>
+      <td>
+        {% set url = url_for('.export_group_membership') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> csv
+        </a>
+      </td>
+    </tr>
   </table>
 {% endblock %}

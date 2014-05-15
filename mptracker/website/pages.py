@@ -428,3 +428,22 @@ def export_mp_list():
         csv_lines(['partid', 'nume'], persons),
         mimetype='text/csv',
     )
+
+
+@pages.route('/export/membri_grupuri.csv')
+@section('export')
+def export_group_membership():
+    membership_list = [
+        {
+            'nume': row['name'],
+            'partid': row['group'],
+            'inceput': row['start'].isoformat(),
+            'sfarsit': '' if row['end'] is None else row['end'].isoformat(),
+        }
+        for row in dal.get_group_membership()
+    ]
+
+    return flask.Response(
+        csv_lines(['partid', 'nume', 'inceput', 'sfarsit'], membership_list),
+        mimetype='text/csv',
+    )

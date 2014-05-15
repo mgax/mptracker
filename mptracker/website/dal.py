@@ -906,6 +906,26 @@ class DataAccess:
             for p in self.get_party_qs()
         ]
 
+    def get_group_membership(self, year=2012):
+        null_end = lambda d: None if d.year == 9999 else d
+        return (
+            {
+                'name': membership.mandate.person.name_first_last,
+                'group': membership.mp_group.name,
+                'start': membership.interval.lower,
+                'end': null_end(membership.interval.upper),
+            }
+            for membership in (
+                MpGroupMembership.query
+                .join(MpGroupMembership.mp_group)
+                .filter_by(year=year)
+                .options(
+                    joinedload('mp_group'),
+                    joinedload('mandate.person'),
+                )
+            )
+        )
+
     def get_party_list(self):
         mp_group_query = self.get_party_qs()
         return [
