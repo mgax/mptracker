@@ -1272,6 +1272,32 @@ class DataAccess:
                 'cdeppk': row.cdeppk,
             }
 
+    def get_all_questions(self):
+        question_query = (
+            db.session.query(
+                Question,
+                Person,
+                Match.score,
+            )
+            .join(Question.asked)
+            .join(Ask.mandate)
+            .filter_by(year=2012)
+            .join(Mandate.person)
+            .join(Ask.match_row)
+        )
+
+        print(question_query.count())
+
+        for (question, person, local_score) in question_query:
+            yield {
+                'name': person.name_first_last,
+                'number': question.number,
+                'date': question.date,
+                'type': question.type,
+                'addressee': question.addressee,
+                'local_score': local_score,
+            }
+
 
 def get_top_words(mandate_id, number):
     query = WORDCLOUD_SQL % {'mandate_id': mandate_id, 'number': number}
