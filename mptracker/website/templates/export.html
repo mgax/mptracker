@@ -28,5 +28,25 @@
         </a>
       </td>
     </tr>
+
+    <tr>
+      <td>Voturi</td>
+      <td>
+        {% set url = url_for('.export_votes') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> csv
+        </a>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Întrebări și interpelări</td>
+      <td>
+        {% set url = url_for('.export_questions') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> csv
+        </a>
+      </td>
+    </tr>
   </table>
 {% endblock %}
