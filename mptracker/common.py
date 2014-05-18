@@ -27,6 +27,13 @@ VOTE_LABEL = {
     'novote': "\u2014",  # em-dash
 }
 
+QUESTION_TYPE_LABEL = {
+    'question': "întrebare",
+    'interpelation': "interpelare",
+    'proposal': "propunere legislativă",
+    'speech': "luare de cuvânt",
+}
+
 
 class UuidConverter(BaseConverter):
 
@@ -61,17 +68,17 @@ def bust_cache(endpoint, values):
             values['t'] = key
 
 
-@common.app_context_processor
-def inject_constants():
-    return {
+@common.record
+def inject_constants(state):
+    state.app.jinja_env.globals.update({
         'VOTE_LABEL': VOTE_LABEL,
-
+        'QUESTION_TYPE_LABEL': QUESTION_TYPE_LABEL,
         'POSITION_CATEGORY_TITLE': {
           'minister': "ministru",
           'permanent-bureau': "membru al biroului permanent",
           'committee-president': "președinte de comisie parlamentară",
         },
-    }
+    })
 
 
 @common.app_template_filter('percent')
