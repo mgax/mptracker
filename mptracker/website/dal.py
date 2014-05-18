@@ -1245,6 +1245,33 @@ class DataAccess:
             'text': transcript.text,
         }
 
+    def get_all_votes(self):
+        vote_query = (
+            db.session.query(
+                Vote.choice,
+                Person.first_name,
+                Person.last_name,
+                GroupVote.choice.label('group_choice'),
+                VotingSession.cdeppk,
+            )
+            .join(Vote.voting_session)
+            .join(VotingSession.group_votes)
+            .join(Vote.mandate)
+            .filter_by(year=2012)
+            .join(Mandate.person)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group_id == GroupVote.mp_group_id)
+            .filter(MpGroupMembership.interval.contains(VotingSession.date))
+        )
+
+        for row in vote_query.yield_per(10):
+            yield {
+                'name': "{row.first_name} {row.last_name}".format(row=row),
+                'choice': row.choice,
+                'group_choice': row.group_choice,
+                'cdeppk': row.cdeppk,
+            }
+
 
 def get_top_words(mandate_id, number):
     query = WORDCLOUD_SQL % {'mandate_id': mandate_id, 'number': number}

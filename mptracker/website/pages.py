@@ -4,7 +4,7 @@ from werkzeug.exceptions import NotFound
 import jinja2
 from babel.numbers import format_currency
 from mptracker import models
-from mptracker.common import csv_lines
+from mptracker.common import csv_lines, buffer_on_disk, VOTE_LABEL
 from mptracker.website.dal import DataAccess
 from path import path
 
@@ -447,3 +447,20 @@ def export_group_membership():
         csv_lines(['partid', 'nume', 'inceput', 'sfarsit'], membership_list),
         mimetype='text/csv',
     )
+
+
+@pages.route('/export/voturi.csv')
+@section('export')
+def export_votes():
+    cols = ['cod cdep', 'nume', 'vot', 'vot grup']
+    rows = (
+        {
+            'cod cdep': row['cdeppk'],
+            'nume': row['name'],
+            'vot': VOTE_LABEL.get(row['choice'], ''),
+            'vot grup': VOTE_LABEL.get(row['group_choice'], ''),
+        }
+        for row in dal.get_all_votes()
+    )
+    data = buffer_on_disk(csv_lines(cols, rows))
+    return flask.Response(data, mimetype='text/csv')

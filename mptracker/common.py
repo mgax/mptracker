@@ -20,6 +20,13 @@ MAX_OCR_PAGES = 3
 
 common = flask.Blueprint('common', __name__)
 
+VOTE_LABEL = {
+    'yes': "da",
+    'no': "nu",
+    'abstain': "abținere",
+    'novote': "\u2014",  # em-dash
+}
+
 
 class UuidConverter(BaseConverter):
 
@@ -57,12 +64,7 @@ def bust_cache(endpoint, values):
 @common.app_context_processor
 def inject_constants():
     return {
-        'VOTE_LABEL': {
-          'yes': "da",
-          'no': "nu",
-          'abstain': "abținere",
-          'novote': "\u2014",  # em-dash
-        },
+        'VOTE_LABEL': VOTE_LABEL,
 
         'POSITION_CATEGORY_TITLE': {
           'minister': "ministru",
