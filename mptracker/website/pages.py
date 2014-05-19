@@ -321,6 +321,7 @@ def person_transcript(person_slug, serial):
 
 
 @pages.route('/persoane/<person_slug>/politici/<policy_slug>')
+@section('person')
 def person_policy(person_slug, policy_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
