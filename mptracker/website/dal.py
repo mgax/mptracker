@@ -29,6 +29,8 @@ from mptracker.models import (
     db,
 )
 
+LEGISLATURE_2012_START = date(2012, 12, 17)
+
 
 def _get_recent_questions(mandate, limit):
     recent_questions_query = (
@@ -257,6 +259,7 @@ class DalPerson:
         rv = {}
         voting_session_count = (
             VotingSession.query
+            .filter(VotingSession.date >= LEGISLATURE_2012_START)
             .filter(VotingSession.final == True)
             .count()
         )
@@ -1139,7 +1142,7 @@ class DataAccess:
             Question.query
             .join(Question.policy_domain)
             .filter_by(slug=policy_slug)
-            .filter(Question.date >= date(2012, 12, 17))
+            .filter(Question.date >= LEGISLATURE_2012_START)
             .order_by(Question.date.desc())
         )
         if mandate is not None:
