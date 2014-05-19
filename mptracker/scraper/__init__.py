@@ -833,13 +833,14 @@ def votes(
 
     with voting_session_patcher.process() as add_voting_session:
         with vote_patcher.process() as add_vote:
-            for delta in range(days):
-                the_date = start + ONE_DAY * delta
-                if the_date >= date.today():
-                    # don't scrape today, maybe voting is not done yet!
-                    break
+            the_date = start
+            while days > 0 and the_date < date.today():
+                the_date += ONE_DAY
                 logger.info("Scraping votes from %s", the_date)
+
+                today_has_votes = False
                 for voting_session in vote_scraper.scrape_day(the_date):
+                    today_has_votes = True
                     record = model_to_dict(
                         voting_session,
                         ['cdeppk', 'subject', 'subject_html'],
@@ -866,6 +867,9 @@ def votes(
                         )
                         record['mandate_id'] = mandate.id
                         add_vote(record)
+
+                if today_has_votes:
+                    days -= 1
 
     if no_commit:
         logger.warn("Rolling back the transaction")
