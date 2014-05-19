@@ -1258,6 +1258,7 @@ class DataAccess:
                 VotingSession.cdeppk,
             )
             .join(Vote.voting_session)
+            .filter_by(final=True)
             .join(VotingSession.group_votes)
             .join(Vote.mandate)
             .filter_by(year=2012)
