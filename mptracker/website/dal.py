@@ -1255,6 +1255,7 @@ class DataAccess:
                 Person.first_name,
                 Person.last_name,
                 GroupVote.choice.label('group_choice'),
+                VotingSession.date,
                 VotingSession.cdeppk,
             )
             .join(Vote.voting_session)
@@ -1266,6 +1267,7 @@ class DataAccess:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group_id == GroupVote.mp_group_id)
             .filter(MpGroupMembership.interval.contains(VotingSession.date))
+            .order_by(VotingSession.cdeppk)
         )
 
         for row in vote_query.yield_per(10):
@@ -1274,6 +1276,7 @@ class DataAccess:
                 'choice': row.choice,
                 'group_choice': row.group_choice,
                 'cdeppk': row.cdeppk,
+                'date': row.date,
             }
 
     def get_all_questions(self):

@@ -463,9 +463,10 @@ def export_group_membership():
 @pages.route('/export/voturi.csv')
 @section('export')
 def export_votes():
-    cols = ['cod cdep', 'nume', 'vot', 'vot grup']
+    cols = ['data', 'cod cdep', 'nume', 'vot', 'vot grup']
     rows = (
         {
+            'data': row['date'].isoformat(),
             'cod cdep': row['cdeppk'],
             'nume': row['name'],
             'vot': VOTE_LABEL.get(row['choice'], ''),
