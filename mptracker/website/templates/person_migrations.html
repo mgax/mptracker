@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+  <h2>Migrări recente</h2>
+
+  <table class="table">
+    <thead>
+      <th>Dată</th>
+      <th>Persoană</th>
+      <th>Partid vechi</th>
+      <th>Partid nou</th>
+    </thead>
+
+    {%- for migration in migration_list %}
+      <tr>
+        <td>{{ migration.date|datefmt }}</td>
+
+        <td>
+          {{ migration.person.name|link_for(
+                  '.person_detail',
+                  person_slug=migration.person.slug,
+              ) }}
+        </td>
+
+        <td>
+          {{ migration.old_group.short_name|link_for(
+                  '.party_detail',
+                  party_short_name=migration.old_group.short_name,
+              ) }}
+        </td>
+
+        <td>
+          {{ migration.new_group.short_name|link_for(
+                  '.party_detail',
+                  party_short_name=migration.new_group.short_name,
+              ) }}
+        </td>
+      </tr>
+    {%- endfor %}
+  </table>
+{% endblock %}

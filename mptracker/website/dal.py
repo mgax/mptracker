@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from collections import defaultdict
-from sqlalchemy import func, distinct
+from sqlalchemy import func, distinct, and_
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
 from mptracker.models import (
@@ -1299,6 +1299,75 @@ class DataAccess:
                 'type': question.type,
                 'addressee': question.addressee,
                 'local_score': local_score,
+            }
+
+    def get_latest_migrations(self):
+        OldGroup = aliased(MpGroup)
+        NewGroup = aliased(MpGroup)
+        OldMembership = aliased(MpGroupMembership)
+        NewMembership = aliased(MpGroupMembership)
+        OtherMembership = aliased(MpGroupMembership)
+
+        migrations_cte = (
+            db.session.query(
+                MpGroupMembership.id.label('membership_id'),
+                MpGroupMembership.interval,
+                Person.id.label('person_id'),
+            )
+            .join(MpGroupMembership.mandate)
+            .join(Mandate.person)
+            .order_by(MpGroupMembership.interval.desc())
+            .limit(10)
+            .cte()
+        )
+
+        migrations_query = (
+            db.session.query(
+                Person,
+                migrations_cte.c.interval,
+                OldGroup,
+                NewGroup,
+            )
+            .join(migrations_cte,
+                migrations_cte.c.person_id == Person.id,
+            )
+            .join(NewMembership,
+                NewMembership.id == migrations_cte.c.membership_id,
+            )
+            .join(NewGroup,
+                NewGroup.id == NewMembership.mp_group_id,
+            )
+            .join(OldMembership,
+                OldMembership.mandate_id == NewMembership.mandate_id,
+            )
+            .join(OldGroup,
+                OldGroup.id == OldMembership.mp_group_id,
+            )
+            .outerjoin(OtherMembership,
+                and_(
+                    OtherMembership.mandate_id == NewMembership.mandate_id,
+                    OtherMembership.interval > OldMembership.interval,
+                    OtherMembership.interval < NewMembership.interval,
+                )
+            )
+            .filter(OldMembership.interval < NewMembership.interval)
+            .filter(OtherMembership.id == None)
+            .order_by(NewMembership.interval.desc())
+        )
+
+        for (person, interval, old_group, new_group) in migrations_query:
+            yield {
+                'person': {
+                    'name': person.name_first_last,
+                    'slug': person.slug,
+                },
+                'old_group': {
+                    'short_name': old_group.short_name,
+                },
+                'new_group': {
+                    'short_name': new_group.short_name,
+                },
+                'date': interval.lower,
             }
 
 

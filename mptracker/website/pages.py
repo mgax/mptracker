@@ -329,6 +329,15 @@ def person_policy(person_slug, policy_slug):
     return flask.render_template('person_policy.html', **ctx)
 
 
+@pages.route('/persoane/migrari')
+@section('person')
+def person_migrations():
+    migration_list = list(dal.get_latest_migrations())
+    return flask.render_template('person_migrations.html', **{
+        'migration_list': migration_list,
+    })
+
+
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
     return flask.render_template('question.html', **{
