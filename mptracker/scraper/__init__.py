@@ -835,7 +835,6 @@ def votes(
         with vote_patcher.process() as add_vote:
             the_date = start
             while days > 0 and the_date < date.today():
-                the_date += ONE_DAY
                 logger.info("Scraping votes from %s", the_date)
 
                 today_has_votes = False
@@ -870,6 +869,8 @@ def votes(
 
                 if today_has_votes:
                     days -= 1
+
+                the_date += ONE_DAY
 
     if no_commit:
         logger.warn("Rolling back the transaction")
