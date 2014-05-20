@@ -22,7 +22,7 @@ psycopg2==2.5.1
 pyquery==1.2.8
 python-dateutil==2.1
 pytz==2013b
-raven==4.0.2
+raven==4.2.3
 redis==2.7.6
 requests-cache==0.4.4
 requests==2.0.0
