@@ -894,6 +894,62 @@ class DalParty:
             'local': local_question_query.count(),
         }
 
+    def get_top_policies(self, cutoff=0.05):
+        count_map = defaultdict(int)
+
+        question_query = (
+            db.session.query(
+                PolicyDomain.id,
+                func.count(distinct(Question.id)),
+            )
+            .select_from(Question)
+            .join(Question.asked)
+            .join(Ask.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(Question.date))
+            .outerjoin(Question.policy_domain)
+            .group_by(PolicyDomain.id)
+        )
+        for policy_domain_id, count in question_query:
+            count_map[policy_domain_id] += count
+
+        proposal_query = (
+            db.session.query(
+                PolicyDomain.id,
+                func.count(distinct(Proposal.id)),
+            )
+            .select_from(Proposal)
+            .join(Proposal.sponsorships)
+            .join(Sponsorship.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(Proposal.date))
+            .outerjoin(Proposal.policy_domain)
+            .group_by(PolicyDomain.id)
+        )
+        for policy_domain_id, count in proposal_query:
+            count_map[policy_domain_id] += count
+
+        total = sum(count_map.values())
+
+        policy_list = []
+        if total:
+            for policy_domain in PolicyDomain.query:
+                interest = count_map.get(policy_domain.id, 0) / total
+                if interest > cutoff:
+                    policy_list.append({
+                        'slug': policy_domain.slug,
+                        'name': policy_domain.name,
+                        'interest': interest,
+                    })
+
+        return sorted(
+            policy_list,
+            reverse=True,
+            key=lambda p: p['interest'],
+        )
+
 
 class DataAccess:
 

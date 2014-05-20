@@ -50,6 +50,19 @@
       </div>
 
       <div>
+        <h4>Domenii de politici publice</h4>
+
+        <ul>
+          {%- for policy in policy_domains %}
+            <li>
+              {{ policy.name }}
+              ({{ policy.interest|percent }})
+            </li>
+          {%- endfor %}
+        </ul>
+      </div>
+
+      <div>
         <h4>Membri ({{ party['member_list']|count }})</h4>
 
         <ul class="list-unstyled">

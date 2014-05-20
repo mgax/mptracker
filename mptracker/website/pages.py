@@ -374,6 +374,7 @@ def party_detail(party_short_name):
     party = dal.get_party(party_short_name)
     return flask.render_template('party_detail.html', **{
         'party': party.get_details(),
+        'policy_domains': party.get_top_policies(),
     })
 
 
