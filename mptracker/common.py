@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 import csv
 import re
+import math
 from io import StringIO
 from itertools import chain
 import unicodedata
@@ -199,3 +200,7 @@ def generate_slug(text, unique=lambda v: True):
             return rv
     else:
         raise RuntimeError("Could not find a unique slug, giving up.")
+
+
+def almost_eq(a, b, eps=1e-6):
+    return abs(1 - a/b) < eps

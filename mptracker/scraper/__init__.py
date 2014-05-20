@@ -10,7 +10,7 @@ import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
                                      get_gdrive_csv, parse_interval
 from mptracker import models
-from mptracker.common import parse_date, model_to_dict, url_args
+from mptracker.common import parse_date, model_to_dict, url_args, almost_eq
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -1076,7 +1076,7 @@ def stop_words():
 
 
 @scraper_manager.command
-def committee_roll_call(no_commit=False):
+def committee_attendance(no_commit=False):
     # Nume
     # Comisia Permanenta 1
     # Numar sedinte comisia permanenta 1
@@ -1134,7 +1134,11 @@ def committee_roll_call(no_commit=False):
             #            meetings_2013_txt, attended_2013_txt)
             return None
 
-        return (committee, meetings_2013, attended_2013)
+        if meetings_2013 == 0:
+            return None
+
+        attendance_2013 = attended_2013 / meetings_2013
+        return (committee, attendance_2013)
 
     for row in get_gdrive_csv(COMMITTEE_ROLL_CALL_CSV_KEY):
         person = person_map[row['Nume'].strip()]
@@ -1145,25 +1149,18 @@ def committee_roll_call(no_commit=False):
             if _data is None:
                 continue
 
-            (committee, meetings_2013, attended_2013) = _data
-
-            if committee.meetings_2013 is not None:
-                if committee.meetings_2013 != meetings_2013:
-                    logger.warn(
-                        "Updating committee meeting count: %r %d -> %d",
-                        committee.name, committee.meetings_2013, meetings_2013,
-                    )
-            committee.meetings_2013 = meetings_2013
-
+            (committee, attendance_2013) = _data
             membership = committee.memberships.filter_by(mandate=mandate).one()
 
-            if membership.attended_2013 is not None:
-                if membership.attended_2013 != attended_2013:
+            if membership.attendance_2013 is not None:
+                if not almost_eq(membership.attendance_2013, attendance_2013):
                     logger.warn(
-                        "Updating attendance count: %r %d -> %d",
-                        person.name, membership.attended_2013, attended_2013,
+                        "Updating attendance: %r %r -> %r",
+                        person.name,
+                        membership.attendance_2013,
+                        attendance_2013,
                     )
-            membership.attended_2013 = attended_2013
+            membership.attendance_2013 = attendance_2013
 
     if no_commit:
         logger.warn("Rolling back the transaction")
