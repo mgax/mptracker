@@ -62,7 +62,12 @@ def create_manager(app):
     @manager.command
     def worker():
         from flask.ext.rq import get_worker
-        get_worker().work()
+        worker = get_worker()
+        sentry = flask.current_app.extensions.get('sentry')
+        if sentry is not None:
+            from rq.contrib.sentry import register_sentry
+            register_sentry(sentry.client, worker)
+        worker.work()
 
     @manager.command
     def requeue_failed():
