@@ -724,6 +724,7 @@ class DalParty:
     def get_main_details(self):
         return {
             'name': self.party.name,
+            'short_name': self.party.short_name,
         }
 
     def get_details(self):
@@ -956,6 +957,19 @@ class DalParty:
             reverse=True,
             key=lambda p: p['interest'],
         )
+
+    def get_policy(self, policy_slug):
+        policy = PolicyDomain.query.filter_by(slug=policy_slug).first()
+        if policy is None:
+            raise self.missing()
+
+        return {
+            'name': policy.name,
+            'proposal_list': self.dal.get_policy_proposal_list(
+                policy_slug, party=self.party),
+            'question_list': self.dal.get_policy_question_list(
+                policy_slug, party=self.party),
+        }
 
 
 class DataAccess:

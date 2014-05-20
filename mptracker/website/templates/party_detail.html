@@ -55,7 +55,11 @@
         <ul>
           {%- for policy in policy_domains %}
             <li>
-              {{ policy.name }}
+              {{ policy.name|link_for(
+                  '.party_policy',
+                  party_short_name=party.short_name,
+                  policy_slug=policy.slug,
+                ) }}
               ({{ policy.interest|percent }})
             </li>
           {%- endfor %}

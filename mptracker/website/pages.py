@@ -378,6 +378,16 @@ def party_detail(party_short_name):
     })
 
 
+@pages.route('/partide/<party_short_name>/politici/<policy_slug>')
+@section('party')
+def party_policy(party_short_name, policy_slug):
+    party = dal.get_party(party_short_name)
+    return flask.render_template('party_policy.html', **{
+        'party': party.get_main_details(),
+        'policy': party.get_policy(policy_slug),
+    })
+
+
 @pages.route('/politici/')
 @section('policy')
 def policy_index():
