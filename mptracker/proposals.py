@@ -109,7 +109,7 @@ def analyze_sponsorship(sponsorship_id):
     result = match_text_for_mandate(sponsorship.mandate, text)
     sponsorship.match.data = flask.json.dumps(result)
     if not sponsorship.match.manual:
-        sponsorship.match.score = ask.match.get_score_from_data()
+        sponsorship.match.score = sponsorship.match.get_score_from_data()
     models.db.session.commit()
 
 
