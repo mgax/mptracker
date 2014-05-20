@@ -706,7 +706,9 @@ class DalCounty:
 
 class DalParty:
 
-    def __init__(self, short_name, year=2012, missing=KeyError):
+    def __init__(self, dal, short_name, year=2012, missing=KeyError):
+        self.dal = dal
+
         self.party = (
             MpGroup.query
             .filter_by(short_name=short_name)
@@ -719,8 +721,13 @@ class DalParty:
     def get_name(self):
         return self.party.short_name
 
+    def get_main_details(self):
+        return {
+            'name': self.party.name,
+        }
+
     def get_details(self):
-        rv = {'name': self.party.name}
+        rv = self.get_main_details()
 
         rv['member_list'] = []
 
@@ -1114,12 +1121,12 @@ class DataAccess:
 
     def get_parties(self):
         return [
-            DalParty(p.short_name, missing=self.missing)
+            DalParty(self, p.short_name, self.missing)
             for p in self.get_party_qs()
         ]
 
     def get_party(self, party_short_name):
-        return DalParty(short_name=party_short_name, missing=self.missing)
+        return DalParty(self, party_short_name, missing=self.missing)
 
     def get_group_membership(self, year=2012):
         null_end = lambda d: None if d.year == 9999 else d
