@@ -719,7 +719,11 @@ class DalParty:
     def get_name(self):
         return self.party.short_name
 
-    def get_members(self):
+    def get_details(self):
+        rv = {'name': self.party.name}
+
+        rv['member_list'] = []
+
         memberships_query = (
             self.party.memberships
             .filter(
@@ -735,7 +739,160 @@ class DalParty:
             .join(Mandate.person)
             .order_by(Person.first_name, Person.last_name)
         )
-        return memberships_query
+
+        for membership in memberships_query:
+            person = membership.mandate.person
+            rv['member_list'].append({
+                'name': person.name_first_last,
+                'slug': person.slug,
+            })
+
+        rv['loyalty'] = self._get_loyalty()
+
+        rv['questions'] = self._get_questions()
+
+        return rv
+
+    def _get_loyalty(self):
+
+        def _loyal_percent(vote_query):
+            total = vote_query.count()
+            loyal = vote_query.filter(Vote.loyal == True).count()
+            if total:
+                return loyal / total
+            else:
+                return None
+
+        rv = {
+            'by-category': {},
+            'by-mandate-count': {},
+        }
+
+        final_votes = (
+            Vote.query
+            .join(Vote.voting_session)
+            .filter(VotingSession.final == True)
+            .join(Vote.mandate)
+            .join(Mandate.chamber)
+            .filter_by(slug='cdep')
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(VotingSession.date))
+        )
+        rv['all'] = _loyal_percent(final_votes)
+
+        group_votes = GroupVote.query.filter(GroupVote.mp_group == self.party)
+        n_group_votes = group_votes.count()
+        if n_group_votes > 0:
+            loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
+            rv['to-cabinet'] = loyal_group_votes.count() / n_group_votes
+
+        position_category_list = [
+            row[0] for row in
+            db.session.query(distinct(Position.category))
+        ]
+        for category in position_category_list:
+            members_with_position_cte = (
+                db.session.query(
+                    distinct(Mandate.id).label('mandate_id'),
+                    Position.interval.label('interval'),
+                )
+                .join(Mandate.person)
+                .join(Person.positions)
+                .filter(Position.category == category)
+                .cte()
+            )
+
+            category_final_votes = (
+                final_votes
+                .join(
+                    members_with_position_cte,
+                    Mandate.id == members_with_position_cte.c.mandate_id,
+                )
+                .filter(
+                    members_with_position_cte.c.interval.contains(
+                        VotingSession.date
+                    )
+                )
+            )
+
+            loyalty = _loyal_percent(category_final_votes)
+            if loyalty is not None:
+                rv['by-category'][category] = loyalty
+
+        mandate_count_cte = (
+            db.session.query(
+                Mandate.person_id.label('person_id'),
+                func.count('*').label('mandate_count'),
+            )
+            .group_by(Mandate.person_id)
+            .cte()
+        )
+
+        one_mandate_cte = (
+            db.session.query(Mandate.id.label('mandate_id'))
+            .join(
+                mandate_count_cte,
+                Mandate.person_id == mandate_count_cte.c.person_id,
+            )
+            .filter(mandate_count_cte.c.mandate_count == 1)
+            .cte()
+        )
+
+        one_mandate_final_votes = (
+            final_votes
+            .join(
+                one_mandate_cte,
+                Mandate.id == one_mandate_cte.c.mandate_id,
+            )
+        )
+        loyalty = _loyal_percent(one_mandate_final_votes)
+        rv['by-mandate-count']['one'] = loyalty
+
+        multiple_mandate_cte = (
+            db.session.query(Mandate.id.label('mandate_id'))
+            .join(
+                mandate_count_cte,
+                Mandate.person_id == mandate_count_cte.c.person_id,
+            )
+            .filter(mandate_count_cte.c.mandate_count > 1)
+            .cte()
+        )
+
+        one_mandate_final_votes = (
+            final_votes
+            .join(
+                multiple_mandate_cte,
+                Mandate.id == multiple_mandate_cte.c.mandate_id,
+            )
+        )
+        loyalty = _loyal_percent(one_mandate_final_votes)
+        rv['by-mandate-count']['multiple'] = loyalty
+
+        return rv
+
+    def _get_questions(self):
+        question_query = (
+            db.session.query(
+                distinct(Question.id),
+            )
+            .join(Question.asked)
+            .join(Ask.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(Question.date))
+        )
+
+        local_question_query = (
+            question_query
+            .join(Ask.match_row)
+            .filter(Match.score > 0)
+        )
+
+        return {
+            'total': question_query.count(),
+            'local': local_question_query.count(),
+        }
 
 
 class DataAccess:
@@ -905,6 +1062,9 @@ class DataAccess:
             for p in self.get_party_qs()
         ]
 
+    def get_party(self, party_short_name):
+        return DalParty(short_name=party_short_name, missing=self.missing)
+
     def get_group_membership(self, year=2012):
         null_end = lambda d: None if d.year == 9999 else d
         return (
@@ -932,169 +1092,6 @@ class DataAccess:
             for group in mp_group_query
             if group.short_name not in ['Indep.']
         ]
-
-    def get_party_details(self, party_short_name):
-        dal_party = DalParty(short_name=party_short_name,
-                             missing=self.missing)
-        party = dal_party.party
-
-        rv = {'name': party.name}
-
-        rv['member_list'] = []
-        memberships_query = dal_party.get_members()
-        for membership in memberships_query:
-            person = membership.mandate.person
-            rv['member_list'].append({
-                'name': person.name_first_last,
-                'slug': person.slug,
-            })
-
-        rv['loyalty'] = self._get_party_loyalty(party)
-
-        rv['questions'] = self._get_party_questions(party)
-
-        return rv
-
-    def _get_party_loyalty(self, party):
-
-        def _loyal_percent(vote_query):
-            total = vote_query.count()
-            loyal = vote_query.filter(Vote.loyal == True).count()
-            if total:
-                return loyal / total
-            else:
-                return None
-
-        rv = {
-            'by-category': {},
-            'by-mandate-count': {},
-        }
-
-        final_votes = (
-            Vote.query
-            .join(Vote.voting_session)
-            .filter(VotingSession.final == True)
-            .join(Vote.mandate)
-            .join(Mandate.chamber)
-            .filter_by(slug='cdep')
-            .join(Mandate.group_memberships)
-            .filter(MpGroupMembership.mp_group == party)
-            .filter(MpGroupMembership.interval.contains(VotingSession.date))
-        )
-        rv['all'] = _loyal_percent(final_votes)
-
-        group_votes = GroupVote.query.filter(GroupVote.mp_group == party)
-        n_group_votes = group_votes.count()
-        if n_group_votes > 0:
-            loyal_group_votes = group_votes.filter_by(loyal_to_cabinet=True)
-            rv['to-cabinet'] = loyal_group_votes.count() / n_group_votes
-
-        position_category_list = [
-            row[0] for row in
-            db.session.query(distinct(Position.category))
-        ]
-        for category in position_category_list:
-            members_with_position_cte = (
-                db.session.query(
-                    distinct(Mandate.id).label('mandate_id'),
-                    Position.interval.label('interval'),
-                )
-                .join(Mandate.person)
-                .join(Person.positions)
-                .filter(Position.category == category)
-                .cte()
-            )
-
-            category_final_votes = (
-                final_votes
-                .join(
-                    members_with_position_cte,
-                    Mandate.id == members_with_position_cte.c.mandate_id,
-                )
-                .filter(
-                    members_with_position_cte.c.interval.contains(
-                        VotingSession.date
-                    )
-                )
-            )
-
-            loyalty = _loyal_percent(category_final_votes)
-            if loyalty is not None:
-                rv['by-category'][category] = loyalty
-
-        mandate_count_cte = (
-            db.session.query(
-                Mandate.person_id.label('person_id'),
-                func.count('*').label('mandate_count'),
-            )
-            .group_by(Mandate.person_id)
-            .cte()
-        )
-
-        one_mandate_cte = (
-            db.session.query(Mandate.id.label('mandate_id'))
-            .join(
-                mandate_count_cte,
-                Mandate.person_id == mandate_count_cte.c.person_id,
-            )
-            .filter(mandate_count_cte.c.mandate_count == 1)
-            .cte()
-        )
-
-        one_mandate_final_votes = (
-            final_votes
-            .join(
-                one_mandate_cte,
-                Mandate.id == one_mandate_cte.c.mandate_id,
-            )
-        )
-        loyalty = _loyal_percent(one_mandate_final_votes)
-        rv['by-mandate-count']['one'] = loyalty
-
-        multiple_mandate_cte = (
-            db.session.query(Mandate.id.label('mandate_id'))
-            .join(
-                mandate_count_cte,
-                Mandate.person_id == mandate_count_cte.c.person_id,
-            )
-            .filter(mandate_count_cte.c.mandate_count > 1)
-            .cte()
-        )
-
-        one_mandate_final_votes = (
-            final_votes
-            .join(
-                multiple_mandate_cte,
-                Mandate.id == multiple_mandate_cte.c.mandate_id,
-            )
-        )
-        loyalty = _loyal_percent(one_mandate_final_votes)
-        rv['by-mandate-count']['multiple'] = loyalty
-
-        return rv
-
-    def _get_party_questions(self, party):
-        question_query = (
-            db.session.query(
-                distinct(Question.id),
-            )
-            .join(Question.asked)
-            .join(Ask.mandate)
-            .join(Mandate.group_memberships)
-            .filter(MpGroupMembership.mp_group == party)
-            .filter(MpGroupMembership.interval.contains(Question.date))
-        )
-
-        local_question_query = (
-            question_query
-            .join(Ask.match_row)
-            .filter(Match.score > 0)
-        )
-
-        return {
-            'total': question_query.count(),
-            'local': local_question_query.count(),
-        }
 
     def get_policy_list(self):
         return [
