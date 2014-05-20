@@ -510,9 +510,9 @@ class DalPerson:
         return {
             'name': policy.name,
             'proposal_list': self.dal.get_policy_proposal_list(
-                policy_slug, self.mandate),
+                policy_slug, mandate=self.mandate),
             'question_list': self.dal.get_policy_question_list(
-                policy_slug, self.mandate),
+                policy_slug, mandate=self.mandate),
         }
 
     def get_comparison_lists(self):
@@ -1174,7 +1174,7 @@ class DataAccess:
             .filter(ProposalActivityItem.html.like('%art.75%'))
         )
 
-    def get_policy_proposal_list(self, policy_slug, mandate=None):
+    def get_policy_proposal_list(self, policy_slug, mandate=None, party=None):
         tacit_approval_query = self.get_policy_tacit_approval_qs()
         tacit_approval = {
             item.proposal_id: {'date': item.date, 'location': item.location}
@@ -1182,16 +1182,30 @@ class DataAccess:
         }
 
         proposal_query = (
-            Proposal.query
+            db.session.query(
+                distinct(Proposal.id)
+            )
             .join(Proposal.policy_domain)
             .filter_by(slug=policy_slug)
         )
+
         if mandate is not None:
             proposal_query = (
                 proposal_query
                 .join(Proposal.sponsorships)
                 .filter_by(mandate=mandate)
             )
+
+        elif party is not None:
+            proposal_query = (
+                proposal_query
+                .join(Proposal.sponsorships)
+                .join(Sponsorship.mandate)
+                .join(Mandate.group_memberships)
+                .filter(MpGroupMembership.mp_group == party)
+                .filter(MpGroupMembership.interval.contains(Proposal.date))
+            )
+
         return [
             {
                 'title': proposal.title,
@@ -1199,7 +1213,11 @@ class DataAccess:
                 'status': proposal.status,
                 'tacit_approval': tacit_approval.get(proposal.id),
             }
-            for proposal in proposal_query
+            for proposal in (
+                Proposal.query
+                .filter(Proposal.id.in_([r[0] for r in proposal_query]))
+                .order_by(Proposal.date)
+            )
         ]
 
     def get_policy_tacit_approval_list(self):
@@ -1218,20 +1236,33 @@ class DataAccess:
             for pi in qs
         ]
 
-    def get_policy_question_list(self, policy_slug, mandate=None):
+    def get_policy_question_list(self, policy_slug, mandate=None, party=None):
         question_query = (
-            Question.query
+            db.session.query(
+                distinct(Question.id),
+            )
             .join(Question.policy_domain)
             .filter_by(slug=policy_slug)
             .filter(Question.date >= LEGISLATURE_2012_START)
-            .order_by(Question.date.desc())
         )
+
         if mandate is not None:
             question_query = (
                 question_query
                 .join(Question.asked)
                 .filter_by(mandate=mandate)
             )
+
+        elif party is not None:
+            question_query = (
+                question_query
+                .join(Question.asked)
+                .join(Ask.mandate)
+                .join(Mandate.group_memberships)
+                .filter(MpGroupMembership.mp_group == party)
+                .filter(MpGroupMembership.interval.contains(Question.date))
+            )
+
         return [
             {
                 'title': question.title,
@@ -1239,7 +1270,11 @@ class DataAccess:
                 'date': question.date,
                 'type': question.type,
             }
-            for question in question_query
+            for question in (
+                Question.query
+                .filter(Question.id.in_([r[0] for r in question_query]))
+                .order_by(Question.date.desc())
+            )
         ]
 
     def get_proposal_details(self, proposal_id):
