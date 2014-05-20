@@ -33,6 +33,19 @@
 
           <dt>membri cu mai multe mandate</dt>
           <dd>{{ party['loyalty']['by-mandate-count']['multiple']|percent }}</dd>
+
+          <dt>întrebări</dt>
+          <dd>{{ party['questions']['total'] }}</dd>
+
+          <dt>întrebări cu subiect local</dt>
+          <dd>
+            {{ party['questions']['local'] }}
+            {% if party['questions']['total'] %}
+              {%- set fraction = (party['questions']['local'] /
+                                  party['questions']['total']) %}
+              ({{ fraction|percent }})
+            {% endif %}
+          </dd>
         </dl>
       </div>
 

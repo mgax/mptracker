@@ -951,6 +951,8 @@ class DataAccess:
 
         rv['loyalty'] = self._get_party_loyalty(party)
 
+        rv['questions'] = self._get_party_questions(party)
+
         return rv
 
     def _get_party_loyalty(self, party):
@@ -1070,6 +1072,29 @@ class DataAccess:
         rv['by-mandate-count']['multiple'] = loyalty
 
         return rv
+
+    def _get_party_questions(self, party):
+        question_query = (
+            db.session.query(
+                distinct(Question.id),
+            )
+            .join(Question.asked)
+            .join(Ask.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == party)
+            .filter(MpGroupMembership.interval.contains(Question.date))
+        )
+
+        local_question_query = (
+            question_query
+            .join(Ask.match_row)
+            .filter(Match.score > 0)
+        )
+
+        return {
+            'total': question_query.count(),
+            'local': local_question_query.count(),
+        }
 
     def get_policy_list(self):
         return [
