@@ -1199,7 +1199,7 @@ class DataAccess:
             db.session.query(
                 distinct(Proposal.id)
             )
-            .join(Proposal.policy_domain)
+            .outerjoin(Proposal.policy_domain)
             .filter_by(slug=policy_slug)
         )
 
@@ -1255,7 +1255,7 @@ class DataAccess:
             db.session.query(
                 distinct(Question.id),
             )
-            .join(Question.policy_domain)
+            .outerjoin(Question.policy_domain)
             .filter_by(slug=policy_slug)
             .filter(Question.date >= LEGISLATURE_2012_START)
         )
