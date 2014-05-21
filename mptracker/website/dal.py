@@ -1135,7 +1135,7 @@ class DataAccess:
 
     def get_parties(self):
         return [
-            DalParty(self, p.short_name, self.missing)
+            DalParty(self, p.short_name, missing=self.missing)
             for p in self.get_party_qs()
         ]
 
