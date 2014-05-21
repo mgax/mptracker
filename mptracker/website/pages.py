@@ -435,19 +435,17 @@ def export_index():
 @pages.route('/export/componenta.csv')
 @section('export')
 def export_mp_list():
-    persons = []
-    for party in dal.get_parties():
-        members = [
-            {
-                'partid': party.get_name(),
-                'nume': person.mandate.person.name_first_last,
-            }
-            for person in party.get_members()
-        ]
-        persons += members
+    membership_list = [
+        {
+            'partid': row['group'],
+            'nume': row['name'],
+        }
+        for row in dal.get_group_membership()
+        if row['sfarsit'] is None
+    ]
 
     return flask.Response(
-        csv_lines(['partid', 'nume'], persons),
+        csv_lines(['partid', 'nume'], membership_list),
         mimetype='text/csv',
     )
 
