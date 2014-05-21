@@ -441,7 +441,7 @@ def export_mp_list():
             'nume': row['name'],
         }
         for row in dal.get_group_membership()
-        if row['sfarsit'] is None
+        if row['end'] is None
     ]
 
     return flask.Response(
