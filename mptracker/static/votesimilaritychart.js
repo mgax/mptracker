@@ -47,7 +47,14 @@ app.render_votesimilaritychart = function(options) {
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.similarity); })
       .attr("height", function(d) { return height - y(d.similarity); })
-      .attr("fill", function(d) { return app.PARTY_COLOR[d.party_short_name]; });
+      .attr("fill", function(d) { return app.PARTY_COLOR[d.party_short_name]; })
+      .on("click", clicked)
+    .append("svg:title")
+      .text(function(d) { return d.name; });
+
+  function clicked(d) {
+    window.location.href = '/persoane/' + d.person_slug;
+  }
 };
 
 
