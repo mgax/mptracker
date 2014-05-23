@@ -9,7 +9,11 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
     <title>{% block title %}Open Parlament{% endblock %}</title>
     {% block styles %}{% endblock %}
-    <script>window.app = {};</script>
+    <script>
+        window.app = {
+            PARTY_COLOR: {{ PARTY_COLOR|tojson }}
+        };
+    </script>
   </head>
 
   <body>

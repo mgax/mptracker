@@ -2,18 +2,6 @@
 "use strict";
 
 
-var color = {
-    "Indep.": "#eee",
-    "Mino.": "#888",
-    "PC": "#3e99ff",
-    "PDL": "#ff962d",
-    "PNL": "#e9e900",
-    "PP-DD": "#5a167b",
-    "PSD": "#f00",
-    "UDMR": "#005900"
-};
-
-
 app.render_membershipchart = function(options) {
     var box = options.container;
     var data = options.data;
@@ -73,7 +61,7 @@ app.render_membershipchart = function(options) {
         .on('mouseover', tooltip.show)
         .on('mouseout', tooltip.hide)
         .on('click', function(d) { navigate_to_group(d); })
-        .style("fill", function(d) { return color[d.group_short_name]; });
+        .style("fill", function(d) { return app.PARTY_COLOR[d.group_short_name]; });
 
     svg.append("g")
         .attr("class", "chart-axis x")

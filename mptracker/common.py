@@ -36,6 +36,18 @@ QUESTION_TYPE_LABEL = {
 }
 
 
+PARTY_COLOR = {
+    "Indep.": "#eee",
+    "Mino.": "#888",
+    "PC": "#3e99ff",
+    "PDL": "#ff962d",
+    "PNL": "#e9e900",
+    "PP-DD": "#5a167b",
+    "PSD": "#f00",
+    "UDMR": "#005900",
+}
+
+
 class UuidConverter(BaseConverter):
 
     def to_python(self, value):
@@ -74,6 +86,7 @@ def inject_constants(state):
     state.app.jinja_env.globals.update({
         'VOTE_LABEL': VOTE_LABEL,
         'QUESTION_TYPE_LABEL': QUESTION_TYPE_LABEL,
+        'PARTY_COLOR': PARTY_COLOR,
         'POSITION_CATEGORY_TITLE': {
           'minister': "ministru",
           'permanent-bureau': "membru al biroului permanent",
