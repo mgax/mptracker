@@ -671,6 +671,51 @@ class DalPerson:
         else:
             return None
 
+    def get_voting_similarity_list(self):
+        other_mandate = aliased(Mandate)
+        other_vote = aliased(Vote)
+        my_vote = aliased(Vote)
+        similarity_cte = (
+            db.session.query(
+                other_vote.mandate_id,
+                func.count(other_vote.id).label('count'),
+            )
+            .join(
+                my_vote,
+                (my_vote.choice == other_vote.choice) &
+                (my_vote.voting_session_id == other_vote.voting_session_id),
+            )
+            .filter(my_vote.mandate == self.mandate)
+            .group_by(other_vote.mandate_id)
+            .cte()
+        )
+
+        similarity_query = (
+            db.session.query(
+                Person,
+                similarity_cte.c.count,
+            )
+            .join(Person.mandates)
+            .filter_by(year=2012)
+            .join(similarity_cte, similarity_cte.c.mandate_id == Mandate.id)
+        )
+
+        count_list = similarity_query.all()
+        self_count = [c for p, c in count_list if p == self.person][0]
+
+        rv = [
+            {
+                'person_slug': person.slug,
+                'name': person.name_first_last,
+                'similarity': count / self_count,
+            }
+            for person, count in count_list
+            if person != self.person
+        ]
+
+        rv.sort(key=lambda r: r['similarity'], reverse=True)
+        return rv
+
 
 class DalCounty:
 

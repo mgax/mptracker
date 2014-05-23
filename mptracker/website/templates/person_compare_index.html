@@ -16,6 +16,10 @@
 {% block content %}
   <h1>{{ name }}</h1>
 
+  <h2>După voturi</h2>
+
+  <div id="compare-votes"></div>
+
   {% for similar_position in same_position_category %}
     {%- set category = similar_position.category %}
     {%- set headline_list_id = 'compare-similar-position-' + category %}
@@ -72,6 +76,7 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="{{ url_for('static', filename='votesimilaritychart.js') }}"></script>
 <script>
   (function() {
     'use strict';
@@ -87,6 +92,11 @@
         $('<span>').addClass('compare-headline-expanded').text('▼'),
         $('<span>').addClass('compare-headline-collapsed').text('▶︎')
       );
+    });
+
+    app.render_votesimilaritychart({
+        container: $('#compare-votes'),
+        vote_similarity_list: {{ vote_similarity_list|tojson }}
     });
   })();
 </script>

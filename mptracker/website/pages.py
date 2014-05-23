@@ -281,6 +281,7 @@ def person_compare_index(person_slug):
     ctx = person.get_main_details()
     ctx['person_slug'] = person_slug
     ctx.update(person.get_comparison_lists())
+    ctx['vote_similarity_list'] = person.get_voting_similarity_list()
     return flask.render_template('person_compare_index.html', **ctx)
 
 
