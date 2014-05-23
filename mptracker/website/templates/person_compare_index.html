@@ -4,6 +4,22 @@
 {% block title %}{{ super() }} – {{ name }} – comparație{% endblock %}
 
 
+{% block styles %}
+<style>
+  #compare-votes .bar {
+    fill: #888;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+</style>
+{% endblock %}
+
+
 {%- macro comparison_link(person_slug, other_person) %}
   {{ other_person.name|link_for(
     '.person_compare',
@@ -76,6 +92,8 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static', filename='votesimilaritychart.js') }}"></script>
 <script>
   (function() {
