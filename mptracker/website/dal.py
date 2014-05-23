@@ -694,22 +694,27 @@ class DalPerson:
             db.session.query(
                 Person,
                 similarity_cte.c.count,
+                MpGroup.short_name,
             )
             .join(Person.mandates)
             .filter_by(year=2012)
             .join(similarity_cte, similarity_cte.c.mandate_id == Mandate.id)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.interval.contains(date.today()))
+            .join(MpGroupMembership.mp_group)
         )
 
         count_list = similarity_query.all()
-        self_count = [c for p, c in count_list if p == self.person][0]
+        self_count = [c for p, c, n in count_list if p == self.person][0]
 
         rv = [
             {
                 'person_slug': person.slug,
                 'name': person.name_first_last,
                 'similarity': count / self_count,
+                'party_short_name': party_short_name,
             }
-            for person, count in count_list
+            for person, count, party_short_name in count_list
             if person != self.person
         ]
 

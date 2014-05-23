@@ -43,10 +43,11 @@ app.render_votesimilaritychart = function(options) {
       .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d, n) { console.log(arguments); return x(n); })
+      .attr("x", function(d, n) { return x(n); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.similarity); })
-      .attr("height", function(d) { return height - y(d.similarity); });
+      .attr("height", function(d) { return height - y(d.similarity); })
+      .attr("fill", function(d) { return app.PARTY_COLOR[d.party_short_name]; });
 };
 
 
