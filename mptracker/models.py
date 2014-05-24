@@ -434,6 +434,19 @@ class ProposalActivityItem(db.Model):
         backref=db.backref('activity', lazy='dynamic', cascade='all'))
 
 
+class ProposalControversy(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+
+    reason = db.Column(db.Text)
+    press_links = db.Column(db.Text)
+
+    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
+    proposal = db.relationship('Proposal', lazy='eager',
+                               backref=db.backref('controversy',
+                                                  lazy='dynamic',
+                                                  cascade='all'))
+
+
 class Controversy(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     slug = db.Column(db.Text, nullable=False, unique=True)
