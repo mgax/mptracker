@@ -780,8 +780,14 @@ class DalParty:
     def get_details(self):
         rv = self.get_main_details()
 
-        rv['member_list'] = []
+        rv['member_list'] = self.get_members()
+        rv['loyalty'] = self._get_loyalty()
+        rv['questions'] = self._get_questions()
 
+        return rv
+
+    def get_members(self):
+        member_list = []
         memberships_query = (
             self.party.memberships
             .filter(
@@ -800,16 +806,11 @@ class DalParty:
 
         for membership in memberships_query:
             person = membership.mandate.person
-            rv['member_list'].append({
+            member_list.append({
                 'name': person.name_first_last,
                 'slug': person.slug,
             })
-
-        rv['loyalty'] = self._get_loyalty()
-
-        rv['questions'] = self._get_questions()
-
-        return rv
+        return member_list
 
     def _get_loyalty(self):
 

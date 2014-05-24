@@ -67,16 +67,9 @@
       </div>
 
       <div>
-        <h4>Membri ({{ party['member_list']|count }})</h4>
-
-        <ul class="list-unstyled">
-          {%- for member in party['member_list'] %}
-            <li>
-              {%- set url = url_for('.person_detail', person_slug=member['slug']) %}
-              <a href="{{ url }}">{{ member['name'] }}</a>
-            </li>
-          {%- endfor %}
-        </ul>
+        <h4>Membri</h4>
+        {% set url = url_for('.party_members', party_short_name=party.short_name) %}
+        <a href="{{ url }}">Lista completă ({{ party['member_list']|count }})</a>
       </div>
     </div>
   </div>
