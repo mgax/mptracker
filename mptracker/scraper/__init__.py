@@ -41,6 +41,7 @@ POLICY_DOMAIN_CSV_KEY = '0AlBmcLkxpBOXdGNXcUtNZ2xHYlpEa1NvWmg2MUNBYVE'
 STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
 MINORITIES_CSV_KEY = '0Ao01Fbm0wOCAdC1neEk0RXV1Z05hRG9QU2FPTlNYZ0E'
 COMMITTEE_ROLL_CALL_CSV_KEY = '1w4IufznSMLMxMOxfS-ggp3IwXePEoDHiTAjAsHgMOpE'
+PROPOSAL_CONTROVERSY_CSV_KEY = '1gsEHB8PhMMgEVJEv-yCBopFl2aMfnXg_JVaJ1aUgLpI'
 
 
 def _get_config_cache_name():
@@ -1320,5 +1321,28 @@ def update_person_xls():
     with person_patcher.process() as add:
         for person_data in people_data:
             add(person_data)
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def proposal_controversy():
+    """ Update proposal controversies from csv"""
+
+    def extract_proposal(url):
+        return url[url.rfind('/') + 1:]
+
+    controversy_patcher = TablePatcher(models.ProposalControversy,
+                                       models.db.session,
+                                       key_columns=['reason', 'proposal_id'])
+    with controversy_patcher.process() as add:
+        for row in get_gdrive_csv(PROPOSAL_CONTROVERSY_CSV_KEY):
+            proposal_id = extract_proposal(row['Link MP Tracker'])
+            assert models.Proposal.query.get(proposal_id)
+
+            record = {'reason': row['Motive controversa'],
+                      'proposal_id': proposal_id,
+                      'press_links': row['Link presa']}
+            add(record)
 
     models.db.session.commit()
