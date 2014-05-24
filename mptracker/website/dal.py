@@ -1228,7 +1228,7 @@ class DataAccess:
     def get_policy_list(self):
         return [
             {'name': policy.name, 'slug': policy.slug}
-            for policy in PolicyDomain.query
+            for policy in PolicyDomain.query.order_by(PolicyDomain.name.asc())
         ]
 
     def get_policy(self, policy_slug):

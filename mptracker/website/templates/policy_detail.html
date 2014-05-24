@@ -16,7 +16,7 @@
       <div>
         <h4>Partide active</h4>
 
-        <ul>
+        <ul class="list-unstyled">
           {%- for party in active_parties %}
             <li>
               {{ party.short_name|link_for(
