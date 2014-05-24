@@ -27,6 +27,7 @@ from mptracker.models import (
     Position,
     NameSearch,
     db,
+    ProposalControversy,
 )
 
 LEGISLATURE_2012_START = date(2012, 12, 17)
@@ -1155,6 +1156,9 @@ class DataAccess:
     def get_tacit_approvals_count(self):
         return self.get_policy_tacit_approval_qs().count()
 
+    def get_controversy_count(self):
+        return self.get_policy_controversy_qs().count()
+
     def get_question_details(self, question_id):
         question = Question.query.get(question_id)
         if question is None:
@@ -1277,6 +1281,7 @@ class DataAccess:
                 'id': proposal.id,
                 'status': proposal.status,
                 'tacit_approval': tacit_approval.get(proposal.id),
+                'controversy': proposal.controversy.all(),
             }
             for proposal in (
                 Proposal.query
@@ -1296,9 +1301,36 @@ class DataAccess:
                 'title': pi.proposal.title,
                 'id': pi.proposal.id,
                 'status': pi.proposal.status,
-                'tacit_approval': pi
+                'tacit_approval': pi,
+                'controversy': pi.proposal.controversy.all(),
             }
             for pi in qs
+        ]
+
+    def get_policy_controversy_qs(self):
+        return Proposal.query.join(ProposalControversy)
+
+    def get_policy_controversy_list(self):
+        tacit_approval_query = self.get_policy_tacit_approval_qs()
+        tacit_approval = {
+            item.proposal_id: {'date': item.date, 'location': item.location}
+            for item in tacit_approval_query
+        }
+        qs = (
+            self.get_policy_controversy_qs()
+            .join(ProposalActivityItem)
+            .order_by(ProposalActivityItem.date.desc())
+        )
+
+        return [
+            {
+                'title': proposal.title,
+                'id': proposal.id,
+                'status': proposal.status,
+                'tacit_approval': tacit_approval.get(proposal.id),
+                'controversy': proposal.controversy.all(),
+            }
+            for proposal in qs
         ]
 
     def get_policy_question_list(self, policy_slug, mandate=None, party=None):
@@ -1404,7 +1436,8 @@ class DataAccess:
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
             raise self.missing()
-        rv = {'title': proposal.title}
+        rv = {'title': proposal.title,
+              'controversy': proposal.controversy.all()}
 
         rv['activity'] = []
         activity_query = (

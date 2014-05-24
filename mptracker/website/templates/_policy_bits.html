@@ -32,6 +32,12 @@
                 <i class="fa fa-exclamation-triangle"></i>
               </span>
             {%- endif %}
+            {%- if proposal.controversy %}
+              {% set title = "Controverse" %}
+              <span title="{{ title }}">
+                <i class="fa fa-exclamation-circle"></i>
+              </span>
+            {%- endif %}
           </td>
         </tr>
       {%- endfor %}

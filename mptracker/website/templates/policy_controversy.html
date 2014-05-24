@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% from '_policy_bits.html' import policy_tables %}
+
+{% block content %}
+  <h1>Inițiative de lege controversate</h1>
+
+  {{ policy_tables(proposal_list) }}
+{% endblock %}

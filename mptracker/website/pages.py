@@ -97,6 +97,7 @@ def ping():
 def home():
     return flask.render_template('home.html', **{
         'tacit_approvals_count': dal.get_tacit_approvals_count(),
+        'controversy_count': dal.get_controversy_count(),
         'recent_proposals': dal.get_recent_proposals(),
         'recent_questions': dal.get_recent_questions(),
     })
@@ -406,6 +407,7 @@ def policy_index():
         'policy_list': dal.get_policy_list(),
     })
 
+
 @pages.route('/politici/aprobate-tacit')
 @section('policy')
 def policy_tacit():
@@ -413,6 +415,16 @@ def policy_tacit():
         'policy_tacit.html',
         proposal_list=dal.get_policy_tacit_approval_list(),
     )
+
+
+@pages.route('/politici/controversate')
+@section('policy')
+def policy_controversy():
+    return flask.render_template(
+        'policy_controversy.html',
+        proposal_list=dal.get_policy_controversy_list(),
+    )
+
 
 @pages.route('/politici/<policy_slug>')
 @pages.route('/politici/altele')

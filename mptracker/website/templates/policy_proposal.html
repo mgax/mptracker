@@ -20,6 +20,22 @@
     {% endfor %}
   </p>
 
+  {% if proposal['controversy'] %}
+  <div class="alert-danger">
+  <p>Controverse:</p>
+    <ul>
+    {% for controversy in proposal['controversy'] %}
+      <li>{{ controversy.reason }}
+        {% for link, title in controversy.links %}
+          <a target="_blank"
+             title="{{ title }}" href="{{ link }}">[{{ loop.index }}]</a>
+        {% endfor %}
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
   <table class="table table-condensed table-bordered">
     {% for item in proposal['activity'] %}
       <tr>

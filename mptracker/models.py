@@ -446,6 +446,16 @@ class ProposalControversy(db.Model):
                                                   lazy='dynamic',
                                                   cascade='all'))
 
+    @property
+    def links(self):
+        if not self.press_links:
+            return []
+        for link in self.press_links.split(' '):
+            try:
+                title = link.split('/')[2]
+            except IndexError:
+                title = link
+            yield link, title
 
 class Controversy(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
