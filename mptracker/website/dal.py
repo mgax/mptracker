@@ -1341,6 +1341,64 @@ class DataAccess:
             )
         ]
 
+    def get_policy_top_parties(self, policy_slug, cutoff=0.05):
+        count_map = defaultdict(int)
+
+        question_query = (
+            db.session.query(
+                MpGroupMembership.mp_group_id,
+                func.count(distinct(Question.id)),
+            )
+            .select_from(Question)
+            .join(Question.asked)
+            .join(Ask.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.interval.contains(Question.date))
+            .join(Question.policy_domain)
+            .filter(PolicyDomain.slug == policy_slug)
+            .group_by(MpGroupMembership.mp_group_id)
+        )
+
+        for mp_group_id, count in question_query:
+            count_map[mp_group_id] += count
+
+        proposal_query = (
+            db.session.query(
+                MpGroupMembership.mp_group_id,
+                func.count(distinct(Proposal.id))
+            )
+            .select_from(Proposal)
+            .join(Proposal.sponsorships)
+            .join(Sponsorship.mandate)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.interval.contains(Proposal.date))
+            .join(Proposal.policy_domain)
+            .filter(PolicyDomain.slug == policy_slug)
+            .group_by(MpGroupMembership.mp_group_id)
+        )
+
+        for mp_group_id, count in proposal_query:
+            count_map[mp_group_id] += count
+
+        total = sum(count_map.values())
+
+        group_list = []
+        if total:
+            for party in MpGroup.query:
+                interest = count_map.get(party.id, 0) / total
+                if interest > cutoff:
+                    group_list.append({
+                        'short_name': party.short_name,
+                        'name': party.name,
+                        'interest': interest,
+                    })
+
+        return sorted(
+            group_list,
+            reverse=True,
+            key=lambda p: p['interest'],
+        )
+
     def get_proposal_details(self, proposal_id):
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:

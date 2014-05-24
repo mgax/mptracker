@@ -5,8 +5,29 @@
 {% block content %}
   <h1>{{ policy_name }}</h1>
 
-  <p class="placeholder" style="height: 200px">analiză, hot issues</p>
+  <div class="row">
+    <div class="col-sm-8">
+      <p class="placeholder" style="height: 200px">analiză, hot issues</p>
 
-  {{ policy_tables(proposal_list) }}
-  {{ question_tables(question_list) }}
+      {{ policy_tables(proposal_list) }}
+      {{ question_tables(question_list) }}
+    </div>
+    <div class="col-sm-4">
+      <div>
+        <h4>Partide active</h4>
+
+        <ul>
+          {%- for party in active_parties %}
+            <li>
+              {{ party.short_name|link_for(
+                  '.party_detail',
+                  party_short_name=party.short_name)
+              }}
+              ({{ party.interest|percent }})
+            </li>
+          {%- endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 {% endblock %}
