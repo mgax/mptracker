@@ -4,6 +4,7 @@
 
 app.render_votesimilaritychart = function(options) {
   var margin = {top: 20, right: 20, bottom: 30, left: 60},
+      axis_padding = 5,
       width = options.container.width() - margin.left - margin.right,
       height = 300 - margin.top - margin.bottom;
 
@@ -31,19 +32,14 @@ app.render_votesimilaritychart = function(options) {
 
   svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Similaritate");
+      .attr("transform", "translate(" + -axis_padding + ",0)")
+      .call(yAxis);
 
   svg.selectAll(".bar")
       .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d, n) { return x(n); })
+      .attr("x", function(d, n) { return x(n) - x(0); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.similarity); })
       .attr("height", function(d) { return height - y(d.similarity); })
