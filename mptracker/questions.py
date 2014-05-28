@@ -42,6 +42,11 @@ def ocr_question(question_id, autoanalyze=False):
             analyze.delay(ask.id)
 
 
+@job
+def ocr_answer(answer_id):
+    raise NotImplementedError
+
+
 @questions_manager.command
 def ocr_all(number=None, force=False):
     text_row_ids = models.OcrText.all_ids_for('question')

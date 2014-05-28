@@ -57,7 +57,7 @@ def questions(
         autoanalyze=False,
         ):
     from mptracker.scraper.questions import QuestionScraper
-    from mptracker.questions import ocr_question
+    from mptracker.questions import ocr_question, ocr_answer
     from mptracker.policy import calculate_question
 
     if reimport_existing:
@@ -82,14 +82,21 @@ def questions(
                                     models.db.session,
                                     key_columns=['number', 'date'])
 
+    answer_patcher = TablePatcher(models.Answer,
+                                  models.db.session,
+                                  key_columns=['question_id'])
+
     new_ask_rows = 0
 
-    changed = []
+    changed_questions = []
+    changed_answers = []
 
-    with question_patcher.process() as add:
+    with question_patcher.process() as add, \
+         answer_patcher.process() as add_answer:
         for question in questions_scraper.run(int(year)):
             person_list = question.pop('person')
             question['addressee'] = '; '.join(question['addressee'])
+            answer_data = question.pop('answer', None)
             result = add(question)
             q = result.row
 
@@ -107,12 +114,19 @@ def questions(
                     new_ask_rows += 1
 
             if result.is_changed:
-                changed.append(q)
+                changed_questions.append(q)
 
             if old_asked:
                 logger.warn("Removing %d old 'ask' records", len(old_asked))
                 for ask in old_asked.values():
                     models.db.session.delete(ask)
+
+            if answer_data:
+                assert q.id is not None
+                answer_data['question_id'] = q.id
+                answer_result = add_answer(answer_data)
+                if answer_result.is_changed:
+                    changed_answers.append(q)
 
     models.db.session.commit()
 
@@ -125,13 +139,17 @@ def questions(
                 counters['download_time'].total_seconds())
 
     if autoanalyze:
-        logger.info("Scheduling jobs for %d questions", len(changed))
-        for question in changed:
+        logger.info("Scheduling jobs for %d questions", len(changed_questions))
+        for question in changed_questions:
             if question.pdf_url:
                 ocr_question.delay(question.id, autoanalyze=True)
 
             if question.policy_domain_id is None:
                 calculate_question.delay(question.id)
+
+        logger.info("Scheduling jobs for %d answers", len(changed_answers))
+        for answer in changed_answers:
+            ocr_answer.delay(answer.id)
 
 
 @scraper_manager.command

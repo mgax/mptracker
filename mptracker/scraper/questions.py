@@ -48,6 +48,16 @@ class QuestionScraper(Scraper):
                 (year, number) = parse_cdep_id(href)
                 return (link.text(), year, number)
 
+    def extract_answer(self, rows):
+        for row in list(rows):
+            text = self.normalize_space(row.text())
+            if text == "Textul răspunsului: fişier PDF":
+                value = pq(row[0][1])
+                link = list(pqitems(value, 'a'))[-1]
+                assert link.text() == "fişier PDF"
+                pdf_url = link.attr('href')
+                return {"pdf_url": pdf_url}
+
     def get_question(self, href):
         page = self.fetch_url(href)
         heading = page('#pageHeader .pageHeaderLinks').text()
@@ -75,6 +85,9 @@ class QuestionScraper(Scraper):
             if norm_text == '':
                 continue
             elif norm_text == 'Informaţii privind răspunsul':
+                answer = self.extract_answer(rows)
+                if answer:
+                    question['answer'] = answer
                 break
 
             [label, value] = [pq(el) for el in row[0]]
