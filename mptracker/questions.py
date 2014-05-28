@@ -44,7 +44,14 @@ def ocr_question(question_id, autoanalyze=False):
 
 @job
 def ocr_answer(answer_id):
-    raise NotImplementedError
+    answer = models.Answer.query.get(answer_id)
+
+    pages = ocr_url(answer.pdf_url)
+    answer.text = '\n\n'.join(pages)
+
+    models.db.session.add(answer)
+    models.db.session.commit()
+    logger.info("done OCR for %s (%d pages)", answer, len(pages))
 
 
 @questions_manager.command

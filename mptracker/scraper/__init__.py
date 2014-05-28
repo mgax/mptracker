@@ -126,7 +126,7 @@ def questions(
                 answer_data['question_id'] = q.id
                 answer_result = add_answer(answer_data)
                 if answer_result.is_changed:
-                    changed_answers.append(q)
+                    changed_answers.append(answer_result.row)
 
     models.db.session.commit()
 
