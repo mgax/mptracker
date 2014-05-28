@@ -35,8 +35,15 @@
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static', filename='similaritychart.js') }}"></script>
 <script>
-  $(document).ready(function() {
-    var barchart_container = $('#similarity-barchart')[0];
+(function() {
+"use strict";
+
+$(document).ready(render);
+$(window).resize(render);
+
+
+function render() {
+    var barchart_container = $('#similarity-barchart').empty()[0];
 
     app.render_similarity_barchart({
         container: barchart_container,
@@ -105,9 +112,11 @@
     });
 
     app.render_similarity_vote_venn({
-        container: $('#similarity-vote-venn'),
+        container: $('#similarity-vote-venn').empty(),
         overlap: {{ similarity|tojson|safe }}
     });
-  });
+}
+
+})();
 </script>
 {% endblock %}
