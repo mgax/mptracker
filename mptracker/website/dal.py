@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from collections import defaultdict
-from sqlalchemy import func, distinct, and_
+from sqlalchemy import func, distinct, and_, desc
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
 from mptracker.models import (
@@ -1022,6 +1022,81 @@ class DalParty:
             'question_list': self.dal.get_policy_question_list(
                 policy_slug, party=self.party),
         }
+
+    def get_policy_members(self, policy_slug):
+        policy = PolicyDomain.query.filter_by(slug=policy_slug).first()
+        if policy is None:
+            raise self.missing()
+
+        question_cte = (
+            db.session.query(
+                Mandate.id.label('mandate_id'),
+                func.count(Ask.id).label('ask_count'),
+            )
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(date.today()))
+            .join(Mandate.asked)
+            .join(Ask.question)
+            .filter(MpGroupMembership.interval.contains(Question.date))
+            .group_by(Mandate.id)
+            .cte()
+        )
+
+        proposal_cte = (
+            db.session.query(
+                Mandate.id.label('mandate_id'),
+                func.count(Sponsorship.id).label('sponsorship_count'),
+            )
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(date.today()))
+            .join(Mandate.sponsorships)
+            .join(Sponsorship.proposal)
+            .filter(MpGroupMembership.interval.contains(Proposal.date))
+            .group_by(Mandate.id)
+            .cte()
+        )
+
+        action_count = (
+            question_cte.c.ask_count +
+            proposal_cte.c.sponsorship_count
+        ).label('action_count')
+
+        action_query = (
+            db.session.query(
+                Person,
+                action_count,
+            )
+            .join(Person.mandates)
+            .join(Mandate.group_memberships)
+            .filter(MpGroupMembership.mp_group == self.party)
+            .filter(MpGroupMembership.interval.contains(date.today()))
+            .outerjoin(question_cte, question_cte.c.mandate_id == Mandate.id)
+            .outerjoin(proposal_cte, proposal_cte.c.mandate_id == Mandate.id)
+            .filter(action_count != None)
+            .order_by(desc('action_count'))
+        )
+
+        results = list(action_query)
+
+        total = sum(n for _, n  in results)
+        top_count = 0
+        top_95 = []
+        for person, n in results:
+            top_count += n
+            top_95.append((person, n))
+            if top_count / total > .95:
+                break
+
+        return [
+            {
+                'name': person.name_first_last,
+                'slug': person.slug,
+                'action_count': n,
+            }
+            for person, n in top_95
+        ]
 
 
 class DataAccess:

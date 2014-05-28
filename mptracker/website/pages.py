@@ -387,6 +387,7 @@ def party_policy(party_short_name, policy_slug):
     return flask.render_template('party_policy.html', **{
         'party': party.get_main_details(),
         'policy': party.get_policy(policy_slug),
+        'policy_members': party.get_policy_members(policy_slug),
     })
 
 

@@ -8,6 +8,15 @@
   {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
   <h1><a href="{{ url }}">{{ party.name }} – {{ policy.name }}</a></h1>
 
+  <h2>Membri activi</h2>
+
+  <p>
+    {%- for member in policy_members %}
+      {{ member.name|link_for('.person_detail', person_slug=member.slug) }}
+      {%- if not loop.last %}, {% endif %}
+    {%- endfor %}
+  </p>
+
   {% from '_policy_bits.html' import policy_tables, question_tables %}
   {{ policy_tables(policy.proposal_list) }}
   {{ question_tables(policy.question_list) }}

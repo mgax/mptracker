@@ -6,7 +6,20 @@
 
   <div class="row">
     <div class="col-sm-8">
-      <p class="placeholder" style="height: 400px">politici publice</p>
+      <h3>Domenii de politici publice</h3>
+
+      <ul>
+        {%- for policy in policy_domains %}
+          <li>
+            {{ policy.name|link_for(
+                '.party_policy',
+                party_short_name=party.short_name,
+                policy_slug=policy.slug,
+              ) }}
+            ({{ policy.interest|percent }})
+          </li>
+        {%- endfor %}
+      </ul>
     </div>
 
     <div class="col-sm-4">
@@ -47,23 +60,6 @@
             {% endif %}
           </dd>
         </dl>
-      </div>
-
-      <div>
-        <h4>Domenii de politici publice</h4>
-
-        <ul>
-          {%- for policy in policy_domains %}
-            <li>
-              {{ policy.name|link_for(
-                  '.party_policy',
-                  party_short_name=party.short_name,
-                  policy_slug=policy.slug,
-                ) }}
-              ({{ policy.interest|percent }})
-            </li>
-          {%- endfor %}
-        </ul>
       </div>
 
       <div>
