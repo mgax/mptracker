@@ -92,7 +92,7 @@ app.render_similarity_barchart = function(options) {
     ];
 
     var x = d3.scale.linear()
-        .domain([0, 1])
+        .domain([0, options.percent ? 1 : options.max * 1.2])
         .range([0, width - margin.left - margin.right]);
 
     var svg = d3.select(options.container)
@@ -114,7 +114,7 @@ app.render_similarity_barchart = function(options) {
         .data(data)
       .enter().append("rect")
         .attr("class", function(d) { return "bar " + d.class; })
-        .attr("width", function(d) { return x(d.value); })
+        .attr("width", function(d) { return x(d.value) || 1; })
         .attr("height", bar_height)
         .attr("transform", function(d, n) {
             return "translate(0," + n * bar_delta + ")"; });
@@ -125,7 +125,8 @@ app.render_similarity_barchart = function(options) {
         .attr("class", function(d) { return "number " + d.class; })
         .attr("dx", function(d) { return x(d.value) + text_margin; })
         .attr("dy", function(d, n) { return 7 + n * bar_delta; })
-        .text(function(d) { return percent(d.value); });
+        .text(function(d) {
+            return options.percent ? percent(d.value) : d.value; });
 };
 
 
