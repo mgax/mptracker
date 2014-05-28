@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div class="similaritychart"></div>
+  <div id="similarity-vote-venn"></div>
 {% endblock %}
 
 
@@ -34,8 +34,8 @@
 <script src="{{ url_for('static', filename='similaritychart.js') }}"></script>
 <script>
   $(document).ready(function() {
-    app.render_similaritychart({
-        container: $('.similaritychart'),
+    app.render_similarity_vote_venn({
+        container: $('#similarity-vote-venn'),
         overlap: {{ similarity|tojson|safe }}
     });
   });

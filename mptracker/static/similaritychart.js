@@ -30,7 +30,7 @@ function calculateVennDistance(f, debug) {
 }
 
 
-app.render_similaritychart = function(options) {
+app.render_similarity_vote_venn = function(options) {
     var box = options.container;
     var margin = 25;
     var height = 100;
