@@ -14,7 +14,17 @@
     {% endfor %}
   </p>
 
+  <h4>Text întrebare</h4>
+
   <div>
     {{- question['text'] -}}
   </div>
+
+  {% if question['answer'] %}
+    <h4>Text răspuns</h4>
+
+    <div>
+      {{- question['answer'] -}}
+    </div>
+  {% endif %}
 {% endblock %}
