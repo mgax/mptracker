@@ -275,6 +275,32 @@ class Question(db.Model):
                    .group_by(cls.id))
 
 
+class Answer(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    pdf_url = db.Column(db.Text)
+
+    question_id = db.Column(UUID, db.ForeignKey('question.id'), nullable=False)
+    question = db.relationship('Question',
+        backref=db.backref('answer', uselist=False, cascade='all'))
+
+    text_row = db.relationship('OcrText', uselist=False,
+                    primaryjoin='Answer.id==foreign(OcrText.id)',
+                    cascade='all')
+
+    def _get_text_row(self):
+        if self.text_row is None:
+            self.text_row = OcrText(parent='answer')
+        return self.text_row
+
+    @property
+    def text(self):
+        return self._get_text_row().text
+
+    @text.setter
+    def text(self, value):
+        self._get_text_row().text = value
+
+
 class Ask(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
 
