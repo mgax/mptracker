@@ -98,3 +98,23 @@
 .similarity-circle {
     fill-opacity: 0.5;
 }
+
+.similarity-barchart .bar.me {
+    fill: steelblue;
+}
+
+.similarity-barchart .bar.other {
+    fill: grey;
+}
+
+.similarity-barchart .number {
+    font-size: 10px;
+}
+
+.similarity-barchart .number.me {
+    stroke: steelblue;
+}
+
+.similarity-barchart .number.other {
+    stroke: grey;
+}

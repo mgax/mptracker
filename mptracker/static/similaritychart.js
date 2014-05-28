@@ -65,4 +65,68 @@ app.render_similarity_vote_venn = function(options) {
 };
 
 
+var percent_fmt = d3.format("2%"),
+    percent_decimal_fmt = d3.format("2.1%");
+
+
+function percent(value) {
+    if(value < .0001 || value > .9999) return percent_fmt(value);
+    else if(value < .1 || value > .9) return percent_decimal_fmt(value);
+    else return percent_fmt(value);
+}
+
+
+app.render_similarity_barchart = function(options) {
+
+    var margin = {top: 5, right: 100, bottom: 5, left: 160},
+        text_margin = 10,
+        bar_height = 8,
+        bar_margin = 2,
+        bar_delta = bar_height + bar_margin,
+        width = $(options.container).width(),
+        height = margin.top + margin.bottom + bar_margin + 2*bar_height;
+
+    var data = [
+        {y: 0, value: options.data.me, class: "me"},
+        {y: 1, value: options.data.other, class: "other"}
+    ];
+
+    var x = d3.scale.linear()
+        .domain([0, 1])
+        .range([0, width - margin.left - margin.right]);
+
+    var svg = d3.select(options.container)
+      .append("svg")
+        .attr("class", "similarity-barchart")
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," +
+                                          margin.top + ")");
+
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("dx", -text_margin)
+        .attr("dy", "1em")
+        .text(options.label);
+
+    svg.selectAll(".bar")
+        .data(data)
+      .enter().append("rect")
+        .attr("class", function(d) { return "bar " + d.class; })
+        .attr("width", function(d) { return x(d.value); })
+        .attr("height", bar_height)
+        .attr("transform", function(d, n) {
+            return "translate(0," + n * bar_delta + ")"; });
+
+    svg.selectAll(".number")
+        .data(data)
+      .enter().append("text")
+        .attr("class", function(d) { return "number " + d.class; })
+        .attr("dx", function(d) { return x(d.value) + text_margin; })
+        .attr("dy", function(d, n) { return 7 + n * bar_delta; })
+        .text(function(d) { return percent(d.value); });
+};
+
+
 })();

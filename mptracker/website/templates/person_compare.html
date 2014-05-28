@@ -24,6 +24,8 @@
     </div>
   </div>
 
+  <div id="similarity-barchart"></div>
+
   <div id="similarity-vote-venn"></div>
 {% endblock %}
 
@@ -34,6 +36,35 @@
 <script src="{{ url_for('static', filename='similaritychart.js') }}"></script>
 <script>
   $(document).ready(function() {
+    var barchart_container = $('#similarity-barchart')[0];
+
+    app.render_similarity_barchart({
+        container: barchart_container,
+        label: "prezență la vot",
+        data: {{ {
+            "me": stats.vote['attendance'],
+            "other": other.stats.vote['attendance'],
+            }|tojson }}
+    });
+
+    app.render_similarity_barchart({
+        container: barchart_container,
+        label: "loialitate față de partid",
+        data: {{ {
+            "me": stats.vote['loyalty'],
+            "other": other.stats.vote['loyalty'],
+            }|tojson }}
+    });
+
+    app.render_similarity_barchart({
+        container: barchart_container,
+        label: "loialitate față de guvern",
+        data: {{ {
+            "me": stats.vote['cabinet_loyalty'],
+            "other": other.stats.vote['cabinet_loyalty'],
+            }|tojson }}
+    });
+
     app.render_similarity_vote_venn({
         container: $('#similarity-vote-venn'),
         overlap: {{ similarity|tojson|safe }}
