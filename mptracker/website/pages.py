@@ -494,6 +494,7 @@ def export_group_membership():
 @section('export')
 def export_votes():
     cols = ['data', 'cod cdep', 'nume', 'vot', 'vot grup']
+    year = flask.request.args.get('an', type=int)
     rows = (
         {
             'data': row['date'].isoformat(),
@@ -502,7 +503,7 @@ def export_votes():
             'vot': VOTE_LABEL.get(row['choice'], ''),
             'vot grup': VOTE_LABEL.get(row['group_choice'], ''),
         }
-        for row in dal.get_all_votes()
+        for row in dal.get_all_votes(year=year)
     )
     data = buffer_on_disk(csv_lines(cols, rows))
     return csv_response(data)

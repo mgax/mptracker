@@ -1599,7 +1599,7 @@ class DataAccess:
             'text': transcript.text,
         }
 
-    def get_all_votes(self):
+    def get_all_votes(self, year):
         vote_query = (
             db.session.query(
                 Vote.choice,
@@ -1618,8 +1618,15 @@ class DataAccess:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group_id == GroupVote.mp_group_id)
             .filter(MpGroupMembership.interval.contains(VotingSession.date))
-            .order_by(VotingSession.cdeppk)
+            .order_by(VotingSession.date, VotingSession.cdeppk)
         )
+
+        if year is not None:
+            vote_query = (
+                vote_query
+                .filter(VotingSession.date >= date(year, 1, 1))
+                .filter(VotingSession.date < date(year+1, 1, 1))
+            )
 
         for row in vote_query.yield_per(10):
             yield {

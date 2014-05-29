@@ -32,9 +32,24 @@
     <tr>
       <td>Voturi</td>
       <td>
+        {% set url = url_for('.export_votes', an='2012') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> 2012
+        </a>
+
+        {% set url = url_for('.export_votes', an='2013') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> 2013
+        </a>
+
+        {% set url = url_for('.export_votes', an='2014') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> 2014
+        </a>
+
         {% set url = url_for('.export_votes') %}
         <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> csv
+          <i class="icon-download"></i> toate
         </a>
       </td>
     </tr>
