@@ -1644,8 +1644,6 @@ class DataAccess:
             .join(Ask.match_row)
         )
 
-        print(question_query.count())
-
         for (question, person, local_score) in question_query:
             yield {
                 'name': person.name_first_last,
