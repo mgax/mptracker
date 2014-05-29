@@ -194,21 +194,35 @@
 <script src="{{ url_for('static', filename='membershipchart.js') }}"></script>
 <script src="{{ url_for('static', filename='wordcloud.js') }}"></script>
 <script>
-  $(document).ready(function() {
+(function() {
+  "use strict";
+
+  var chart_random_seed = Date();
+
+  $(document).ready(render);
+  $(window).resize(render);
+
+  function render() {
+    Math.seedrandom(chart_random_seed);
+
     app.render_activitychart({
-      container: $('.activitychart'),
+      container: $('.activitychart').empty(),
       data: {{ activitychart_data|tojson|safe }},
       one_year: true
     });
 
     app.render_membershipchart({
-      container: $('.membershipchart'),
+      container: $('.membershipchart').empty(),
       data: {{ group_history|tojson|safe }},
       one_year: true
     });
 
     var top_words = {{ top_words|tojson|safe }};
-    app.render_wordcloud($('.wordcloud'), top_words);
-  });
+    app.render_wordcloud($('.wordcloud').empty(), top_words);
+
+    Math.seedrandom(Date());
+  }
+
+})();
 </script>
 {% endblock %}
