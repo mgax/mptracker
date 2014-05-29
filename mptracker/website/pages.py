@@ -513,6 +513,7 @@ def export_votes():
 @section('export')
 def export_questions():
     cols = ['data', 'numar', 'tip', 'nume', 'destinatar', 'scor']
+    year = flask.request.args.get('an', type=int)
     rows = (
         {
             'data': row['date'].isoformat(),
@@ -522,7 +523,7 @@ def export_questions():
             'destinatar': row['addressee'],
             'scor': int(row['local_score']),
         }
-        for row in dal.get_all_questions()
+        for row in dal.get_all_questions(year=year)
     )
     data = buffer_on_disk(csv_lines(cols, rows))
     return csv_response(data)

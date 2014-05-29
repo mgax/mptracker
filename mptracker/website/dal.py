@@ -1642,7 +1642,7 @@ class DataAccess:
                 'date': row.date,
             }
 
-    def get_all_questions(self):
+    def get_all_questions(self, year):
         question_query = (
             db.session.query(
                 Question,
@@ -1654,7 +1654,15 @@ class DataAccess:
             .filter_by(year=2012)
             .join(Mandate.person)
             .join(Ask.match_row)
+            .order_by(Question.date, Question.number)
         )
+
+        if year is not None:
+            question_query = (
+                question_query
+                .filter(Question.date >= date(year, 1, 1))
+                .filter(Question.date < date(year+1, 1, 1))
+            )
 
         for (question, person, local_score) in question_query:
             yield {
