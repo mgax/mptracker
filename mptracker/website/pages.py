@@ -4,7 +4,7 @@ from werkzeug.exceptions import NotFound
 import jinja2
 from babel.numbers import format_currency
 from mptracker import models
-from mptracker.common import csv_lines, buffer_on_disk
+from mptracker.common import csv_lines, csv_response, buffer_on_disk
 from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL
 from mptracker.website.dal import DataAccess
 from path import path
@@ -469,10 +469,7 @@ def export_mp_list():
         if row['end'] is None
     ]
 
-    return flask.Response(
-        csv_lines(['partid', 'nume'], membership_list),
-        mimetype='text/csv',
-    )
+    return csv_response(csv_lines(['partid', 'nume'], membership_list))
 
 
 @pages.route('/export/membri_grupuri.csv')
@@ -488,9 +485,8 @@ def export_group_membership():
         for row in dal.get_group_membership()
     ]
 
-    return flask.Response(
+    return csv_response(
         csv_lines(['partid', 'nume', 'inceput', 'sfarsit'], membership_list),
-        mimetype='text/csv',
     )
 
 
@@ -509,7 +505,7 @@ def export_votes():
         for row in dal.get_all_votes()
     )
     data = buffer_on_disk(csv_lines(cols, rows))
-    return flask.Response(data, mimetype='text/csv')
+    return csv_response(data)
 
 
 @pages.route('/export/intrebari.csv')
@@ -528,4 +524,4 @@ def export_questions():
         for row in dal.get_all_questions()
     )
     data = buffer_on_disk(csv_lines(cols, rows))
-    return flask.Response(data, mimetype='text/csv')
+    return csv_response(data)

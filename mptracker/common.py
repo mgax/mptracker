@@ -217,3 +217,8 @@ def generate_slug(text, unique=lambda v: True):
 
 def almost_eq(a, b, eps=1e-6):
     return abs(1 - a/b) < eps
+
+
+def csv_response(data):
+    debug = flask.current_app.config.get('EXPORT_DEBUG')
+    return flask.Response(data, mimetype='text/plain' if debug else 'text/csv')
