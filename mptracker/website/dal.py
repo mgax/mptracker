@@ -1291,7 +1291,12 @@ class DataAccess:
                 .filter_by(year=year)
                 .options(
                     joinedload('mp_group'),
+                    joinedload('mandate'),
                     joinedload('mandate.person'),
+                )
+                .order_by(
+                    MpGroupMembership.mandate_id,
+                    MpGroupMembership.interval,
                 )
             )
         )

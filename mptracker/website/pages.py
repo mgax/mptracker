@@ -478,15 +478,15 @@ def export_group_membership():
     membership_list = [
         {
             'nume': row['name'],
-            'partid': row['group'],
             'inceput': row['start'].isoformat(),
             'sfarsit': '' if row['end'] is None else row['end'].isoformat(),
+            'partid': row['group'],
         }
         for row in dal.get_group_membership()
     ]
 
     return csv_response(
-        csv_lines(['partid', 'nume', 'inceput', 'sfarsit'], membership_list),
+        csv_lines(['nume', 'inceput', 'sfarsit', 'partid'], membership_list),
     )
 
 
