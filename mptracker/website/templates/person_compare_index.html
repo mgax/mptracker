@@ -96,26 +96,32 @@
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static', filename='votesimilaritychart.js') }}"></script>
 <script>
-  (function() {
-    'use strict';
-    $('.compare-headline').click(function(evt) {
-      var headline = $(this);
-      var list = $('#' + headline.data('list'));
-      list.toggle();
-      headline.toggleClass('expanded');
-    });
+(function() {
+'use strict';
 
-    _.forEach($('.compare-headline'), function(h2) {
-      $(h2).prepend(
-        $('<span>').addClass('compare-headline-expanded').text('▼'),
-        $('<span>').addClass('compare-headline-collapsed').text('▶︎')
-      );
-    });
+  $('.compare-headline').click(function(evt) {
+    var headline = $(this);
+    var list = $('#' + headline.data('list'));
+    list.toggle();
+    headline.toggleClass('expanded');
+  });
 
+  _.forEach($('.compare-headline'), function(h2) {
+    $(h2).prepend(
+      $('<span>').addClass('compare-headline-expanded').text('▼'),
+      $('<span>').addClass('compare-headline-collapsed').text('▶︎')
+    );
+  });
+
+  $(document).ready(render);
+  $(window).resize(render);
+
+  function render() {
     app.render_votesimilaritychart({
-        container: $('#compare-votes'),
+        container: $('#compare-votes').empty(),
         vote_similarity_list: {{ vote_similarity_list|tojson }}
     });
-  })();
+  }
+})();
 </script>
 {% endblock %}
