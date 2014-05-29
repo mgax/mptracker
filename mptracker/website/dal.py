@@ -1276,8 +1276,11 @@ class DataAccess:
     def get_party(self, party_short_name):
         return DalParty(self, party_short_name, missing=self.missing)
 
-    def get_group_membership(self, year=2012):
+    def get_group_membership(self, interval):
         null_end = lambda d: None if d.year == 9999 else d
+        (q_lower, q_upper) = interval
+        membership_lower = func.lower(MpGroupMembership.interval)
+        membership_upper = func.upper(MpGroupMembership.interval)
         return (
             {
                 'name': membership.mandate.person.name_first_last,
@@ -1288,7 +1291,14 @@ class DataAccess:
             for membership in (
                 MpGroupMembership.query
                 .join(MpGroupMembership.mp_group)
-                .filter_by(year=year)
+                .filter_by(year=2012)
+                .filter((
+                    (q_lower <= membership_lower) &
+                    ((membership_lower < q_upper) if q_upper else True)
+                ) | (
+                    (q_lower < membership_upper) &
+                    ((membership_upper <= q_upper) if q_upper else True)
+                ))
                 .options(
                     joinedload('mp_group'),
                     joinedload('mandate'),

@@ -10,21 +10,36 @@
     </tr>
 
     <tr>
-      <td>Componența curentă a partidelor</td>
+      <td>Componența partidelor</td>
       <td>
-        {% set url = url_for('.export_mp_list') %}
+        {% set url = url_for('.export_group_membership', migrare='initial') %}
         <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> csv
+          <i class="icon-download"></i> alegeri 2012
         </a>
-      </td>
-    </tr>
 
-    <tr>
-      <td>Componența istorică a partidelor</td>
-      <td>
+        {% set url = url_for('.export_group_membership', migrare='2012') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> migrări 2012
+        </a>
+
+        {% set url = url_for('.export_group_membership', migrare='2013') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> migrări 2013
+        </a>
+
+        {% set url = url_for('.export_group_membership', migrare='2014') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> migrări 2014
+        </a>
+
+        {% set url = url_for('.export_group_membership', migrare='curent') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> actual
+        </a>
+
         {% set url = url_for('.export_group_membership') %}
         <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> csv
+          <i class="icon-download"></i> toate
         </a>
       </td>
     </tr>

@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 import functools
 import flask
 from werkzeug.exceptions import NotFound
@@ -6,7 +7,7 @@ from babel.numbers import format_currency
 from mptracker import models
 from mptracker.common import csv_lines, csv_response, buffer_on_disk
 from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL
-from mptracker.website.dal import DataAccess
+from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
 from path import path
 
 dal = DataAccess(missing=NotFound)
@@ -457,24 +458,35 @@ def export_index():
     return flask.render_template('export.html')
 
 
-@pages.route('/export/componenta.csv')
-@section('export')
-def export_mp_list():
-    membership_list = [
-        {
-            'partid': row['group'],
-            'nume': row['name'],
-        }
-        for row in dal.get_group_membership()
-        if row['end'] is None
-    ]
-
-    return csv_response(csv_lines(['partid', 'nume'], membership_list))
-
-
 @pages.route('/export/membri_grupuri.csv')
 @section('export')
 def export_group_membership():
+    migration = flask.request.args.get('migrare')
+    initial = date(2012, 12, 19)
+    one_day = timedelta(days=1)
+    today = date.today()
+
+    if migration is None:
+        interval = (initial, today + one_day)
+
+    elif migration == 'initial':
+        interval = (initial, initial + one_day)
+
+    elif migration == 'curent':
+        interval = (today, None)
+
+    else:
+        if migration not in ['2012', '2013', '2014', '2015', '2016']:
+            flask.abort(404)
+
+        year = int(migration)
+        if year == 2012:
+            interval = (initial + one_day, date(year + 1, 1, 1))
+        else:
+            interval = (date(year, 1, 1), date(year + 1, 1, 1))
+
+    print(interval)
+
     membership_list = [
         {
             'nume': row['name'],
@@ -482,7 +494,7 @@ def export_group_membership():
             'sfarsit': '' if row['end'] is None else row['end'].isoformat(),
             'partid': row['group'],
         }
-        for row in dal.get_group_membership()
+        for row in dal.get_group_membership(interval=interval)
     ]
 
     return csv_response(
