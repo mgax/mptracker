@@ -34,18 +34,25 @@
 <script src="{{ url_for('static', filename='activitychart.js') }}"></script>
 <script src="{{ url_for('static', filename='membershipchart.js') }}"></script>
 <script>
-  $(document).ready(function() {
+(function() {
+  "use strict";
+
+  $(document).ready(render);
+  $(window).resize(render);
+
+  function render() {
     app.render_activitychart({
-      container: $('.activitychart'),
+      container: $('.activitychart').empty(),
       data: {{ activitychart_data|tojson|safe }},
       one_year: false
     });
 
     app.render_membershipchart({
-      container: $('.membershipchart'),
+      container: $('.membershipchart').empty(),
       data: {{ group_history|tojson|safe }},
       one_year: false
     });
-  });
+  }
+})();
 </script>
 {% endblock %}
