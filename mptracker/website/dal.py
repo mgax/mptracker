@@ -1254,10 +1254,6 @@ class DataAccess:
                 'slug': person.slug,
             })
 
-        answer = question.answer
-        if answer and answer.text:
-            rv['answer'] = answer.text
-
         return rv
 
     def get_party_qs(self, year=2012):
