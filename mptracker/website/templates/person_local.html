@@ -8,7 +8,62 @@
   {%- set url = url_for('.person_detail', person_slug=person_slug) %}
   <h1><a href="{{ url }}">{{ name }}</a></h1>
 
-  <h3>Întrebări și interpelări</h3>
+
+  <h2>Reprezentarea intereselor locale în Camera Deputaților</h2>
+
+  <p>
+  Pentru prima dată în România o aplicație online permite cetățenilor să evalueze nivelul de implicare al deputaților în reprezentarea intereselor locale (ceea ce literatura de specialitate numește "constituency service"). Aplicația face acest lucru folosind întrebările și interpelările parlamentare, care reprezintă conform studiilor legislative (Martin 2011; Russo 2011) unul dintre cei mai relevanți indicatori pentru măsurarea acestui tip de reprezentare politică.
+  </p>
+
+  <p>
+  Echipa Open Parlament a creat un soft care analizează conținutul întrebărilor și interpelărilor parlamentare pentru a descoperi dacă acestea se referă la probleme locale, petiții sau memorii din județul deputatului. Soft-ul compară textele cu baze de date ce conțin toponime din județul deputatului, respectiv o serie de cuvinte-cheie relevante pentru acest tip de reprezentare și oferă un scor pe baza numărului de asocieri descoperite.
+  </p>
+
+  <p>
+  Rezultatul analizei automate de conținut a fost verificat prin codarea manuală a unui eșantion de aproximativ 11.000 de întrebări și interpelări. Aceasta a relevat un grad foarte ridicat de categorizare corectă. Erorile pot apărea, totuși, in principal din cauza calității grafice a pdf-urile scanate urcate pe situl oficial al Camerei Deputaților, pe care le convertim prin recunoaștere optică de caractere (OCR) înainte de analiza automată.
+  </p>
+
+  <p>
+  Sperăm în introducerea cât mai rapidă a semnăturilor digitale în locul tradiționalelor semnături și ștampile de înregistrare.
+  </p>
+
+  <h3>De ce e importantă urmărirea întrebărilor și interpelărilor pe teme locale?</h3>
+
+  <p>
+  Pe de o parte pentru că deputații investesc tot mai mult timp în această activitate. Figura 1 de mai jos prezintă evoluția numărului total de întrebări și interpelări din 1992, respectiv a celor cu teme locale din 1998, primul anul pentru care sunt disponibile copii electronice ale documentelor, până în 2013.
+  </p>
+
+  <figure>
+    <img src="{{ url_for('static', filename='help-figures/local1.jpeg') }}">
+    <figcaption>Figura 1: Evoluția întrebărilor și interpelarilor parlamentare pe teme locale</figcaption>
+  </figure>
+
+
+  <p>
+  În ciuda variațiilor anuale semnificative se poate observa un trend ascendent: tot mai multe întrebări si interpelări parlamentare adresează probleme din județele deputaților. Fenomenul este reprezentativ pentru creșterea importanței temelor locale în politica românească și a fost amplificat de schimbarea sistemului electoral, care a înlocuit votul pe liste închise cu un sistem mixt în care toți deputații sunt aleși în colegii uninominale. O analiză longitudinală multivariată folosind eșantioane de deputați aleși înainte și după schimbarea de sistem electoral, ce au fost ajustate prin algoritme de matching genetic, a indicat că după reforma electorală parlamentarii români inițiază de aproximativ 2 ori mai multe întrebări bazate pe petiții ale cetățenilor din județul lor, respectiv de 1.7 ori mai multe întrebări legate de infrastructura locală (Chiru 2014).
+  </p>
+
+  <p>
+  Această evoluție poate fi considerată îmbucurătoare în măsura în care indică o legătură mai strânsă între alegători, actori privați, autorități și instituții locale pe de o parte și reprezentatul lor în Parlament, pe de altă parte. Poate că demersurile unui deputat pentru deblocarea fondurilor necesare reparării unui drum județean nu vor avea efectul scontat în ministerul de resort sau vor trece neobservate în circumscripția respectivă, dar ne putem imagina că o orientare constantă către soluționarea unor probleme locale poate spori pe termen lung calitatea reprezentării individuale.
+  </p>
+
+  <p>
+  Desigur, unele dintre aceste întrebări locale pot ascunde cazuri de clientelism, precum intervenții în favoarea unor companii private locale sau a unor donatori locali ai partidelor. Pentru a stabili însă neechivoc motivația unor astfel de demersuri este nevoie de altfel de demersuri și resurse care țin mai degrabă de jurnalismul de investigație. Totuși, aplicația le oferă celor interesați de astfel de investigații o resursă importantă de care se poate pleca.    
+  </p>
+
+  <p>
+  Implicarea în activități de reprezentare locală este unul din criteriile pe baza căruia poate fi judecată activitatea unui parlamentar. Cetățenii sau politicienii însăși pot considera mult mai importantă specializarea deputatului într-un domeniu de politici publice care să permită participarea la crearea unui cadrul legislativ adecvat sau controlul acțiunilor guvernului în acel domeniu. #### oferă acum posibilitatea de a monitoriza activitatea deputaților și de a o evalua pe ambele dimensiuni.
+  </p>
+
+  <h3>Referințe</h3>
+  <ul>
+    <li>Chiru, M. 2014. 'Improving MPs’ Responsiveness through Institutional Engineering? Constituency Questions Under Two Electoral Systems', manuscris nepublicat.</li>
+    <li>Martin, S. 2011. ‘Using Parliamentary Questions to Measure Constituency Focus: An Application to the Irish Case’, Political Studies, 59: 472–488</li>
+    <li>Russo, F. 2011. ‘The Constituency as a Focus of Representation: Studying the Italian Case through the Analysis of Parliamentary Questions’, The Journal of Legislative Studies 17(3): 290-301.</li>
+  </ul>
+
+
+  <h2>Întrebări și interpelări</h2>
   <ul>
     {%- for question in question_list %}
       <li>
