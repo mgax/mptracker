@@ -299,6 +299,17 @@ def person_compare(person_slug, other_person_slug):
     ctx['other']['person_slug'] = other_person_slug
     ctx['other']['stats'] = other_person.get_stats()
     ctx['similarity'] = person.get_voting_similarity(other_person)
+    attendance_data = lambda row, cls: {
+        'class': cls,
+        'value': row['attendance_2013'],
+        'title': row['committee'],
+    }
+    ctx['attendance_data'] = (
+        [attendance_data(row, 'me') for row in
+         ctx['stats']['committee_attendance']] +
+        [attendance_data(row, 'other') for row in
+         ctx['other']['stats']['committee_attendance']]
+    )
     return flask.render_template('person_compare.html', **ctx)
 
 

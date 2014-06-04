@@ -113,6 +113,13 @@ function render() {
             ]|tojson }}
     });
 
+    app.render_similarity_barchart({
+        container: barchart_container,
+        label: "prezență comisii 2013",
+        percent: true,
+        data: {{ attendance_data|tojson}}
+    });
+
     app.render_similarity_vote_venn({
         container: $('#similarity-vote-venn').empty(),
         overlap: {{ similarity|tojson|safe }}

@@ -112,7 +112,9 @@ app.render_similarity_barchart = function(options) {
         .attr("width", function(d) { return x(d.value) || 1; })
         .attr("height", bar_height)
         .attr("transform", function(d, n) {
-            return "translate(0," + n * bar_delta + ")"; });
+            return "translate(0," + n * bar_delta + ")"; })
+        .append("title")
+          .text(function(d) { return d.title; });
 
     svg.selectAll(".number")
         .data(options.data)

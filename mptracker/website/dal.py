@@ -10,6 +10,7 @@ from mptracker.models import (
     Mandate,
     MpGroup,
     MpGroupMembership,
+    MpCommittee,
     MpCommitteeMembership,
     Proposal,
     ProposalActivityItem,
@@ -299,6 +300,23 @@ class DalPerson:
             .count()
         )
         rv['local_score'] = self._local_ask_query.count()
+
+        rv['committee_attendance'] = [
+            {
+                'attendance_2013': row.attendance_2013,
+                'committee': row.committee_name,
+            }
+            for row in (
+                db.session.query(
+                    MpCommitteeMembership.attendance_2013,
+                    MpCommittee.name.label('committee_name'),
+                )
+                .filter(MpCommitteeMembership.mandate == self.mandate)
+                .join(MpCommitteeMembership.mp_committee)
+                .filter(MpCommitteeMembership.attendance_2013 != None)
+            )
+        ]
+
         return rv
 
     def get_assets_data(self):
