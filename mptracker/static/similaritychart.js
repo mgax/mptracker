@@ -86,11 +86,6 @@ app.render_similarity_barchart = function(options) {
         width = $(options.container).width(),
         height = margin.top + margin.bottom + bar_margin + 2*bar_height;
 
-    var data = [
-        {y: 0, value: options.data.me, class: "me"},
-        {y: 1, value: options.data.other, class: "other"}
-    ];
-
     var x = d3.scale.linear()
         .domain([0, options.percent ? 1 : options.max * 1.2])
         .range([0, width - margin.left - margin.right]);
@@ -111,7 +106,7 @@ app.render_similarity_barchart = function(options) {
         .text(options.label);
 
     svg.selectAll(".bar")
-        .data(data)
+        .data(options.data)
       .enter().append("rect")
         .attr("class", function(d) { return "bar " + d.class; })
         .attr("width", function(d) { return x(d.value) || 1; })
@@ -120,7 +115,7 @@ app.render_similarity_barchart = function(options) {
             return "translate(0," + n * bar_delta + ")"; });
 
     svg.selectAll(".number")
-        .data(data)
+        .data(options.data)
       .enter().append("text")
         .attr("class", function(d) { return "number " + d.class; })
         .attr("dx", function(d) { return x(d.value) + text_margin; })

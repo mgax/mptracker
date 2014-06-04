@@ -39,30 +39,30 @@ function render() {
         container: barchart_container,
         label: "prezență la vot",
         percent: true,
-        data: {{ {
-            "me": stats.vote['attendance'],
-            "other": other.stats.vote['attendance'],
-            }|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.vote['attendance']},
+            {'class': 'other', 'value': other.stats.vote['attendance']},
+            ]|tojson }}
     });
 
     app.render_similarity_barchart({
         container: barchart_container,
         label: "loialitate față de partid",
         percent: true,
-        data: {{ {
-            "me": stats.vote['loyalty'],
-            "other": other.stats.vote['loyalty'],
-            }|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.vote['loyalty']},
+            {'class': 'other', 'value': other.stats.vote['loyalty']},
+            ]|tojson }}
     });
 
     app.render_similarity_barchart({
         container: barchart_container,
         label: "loialitate față de guvern",
         percent: true,
-        data: {{ {
-            "me": stats.vote['cabinet_loyalty'],
-            "other": other.stats.vote['cabinet_loyalty'],
-            }|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.vote['cabinet_loyalty']},
+            {'class': 'other', 'value': other.stats.vote['cabinet_loyalty']},
+            ]|tojson }}
     });
 
     var max_scalar = {{ ([
@@ -77,28 +77,40 @@ function render() {
         container: barchart_container,
         label: "luări de cuvânt",
         max: max_scalar,
-        data: {{ {"me": stats.speeches, "other": other.stats.speeches}|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.speeches},
+            {'class': 'other', 'value': other.stats.speeches},
+            ]|tojson }}
     });
 
     app.render_similarity_barchart({
         container: barchart_container,
         label: "întrebări și interpelări",
         max: max_scalar,
-        data: {{ {"me": stats.questions, "other": other.stats.questions}|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.questions},
+            {'class': 'other', 'value': other.stats.questions},
+            ]|tojson }}
     });
 
     app.render_similarity_barchart({
         container: barchart_container,
         label: "propuneri legislative",
         max: max_scalar,
-        data: {{ {"me": stats.proposals, "other": other.stats.proposals}|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.proposals},
+            {'class': 'other', 'value': other.stats.proposals},
+            ]|tojson }}
     });
 
     app.render_similarity_barchart({
         container: barchart_container,
         label: "reprezentare locală",
         max: max_scalar,
-        data: {{ {"me": stats.local_score, "other": other.stats.local_score}|tojson }}
+        data: {{ [
+            {'class': 'me', 'value': stats.local_score},
+            {'class': 'other', 'value': other.stats.local_score},
+            ]|tojson }}
     });
 
     app.render_similarity_vote_venn({
