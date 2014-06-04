@@ -483,10 +483,19 @@ class ProposalControversy(db.Model):
                 title = link
             yield link, title
 
-class Controversy(db.Model):
+class VotingSessionControversy(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
-    slug = db.Column(db.Text, nullable=False, unique=True)
     title = db.Column(db.Text)
+    status = db.Column(db.Text)
+    reason = db.Column(db.Text)
+    vote_meaning_yes = db.Column(db.Text)
+    vote_meaning_no = db.Column(db.Text)
+    press_links = db.Column(db.Text)
+
+    voting_session_id = db.Column(UUID, db.ForeignKey('voting_session.id'),
+                                  nullable=False, index=True)
+    voting_session = db.relationship('VotingSession',
+        backref=db.backref('controversy', uselist=False))
 
 
 class VotingSession(db.Model):
@@ -500,10 +509,6 @@ class VotingSession(db.Model):
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'))
     proposal = db.relationship('Proposal',
-        backref=db.backref('voting_sessions', lazy='dynamic'))
-
-    controversy_id = db.Column(UUID, db.ForeignKey('controversy.id'))
-    controversy = db.relationship('Controversy',
         backref=db.backref('voting_sessions', lazy='dynamic'))
 
     @property

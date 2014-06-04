@@ -935,7 +935,7 @@ def controversy():
         controversy_map[slug]['voting_session_rows'].append(voting_session)
 
     controversy_patcher = TablePatcher(
-        models.Controversy,
+        models.VotingSessionControversy,
         models.db.session,
         key_columns=['slug'],
     )

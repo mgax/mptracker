@@ -21,7 +21,7 @@ from mptracker.models import (
     Ask,
     Match,
     VotingSession,
-    Controversy,
+    VotingSessionControversy,
     Vote,
     GroupVote,
     PolicyDomain,
@@ -186,11 +186,11 @@ class DalPerson:
         vote_subquery = Vote.query.filter_by(mandate=self.mandate).subquery()
         controversy_query = (
             db.session.query(
-                Controversy.title,
+                VotingSessionControversy.title,
                 VotingSession.date,
                 vote_subquery.c.choice,
             )
-            .join(Controversy.voting_sessions)
+            .join(VotingSessionControversy.voting_sessions)
             .outerjoin(vote_subquery)
         )
         rv['controversy_list'] = [
