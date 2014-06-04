@@ -813,6 +813,7 @@ class DalParty:
         rv['member_list'] = self.get_members()
         rv['loyalty'] = self._get_loyalty()
         rv['questions'] = self._get_questions()
+        rv['description'] = self.party.description
 
         return rv
 
