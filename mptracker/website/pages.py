@@ -524,13 +524,14 @@ def export_votes():
 @pages.route('/export/intrebari.csv')
 @section('export')
 def export_questions():
-    cols = ['data', 'numar', 'tip', 'nume', 'destinatar', 'scor']
+    cols = ['data', 'numar', 'tip', 'titlu', 'nume', 'destinatar', 'scor']
     year = flask.request.args.get('an', type=int)
     rows = (
         {
             'data': row['date'].isoformat(),
             'numar': row['number'],
             'tip': QUESTION_TYPE_LABEL[row['type']],
+            'titlu': row['title'],
             'nume': row['name'],
             'destinatar': row['addressee'],
             'scor': int(row['local_score']),

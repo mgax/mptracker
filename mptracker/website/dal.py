@@ -1676,6 +1676,7 @@ class DataAccess:
                 'number': question.number,
                 'date': question.date,
                 'type': question.type,
+                'title': question.title,
                 'addressee': question.addressee,
                 'local_score': local_score,
             }
