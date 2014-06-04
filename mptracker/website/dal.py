@@ -1272,11 +1272,47 @@ class DataAccess:
     def get_party(self, party_short_name):
         return DalParty(self, party_short_name, missing=self.missing)
 
-    def get_group_membership(self, interval):
+    def get_group_membership(self, interval, end):
         null_end = lambda d: None if d.year == 9999 else d
         (q_lower, q_upper) = interval
         membership_lower = func.lower(MpGroupMembership.interval)
         membership_upper = func.upper(MpGroupMembership.interval)
+
+        membership_query = (
+            MpGroupMembership.query
+            .join(MpGroupMembership.mp_group)
+            .join(MpGroupMembership.mandate)
+            .filter_by(year=2012)
+            .filter((
+                (q_lower <= membership_lower) &
+                ((membership_lower < q_upper) if q_upper else True)
+            ) | (
+                (q_lower < membership_upper) &
+                ((membership_upper <= q_upper) if q_upper else True)
+            ))
+            .options(
+                joinedload('mp_group'),
+                joinedload('mandate'),
+                joinedload('mandate.person'),
+            )
+            .order_by(
+                MpGroupMembership.mandate_id,
+                MpGroupMembership.interval,
+            )
+        )
+
+        if end:
+            membership_query = (
+                membership_query
+                .filter(membership_upper == func.upper(Mandate.interval))
+            )
+
+        else:
+            membership_query = (
+                membership_query
+                .filter(func.upper(Mandate.interval) >= q_upper)
+            )
+
         return (
             {
                 'name': membership.mandate.person.name_first_last,
@@ -1284,27 +1320,7 @@ class DataAccess:
                 'start': membership.interval.lower,
                 'end': null_end(membership.interval.upper),
             }
-            for membership in (
-                MpGroupMembership.query
-                .join(MpGroupMembership.mp_group)
-                .filter_by(year=2012)
-                .filter((
-                    (q_lower <= membership_lower) &
-                    ((membership_lower < q_upper) if q_upper else True)
-                ) | (
-                    (q_lower < membership_upper) &
-                    ((membership_upper <= q_upper) if q_upper else True)
-                ))
-                .options(
-                    joinedload('mp_group'),
-                    joinedload('mandate'),
-                    joinedload('mandate.person'),
-                )
-                .order_by(
-                    MpGroupMembership.mandate_id,
-                    MpGroupMembership.interval,
-                )
-            )
+            for membership in membership_query
         )
 
     def get_party_list(self):

@@ -465,6 +465,7 @@ def export_group_membership():
     initial = date(2012, 12, 19)
     one_day = timedelta(days=1)
     today = date.today()
+    end = False
 
     if migration is None:
         interval = (initial, today + one_day)
@@ -474,6 +475,10 @@ def export_group_membership():
 
     elif migration == 'curent':
         interval = (today, None)
+
+    elif migration == 'incheiat':
+        interval = (initial, today + one_day)
+        end = True
 
     else:
         if migration not in ['2012', '2013', '2014', '2015', '2016']:
@@ -485,8 +490,6 @@ def export_group_membership():
         else:
             interval = (date(year, 1, 1), date(year + 1, 1, 1))
 
-    print(interval)
-
     membership_list = [
         {
             'nume': row['name'],
@@ -494,7 +497,7 @@ def export_group_membership():
             'sfarsit': '' if row['end'] is None else row['end'].isoformat(),
             'partid': row['group'],
         }
-        for row in dal.get_group_membership(interval=interval)
+        for row in dal.get_group_membership(interval=interval, end=end)
     ]
 
     return csv_response(

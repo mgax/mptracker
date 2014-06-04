@@ -22,6 +22,11 @@
           <i class="icon-download"></i> actual
         </a>
 
+        {% set url = url_for('.export_group_membership', migrare='incheiat') %}
+        <a href="{{ url }}" class="btn btn-sm btn-primary">
+          <i class="icon-download"></i> mandate încheiate
+        </a>
+
         {% set url = url_for('.export_group_membership', migrare='2013') %}
         <a href="{{ url }}" class="btn btn-sm btn-primary">
           <i class="icon-download"></i> migrări 2013
