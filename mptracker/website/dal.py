@@ -1408,7 +1408,7 @@ class DataAccess:
         }
         qs = (
             self.get_policy_controversy_qs()
-            .join(ProposalActivityItem)
+            .outerjoin(ProposalActivityItem)
             .order_by(ProposalActivityItem.date.desc())
         )
 
