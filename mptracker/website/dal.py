@@ -186,20 +186,31 @@ class DalPerson:
         vote_subquery = Vote.query.filter_by(mandate=self.mandate).subquery()
         controversy_query = (
             db.session.query(
-                VotingSessionControversy.title,
+                VotingSessionControversy,
                 VotingSession.date,
                 vote_subquery.c.choice,
             )
-            .join(VotingSessionControversy.voting_sessions)
+            .join(VotingSessionControversy.voting_session)
             .outerjoin(vote_subquery)
         )
+
+        def meaning(vote_choice, controversy):
+            if vote_choice == 'yes':
+                return controversy.vote_meaning_yes
+            elif vote_choice == 'no':
+                return controversy.vote_meaning_no
+            else:
+                return None
+
         rv['controversy_list'] = [
             {
-                'title': contro_title,
+                'title': controversy.title,
                 'date': vs_date,
                 'choice': vote_choice or 'novote',
+                'meaning': meaning(vote_choice, controversy),
+                'press_link_list': controversy.press_links.split(),
             }
-            for contro_title, vs_date, vote_choice in controversy_query
+            for controversy, vs_date, vote_choice in controversy_query
         ]
 
         rv['contact'] = {
