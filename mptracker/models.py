@@ -90,6 +90,7 @@ class MpGroup(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     name = db.Column(db.Text)
     short_name = db.Column(db.Text)
+    description = db.Column(db.Text)
     year = db.Column(db.Integer)
 
 
