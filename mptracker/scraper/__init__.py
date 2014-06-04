@@ -32,7 +32,7 @@ TERM_INTERVAL = {
 
 TERM_2012_START = TERM_INTERVAL[2012].lower
 
-CONTROVERSY_CSV_KEY = '0Aoh2FHzCVVhldEJEMkhEblJCaWdGdy1FWlg5a0dzNEE'
+CONTROVERSY_CSV_KEY = '1oCBeyNZc6OxIDJTI25wCeEkIEzkxf6qAwhcE69eDKWY'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
 POSITION_PONTA3_CSV_KEY = '0AlBmcLkxpBOXdGhMT0h2Vl9lWENlLUpJZm5jZUpYNlE'
 POSITION_BIROU_CDEP_CSV_KEY = '0AlBmcLkxpBOXdDFKblpaRnRLNDcxSGotT3dhaWpYYUE'
@@ -906,72 +906,31 @@ def votes(
 
 
 @scraper_manager.command
-def controversy():
-    old_voting_sessions = set(
-        models.VotingSession.query
-        .filter(models.VotingSession.controversy_id != None)
-        .all()
-    )
-
-    controversy_map = {}
-
-    for line in get_gdrive_csv(CONTROVERSY_CSV_KEY):
-        cdeppk = url_args(line['link']).get('idv', type=int)
-        slug = line['slug']
-        if slug not in controversy_map:
-            controversy_map[slug] = {
-                'data': {
-                    'slug': slug,
-                    'title': line['title'],
-                },
-                'voting_session_rows': [],
-            }
-
-        voting_session = (
-            models.VotingSession.query
-            .filter_by(cdeppk=cdeppk)
-            .first()
-        )
-        controversy_map[slug]['voting_session_rows'].append(voting_session)
-
+def vote_controversy(no_commit=False):
     controversy_patcher = TablePatcher(
         models.VotingSessionControversy,
         models.db.session,
-        key_columns=['slug'],
+        key_columns=['voting_session_id'],
     )
 
     with controversy_patcher.process(remove=True) as add_controversy:
-        for controversy in controversy_map.values():
-            result = add_controversy(controversy['data'])
-            controversy['row'] = result.row
-
-    models.db.session.flush()
-
-    voting_session_patcher = TablePatcher(
-        models.VotingSession,
-        models.db.session,
-        key_columns=['id'],
-    )
-
-    new_voting_sessions = set()
-
-    with voting_session_patcher.process() as add_voting_session:
-        for controversy in controversy_map.values():
-            for voting_session in controversy['voting_session_rows']:
-                data = {
-                    'id': voting_session.id,
-                    'controversy_id': controversy['row'].id,
-                }
-                add_voting_session(data, create=False)
-                new_voting_sessions.add(voting_session)
-
-        for voting_session in old_voting_sessions - new_voting_sessions:
-            add_voting_session({
-                'id': voting_session.id,
-                'controversy_id': None,
+        for line in get_gdrive_csv(CONTROVERSY_CSV_KEY):
+            add_controversy({
+                'title': line['title'],
+                'status': line['status'],
+                'reason': line['motive'],
+                'vote_meaning_yes': line['info_da'],
+                'vote_meaning_no': line['info_nu'],
+                'press_links': line['link_presa'],
+                'voting_session_id': line['mptracker_url'].split('/votes/')[1],
             })
 
-    models.db.session.commit()
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
 
 
 @scraper_manager.command
