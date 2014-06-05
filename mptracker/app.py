@@ -39,6 +39,39 @@ def create_app():
     return app
 
 
+def create_rq_manager():
+    from flask.ext.script import Manager
+    from flask.ext.rq import get_worker, get_connection
+    from rq import get_failed_queue
+
+    rq_manager = Manager()
+
+    @rq_manager.command
+    def worker():
+        """ run a worker process """
+        worker = get_worker()
+        sentry = flask.current_app.extensions.get('sentry')
+        if sentry is not None:
+            from rq.contrib.sentry import register_sentry
+            register_sentry(sentry.client, worker)
+        worker.work()
+
+    @rq_manager.command
+    def retry():
+        """ retry failed jobs"""
+        failed = get_failed_queue(get_connection())
+        for job in failed.get_jobs():
+            failed.requeue(job.id)
+
+    @rq_manager.command
+    def cleanup():
+        """ delete failed jobs"""
+        failed = get_failed_queue(get_connection())
+        failed.empty()
+
+    return rq_manager
+
+
 def create_manager(app):
     from flask.ext.script import Manager
     from mptracker import models
@@ -52,30 +85,13 @@ def create_manager(app):
     manager = Manager(app)
 
     manager.add_command('db', models.db_manager)
+    manager.add_command('rq', create_rq_manager())
     manager.add_command('questions', questions_manager)
     manager.add_command('placenames', placenames_manager)
     manager.add_command('scraper', scraper_manager)
     manager.add_command('proposals', proposals_manager)
     manager.add_command('votes', votes_manager)
     manager.add_command('policy', policy_manager)
-
-    @manager.command
-    def worker():
-        from flask.ext.rq import get_worker
-        worker = get_worker()
-        sentry = flask.current_app.extensions.get('sentry')
-        if sentry is not None:
-            from rq.contrib.sentry import register_sentry
-            register_sentry(sentry.client, worker)
-        worker.work()
-
-    @manager.command
-    def requeue_failed():
-        from rq import get_failed_queue
-        from flask.ext.rq import get_connection
-        failed = get_failed_queue(get_connection())
-        for job in failed.get_jobs():
-            failed.requeue(job.id)
 
     @manager.command
     def import_people():
