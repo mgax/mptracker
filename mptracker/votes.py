@@ -51,7 +51,7 @@ def detail(voting_session_id):
 @votes.route('/votes/controversy')
 def controversy():
     return flask.render_template('votes/controversy.html', **{
-        'controversy_list': models.Controversy.query.all(),
+        'controversy_list': models.VotingSessionControversy.query.all(),
     })
 
 
