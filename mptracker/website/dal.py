@@ -735,7 +735,8 @@ class DalPerson:
         )
 
         count_list = similarity_query.all()
-        self_count = [c for p, c, n in count_list if p == self.person][0]
+        self_count_list = [c for p, c, n in count_list if p == self.person]
+        self_count = self_count_list[0] if self_count_list else None
 
         rv = [
             {
@@ -744,7 +745,8 @@ class DalPerson:
                 'similarity': count / self_count,
                 'party_short_name': party_short_name,
             }
-            for person, count, party_short_name in count_list
+            for person, count, party_short_name in
+            (count_list if self_count else [])
             if person != self.person
         ]
 
