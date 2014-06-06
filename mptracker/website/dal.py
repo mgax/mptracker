@@ -1255,11 +1255,11 @@ class DataAccess:
     def get_county(self, county_code):
         return DalCounty(county_code, self.missing)
 
-    def get_recent_proposals(self):
-        return _get_recent_proposals(None, 10)
+    def get_recent_proposals(self, limit):
+        return _get_recent_proposals(None, limit)
 
-    def get_recent_questions(self):
-        return _get_recent_questions(None, 10)
+    def get_recent_questions(self, limit):
+        return _get_recent_questions(None, limit)
 
     def get_tacit_approvals_count(self):
         return self.get_policy_tacit_approval_qs().count()

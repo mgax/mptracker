@@ -109,8 +109,8 @@ def home():
     return flask.render_template('home.html', **{
         'tacit_approvals_count': dal.get_tacit_approvals_count(),
         'controversy_count': dal.get_controversy_count(),
-        'recent_proposals': dal.get_recent_proposals(),
-        'recent_questions': dal.get_recent_questions(),
+        'recent_proposals': dal.get_recent_proposals(3),
+        'recent_questions': dal.get_recent_questions(3),
     })
 
 
