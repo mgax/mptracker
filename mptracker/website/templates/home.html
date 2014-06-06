@@ -4,49 +4,63 @@
 {% block content %}
   <h1>Open Parlament</h1>
 
-  <p>
-    {% set url = url_for('.policy_tacit') %}
-    <a href="{{ url }}">legi adoptate tacit ({{ tacit_approvals_count }})</a>
-  </p>
+  <div class="row">
+    <div class="col-sm-8">
+      {{ text('local', fold=True) }}
 
-  <p>
-    {% set url = url_for('.policy_controversy') %}
-    <a href="{{ url }}">legi controversate ({{ controversy_count }})</a>
-  </p>
+      <p>
+        <a href="{{ url_for('.text_page', name='local') }}">
+          citește mai mult
+        </a>
+      </p>
+    </div>
 
-  <p>
-    <a href="{{ url_for('.person_migrations') }}">migrări recente</a>
-  </p>
+    <div class="col-sm-4">
+      <p>
+        {% set url = url_for('.policy_tacit') %}
+        <a href="{{ url }}">legi adoptate tacit ({{ tacit_approvals_count }})</a>
+      </p>
 
-  <h3>Propuneri legislative</h3>
+      <p>
+        {% set url = url_for('.policy_controversy') %}
+        <a href="{{ url }}">legi controversate ({{ controversy_count }})</a>
+      </p>
 
-  <ul class="list-unstyled">
-    {% for item in recent_proposals %}
-      {% set url = url_for(
-          '.policy_proposal',
-          proposal_id=item['proposal_id'],
-        ) %}
-      <li>
-        <strong>{{ item['date']|datefmt }}:</strong>
+      <p>
+        <a href="{{ url_for('.person_migrations') }}">migrări recente</a>
+      </p>
 
-        <a href="{{ url }}">{{ item['text'] }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+      <h3>Propuneri legislative</h3>
 
-  <h3>Întrebări și interpelări</h3>
+      <ul class="list-unstyled">
+        {% for item in recent_proposals %}
+          {% set url = url_for(
+              '.policy_proposal',
+              proposal_id=item['proposal_id'],
+            ) %}
+          <li>
+            <strong>{{ item['date']|datefmt }}:</strong>
 
-  <ul class="list-unstyled">
-    {% for item in recent_questions %}
-      {% set url = url_for(
-          '.person_question',
-          question_id=item['question_id'],
-        ) %}
-      <li>
-        <strong>{{ item['date']|datefmt }}:</strong>
+            <a href="{{ url }}">{{ item['text'] }}</a>
+          </li>
+        {% endfor %}
+      </ul>
 
-        <a href="{{ url }}">{{ item['text'] }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+      <h3>Întrebări și interpelări</h3>
+
+      <ul class="list-unstyled">
+        {% for item in recent_questions %}
+          {% set url = url_for(
+              '.person_question',
+              question_id=item['question_id'],
+            ) %}
+          <li>
+            <strong>{{ item['date']|datefmt }}:</strong>
+
+            <a href="{{ url }}">{{ item['text'] }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

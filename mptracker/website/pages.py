@@ -80,6 +80,16 @@ def inject_nav_links():
     }
 
 
+def template_text(name, fold=False):
+    html = flask.render_template('text_%s.html' % name, layout=False)
+    return jinja2.Markup(html.split('<!-- fold -->')[0] if fold else html)
+
+
+@pages.record
+def register_text(state):
+    state.app.jinja_env.globals.update({'text': template_text})
+
+
 @pages.route('/_crashme', methods=['GET', 'POST'])
 def crashme():
     if flask.request.method == 'POST':
@@ -461,6 +471,11 @@ def policy_detail(policy_slug=None):
 def policy_proposal(proposal_id):
     proposal = dal.get_proposal_details(proposal_id)
     return flask.render_template('policy_proposal.html', proposal=proposal)
+
+
+@pages.route('/info/reprezentare_locala', defaults={'name': 'local'})
+def text_page(name):
+    return flask.render_template('text_%s.html' % name, layout=True)
 
 
 @pages.route('/export')
