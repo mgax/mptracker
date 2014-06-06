@@ -1,6 +1,7 @@
 from datetime import date
 from collections import defaultdict
 import logging
+import re
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
@@ -150,6 +151,48 @@ def loyalty():
     job_count = 0
     for voting_session in voting_session_query:
         calculate_voting_session_loyalty.delay(voting_session.id)
+        job_count += 1
+
+    logger.info("Enqueued %d jobs", job_count)
+
+
+@job
+def link_to_proposal(voting_session_id):
+    voting_session = models.VotingSession.query.get(voting_session_id)
+
+    if not voting_session.final:
+        return
+
+    match = re.search(
+        r'<a href="([^"]+)" target="PROIECTE">',
+        voting_session.subject_html,
+    )
+    if match is None:
+        raise RuntimeError("No match for voting_session subject")
+
+    from werkzeug.urls import url_decode, url_parse
+    args = url_decode(url_parse(match.group(1)).query)
+    cdeppk_cdep = args.get('idp', type=int)
+    proposal = models.Proposal.query.filter_by(cdeppk_cdep=cdeppk_cdep).first()
+    if proposal is None:
+        raise RuntimeError("Proposal %r not found" % cdeppk_cdep)
+
+    voting_session.proposal = proposal
+    models.db.session.commit()
+
+
+@votes_manager.command
+def proposals():
+    voting_session_query = (
+        models.VotingSession.query
+        .filter_by(final=True)
+        .filter_by(proposal_id=None)
+        .filter(models.VotingSession.date >= date(2012, 12, 19))
+        .order_by(models.VotingSession.date)
+    )
+    job_count = 0
+    for voting_session in voting_session_query:
+        link_to_proposal.delay(voting_session.id)
         job_count += 1
 
     logger.info("Enqueued %d jobs", job_count)
