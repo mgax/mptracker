@@ -133,15 +133,11 @@
       {%- for controversy in controversy_list %}
         <li>
           <strong>{{ controversy.date|datefmt }}</strong> –
-          {{ controversy.title }}:
+          {{ controversy.title|link_for(
+                '.vote_controversy',
+                controversy_id=controversy.id) }}:
           <strong>{{ VOTE_LABEL[controversy.choice] }}</strong>
           {% if controversy.meaning %}({{ controversy.meaning }}){% endif %}
-          {% if controversy.press_link_list %}
-            (presă:
-            {% for link in controversy.press_link_list -%}
-              <a href="{{ link }}">[{{ loop.index }}]</a>
-            {%- endfor %})
-          {% endif %}
         </li>
       {%- endfor %}
       </ul>

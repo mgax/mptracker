@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}{{ super() }} – Vot controversat - {{ title }}{% endblock %}
+
+
+{% block content %}
+  <h1>Vot controversat - {{ title }}</h1>
+
+  <p>Dată: {{ date|datefmt }}</p>
+
+  <p>Semnificație "da": {{ meaning_yes }}</p>
+
+  <p>Semnificație "nu": {{ meaning_no }}</p>
+
+  {% if press_link_list %}
+    <h4>presă</h4>
+    <ul>
+      {%- for link in press_link_list %}
+        <li><a href="{{ link }}">{{ link }}</a>
+      {%- endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

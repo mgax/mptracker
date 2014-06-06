@@ -84,7 +84,15 @@ class ProposalScraper(Scraper):
                     self.fetch_proposal_details(prop)
                     proposals[prop.cdeppks] = prop
                 prop.sponsorships.append(mandate_cdep_id)
+
+        proposals.update(self.fetch_extra_proposals())
+
         return list(proposals.values())
+
+    def fetch_extra_proposals(self):
+        proposal = Proposal(14203, None)
+        self.fetch_proposal_details(proposal)
+        yield proposal.cdeppks, proposal
 
     def fetch_mp_proposals(self, cdep_id):
         (leg, idm) = cdep_id

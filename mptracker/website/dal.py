@@ -204,11 +204,12 @@ class DalPerson:
 
         rv['controversy_list'] = [
             {
+                'id': controversy.id,
                 'title': controversy.title,
                 'date': vs_date,
                 'choice': vote_choice or 'novote',
                 'meaning': meaning(vote_choice, controversy),
-                'press_link_list': controversy.press_links.split(),
+                #'press_link_list': controversy.press_links.split(),
             }
             for controversy, vs_date, vote_choice in controversy_query
         ]
@@ -1797,6 +1798,19 @@ class DataAccess:
                 },
                 'date': interval.lower,
             }
+
+    def get_vote_controversy(self, controversy_id):
+        controversy = VotingSessionControversy.query.get(controversy_id)
+        if controversy is None:
+            raise self.missing()
+
+        return {
+            'title': controversy.title,
+            'date': controversy.voting_session.date,
+            'meaning_yes': controversy.vote_meaning_yes,
+            'meaning_no': controversy.vote_meaning_no,
+            'press_link_list': controversy.press_links.split(),
+        }
 
 
 def get_top_words(mandate_id, number):

@@ -473,6 +473,13 @@ def policy_proposal(proposal_id):
     return flask.render_template('policy_proposal.html', proposal=proposal)
 
 
+@pages.route('/politici/vot-controversat/<uuid:controversy_id>')
+@section('policy')
+def vote_controversy(controversy_id):
+    ctx = dal.get_vote_controversy(controversy_id)
+    return flask.render_template('policy_vote_controversy.html', **ctx)
+
+
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local'})
 @pages.route('/info/editorial', defaults={'name': 'editorial'})
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
