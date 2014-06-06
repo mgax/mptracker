@@ -474,6 +474,7 @@ def policy_proposal(proposal_id):
 
 
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local'})
+@pages.route('/info/editorial', defaults={'name': 'editorial'})
 def text_page(name):
     return flask.render_template('text_%s.html' % name, layout=True)
 
