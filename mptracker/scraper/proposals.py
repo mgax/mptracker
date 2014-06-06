@@ -1,16 +1,29 @@
 import re
 import logging
 from datetime import date, datetime
-import itertools
+from itertools import chain, groupby
+from collections import defaultdict
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
 from mptracker.scraper.common import (
-    Scraper, pqitems, get_cdep_id, sanitize, url_args)
+    Scraper, pqitems, get_cdep_id, sanitize, url_args, GenericModel)
 from mptracker.common import fix_local_chars
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+PROPOSAL_KEYS = [
+    'cdeppk_cdep',
+    'cdeppk_senate',
+    'number_cdep',
+    'number_senate',
+    'number_bpi',
+]
+
+
+class ProposalModel(GenericModel):
+    pass
 
 
 class Proposal:
@@ -107,6 +120,9 @@ class ProposalScraper(Scraper):
             number_txt = link.text().lower().strip()
             (prefix, number) = parse_proposal_number(number_txt)
             if cam == 2:
+                if rv['cdeppk_cdep'] in [9542, 9543, 12822, 12868]:
+                    continue  # duplicate proposals in cdep.ro db
+
                 if prefix in ['pl', 'pl-x']:
                     rv['number_cdep'] = number
                 elif prefix == 'bp':
@@ -117,6 +133,34 @@ class ProposalScraper(Scraper):
                     raise RuntimeError("Can't parse number %r" % number_txt)
 
             yield rv
+
+    def scrape(self):
+        proposal_list = []
+        index = defaultdict(dict)
+
+        for data in chain(self.list_proposals(2), self.list_proposals(1)):
+            data_keys = set(PROPOSAL_KEYS) & set(data)
+
+            proposal = None
+            for key in data_keys:
+                value = data[key]
+                if value in index[key]:
+                    proposal = index[key][value]
+                    break
+
+            if proposal is None:
+                proposal = ProposalModel(**data)
+                proposal_list.append(proposal)
+            else:
+                for key in data_keys:
+                    old_value = getattr(proposal, key)
+                    assert old_value == data[key]
+
+            for key in data_keys:
+                value = data[key]
+                setattr(proposal, key, value)
+                index[key][value] = proposal
+
 
     def fix_name(self, name):
         return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
@@ -301,7 +345,7 @@ class ProposalScraper(Scraper):
             return activity_cdep
 
         def activity_chunks(series):
-            for _, g in itertools.groupby(series, lambda ac: ac.location):
+            for _, g in groupby(series, lambda ac: ac.location):
                 chunk = list(g)
                 start_date = chunk[0].date
                 yield (start_date, chunk)
