@@ -4,7 +4,8 @@ from datetime import date, datetime
 import itertools
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
-from mptracker.scraper.common import Scraper, pqitems, get_cdep_id, sanitize
+from mptracker.scraper.common import (
+    Scraper, pqitems, get_cdep_id, sanitize, url_args)
 from mptracker.common import fix_local_chars
 
 
@@ -66,10 +67,56 @@ def get_date_from_numbers(numbers):
     return rv
 
 
+def parse_proposal_number(number_txt):
+    m = re.match(
+        r'^(?P<prefix>[\D]*)'
+        r'(?P<index>\d{1,4})/'
+        r'(\d{2}\.\d{2}\.)?(?P<year>\d{4})$',
+        number_txt,
+    )
+    if m is None:
+        raise RuntimeError("Can't parse number %r" % number_txt)
+    groups = m.groupdict()
+    return (groups['prefix'].strip(), "{index}/{year}".format(**groups))
+
+
 class ProposalScraper(Scraper):
 
     mandate_proposal_url = ('http://www.cdep.ro/pls/parlam/structura.mp?'
                             'idm={idm}&leg={leg}&cam=2&pag=2&idl=1&prn=0&par=')
+
+    list_url = 'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam={cam}'
+
+    def list_proposals(self, cam):
+        url = self.list_url.format(cam=cam)
+        url += '&anp=2014'
+        page = self.fetch_url(url)
+        table = page.find('p[align=center]').next()
+        for tr in pqitems(table, 'tr[valign=top]'):
+            td_list = tr.find('td')
+            link = td_list.eq(1).find('a')
+            args = url_args(link.attr('href'))
+            assert args.get('cam', type=int) == cam
+            slug = 'senate' if cam == 1 else 'cdep'
+
+            rv = {
+                'cdeppk_' + slug: args.get('idp', type=int),
+                'title': td_list.eq(2).text(),
+            }
+
+            number_txt = link.text().lower().strip()
+            (prefix, number) = parse_proposal_number(number_txt)
+            if cam == 2:
+                if prefix in ['pl', 'pl-x']:
+                    rv['number_cdep'] = number
+                elif prefix == 'bp':
+                    rv['number_bpi'] = number
+                elif prefix == 'l':
+                    rv['number_senate'] = number
+                else:
+                    raise RuntimeError("Can't parse number %r" % number_txt)
+
+            yield rv
 
     def fix_name(self, name):
         return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
