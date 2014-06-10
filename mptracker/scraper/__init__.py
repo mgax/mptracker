@@ -555,16 +555,6 @@ def proposals(
         for key in data_keys:
             assert getattr(proposal, key, None) == data[key]
 
-
-    if no_commit:
-        logger.warn("Rolling back the transaction")
-        models.db.session.rollback()
-
-    else:
-        models.db.session.commit()
-
-    return
-
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
 
@@ -601,8 +591,8 @@ def proposals(
     changed = []
     seen = []
 
-    with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
-        with activity_patcher.process(autoflush=1000, remove=True) \
+    with proposal_patcher.process(autoflush=1000) as add_proposal:
+        with activity_patcher.process(autoflush=1000) \
                 as add_activity:
             for prop in proposals:
                 record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
@@ -677,21 +667,11 @@ def proposals(
                         record['id'] = models.random_uuid()
                     add_activity(record)
 
-        for proposal_id in proposal_patcher.ids_to_delete():
-            logger.warn(
-                "Deleting activity and sponsorship for old proposal %s",
-                proposal_id,
-            )
-            old_activity = (
-                models.ProposalActivityItem.query
-                .filter_by(proposal_id=proposal_id)
-            )
-            old_activity.delete(synchronize_session=False)
-            old_sponsorships = (
-                models.Sponsorship.query
-                .filter_by(proposal_id=proposal_id)
-            )
-            old_sponsorships.delete(synchronize_session=False)
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+        return
 
     models.db.session.commit()
 
