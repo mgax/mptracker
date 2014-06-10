@@ -421,6 +421,7 @@ class Proposal(db.Model):
     number_senate = db.Column(db.Text, unique=True)
     number_bpi = db.Column(db.Text, unique=True)
     date = db.Column(db.Date)
+    modification_date = db.Column(db.Date)
     proposal_type = db.Column(db.Text)
     status = db.Column(db.Text)
     status_text = db.Column(db.Text)
