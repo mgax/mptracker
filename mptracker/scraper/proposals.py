@@ -1,7 +1,7 @@
 import re
 import logging
 from datetime import date, datetime
-from itertools import chain, groupby
+from itertools import groupby
 from collections import defaultdict
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
@@ -13,47 +13,9 @@ from mptracker.common import fix_local_chars
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-PROPOSAL_KEYS = [
-    'cdeppk_cdep',
-    'cdeppk_senate',
-    'number_cdep',
-    'number_senate',
-    'number_bpi',
-]
 
-
-class ProposalModel(GenericModel):
+class Proposal(GenericModel):
     pass
-
-
-class Proposal:
-
-    def __init__(self, cdeppk_cdep, cdeppk_senate):
-        self.cdeppk_cdep = cdeppk_cdep
-        self.cdeppk_senate = cdeppk_senate
-        self.sponsorships = []
-
-    @property
-    def cdeppks(self):
-        return (self.cdeppk_cdep, self.cdeppk_senate)
-
-    @property
-    def url_cdep(self):
-        if self.cdeppk_cdep is None:
-            return None
-        return ("http://www.cdep.ro/pls/proiecte/upl_pck.proiect"
-                "?idp=%d&cam=2" % self.cdeppk_cdep)
-
-    @property
-    def url_senate(self):
-        if self.cdeppk_senate is None:
-            return None
-        return ("http://www.cdep.ro/pls/proiecte/upl_pck.proiect"
-                "?idp=%d&cam=1" % self.cdeppk_senate)
-
-    @property
-    def url(self):
-        return self.url_cdep or self.url_senate
 
 
 class Activity:
@@ -84,7 +46,7 @@ def parse_proposal_number(number_txt):
     m = re.match(
         r'^(?P<prefix>[\D]*)'
         r'(?P<index>\d{1,4})/'
-        r'(\d{2}\.\d{2}\.)?(?P<year>\d{4})$',
+        r'(\d{2}[-.]\d{2}[-.])?(?P<year>\d{4})$',
         number_txt,
     )
     if m is None:
@@ -101,9 +63,9 @@ class ProposalScraper(Scraper):
     list_url = 'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam={cam}'
 
     def list_proposals(self, cam):
-        url = self.list_url.format(cam=cam)
-        url += '&anp=2014'
-        page = self.fetch_url(url)
+        list_url = self.list_url.format(cam=cam)
+        list_url += '&anp=2014'
+        page = self.fetch_url(list_url)
         table = page.find('p[align=center]').next()
         for tr in pqitems(table, 'tr[valign=top]'):
             td_list = tr.find('td')
@@ -133,34 +95,6 @@ class ProposalScraper(Scraper):
                     raise RuntimeError("Can't parse number %r" % number_txt)
 
             yield rv
-
-    def scrape(self):
-        proposal_list = []
-        index = defaultdict(dict)
-
-        for data in chain(self.list_proposals(2), self.list_proposals(1)):
-            data_keys = set(PROPOSAL_KEYS) & set(data)
-
-            proposal = None
-            for key in data_keys:
-                value = data[key]
-                if value in index[key]:
-                    proposal = index[key][value]
-                    break
-
-            if proposal is None:
-                proposal = ProposalModel(**data)
-                proposal_list.append(proposal)
-            else:
-                for key in data_keys:
-                    old_value = getattr(proposal, key)
-                    assert old_value == data[key]
-
-            for key in data_keys:
-                value = data[key]
-                setattr(proposal, key, value)
-                index[key][value] = proposal
-
 
     def fix_name(self, name):
         return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
@@ -214,17 +148,25 @@ class ProposalScraper(Scraper):
         else:
             return 'inprogress'
 
-    def fetch_proposal_details(self, prop):
-        page = self.fetch_url(prop.url)
+    def proposal(self, cdeppk_cdep, cdeppk_senate):
         page_cdep = page_senate = None
-        if prop.url_cdep:
-            page_cdep = self.fetch_url(prop.url_cdep)
-        if prop.url_senate:
-            page_senate = self.fetch_url(prop.url_senate)
+        if cdeppk_cdep:
+            page_cdep = self.fetch_url(
+                "http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=2"
+                % cdeppk_cdep
+            )
+        if cdeppk_senate:
+            page_senate = self.fetch_url(
+                "http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=1"
+                % cdeppk_senate
+            )
 
         page = page_cdep or page_senate
 
+        prop = Proposal(sponsorships=[])
         prop.title = pq('.headline', page).text()
+        prop.cdeppk_cdep = cdeppk_cdep
+        prop.cdeppk_senate = cdeppk_senate
         prop.number_bpi = None
         prop.number_cdep = None
         prop.number_senate = None
@@ -235,19 +177,30 @@ class ProposalScraper(Scraper):
 
         [hook_td] = pqitems(page, ':contains("Nr. înregistrare")')
         metadata_table = pq(hook_td.parents('table')[-1])
+        date_texts = []
+
         for row in pqitems(metadata_table.children('tr')):
             cols = row.children()
             label = cols.eq(0).text().strip()
             val_td = cols.eq(1) if len(cols) > 1 else None
 
             if label == "- B.P.I.:":
-                prop.number_bpi = val_td.text()
+                txt = val_td.text().split()
+                prop.number_bpi = ' '.join(
+                    parse_proposal_number(t)[1]
+                    for t in txt.split()
+                )
+                date_texts.append(txt.split()[0])
 
             elif label == "- Camera Deputatilor:":
-                prop.number_cdep = val_td.text()
+                txt = val_td.text()
+                prop.number_cdep = parse_proposal_number(txt)[1]
+                date_texts.append(txt)
 
             elif label == "- Senat:":
-                prop.number_senate = val_td.text()
+                txt = val_td.text()
+                prop.number_senate = parse_proposal_number(txt)[1]
+                date_texts.append(txt)
 
             elif label == "Tip initiativa:":
                 prop.proposal_type = val_td.text()
@@ -267,6 +220,8 @@ class ProposalScraper(Scraper):
                     prop.decision_chamber = 'senat'
                 elif txt == 'Camera Deputatilor + Senatul':
                     prop.decision_chamber = 'common'
+                elif txt == '-':
+                    prop.decision_chamber = None
                 else:
                     logger.warn("Unknown decision_chamber %r", txt)
 
@@ -274,16 +229,17 @@ class ProposalScraper(Scraper):
                 prop.status_text = val_td.text()
                 prop.status = self.classify_status(prop.status_text)
 
-        prop.date = get_date_from_numbers([prop.number_bpi,
-                                         prop.number_cdep,
-                                         prop.number_senate])
-        assert prop.date is not None, "No date for proposal %r" % prop.url
+        prop.date = get_date_from_numbers(date_texts)
+        assert prop.date is not None, "No date for proposal %r" % \
+            (prop.cdeppk_cdep or prop.cdeppk_senate)
 
         cdep_activity = (self.get_activity(page_cdep)
                          if page_cdep else [])
         senate_activity = (self.get_activity(page_senate)
                            if page_senate else [])
         prop.activity = self.merge_activity(cdep_activity, senate_activity)
+
+        return prop
 
     def get_activity(self, page):
         activity = []

@@ -503,14 +503,67 @@ def proposals(
         cache_name=None,
         throttle=None,
         autoanalyze=False,
+        no_commit=False,
         ):
+    from itertools import chain
     from mptracker.scraper.proposals import ProposalScraper
     from mptracker.proposals import ocr_proposal
     from mptracker.policy import calculate_proposal
 
-    proposal_scraper = ProposalScraper(create_session(
-            cache_name=cache_name or _get_config_cache_name(),
-            throttle=float(throttle) if throttle else None))
+    PROPOSAL_KEYS = [
+        'cdeppk_cdep',
+        'cdeppk_senate',
+        'number_cdep',
+        'number_senate',
+        'number_bpi',
+    ]
+
+    session = create_session(
+        cache_name=cache_name or _get_config_cache_name(),
+        throttle=float(throttle) if throttle else None,
+    )
+    scraper = ProposalScraper(session)
+
+    proposal_list = []
+    index = defaultdict(dict)
+
+    for data in chain(scraper.list_proposals(2), scraper.list_proposals(1)):
+        data_keys = set(PROPOSAL_KEYS) & set(data)
+
+        proposal = None
+        for key in data_keys:
+            value = data[key]
+            if value in index[key]:
+                proposal = index[key][value]
+                break
+
+        if proposal is None:
+            # TODO if db proposal is up-to-date, skip it
+            proposal = scraper.proposal(
+                data.get('cdeppk_cdep'),
+                data.get('cdeppk_senate'),
+            )
+
+            proposal_list.append(proposal)
+            for key in PROPOSAL_KEYS:
+                value = getattr(proposal, key, None)
+                if value is not None:
+                    index[key][value] = proposal
+
+            # TODO write proposal to db
+
+        for key in data_keys:
+            assert getattr(proposal, key, None) == data[key]
+
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+
+    else:
+        models.db.session.commit()
+
+    return
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
