@@ -13,6 +13,8 @@ from mptracker.common import fix_local_chars
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+CDEPPK_CDEP_BLACKLIST = [9542, 9543, 12822, 12868, 13811, 13815]
+
 
 class Proposal(GenericModel):
     pass
@@ -55,6 +57,13 @@ def parse_proposal_number(number_txt):
     return (groups['prefix'].strip(), "{index}/{year}".format(**groups))
 
 
+def extract_modification_date(txt):
+    return date(*[
+        int(n) for n in
+        reversed(txt.strip().split()[-1].split('.'))
+    ])
+
+
 class ProposalScraper(Scraper):
 
     mandate_proposal_url = ('http://www.cdep.ro/pls/parlam/structura.mp?'
@@ -77,12 +86,14 @@ class ProposalScraper(Scraper):
             rv = {
                 'cdeppk_' + slug: args.get('idp', type=int),
                 'title': td_list.eq(2).text(),
+                'modification_date': extract_modification_date(
+                    td_list.eq(3).text()),
             }
 
             number_txt = link.text().lower().strip()
             (prefix, number) = parse_proposal_number(number_txt)
             if cam == 2:
-                if rv['cdeppk_cdep'] in [9542, 9543, 12822, 12868]:
+                if rv['cdeppk_cdep'] in CDEPPK_CDEP_BLACKLIST:
                     continue  # duplicate proposals in cdep.ro db
 
                 if prefix in ['pl', 'pl-x']:
@@ -96,49 +107,32 @@ class ProposalScraper(Scraper):
 
             yield rv
 
-    def fix_name(self, name):
-        return fix_local_chars(re.sub(r'[\s\-]+', ' ', name))
 
-    def fetch_from_mp_pages(self, mandate_cdep_id_list):
-        proposals = {}
-        for mandate_cdep_id in mandate_cdep_id_list:
-            for prop in self.fetch_mp_proposals(mandate_cdep_id):
-                if prop.cdeppks in proposals:
-                    prop = proposals[prop.cdeppks]
-                else:
-                    self.fetch_proposal_details(prop)
-                    proposals[prop.cdeppks] = prop
-                prop.sponsorships.append(mandate_cdep_id)
+class SingleProposalScraper(Scraper):
 
-        proposals.update(self.fetch_extra_proposals())
+    def __init__(self, cdeppk_cdep, cdeppk_senate, session=None):
+        super().__init__(session)
+        self.prop = Proposal(
+            cdeppk_cdep=cdeppk_cdep,
+            cdeppk_senate=cdeppk_senate,
+            sponsorships=[],
+        )
+        self.activity = {'cdep': [], 'senate': []}
+        self.queue = []
 
-        return list(proposals.values())
+    def set_pk_cdep(self, value):
+        assert value is not None
+        if self.prop.cdeppk_cdep:
+            assert self.prop.cdeppk_cdep == value
+        else:
+            self.prop.cdeppk_cdep = value
 
-    def fetch_extra_proposals(self):
-        proposal = Proposal(14203, None)
-        self.fetch_proposal_details(proposal)
-        yield proposal.cdeppks, proposal
-
-    def fetch_mp_proposals(self, cdep_id):
-        (leg, idm) = cdep_id
-        url = self.mandate_proposal_url.format(leg=leg, idm=idm)
-        page = self.fetch_url(url)
-        headline = pqitems(page, ':contains("PL înregistrat la")')
-        if not headline:
-            return  # no proposals here
-        table = pq(headline[0].parents('table')[-1])
-        rows = iter(pqitems(table, 'tr'))
-        assert "PL înregistrat la" in next(rows).text()
-        assert "Camera Deputaţilor" in next(rows).text()
-        for row in rows:
-            cols = pqitems(row, 'td')
-            def cdeppk(col):
-                href = col.find('a').attr('href') or '?'
-                val = url_decode(href.split('?', 1)[1]).get('idp')
-                return int(val) if val else None
-            cdeppks = (cdeppk(cols[1]), cdeppk(cols[2]))
-            p = Proposal(*cdeppks)
-            yield p
+    def set_pk_senate(self, value):
+        assert value is not None
+        if self.prop.cdeppk_senate:
+            assert self.prop.cdeppk_senate == value
+        else:
+            self.prop.cdeppk_senate = value
 
     def classify_status(self, text):
         if 'LEGE' in text:
@@ -148,25 +142,25 @@ class ProposalScraper(Scraper):
         else:
             return 'inprogress'
 
-    def proposal(self, cdeppk_cdep, cdeppk_senate):
-        page_cdep = page_senate = None
-        if cdeppk_cdep:
-            page_cdep = self.fetch_url(
+    def scrape_page(self, name):
+        prop = self.prop
+
+        if name == 'cdep':
+            page = self.fetch_url(
                 "http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=2"
-                % cdeppk_cdep
+                % prop.cdeppk_cdep
             )
-        if cdeppk_senate:
-            page_senate = self.fetch_url(
+
+        elif name == 'senate':
+            page = self.fetch_url(
                 "http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=1"
-                % cdeppk_senate
+                % prop.cdeppk_senate
             )
 
-        page = page_cdep or page_senate
+        else:
+            raise RuntimeError
 
-        prop = Proposal(sponsorships=[])
         prop.title = pq('.headline', page).text()
-        prop.cdeppk_cdep = cdeppk_cdep
-        prop.cdeppk_senate = cdeppk_senate
         prop.number_bpi = None
         prop.number_cdep = None
         prop.number_senate = None
@@ -185,7 +179,7 @@ class ProposalScraper(Scraper):
             val_td = cols.eq(1) if len(cols) > 1 else None
 
             if label == "- B.P.I.:":
-                txt = val_td.text().split()
+                txt = val_td.text()
                 prop.number_bpi = ' '.join(
                     parse_proposal_number(t)[1]
                     for t in txt.split()
@@ -196,11 +190,21 @@ class ProposalScraper(Scraper):
                 txt = val_td.text()
                 prop.number_cdep = parse_proposal_number(txt)[1]
                 date_texts.append(txt)
+                link = val_td.find('a')
+                if link:
+                    args = url_args(link.attr('href'))
+                    assert args.get('cam', '2') == '2'
+                    self.set_pk_cdep(args.get('idp', type=int))
 
             elif label == "- Senat:":
                 txt = val_td.text()
                 prop.number_senate = parse_proposal_number(txt)[1]
                 date_texts.append(txt)
+                link = val_td.find('a')
+                if link:
+                    args = url_args(link.attr('href'))
+                    assert args.get('cam') == '1'
+                    self.set_pk_senate(args.get('idp', type=int))
 
             elif label == "Tip initiativa:":
                 prop.proposal_type = val_td.text()
@@ -233,13 +237,7 @@ class ProposalScraper(Scraper):
         assert prop.date is not None, "No date for proposal %r" % \
             (prop.cdeppk_cdep or prop.cdeppk_senate)
 
-        cdep_activity = (self.get_activity(page_cdep)
-                         if page_cdep else [])
-        senate_activity = (self.get_activity(page_senate)
-                           if page_senate else [])
-        prop.activity = self.merge_activity(cdep_activity, senate_activity)
-
-        return prop
+        self.activity[name] = self.get_activity(page)
 
     def get_activity(self, page):
         activity = []
@@ -313,3 +311,23 @@ class ProposalScraper(Scraper):
         for _, chunk in chunks:
             rv.extend(chunk)
         return rv
+
+    def scrape(self):
+        if self.prop.cdeppk_cdep:
+            self.queue.append('cdep')
+        if self.prop.cdeppk_senate:
+            self.queue.append('senate')
+
+        while self.queue:
+            self.scrape_page(self.queue.pop(0))
+
+        prop = self.prop
+
+        prop.activity = self.merge_activity(
+            self.activity['cdep'],
+            self.activity['senate'],
+        )
+
+        prop.modification_date = prop.activity[-1].date
+
+        return prop

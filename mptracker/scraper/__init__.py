@@ -510,16 +510,18 @@ def proposals(
         no_commit=False,
         ):
     from itertools import chain
-    from mptracker.scraper.proposals import ProposalScraper
+    from mptracker.scraper.proposals import CDEPPK_CDEP_BLACKLIST
+    from mptracker.scraper.proposals import (
+        ProposalScraper,
+        Proposal,
+        SingleProposalScraper,
+    )
     from mptracker.proposals import ocr_proposal
     from mptracker.policy import calculate_proposal
 
     PROPOSAL_KEYS = [
         'cdeppk_cdep',
         'cdeppk_senate',
-        'number_cdep',
-        'number_senate',
-        'number_bpi',
     ]
 
     session = create_session(
@@ -528,33 +530,58 @@ def proposals(
     )
     scraper = ProposalScraper(session)
 
-    proposal_list = []
+    proposal_bucket = {}
     index = defaultdict(dict)
+
+    for row in models.Proposal.query:
+        if row.cdeppk_cdep in CDEPPK_CDEP_BLACKLIST:
+            logger.warn(
+                "Deleting blacklisted record cdeppk=%r id=%r",
+                row.cdeppk_cdep, row.id,
+            )
+            models.db.session.delete(row)
+            continue
+
+        proposal = Proposal(
+            id=row.id,
+            modification_date=row.modification_date,
+            _db=True,
+        )
+
+        for k in PROPOSAL_KEYS:
+            v = getattr(row, k)
+            setattr(proposal, k, v)
+            index[k][v] = proposal
 
     for data in chain(scraper.list_proposals(2), scraper.list_proposals(1)):
         data_keys = set(PROPOSAL_KEYS) & set(data)
 
+        proposal_id = None
         proposal = None
         for key in data_keys:
             value = data[key]
             if value in index[key]:
                 proposal = index[key][value]
+                if proposal.modification_date != data['modification_date']:
+                    proposal_id = proposal.id
+                    proposal = None
                 break
 
         if proposal is None:
-            # TODO if db proposal is up-to-date, skip it
-            proposal = scraper.proposal(
+            single_scraper = SingleProposalScraper(
                 data.get('cdeppk_cdep'),
                 data.get('cdeppk_senate'),
+                session,
             )
+            proposal = single_scraper.scrape()
+            proposal.id = proposal_id or models.random_uuid()
 
-            proposal_list.append(proposal)
             for key in PROPOSAL_KEYS:
                 value = getattr(proposal, key, None)
                 if value is not None:
                     index[key][value] = proposal
 
-            # TODO write proposal to db
+            proposal_bucket[proposal.id] = proposal
 
         for key in data_keys:
             assert getattr(proposal, key, None) == data[key]
@@ -566,17 +593,7 @@ def proposals(
                   for m in models.Mandate.query
                   if m.year == 2012}
 
-    id_cdeppk_cdep = {}
-    id_cdeppk_senate = {}
-    for proposal in models.Proposal.query:
-        if proposal.cdeppk_cdep:
-            id_cdeppk_cdep[proposal.cdeppk_cdep] = proposal.id
-        if proposal.cdeppk_senate:
-            id_cdeppk_senate[proposal.cdeppk_senate] = proposal.id
-
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
-
-    proposals = proposal_scraper.fetch_from_mp_pages(set(by_cdep_id.keys()))
 
     all_activity = defaultdict(list)
     for item in models.ProposalActivityItem.query:
@@ -596,34 +613,25 @@ def proposals(
     seen = []
 
     with proposal_patcher.process(autoflush=1000) as add_proposal:
-        with activity_patcher.process(autoflush=1000) \
-                as add_activity:
-            for prop in proposals:
-                record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
+        #with activity_patcher.process(autoflush=1000) \
+        #        as add_activity:
+            for prop in proposal_bucket.values():
+                record = prop.as_dict(['id', 'cdeppk_cdep', 'cdeppk_senate',
                     'decision_chamber', 'url', 'title', 'date', 'number_bpi',
                     'number_cdep', 'number_senate', 'proposal_type',
-                    'pdf_url', 'status', 'status_text'])
+                    'pdf_url', 'status', 'status_text', 'modification_date'])
 
                 slug = prop.decision_chamber
                 if slug:
                     record['decision_chamber'] = chamber_by_slug[slug]
-
-                idc = id_cdeppk_cdep.get(prop.cdeppk_cdep)
-                ids = id_cdeppk_senate.get(prop.cdeppk_senate)
-                if idc and ids and idc != ids:
-                    logger.warn("Two different records for the same proposal: "
-                                "(%s, %s). Removing the 2nd.", idc, ids)
-                    proposal_s = models.Proposal.query.get(ids)
-                    if proposal_s is not None:
-                        models.db.session.delete(proposal_s)
-                    ids = None
-                record['id'] = idc or ids or models.random_uuid()
 
                 result = add_proposal(record)
                 row = result.row
                 if result.is_changed:
                     changed.append(row)
                 seen.append(row)
+
+                continue
 
                 new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
                 existing_sponsorships = {sp.mandate: sp
