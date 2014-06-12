@@ -342,7 +342,6 @@ def groups(
                 )
                 new_intervals.append(interval)
             elif interval_one.end > interval_two.start:
-                import pdb; pdb.set_trace()
                 raise RuntimeError("Overlapping intervals")
 
         interval_list.extend(new_intervals)
@@ -463,8 +462,6 @@ def committees(
                     member.start_date or TERM_2012_START,
                     member.end_date or date.max,
                 )
-                if interval.lower > interval.upper:
-                    import pdb; pdb.set_trace()
                 mandate = mandate_lookup.find(
                     member.mp_name,
                     member.mp_ident.year,
