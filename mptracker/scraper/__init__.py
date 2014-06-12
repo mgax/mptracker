@@ -10,7 +10,8 @@ import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
                                      get_gdrive_csv, parse_interval
 from mptracker import models
-from mptracker.common import parse_date, model_to_dict, url_args, almost_eq
+from mptracker.common import parse_date, model_to_dict, url_args, almost_eq, \
+                             generate_slug
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -198,7 +199,7 @@ def people(
             ])
             assert mandate.chamber_number == 2
             row['chamber_id'] = chamber_by_slug['cdep'].id
-            end_date = mandate.end_date or term_interval.upper
+            end_date = mandate.end_date or term_interval.upper or date.max
             row['interval'] = DateRange(term_interval.lower, end_date)
 
             person = (
@@ -208,7 +209,10 @@ def people(
 
             if person is None:
                 if add_people:
-                    person = models.Person(name=mandate.person_name)
+                    person = models.Person(
+                        name=mandate.person_name,
+                        slug=generate_slug(mandate.person_name),
+                    )
                     models.db.session.add(person)
                     models.db.session.flush()
                     new_people += 1
