@@ -608,8 +608,8 @@ def proposals(
     seen = []
 
     with proposal_patcher.process(autoflush=1000) as add_proposal:
-        #with activity_patcher.process(autoflush=1000) \
-        #        as add_activity:
+        with activity_patcher.process(autoflush=1000) \
+                as add_activity:
             for prop in proposal_bucket.values():
                 record = prop.as_dict(['id', 'cdeppk_cdep', 'cdeppk_senate',
                     'decision_chamber', 'url', 'title', 'date', 'number_bpi',
@@ -647,8 +647,6 @@ def proposals(
 
                 if to_remove or to_add:
                     sp_updates += 1
-
-                continue
 
                 db_activity = all_activity[row.id]
                 db_activity.sort(key=lambda a: a.order)
