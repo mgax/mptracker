@@ -115,10 +115,9 @@ class SingleProposalScraper(Scraper):
         self.prop = Proposal(
             cdeppk_cdep=cdeppk_cdep,
             cdeppk_senate=cdeppk_senate,
-            sponsorships=[],
         )
         self.activity = {'cdep': [], 'senate': []}
-        self.queue = []
+        self.sponsorship_bucket = set()
 
     def set_pk_cdep(self, value):
         assert value is not None
@@ -233,6 +232,16 @@ class SingleProposalScraper(Scraper):
                 prop.status_text = val_td.text()
                 prop.status = self.classify_status(prop.status_text)
 
+            elif label == "Initiator:":
+                for link in pqitems(val_td, 'a'):
+                    args = url_args(link.attr('href'))
+                    if args.get('cam', 2, type=int) == 2:
+                        cdep_id = (
+                            args.get('leg', type=int),
+                            args.get('idm', type=int),
+                        )
+                        self.sponsorship_bucket.add(cdep_id)
+
         prop.date = get_date_from_numbers(date_texts)
         assert prop.date is not None, "No date for proposal %r" % \
             (prop.cdeppk_cdep or prop.cdeppk_senate)
@@ -313,13 +322,21 @@ class SingleProposalScraper(Scraper):
         return rv
 
     def scrape(self):
-        if self.prop.cdeppk_cdep:
-            self.queue.append('cdep')
-        if self.prop.cdeppk_senate:
-            self.queue.append('senate')
+        visited = set()
 
-        while self.queue:
-            self.scrape_page(self.queue.pop(0))
+        while True:
+            available = set()
+            if self.prop.cdeppk_cdep:
+                available.add('cdep')
+            if self.prop.cdeppk_senate:
+                available.add('senate')
+
+            if available == visited:
+                break
+
+            name = (available - visited).pop()
+            self.scrape_page(name)
+            visited.add(name)
 
         prop = self.prop
 
@@ -329,5 +346,7 @@ class SingleProposalScraper(Scraper):
         )
 
         prop.modification_date = prop.activity[-1].date
+
+        prop.sponsorships = sorted(self.sponsorship_bucket)
 
         return prop

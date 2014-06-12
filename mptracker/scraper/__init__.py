@@ -559,7 +559,7 @@ def proposals(
             value = data[key]
             if value in index[key]:
                 proposal = index[key][value]
-                if proposal.modification_date != data['modification_date']:
+                if proposal.modification_date < data['modification_date']:
                     proposal_id = proposal.id
                     proposal = None
                 break
@@ -586,9 +586,7 @@ def proposals(
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
 
-    by_cdep_id = {cdep_id(m): m
-                  for m in models.Mandate.query
-                  if m.year == 2012}
+    by_cdep_id = {cdep_id(m): m for m in models.Mandate.query}
 
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
@@ -628,8 +626,6 @@ def proposals(
                     changed.append(row)
                 seen.append(row)
 
-                continue
-
                 new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
                 existing_sponsorships = {sp.mandate: sp
                                          for sp in row.sponsorships}
@@ -651,6 +647,8 @@ def proposals(
 
                 if to_remove or to_add:
                     sp_updates += 1
+
+                continue
 
                 db_activity = all_activity[row.id]
                 db_activity.sort(key=lambda a: a.order)
