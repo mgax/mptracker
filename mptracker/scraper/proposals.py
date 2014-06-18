@@ -97,6 +97,11 @@ class ProposalScraper(Scraper):
         )
         page = self.fetch_url(url)
 
+        if chamber == 1:
+            rv['pk_senate'] = pk
+        else:
+            rv['pk_cdep'] = pk
+
         rv['title'] = pq('.headline', page).text()
         rv['sponsorship'] = []
 

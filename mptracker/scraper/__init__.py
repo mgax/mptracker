@@ -558,6 +558,20 @@ def proposals(
 
     models.db.session.commit()
 
+    for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
+        result = pickle.loads(page.result)
+        if page.chamber == 1:
+            print('pk_senate', page.pk)
+            pk_cdep = result.get('pk_cdep')
+            if pk_cdep:
+                print('>> pk_cdep', pk_cdep)
+
+        else:
+            print('pk_cdep', page.pk)
+            pk_senate = result.get('pk_senate')
+            if pk_senate:
+                print('>> pk_senate', pk_senate)
+
     return
 
 
