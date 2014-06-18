@@ -598,6 +598,14 @@ class User(db.Model, UserMixin):
             return row
 
 
+class ScrapedProposalPage(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    chamber = db.Column(db.Integer)
+    pk = db.Column(db.Integer)
+    date = db.Column(db.Date)
+    value = db.Column(db.Binary)
+
+
 class LookupError(Exception):
     pass
 
