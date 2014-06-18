@@ -558,19 +558,35 @@ def proposals(
 
     models.db.session.commit()
 
+    index = {'pk_cdep': {}, 'pk_senate': {}}
+
+    for p in models.Proposal.query:
+        if p.cdeppk_cdep:
+            index['pk_cdep'][p.cdeppk_cdep] = p
+        if p.cdeppk_senate:
+            index['pk_senate'][p.cdeppk_senate] = p
+
+    dirty_proposal_set = set()
+
     for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
         result = pickle.loads(page.result)
-        if page.chamber == 1:
-            print('pk_senate', page.pk)
-            pk_cdep = result.get('pk_cdep')
-            if pk_cdep:
-                print('>> pk_cdep', pk_cdep)
 
-        else:
-            print('pk_cdep', page.pk)
-            pk_senate = result.get('pk_senate')
-            if pk_senate:
-                print('>> pk_senate', pk_senate)
+        p = index['pk_cdep'].get(result.get('pk_cdep'))
+        if p:
+            dirty_proposal_set.add(p)
+            continue
+
+        p = index['pk_senate'].get(result.get('pk_senate'))
+        if p:
+            dirty_proposal_set.add(p)
+            continue
+
+        p = models.Proposal(
+            cdeppk_cdep=result.get('pk_cdep'),
+            cdeppk_senate=result.get('pk_senate'),
+        )
+        models.db.session.add(p)
+        dirty_proposal_set.add(p)
 
     return
 
