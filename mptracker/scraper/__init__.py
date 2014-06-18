@@ -500,27 +500,15 @@ def committee_summaries(year=2014):
 
 
 @scraper_manager.command
-def proposals(
-        cache_name=None,
+def proposal_pages(
         throttle=None,
-        autoanalyze=False,
-        no_commit=False,
+        cache_name=None,
+        year=None,
         ):
-    from itertools import chain
     import pickle
+    from itertools import chain
     from mptracker.scraper.proposals import CDEPPK_CDEP_BLACKLIST
-    from mptracker.scraper.proposals import (
-        ProposalScraper,
-        Proposal,
-        SingleProposalScraper,
-    )
-    from mptracker.proposals import ocr_proposal
-    from mptracker.policy import calculate_proposal
-
-    PROPOSAL_KEYS = [
-        'cdeppk_cdep',
-        'cdeppk_senate',
-    ]
+    from mptracker.scraper.proposals import ProposalScraper
 
     session = create_session(
         cache_name=cache_name or _get_config_cache_name(),
@@ -537,7 +525,8 @@ def proposals(
         )
     }
 
-    for record in chain(scraper.list_proposals(2), scraper.list_proposals(1)):
+    for record in chain(scraper.list_proposals(2, year),
+                        scraper.list_proposals(1, year)):
         pk = record['pk']
         chamber = record['chamber']
         old_date = db_page_date.get((chamber, pk))
@@ -550,6 +539,7 @@ def proposals(
         )
         old_rows.delete()
 
+        logger.info("scrapign %d %d", chamber, pk)
         result = scraper.scrape_proposal_page(chamber, pk)
 
         scraped_page = models.ScrapedProposalPage(**record)
@@ -557,6 +547,19 @@ def proposals(
         models.db.session.add(scraped_page)
 
     models.db.session.commit()
+
+
+@scraper_manager.command
+def proposals(
+        autoanalyze=False,
+        no_commit=False,
+        ):
+    import pickle
+    from mptracker.scraper.proposals import SingleProposalScraper
+    from mptracker.proposals import ocr_proposal
+    from mptracker.policy import calculate_proposal
+
+    proposal_pages()
 
     index = {'pk_cdep': {}, 'pk_senate': {}}
 

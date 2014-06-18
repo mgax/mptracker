@@ -71,9 +71,10 @@ class ProposalScraper(Scraper):
 
     list_url = 'http://www.cdep.ro/pls/proiecte/upl_pck.lista?cam={cam}'
 
-    def list_proposals(self, cam):
+    def list_proposals(self, cam, year=None):
         list_url = self.list_url.format(cam=cam)
-        list_url += '&anp=2014'
+        if year:
+            list_url += '&anp=%s' % year
         page = self.fetch_url(list_url)
         table = page.find('p[align=center]').next()
         for tr in pqitems(table, 'tr[valign=top]'):
