@@ -561,6 +561,11 @@ def proposals(
     index = {'pk_cdep': {}, 'pk_senate': {}}
 
     for p in models.Proposal.query:
+        if p.cdeppk_cdep in CDEPPK_CDEP_BLACKLIST:
+            logger.warn("Deleting cdeppk=%r id=%r", p.cdeppk_cdep, p.id)
+            models.db.session.delete(p)
+            continue
+
         if p.cdeppk_cdep:
             index['pk_cdep'][p.cdeppk_cdep] = p
         if p.cdeppk_senate:
@@ -569,24 +574,36 @@ def proposals(
     dirty_proposal_set = set()
 
     for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
+        if page.chamber == 2 and page.pk in CDEPPK_CDEP_BLACKLIST:
+            continue
+
         result = pickle.loads(page.result)
+        pk_cdep = result.get('pk_cdep')
+        pk_senate = result.get('pk_senate')
 
-        p = index['pk_cdep'].get(result.get('pk_cdep'))
-        if p:
-            p.cdeppk_senate = result.get('pk_senate')
-            dirty_proposal_set.add(p)
-            continue
+        if pk_cdep and pk_cdep in index['pk_cdep']:
+            p = index['pk_cdep'][pk_cdep]
 
-        p = index['pk_senate'].get(result.get('pk_senate'))
-        if p:
-            p.cdeppk_cdep = result.get('pk_cdep')
-            dirty_proposal_set.add(p)
-            continue
+        elif pk_senate and pk_senate in index['pk_senate']:
+            p = index['pk_senate'][pk_senate]
 
-        p = models.Proposal(
-            cdeppk_cdep=result.get('pk_cdep'),
-            cdeppk_senate=result.get('pk_senate'),
-        )
+        else:
+            p = models.Proposal()
+
+        if p.cdeppk_cdep:
+            assert pk_cdep == p.cdeppk_cdep, \
+                repr((pk_cdep, p.cdeppk_cdep, p.id))
+        elif pk_cdep:
+            p.cdeppk_cdep = pk_cdep
+            index['pk_cdep'][pk_cdep] = p
+
+        if p.cdeppk_senate:
+            assert pk_senate == p.cdeppk_senate, \
+                repr((pk_senate, p.cdeppk_senate, p.id))
+        elif pk_senate:
+            p.cdeppk_senate = pk_senate
+            index['pk_senate'][pk_senate] = p
+
         dirty_proposal_set.add(p)
 
 
