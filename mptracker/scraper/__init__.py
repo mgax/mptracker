@@ -573,11 +573,13 @@ def proposals(
 
         p = index['pk_cdep'].get(result.get('pk_cdep'))
         if p:
+            p.cdeppk_senate = result.get('pk_senate')
             dirty_proposal_set.add(p)
             continue
 
         p = index['pk_senate'].get(result.get('pk_senate'))
         if p:
+            p.cdeppk_cdep = result.get('pk_cdep')
             dirty_proposal_set.add(p)
             continue
 
@@ -585,88 +587,8 @@ def proposals(
             cdeppk_cdep=result.get('pk_cdep'),
             cdeppk_senate=result.get('pk_senate'),
         )
-        models.db.session.add(p)
         dirty_proposal_set.add(p)
 
-    return
-
-
-
-
-
-
-    proposal_bucket = {}
-    index = defaultdict(dict)
-
-    for row in models.Proposal.query:
-        if row.cdeppk_cdep in CDEPPK_CDEP_BLACKLIST:
-            logger.warn(
-                "Deleting blacklisted record cdeppk=%r id=%r",
-                row.cdeppk_cdep, row.id,
-            )
-            models.db.session.delete(row)
-            continue
-
-        proposal = Proposal(
-            id=row.id,
-            modification_date=row.modification_date,
-            _db=True,
-        )
-
-        for k in PROPOSAL_KEYS:
-            v = getattr(row, k)
-            setattr(proposal, k, v)
-            index[k][v] = proposal
-
-    def get_proposal_page(chamber, pk):
-        cached_rv = (
-            models.ScrapedProposalPage.query
-            .filter_by(chamber=chamber, pk=pk)
-            .first()
-        )
-        if cached_rv:
-            return pickle.loads(cached_rv.result)
-
-        result = scraper.scrape_proposal_page(chamber, pk)
-        cached_rv = models.ScrapedProposalPage(chamber=chamber, pk=pk)
-        cached_rv.result = pickle.dumps(result)
-        models.db.session.add(cached_rv)
-        return result
-
-    for data in chain(scraper.list_proposals(2), scraper.list_proposals(1)):
-        data_keys = set(PROPOSAL_KEYS) & set(data)
-
-        proposal_id = None
-        proposal = None
-        for key in data_keys:
-            value = data[key]
-            if value in index[key]:
-                proposal = index[key][value]
-                if proposal.modification_date < data['modification_date']:
-                    proposal_id = proposal.id
-                    proposal = None
-                break
-
-        if proposal is None:
-            single_scraper = SingleProposalScraper(
-                data.get('cdeppk_cdep'),
-                data.get('cdeppk_senate'),
-                get_proposal_page,
-            )
-            proposal = single_scraper.scrape()
-            proposal.id = proposal_id or models.random_uuid()
-
-            for key in PROPOSAL_KEYS:
-                value = getattr(proposal, key, None)
-                if value is not None:
-                    index[key][value] = proposal
-
-            proposal_bucket[proposal.id] = proposal
-
-        for key in data_keys:
-            assert getattr(proposal, key, None) == data[key]
-
-    #models.db.session.commit(); return
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
@@ -695,7 +617,37 @@ def proposals(
     with proposal_patcher.process(autoflush=1000) as add_proposal:
         with activity_patcher.process(autoflush=1000) \
                 as add_activity:
-            for prop in proposal_bucket.values():
+            for proposal in dirty_proposal_set:
+                page_cdep = (
+                    models.ScrapedProposalPage.query
+                    .filter_by(chamber=2, pk=proposal.cdeppk_cdep)
+                    .first()
+                )
+                page_senate = (
+                    models.ScrapedProposalPage.query
+                    .filter_by(chamber=1, pk=proposal.cdeppk_senate)
+                    .first()
+                )
+
+                single_scraper = SingleProposalScraper()
+
+                if page_senate:
+                    single_scraper.scrape_page('senate',
+                        pickle.loads(page_senate.result))
+                    page_senate.parsed = True
+
+                if page_cdep:
+                    single_scraper.scrape_page('cdep',
+                        pickle.loads(page_cdep.result))
+                    page_cdep.parsed = True
+
+                prop = single_scraper.finalize()
+
+                prop.id = proposal.id or models.random_uuid()
+                prop.cdeppk_cdep = proposal.cdeppk_cdep
+                prop.cdeppk_senate = proposal.cdeppk_senate
+
+
                 record = prop.as_dict(['id', 'cdeppk_cdep', 'cdeppk_senate',
                     'decision_chamber', 'url', 'title', 'date', 'number_bpi',
                     'number_cdep', 'number_senate', 'proposal_type',

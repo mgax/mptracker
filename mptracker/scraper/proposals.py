@@ -240,28 +240,10 @@ class ProposalScraper(Scraper):
 
 class SingleProposalScraper:
 
-    def __init__(self, cdeppk_cdep, cdeppk_senate, get_proposal_page):
-        self.get_proposal_page = get_proposal_page
-        self.prop = Proposal(
-            cdeppk_cdep=cdeppk_cdep,
-            cdeppk_senate=cdeppk_senate,
-        )
+    def __init__(self):
+        self.prop = Proposal()
         self.activity = {'cdep': [], 'senate': []}
         self.sponsorship_bucket = set()
-
-    def set_pk_cdep(self, value):
-        assert value is not None
-        if self.prop.cdeppk_cdep:
-            assert self.prop.cdeppk_cdep == value
-        else:
-            self.prop.cdeppk_cdep = value
-
-    def set_pk_senate(self, value):
-        assert value is not None
-        if self.prop.cdeppk_senate:
-            assert self.prop.cdeppk_senate == value
-        else:
-            self.prop.cdeppk_senate = value
 
     def classify_status(self, text):
         if 'LEGE' in text:
@@ -271,17 +253,8 @@ class SingleProposalScraper:
         else:
             return 'inprogress'
 
-    def scrape_page(self, name):
+    def scrape_page(self, name, result):
         prop = self.prop
-
-        if name == 'cdep':
-            result = self.get_proposal_page(2, prop.cdeppk_cdep)
-
-        elif name == 'senate':
-            result = self.get_proposal_page(1, prop.cdeppk_senate)
-
-        else:
-            raise RuntimeError
 
         prop.title = result['title']
         prop.number_bpi = result.get('number_bpi')
@@ -317,23 +290,7 @@ class SingleProposalScraper:
             rv.extend(chunk)
         return rv
 
-    def scrape(self):
-        visited = set()
-
-        while True:
-            available = set()
-            if self.prop.cdeppk_cdep:
-                available.add('cdep')
-            if self.prop.cdeppk_senate:
-                available.add('senate')
-
-            if available == visited:
-                break
-
-            name = (available - visited).pop()
-            self.scrape_page(name)
-            visited.add(name)
-
+    def finalize(self):
         prop = self.prop
 
         prop.activity = self.merge_activity(
