@@ -1,4 +1,4 @@
-revision = '423a6f998c8'
+revision = '433d8997b7d'
 down_revision = '4ace23c68ca'
 
 from alembic import op
@@ -13,7 +13,8 @@ def upgrade():
         sa.Column('chamber', sa.Integer(), nullable=True),
         sa.Column('pk', sa.Integer(), nullable=True),
         sa.Column('date', sa.Date(), nullable=True),
-        sa.Column('value', sa.Binary(), nullable=True),
+        sa.Column('result', sa.Binary(), nullable=True),
+        sa.Column('parsed', sa.Boolean(), nullable=False),
         sa.PrimaryKeyConstraint('id'),
     )
 

@@ -81,92 +81,24 @@ class ProposalScraper(Scraper):
             link = td_list.eq(1).find('a')
             args = url_args(link.attr('href'))
             assert args.get('cam', type=int) == cam
-            slug = 'senate' if cam == 1 else 'cdep'
 
-            rv = {
-                'cdeppk_' + slug: args.get('idp', type=int),
-                'title': td_list.eq(2).text(),
-                'modification_date': extract_modification_date(
-                    td_list.eq(3).text()),
+            yield {
+                'pk': args.get('idp', type=int),
+                'chamber': cam,
+                'date': extract_modification_date(td_list.eq(3).text()),
             }
 
-            number_txt = link.text().lower().strip()
-            (prefix, number) = parse_proposal_number(number_txt)
-            if cam == 2:
-                if rv['cdeppk_cdep'] in CDEPPK_CDEP_BLACKLIST:
-                    continue  # duplicate proposals in cdep.ro db
 
-                if prefix in ['pl', 'pl-x']:
-                    rv['number_cdep'] = number
-                elif prefix == 'bp':
-                    rv['number_bpi'] = number
-                elif prefix == 'l':
-                    rv['number_senate'] = number
-                else:
-                    raise RuntimeError("Can't parse number %r" % number_txt)
-
-            yield rv
-
-
-class SingleProposalScraper(Scraper):
-
-    def __init__(self, cdeppk_cdep, cdeppk_senate, session=None):
-        super().__init__(session)
-        self.prop = Proposal(
-            cdeppk_cdep=cdeppk_cdep,
-            cdeppk_senate=cdeppk_senate,
+    def scrape_proposal_page(self, chamber, pk):
+        rv = {}
+        url = (
+            'http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=%d'
+            % (pk, chamber)
         )
-        self.activity = {'cdep': [], 'senate': []}
-        self.sponsorship_bucket = set()
+        page = self.fetch_url(url)
 
-    def set_pk_cdep(self, value):
-        assert value is not None
-        if self.prop.cdeppk_cdep:
-            assert self.prop.cdeppk_cdep == value
-        else:
-            self.prop.cdeppk_cdep = value
-
-    def set_pk_senate(self, value):
-        assert value is not None
-        if self.prop.cdeppk_senate:
-            assert self.prop.cdeppk_senate == value
-        else:
-            self.prop.cdeppk_senate = value
-
-    def classify_status(self, text):
-        if 'LEGE' in text:
-            return 'approved'
-        elif u'procedură legislativă încetată' in text:
-            return 'rejected'
-        else:
-            return 'inprogress'
-
-    def scrape_page(self, name):
-        prop = self.prop
-
-        if name == 'cdep':
-            page = self.fetch_url(
-                "http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=2"
-                % prop.cdeppk_cdep
-            )
-
-        elif name == 'senate':
-            page = self.fetch_url(
-                "http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=1"
-                % prop.cdeppk_senate
-            )
-
-        else:
-            raise RuntimeError
-
-        prop.title = pq('.headline', page).text()
-        prop.number_bpi = None
-        prop.number_cdep = None
-        prop.number_senate = None
-        prop.decision_chamber = None
-        prop.pdf_url = None
-        prop.status = None
-        prop.status_text = None
+        rv['title'] = pq('.headline', page).text()
+        rv['sponsorship'] = []
 
         [hook_td] = pqitems(page, ':contains("Nr. înregistrare")')
         metadata_table = pq(hook_td.parents('table')[-1])
@@ -179,7 +111,7 @@ class SingleProposalScraper(Scraper):
 
             if label == "- B.P.I.:":
                 txt = val_td.text()
-                prop.number_bpi = ' '.join(
+                rv['number_bpi'] = ' '.join(
                     parse_proposal_number(t)[1]
                     for t in txt.split()
                 )
@@ -187,50 +119,49 @@ class SingleProposalScraper(Scraper):
 
             elif label == "- Camera Deputatilor:":
                 txt = val_td.text()
-                prop.number_cdep = parse_proposal_number(txt)[1]
+                rv['number_cdep'] = parse_proposal_number(txt)[1]
                 date_texts.append(txt)
                 link = val_td.find('a')
                 if link:
                     args = url_args(link.attr('href'))
                     assert args.get('cam', '2') == '2'
-                    self.set_pk_cdep(args.get('idp', type=int))
+                    rv['pk_cdep'] = args.get('idp', type=int)
 
             elif label == "- Senat:":
                 txt = val_td.text()
-                prop.number_senate = parse_proposal_number(txt)[1]
+                rv['number_senate'] = parse_proposal_number(txt)[1]
                 date_texts.append(txt)
                 link = val_td.find('a')
                 if link:
                     args = url_args(link.attr('href'))
                     assert args.get('cam') == '1'
-                    self.set_pk_senate(args.get('idp', type=int))
+                    rv['pk_senate'] = args.get('idp', type=int)
 
             elif label == "Tip initiativa:":
-                prop.proposal_type = val_td.text()
+                rv['proposal_type'] = val_td.text()
 
             elif label == "Consultati:":
                 for tr in pqitems(val_td, 'tr'):
                     if tr.text() == "Forma iniţiatorului":
                         [a] = pqitems(tr, 'a')
                         href = a.attr('href')
-                        prop.pdf_url = href
+                        rv['pdf_url'] = href
 
             elif label == "Camera decizionala:":
                 txt = val_td.text()
                 if txt == 'Camera Deputatilor':
-                    prop.decision_chamber = 'cdep'
+                    rv['decision_chamber'] = 'cdep'
                 elif txt == 'Senatul':
-                    prop.decision_chamber = 'senat'
+                    rv['decision_chamber'] = 'senat'
                 elif txt == 'Camera Deputatilor + Senatul':
-                    prop.decision_chamber = 'common'
+                    rv['decision_chamber'] = 'common'
                 elif txt == '-':
-                    prop.decision_chamber = None
+                    rv['decision_chamber'] = None
                 else:
                     logger.warn("Unknown decision_chamber %r", txt)
 
             elif label == "Stadiu:":
-                prop.status_text = val_td.text()
-                prop.status = self.classify_status(prop.status_text)
+                rv['status_text'] = val_td.text()
 
             elif label == "Initiator:":
                 for link in pqitems(val_td, 'a'):
@@ -240,13 +171,14 @@ class SingleProposalScraper(Scraper):
                             args.get('leg', type=int),
                             args.get('idm', type=int),
                         )
-                        self.sponsorship_bucket.add(cdep_id)
+                        rv['sponsorship'].append(cdep_id)
 
-        prop.date = get_date_from_numbers(date_texts)
-        assert prop.date is not None, "No date for proposal %r" % \
-            (prop.cdeppk_cdep or prop.cdeppk_senate)
+        rv['date'] = get_date_from_numbers(date_texts)
+        assert rv['date'] is not None, "No date for %r %r" % (chamber, pk)
 
-        self.activity[name] = self.get_activity(page)
+        rv['activity'] = self.get_activity(page)
+
+        return rv
 
     def get_activity(self, page):
         activity = []
@@ -299,6 +231,65 @@ class SingleProposalScraper(Scraper):
             activity.append(ac)
 
         return activity
+
+
+class SingleProposalScraper:
+
+    def __init__(self, cdeppk_cdep, cdeppk_senate, get_proposal_page):
+        self.get_proposal_page = get_proposal_page
+        self.prop = Proposal(
+            cdeppk_cdep=cdeppk_cdep,
+            cdeppk_senate=cdeppk_senate,
+        )
+        self.activity = {'cdep': [], 'senate': []}
+        self.sponsorship_bucket = set()
+
+    def set_pk_cdep(self, value):
+        assert value is not None
+        if self.prop.cdeppk_cdep:
+            assert self.prop.cdeppk_cdep == value
+        else:
+            self.prop.cdeppk_cdep = value
+
+    def set_pk_senate(self, value):
+        assert value is not None
+        if self.prop.cdeppk_senate:
+            assert self.prop.cdeppk_senate == value
+        else:
+            self.prop.cdeppk_senate = value
+
+    def classify_status(self, text):
+        if 'LEGE' in text:
+            return 'approved'
+        elif u'procedură legislativă încetată' in text:
+            return 'rejected'
+        else:
+            return 'inprogress'
+
+    def scrape_page(self, name):
+        prop = self.prop
+
+        if name == 'cdep':
+            result = self.get_proposal_page(2, prop.cdeppk_cdep)
+
+        elif name == 'senate':
+            result = self.get_proposal_page(1, prop.cdeppk_senate)
+
+        else:
+            raise RuntimeError
+
+        prop.title = result['title']
+        prop.number_bpi = result.get('number_bpi')
+        prop.number_cdep = result.get('number_cdep')
+        prop.number_senate = result.get('number_senate')
+        prop.decision_chamber = result.get('decision_chamber')
+        prop.pdf_url = result.get('pdf_url')
+        prop.status_text = result.get('status_text')
+        prop.status = self.classify_status(result['status_text'])
+        prop.date = result['date']
+        prop.proposal_type = result.get('proposal_type')
+
+        self.activity[name] = result['activity']
 
     def merge_activity(self, activity_cdep, activity_senate):
         if not activity_cdep:

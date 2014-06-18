@@ -507,6 +507,7 @@ def proposals(
         no_commit=False,
         ):
     from itertools import chain
+    import pickle
     from mptracker.scraper.proposals import CDEPPK_CDEP_BLACKLIST
     from mptracker.scraper.proposals import (
         ProposalScraper,
@@ -526,6 +527,43 @@ def proposals(
         throttle=float(throttle) if throttle else None,
     )
     scraper = ProposalScraper(session)
+
+    db_page_date = {
+        (chamber, pk): date
+        for (chamber, pk, date) in models.db.session.query(
+            models.ScrapedProposalPage.chamber,
+            models.ScrapedProposalPage.pk,
+            models.ScrapedProposalPage.date,
+        )
+    }
+
+    for record in chain(scraper.list_proposals(2), scraper.list_proposals(1)):
+        pk = record['pk']
+        chamber = record['chamber']
+        old_date = db_page_date.get((chamber, pk))
+        if old_date and old_date == record['date']:
+            continue
+
+        old_rows = (
+            models.ScrapedProposalPage.query
+            .filter_by(chamber=chamber, pk=pk)
+        )
+        old_rows.delete()
+
+        result = scraper.scrape_proposal_page(chamber, pk)
+
+        scraped_page = models.ScrapedProposalPage(**record)
+        scraped_page.result = pickle.dumps(result)
+        models.db.session.add(scraped_page)
+
+    models.db.session.commit()
+
+    return
+
+
+
+
+
 
     proposal_bucket = {}
     index = defaultdict(dict)
@@ -550,6 +588,21 @@ def proposals(
             setattr(proposal, k, v)
             index[k][v] = proposal
 
+    def get_proposal_page(chamber, pk):
+        cached_rv = (
+            models.ScrapedProposalPage.query
+            .filter_by(chamber=chamber, pk=pk)
+            .first()
+        )
+        if cached_rv:
+            return pickle.loads(cached_rv.result)
+
+        result = scraper.scrape_proposal_page(chamber, pk)
+        cached_rv = models.ScrapedProposalPage(chamber=chamber, pk=pk)
+        cached_rv.result = pickle.dumps(result)
+        models.db.session.add(cached_rv)
+        return result
+
     for data in chain(scraper.list_proposals(2), scraper.list_proposals(1)):
         data_keys = set(PROPOSAL_KEYS) & set(data)
 
@@ -568,7 +621,7 @@ def proposals(
             single_scraper = SingleProposalScraper(
                 data.get('cdeppk_cdep'),
                 data.get('cdeppk_senate'),
-                session,
+                get_proposal_page,
             )
             proposal = single_scraper.scrape()
             proposal.id = proposal_id or models.random_uuid()
@@ -582,6 +635,8 @@ def proposals(
 
         for key in data_keys:
             assert getattr(proposal, key, None) == data[key]
+
+    #models.db.session.commit(); return
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
