@@ -538,7 +538,7 @@ def proposal_pages(
         )
         old_rows.delete()
 
-        logger.info("scrapign %d %d", chamber, pk)
+        logger.info("scraping %d %d", chamber, pk)
         result = scraper.scrape_proposal_page(chamber, pk)
 
         scraped_page = models.ScrapedProposalPage(**record)
