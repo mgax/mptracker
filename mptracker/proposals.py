@@ -37,7 +37,16 @@ def proposal(proposal_id):
     proposal = (models.Proposal.query
                     .filter_by(id=proposal_id)
                     .first_or_404())
-    activity = proposal.activity.order_by(models.ProposalActivityItem.order)
+
+    activity = [
+        {
+            'date': parse_date(item['date']),
+            'location': item['location'].lower(),
+            'html': item['html'],
+        }
+        for item in flask.json.loads(proposal.activity or '[]')
+    ]
+
     return flask.render_template('proposals/detail.html', **{
         'proposal': proposal,
         'policy_domain': proposal.policy_domain,
@@ -46,7 +55,7 @@ def proposal(proposal_id):
                 'mandate': sp.mandate,
                 'match_data': flask.json.loads(sp.match.data or '{}'),
             } for sp in proposal.sponsorships],
-        'activity': activity.all(),
+        'activity': activity,
         'voting_sessions': proposal.voting_sessions.all(),
     })
 

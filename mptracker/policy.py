@@ -14,8 +14,8 @@ policy_manager = Manager()
 
 
 def iter_committees(proposal):
-    for activity_item in proposal.activity:
-        html = pq(activity_item.html)
+    for activity_item in flask.json.loads(proposal.activity or '[]'):
+        html = pq(activity_item['html'])
         for link in html.items('a'):
             href = link.attr('href')
             if href and href.startswith(COMMITTEE_URL_PREFIX):

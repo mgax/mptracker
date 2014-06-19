@@ -18,12 +18,9 @@ class Proposal(GenericModel):
     pass
 
 
-class Activity:
+class Activity(GenericModel):
 
-    def __init__(self, date, location, html):
-        self.date = date
-        self.location = location
-        self.html = html
+    pass
 
 
 def get_date_from_numbers(numbers):
