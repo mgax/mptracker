@@ -83,10 +83,17 @@ class ProposalScraper(Scraper):
             args = url_args(link.attr('href'))
             assert args.get('cam', type=int) == cam
 
+            date_txt = td_list.eq(3).text()
+            try:
+                date = extract_modification_date(date_txt)
+            except:
+                logger.warn("Can't parse modification date %r" % date_txt)
+                continue
+
             yield {
                 'pk': args.get('idp', type=int),
                 'chamber': cam,
-                'date': extract_modification_date(td_list.eq(3).text()),
+                'date': date,
             }
 
 
