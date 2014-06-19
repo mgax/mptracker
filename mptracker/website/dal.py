@@ -3,6 +3,8 @@ from collections import defaultdict
 from sqlalchemy import func, distinct, and_, desc
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
+from flask import json
+from mptracker.common import parse_date
 from mptracker.models import (
     Chamber,
     County,
@@ -1580,24 +1582,22 @@ class DataAccess:
         if proposal is None:
             raise self.missing()
 
+        activity = [
+            {
+                'date': parse_date(item['date']),
+                'location': item['location'].lower(),
+                'html': item['html'],
+            }
+            for item in reversed(json.loads(proposal.activity or '[]'))
+        ]
+
         rv = {
             'title': proposal.title,
             'controversy': proposal.controversy.all(),
             'pk_cdep': proposal.cdeppk_cdep,
             'pk_senate': proposal.cdeppk_senate,
+            'activity': activity,
         }
-
-        rv['activity'] = []
-        activity_query = (
-            proposal.activity_items
-            .order_by(ProposalActivityItem.order.desc())
-        )
-        for item in activity_query:
-            rv['activity'].append({
-                'date': item.date,
-                'location': item.location.lower(),
-                'html': item.html,
-            })
 
         sponsors_query = (
             Person.query
