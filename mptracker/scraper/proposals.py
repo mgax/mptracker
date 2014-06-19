@@ -281,6 +281,8 @@ class SingleProposalScraper:
 
         self.activity[name] = result['activity']
 
+        self.sponsorship_bucket.update(result['sponsorship'])
+
     def merge_activity(self, activity_cdep, activity_senate):
         if not activity_cdep:
             return activity_senate
