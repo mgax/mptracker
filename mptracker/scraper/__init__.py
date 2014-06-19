@@ -507,7 +507,6 @@ def proposal_pages(
         ):
     import pickle
     from itertools import chain
-    from mptracker.scraper.proposals import CDEPPK_CDEP_BLACKLIST
     from mptracker.scraper.proposals import ProposalScraper
 
     session = create_session(
@@ -564,11 +563,6 @@ def proposals(
     index = {'pk_cdep': {}, 'pk_senate': {}}
 
     for p in models.Proposal.query:
-        if p.cdeppk_cdep in CDEPPK_CDEP_BLACKLIST:
-            logger.warn("Deleting cdeppk=%r id=%r", p.cdeppk_cdep, p.id)
-            models.db.session.delete(p)
-            continue
-
         if p.cdeppk_cdep:
             index['pk_cdep'][p.cdeppk_cdep] = p
         if p.cdeppk_senate:
@@ -577,9 +571,6 @@ def proposals(
     dirty_proposal_set = set()
 
     for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
-        if page.chamber == 2 and page.pk in CDEPPK_CDEP_BLACKLIST:
-            continue
-
         result = pickle.loads(page.result)
         pk_cdep = result.get('pk_cdep')
         pk_senate = result.get('pk_senate')
@@ -594,8 +585,23 @@ def proposals(
             p = models.Proposal()
 
         if p.cdeppk_cdep:
-            assert pk_cdep == p.cdeppk_cdep, \
-                repr((pk_cdep, p.cdeppk_cdep, p.id))
+            if pk_cdep != p.cdeppk_cdep:
+                if page.chamber == 1:
+                    p.cdeppk_cdep = pk_cdep
+
+                elif page.chamber == 2 and pk_senate:
+                    senate_page = (
+                        models.ScrapedProposalPage.query
+                        .filter_by(chamber=1, pk=pk_senate)
+                        .one()
+                    )
+                    pk_cdep = pickle.loads(senate_page.result)['pk_cdep']
+                    if pk_cdep != page.pk:
+                        page.parsed = True
+                    p.cdeppk_cdep = pk_cdep
+
+                else:
+                    raise RuntimeError(repr((pk_cdep, p.cdeppk_cdep, p.id)))
         elif pk_cdep:
             p.cdeppk_cdep = pk_cdep
             index['pk_cdep'][pk_cdep] = p

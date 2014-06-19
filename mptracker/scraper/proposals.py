@@ -13,8 +13,6 @@ from mptracker.common import fix_local_chars
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-CDEPPK_CDEP_BLACKLIST = [9542, 9543, 12822, 12868, 13812, 13815]
-
 
 class Proposal(GenericModel):
     pass
