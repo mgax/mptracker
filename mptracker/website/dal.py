@@ -506,6 +506,7 @@ class DalPerson:
                 func.count('*'),
             )
             .select_from(Proposal)
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .filter_by(mandate=self.mandate)
             .outerjoin(Proposal.policy_domain)
@@ -1013,6 +1014,7 @@ class DalParty:
                 func.count(distinct(Proposal.id)),
             )
             .select_from(Proposal)
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .join(Mandate.group_memberships)
@@ -1379,6 +1381,7 @@ class DataAccess:
     def get_policy_tacit_approval_qs(self):
         return (
             ProposalActivityItem.query
+            .filter(ProposalActivityItem.date >= LEGISLATURE_2012_START)
             .filter(ProposalActivityItem.html.like('%art.75%'))
         )
 
@@ -1393,6 +1396,7 @@ class DataAccess:
             db.session.query(
                 distinct(Proposal.id)
             )
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .outerjoin(Proposal.policy_domain)
             .filter_by(slug=policy_slug)
         )
@@ -1540,6 +1544,7 @@ class DataAccess:
                 func.count(distinct(Proposal.id))
             )
             .select_from(Proposal)
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .join(Mandate.group_memberships)
