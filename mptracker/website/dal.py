@@ -1575,8 +1575,13 @@ class DataAccess:
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
             raise self.missing()
-        rv = {'title': proposal.title,
-              'controversy': proposal.controversy.all()}
+
+        rv = {
+            'title': proposal.title,
+            'controversy': proposal.controversy.all(),
+            'pk_cdep': proposal.cdeppk_cdep,
+            'pk_senate': proposal.cdeppk_senate,
+        }
 
         rv['activity'] = []
         activity_query = (
