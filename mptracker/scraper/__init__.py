@@ -671,6 +671,11 @@ def proposals(
                 'number_cdep', 'number_senate', 'proposal_type',
                 'pdf_url', 'status', 'status_text', 'modification_date'])
 
+            record['activity'] = flask.json.dumps([
+                item.as_dict(['date', 'location', 'html'])
+                for item in prop.activity
+            ])
+
             slug = prop.decision_chamber
             if slug:
                 record['decision_chamber'] = chamber_by_slug[slug]
