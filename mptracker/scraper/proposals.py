@@ -90,8 +90,13 @@ class ProposalScraper(Scraper):
                 logger.warn("Can't parse modification date %r" % date_txt)
                 continue
 
+            pk = args.get('idp', type=int)
+
+            if (cam, pk) in [(1, 282), (1, 283)]:
+                continue
+
             yield {
-                'pk': args.get('idp', type=int),
+                'pk': pk,
                 'chamber': cam,
                 'date': date,
             }
@@ -186,10 +191,11 @@ class ProposalScraper(Scraper):
                         )
                         rv['sponsorship'].append(cdep_id)
 
-        rv['date'] = get_date_from_numbers(date_texts)
-        assert rv['date'] is not None, "No date for %r %r" % (chamber, pk)
-
         rv['activity'] = self.get_activity(page)
+
+        rv['date'] = get_date_from_numbers(date_texts)
+        if rv['date'] is None:
+            rv['date'] = rv['activity'][0].date
 
         return rv
 
