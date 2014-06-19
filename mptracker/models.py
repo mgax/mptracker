@@ -459,7 +459,7 @@ class ProposalActivityItem(db.Model):
 
     proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
     proposal = db.relationship('Proposal', lazy='eager',
-        backref=db.backref('activity', lazy='dynamic', cascade='all'))
+        backref=db.backref('activity_items', lazy='dynamic', cascade='all'))
 
 
 class ProposalControversy(db.Model):

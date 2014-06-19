@@ -14,7 +14,7 @@ policy_manager = Manager()
 
 
 def iter_committees(proposal):
-    for activity_item in proposal.activity:
+    for activity_item in proposal.activity_items:
         html = pq(activity_item.html)
         for link in html.items('a'):
             href = link.attr('href')

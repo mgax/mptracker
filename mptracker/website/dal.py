@@ -1589,7 +1589,7 @@ class DataAccess:
 
         rv['activity'] = []
         activity_query = (
-            proposal.activity
+            proposal.activity_items
             .order_by(ProposalActivityItem.order.desc())
         )
         for item in activity_query:
