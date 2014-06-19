@@ -552,13 +552,12 @@ def proposal_pages(
 def proposals(
         autoanalyze=False,
         no_commit=False,
+        limit=None,
         ):
     import pickle
     from mptracker.scraper.proposals import SingleProposalScraper
     from mptracker.proposals import ocr_proposal
     from mptracker.policy import calculate_proposal
-
-    proposal_pages()
 
     index = {'pk_cdep': {}, 'pk_senate': {}}
 
@@ -614,6 +613,9 @@ def proposals(
             index['pk_senate'][pk_senate] = p
 
         dirty_proposal_set.add(p)
+
+        if limit and len(dirty_proposal_set) >= int(limit):
+            break
 
 
     def cdep_id(mandate):
