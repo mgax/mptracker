@@ -20,6 +20,16 @@
     {% endfor %}
   </p>
 
+  <p>
+    {% if proposal.pk_cdep %}
+      <a href="http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=2&idp={{ proposal.pk_cdep }}">cdep</a>
+    {% endif %}
+
+    {% if proposal.pk_senate %}
+      <a href="http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=1&idp={{ proposal.pk_senate }}">senat</a>
+    {% endif %}
+  </p>
+
   {% if proposal['controversy'] %}
   <div class="alert-danger">
   <p>Controverse:</p>

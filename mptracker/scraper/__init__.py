@@ -10,7 +10,8 @@ import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
                                      get_gdrive_csv, parse_interval
 from mptracker import models
-from mptracker.common import parse_date, model_to_dict, url_args, almost_eq
+from mptracker.common import parse_date, model_to_dict, url_args, almost_eq, \
+                             generate_slug
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -198,7 +199,7 @@ def people(
             ])
             assert mandate.chamber_number == 2
             row['chamber_id'] = chamber_by_slug['cdep'].id
-            end_date = mandate.end_date or term_interval.upper
+            end_date = mandate.end_date or term_interval.upper or date.max
             row['interval'] = DateRange(term_interval.lower, end_date)
 
             person = (
@@ -208,7 +209,10 @@ def people(
 
             if person is None:
                 if add_people:
-                    person = models.Person(name=mandate.person_name)
+                    person = models.Person(
+                        name=mandate.person_name,
+                        slug=generate_slug(mandate.person_name),
+                    )
                     models.db.session.add(person)
                     models.db.session.flush()
                     new_people += 1
@@ -338,7 +342,6 @@ def groups(
                 )
                 new_intervals.append(interval)
             elif interval_one.end > interval_two.start:
-                import pdb; pdb.set_trace()
                 raise RuntimeError("Overlapping intervals")
 
         interval_list.extend(new_intervals)
@@ -459,8 +462,6 @@ def committees(
                     member.start_date or TERM_2012_START,
                     member.end_date or date.max,
                 )
-                if interval.lower > interval.upper:
-                    import pdb; pdb.set_trace()
                 mandate = mandate_lookup.find(
                     member.mp_name,
                     member.mp_ident.year,
@@ -499,37 +500,130 @@ def committee_summaries(year=2014):
 
 
 @scraper_manager.command
-def proposals(
-        cache_name=None,
+def proposal_pages(
         throttle=None,
-        autoanalyze=False,
+        cache_name=None,
+        year=None,
         ):
+    import pickle
+    from itertools import chain
     from mptracker.scraper.proposals import ProposalScraper
+
+    session = create_session(
+        cache_name=cache_name or _get_config_cache_name(),
+        throttle=float(throttle) if throttle else None,
+    )
+    scraper = ProposalScraper(session)
+
+    db_page_date = {
+        (chamber, pk): date
+        for (chamber, pk, date) in models.db.session.query(
+            models.ScrapedProposalPage.chamber,
+            models.ScrapedProposalPage.pk,
+            models.ScrapedProposalPage.date,
+        )
+    }
+
+    for record in chain(scraper.list_proposals(2, year),
+                        scraper.list_proposals(1, year)):
+        pk = record['pk']
+        chamber = record['chamber']
+        old_date = db_page_date.get((chamber, pk))
+        if old_date and old_date == record['date']:
+            continue
+
+        old_rows = (
+            models.ScrapedProposalPage.query
+            .filter_by(chamber=chamber, pk=pk)
+        )
+        old_rows.delete()
+
+        logger.info("scraping %d %d", chamber, pk)
+        result = scraper.scrape_proposal_page(chamber, pk)
+
+        scraped_page = models.ScrapedProposalPage(**record)
+        scraped_page.result = pickle.dumps(result)
+        models.db.session.add(scraped_page)
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def proposals(
+        autoanalyze=False,
+        no_commit=False,
+        limit=None,
+        ):
+    import pickle
+    from mptracker.scraper.proposals import SingleProposalScraper
     from mptracker.proposals import ocr_proposal
     from mptracker.policy import calculate_proposal
 
-    proposal_scraper = ProposalScraper(create_session(
-            cache_name=cache_name or _get_config_cache_name(),
-            throttle=float(throttle) if throttle else None))
+    index = {'pk_cdep': {}, 'pk_senate': {}}
+
+    for p in models.Proposal.query:
+        if p.cdeppk_cdep:
+            index['pk_cdep'][p.cdeppk_cdep] = p
+        if p.cdeppk_senate:
+            index['pk_senate'][p.cdeppk_senate] = p
+
+    dirty_proposal_set = set()
+
+    for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
+        result = pickle.loads(page.result)
+        pk_cdep = result.get('pk_cdep')
+        pk_senate = result.get('pk_senate')
+
+        if pk_cdep and pk_cdep in index['pk_cdep']:
+            p = index['pk_cdep'][pk_cdep]
+
+        elif pk_senate and pk_senate in index['pk_senate']:
+            p = index['pk_senate'][pk_senate]
+
+        else:
+            p = models.Proposal()
+
+        if p.cdeppk_cdep:
+            if pk_cdep != p.cdeppk_cdep:
+                if page.chamber == 1:
+                    p.cdeppk_cdep = pk_cdep
+
+                elif page.chamber == 2 and pk_senate:
+                    senate_page = (
+                        models.ScrapedProposalPage.query
+                        .filter_by(chamber=1, pk=pk_senate)
+                        .one()
+                    )
+                    pk_cdep = pickle.loads(senate_page.result)['pk_cdep']
+                    if pk_cdep != page.pk:
+                        page.parsed = True
+                    p.cdeppk_cdep = pk_cdep
+
+                else:
+                    raise RuntimeError(repr((pk_cdep, p.cdeppk_cdep, p.id)))
+        elif pk_cdep:
+            p.cdeppk_cdep = pk_cdep
+            index['pk_cdep'][pk_cdep] = p
+
+        if p.cdeppk_senate:
+            assert pk_senate == p.cdeppk_senate, \
+                repr((pk_senate, p.cdeppk_senate, p.id))
+        elif pk_senate:
+            p.cdeppk_senate = pk_senate
+            index['pk_senate'][pk_senate] = p
+
+        dirty_proposal_set.add(p)
+
+        if limit and len(dirty_proposal_set) >= int(limit):
+            break
+
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
 
-    by_cdep_id = {cdep_id(m): m
-                  for m in models.Mandate.query
-                  if m.year == 2012}
-
-    id_cdeppk_cdep = {}
-    id_cdeppk_senate = {}
-    for proposal in models.Proposal.query:
-        if proposal.cdeppk_cdep:
-            id_cdeppk_cdep[proposal.cdeppk_cdep] = proposal.id
-        if proposal.cdeppk_senate:
-            id_cdeppk_senate[proposal.cdeppk_senate] = proposal.id
+    by_cdep_id = {cdep_id(m): m for m in models.Mandate.query}
 
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
-
-    proposals = proposal_scraper.fetch_from_mp_pages(set(by_cdep_id.keys()))
 
     all_activity = defaultdict(list)
     for item in models.ProposalActivityItem.query:
@@ -548,29 +642,48 @@ def proposals(
     changed = []
     seen = []
 
-    with proposal_patcher.process(autoflush=1000, remove=True) as add_proposal:
-        with activity_patcher.process(autoflush=1000, remove=True) \
+    with proposal_patcher.process(autoflush=1000) as add_proposal:
+        with activity_patcher.process(autoflush=1000) \
                 as add_activity:
-            for prop in proposals:
-                record = model_to_dict(prop, ['cdeppk_cdep', 'cdeppk_senate',
+            for proposal in dirty_proposal_set:
+                page_cdep = (
+                    models.ScrapedProposalPage.query
+                    .filter_by(chamber=2, pk=proposal.cdeppk_cdep)
+                    .first()
+                )
+                page_senate = (
+                    models.ScrapedProposalPage.query
+                    .filter_by(chamber=1, pk=proposal.cdeppk_senate)
+                    .first()
+                )
+
+                single_scraper = SingleProposalScraper()
+
+                if page_senate:
+                    single_scraper.scrape_page('senate',
+                        pickle.loads(page_senate.result))
+                    page_senate.parsed = True
+
+                if page_cdep:
+                    single_scraper.scrape_page('cdep',
+                        pickle.loads(page_cdep.result))
+                    page_cdep.parsed = True
+
+                prop = single_scraper.finalize()
+
+                prop.id = proposal.id or models.random_uuid()
+                prop.cdeppk_cdep = proposal.cdeppk_cdep
+                prop.cdeppk_senate = proposal.cdeppk_senate
+
+
+                record = prop.as_dict(['id', 'cdeppk_cdep', 'cdeppk_senate',
                     'decision_chamber', 'url', 'title', 'date', 'number_bpi',
                     'number_cdep', 'number_senate', 'proposal_type',
-                    'pdf_url', 'status', 'status_text'])
+                    'pdf_url', 'status', 'status_text', 'modification_date'])
 
                 slug = prop.decision_chamber
                 if slug:
                     record['decision_chamber'] = chamber_by_slug[slug]
-
-                idc = id_cdeppk_cdep.get(prop.cdeppk_cdep)
-                ids = id_cdeppk_senate.get(prop.cdeppk_senate)
-                if idc and ids and idc != ids:
-                    logger.warn("Two different records for the same proposal: "
-                                "(%s, %s). Removing the 2nd.", idc, ids)
-                    proposal_s = models.Proposal.query.get(ids)
-                    if proposal_s is not None:
-                        models.db.session.delete(proposal_s)
-                    ids = None
-                record['id'] = idc or ids or models.random_uuid()
 
                 result = add_proposal(record)
                 row = result.row
@@ -624,21 +737,11 @@ def proposals(
                         record['id'] = models.random_uuid()
                     add_activity(record)
 
-        for proposal_id in proposal_patcher.ids_to_delete():
-            logger.warn(
-                "Deleting activity and sponsorship for old proposal %s",
-                proposal_id,
-            )
-            old_activity = (
-                models.ProposalActivityItem.query
-                .filter_by(proposal_id=proposal_id)
-            )
-            old_activity.delete(synchronize_session=False)
-            old_sponsorships = (
-                models.Sponsorship.query
-                .filter_by(proposal_id=proposal_id)
-            )
-            old_sponsorships.delete(synchronize_session=False)
+
+    if no_commit:
+        logger.warn("Rolling back the transaction")
+        models.db.session.rollback()
+        return
 
     models.db.session.commit()
 
@@ -1270,7 +1373,8 @@ def auto(cache_name=None):
     questions(autoanalyze=True, cache_name=cache_name)
     votes(days=20, autoanalyze=True, cache_name=cache_name)
     groups(cache_name=cache_name)
-    proposals(autoanalyze=True, cache_name=cache_name)
+    proposal_pages(cache_name=cache_name)
+    proposals(autoanalyze=True)
 
 
 @scraper_manager.command

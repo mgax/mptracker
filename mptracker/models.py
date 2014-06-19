@@ -421,6 +421,7 @@ class Proposal(db.Model):
     number_senate = db.Column(db.Text, unique=True)
     number_bpi = db.Column(db.Text, unique=True)
     date = db.Column(db.Date)
+    modification_date = db.Column(db.Date)
     proposal_type = db.Column(db.Text)
     status = db.Column(db.Text)
     status_text = db.Column(db.Text)
@@ -595,6 +596,15 @@ class User(db.Model, UserMixin):
                 db.session.add(row)
                 db.session.commit()
             return row
+
+
+class ScrapedProposalPage(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    chamber = db.Column(db.Integer)
+    pk = db.Column(db.Integer)
+    date = db.Column(db.Date)
+    result = db.Column(db.Binary)
+    parsed = db.Column(db.Boolean, nullable=False, default=False)
 
 
 class LookupError(Exception):
