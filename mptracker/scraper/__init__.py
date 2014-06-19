@@ -625,15 +625,7 @@ def proposals(
 
     chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
-    all_activity = defaultdict(list)
-    for item in models.ProposalActivityItem.query:
-        all_activity[item.proposal_id].append(item)
-
     proposal_patcher = TablePatcher(models.Proposal,
-                                    models.db.session,
-                                    key_columns=['id'])
-
-    activity_patcher = TablePatcher(models.ProposalActivityItem,
                                     models.db.session,
                                     key_columns=['id'])
 
@@ -643,99 +635,73 @@ def proposals(
     seen = []
 
     with proposal_patcher.process(autoflush=1000) as add_proposal:
-        with activity_patcher.process(autoflush=1000) \
-                as add_activity:
-            for proposal in dirty_proposal_set:
-                page_cdep = (
-                    models.ScrapedProposalPage.query
-                    .filter_by(chamber=2, pk=proposal.cdeppk_cdep)
-                    .first()
-                )
-                page_senate = (
-                    models.ScrapedProposalPage.query
-                    .filter_by(chamber=1, pk=proposal.cdeppk_senate)
-                    .first()
-                )
+        for proposal in dirty_proposal_set:
+            page_cdep = (
+                models.ScrapedProposalPage.query
+                .filter_by(chamber=2, pk=proposal.cdeppk_cdep)
+                .first()
+            )
+            page_senate = (
+                models.ScrapedProposalPage.query
+                .filter_by(chamber=1, pk=proposal.cdeppk_senate)
+                .first()
+            )
 
-                single_scraper = SingleProposalScraper()
+            single_scraper = SingleProposalScraper()
 
-                if page_senate:
-                    single_scraper.scrape_page('senate',
-                        pickle.loads(page_senate.result))
-                    page_senate.parsed = True
+            if page_senate:
+                single_scraper.scrape_page('senate',
+                    pickle.loads(page_senate.result))
+                page_senate.parsed = True
 
-                if page_cdep:
-                    single_scraper.scrape_page('cdep',
-                        pickle.loads(page_cdep.result))
-                    page_cdep.parsed = True
+            if page_cdep:
+                single_scraper.scrape_page('cdep',
+                    pickle.loads(page_cdep.result))
+                page_cdep.parsed = True
 
-                prop = single_scraper.finalize()
+            prop = single_scraper.finalize()
 
-                prop.id = proposal.id or models.random_uuid()
-                prop.cdeppk_cdep = proposal.cdeppk_cdep
-                prop.cdeppk_senate = proposal.cdeppk_senate
+            prop.id = proposal.id or models.random_uuid()
+            prop.cdeppk_cdep = proposal.cdeppk_cdep
+            prop.cdeppk_senate = proposal.cdeppk_senate
 
 
-                record = prop.as_dict(['id', 'cdeppk_cdep', 'cdeppk_senate',
-                    'decision_chamber', 'url', 'title', 'date', 'number_bpi',
-                    'number_cdep', 'number_senate', 'proposal_type',
-                    'pdf_url', 'status', 'status_text', 'modification_date'])
+            record = prop.as_dict(['id', 'cdeppk_cdep', 'cdeppk_senate',
+                'decision_chamber', 'url', 'title', 'date', 'number_bpi',
+                'number_cdep', 'number_senate', 'proposal_type',
+                'pdf_url', 'status', 'status_text', 'modification_date'])
 
-                slug = prop.decision_chamber
-                if slug:
-                    record['decision_chamber'] = chamber_by_slug[slug]
+            slug = prop.decision_chamber
+            if slug:
+                record['decision_chamber'] = chamber_by_slug[slug]
 
-                result = add_proposal(record)
-                row = result.row
-                if result.is_changed:
-                    changed.append(row)
-                seen.append(row)
+            result = add_proposal(record)
+            row = result.row
+            if result.is_changed:
+                changed.append(row)
+            seen.append(row)
 
-                new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
-                existing_sponsorships = {sp.mandate: sp
-                                         for sp in row.sponsorships}
-                to_remove = set(existing_sponsorships) - set(new_people)
-                to_add = set(new_people) - set(existing_sponsorships)
-                if to_remove:
-                    logger.info("Removing sponsors %s: %r", row.id,
-                                [cdep_id(m) for m in to_remove])
-                    sp_removed += 1
-                    for m in to_remove:
-                        sp = existing_sponsorships[m]
-                        models.db.session.delete(sp)
-                if to_add:
-                    logger.info("Adding sponsors %s: %r", row.id,
-                                [cdep_id(m) for m in to_add])
-                    sp_added += 1
-                    for m in to_add:
-                        row.sponsorships.append(models.Sponsorship(mandate=m))
+            new_people = set(by_cdep_id[ci] for ci in prop.sponsorships)
+            existing_sponsorships = {sp.mandate: sp
+                                     for sp in row.sponsorships}
+            to_remove = set(existing_sponsorships) - set(new_people)
+            to_add = set(new_people) - set(existing_sponsorships)
+            if to_remove:
+                logger.info("Removing sponsors %s: %r", row.id,
+                            [cdep_id(m) for m in to_remove])
+                sp_removed += 1
+                for m in to_remove:
+                    sp = existing_sponsorships[m]
+                    models.db.session.delete(sp)
+            if to_add:
+                logger.info("Adding sponsors %s: %r", row.id,
+                            [cdep_id(m) for m in to_add])
+                sp_added += 1
+                for m in to_add:
+                    row.sponsorships.append(models.Sponsorship(mandate=m))
 
-                if to_remove or to_add:
-                    sp_updates += 1
-
-                db_activity = all_activity[row.id]
-                db_activity.sort(key=lambda a: a.order)
-                act_fields = lambda r: (r.date, r.location)
-                if ([act_fields(r) for r in db_activity] !=
-                    [act_fields(r) for r in prop.activity[:len(db_activity)]]):
-                    logger.warn("History doesn't match for %s, "
-                                "%d items will be removed",
-                                row.id,len(db_activity))
-                    db_activity = []
-
-                for n, ac in enumerate(prop.activity):
-                    record = model_to_dict(ac, ['date', 'location', 'html'])
-                    record['proposal_id'] = row.id
-                    record['order'] = n
-                    if n < len(db_activity):
-                        item = db_activity[n]
-                        record['id'] = item.id
-                        assert item.date == record['date']
-                        assert item.location == record['location']
-                        assert item.order == record['order']
-                    else:
-                        record['id'] = models.random_uuid()
-                    add_activity(record)
+            if to_remove or to_add:
+                sp_updates += 1
 
 
     if no_commit:
