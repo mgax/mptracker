@@ -425,6 +425,7 @@ class Proposal(db.Model):
     proposal_type = db.Column(db.Text)
     status = db.Column(db.Text)
     status_text = db.Column(db.Text)
+    activity = db.Column(db.Text)
 
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
     decision_chamber = db.relationship('Chamber')
