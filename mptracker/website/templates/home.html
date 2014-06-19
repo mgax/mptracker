@@ -2,81 +2,212 @@
 
 
 {% block content %}
-  <h1>Open Parlament</h1>
 
-  <div class="row">
-    <div class="col-sm-8">
-      {{ text('editorial', fold=True) }}
-
-      <p>
-        <a href="{{ url_for('.text_page', name='editorial') }}">
-          citește mai mult
-        </a>
-      </p>
-
-      {{ text('local', fold=True) }}
-
-      <p>
-        <a href="{{ url_for('.text_page', name='local') }}">
-          citește mai mult
-        </a>
-      </p>
-
-      <h2>Contribuie</h2>
-
-      <p>
-        <a href="{{ url_for('.text_page', name='donations') }}">
-          citește mai mult
-        </a>
-      </p>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="home-header-search">
+            <div class="row">
+                <div class="col-sm-4 pull-left search-title">
+                    Caută în Open Parlament după:
+                </div>
+                <div class="col-sm-2 pull-right search-advanced">
+                    <a href="#">
+                    Căutare avansată &raquo;
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form-inline">
+                        <div class="form-group col-sm-6">
+                            <label for="name" class="sr-only">Nume / Prenume Deputat</label>
+                            <input type="text" name="name" class="form-control" placeholder="Nume / Prenume Deputat" />
+                        </div>
+                        <div class="form-group col-sm-5">
+                            <label for="politics" class="sr-only">Politici Publice</label>
+                            <select name="politics" class="form-control">
+                                <option>Politici Publice</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-1">
+                            <button class="btn btn-success">
+                                <i class="fa fa-search"></i> Caută
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-content content-home">
+    <div class="row home-section">
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-9">
+                    <!-- De ce este necesar -->
+                    <div class="row editorial">
+                        <div class="col-sm-12">
+                            {{ text('editorial', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='editorial') }}">
+                                continuare &raquo;
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Articol Featured -->
+                    <div class="row article-featured">
+                        <div class="col-sm-12">
+                            <!-- Titlu Articol -->
+                            <div class="row">
+                                <div class="col-sm-12 article-title">
+                                    <a href="#">
+                                        Leapșa printre legi și prea multe proiecte
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Meta Articol -->
+                            <div class="row article-meta">
+                                <div class="col-sm-2 article-author-image">
+                                    <img src="http://placehold.it/70x70" alt="Lavinia Niculescu" />
+                                </div>
+                                <div class="col-sm-10 article-author-meta">
+                                    <span class="article-author-date">
+                                        LAVINIA NICULESCU &bull; 28 mai
+                                    </span><br />
+                                    <span class="article-author-occupation">
+                                        jurnalist freelance
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Excerpt Articol -->
+                            <div class="row article-excerpt">
+                                <div class="col-sm-12">
+                                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi an, sed choro mediocritatem id. His ad duis recusabo forensibus, usu meliore legendos acusam... <a href="#">continuare &raquo;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 middle-info">
+                    <!-- Local STUFF -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ text('local', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='local') }}">continuare &raquo;</a>
+                        </div>
+                    </div>
+                    <!-- Voturi Controversate -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ text('local', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='local') }}">continuare &raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 articles-list">
+            <h3>Articole recente:</h3>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    OANA RĂDESCU &bull; 13 iunie
+                </span>
+            </div>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    OANA RĂDULESCU &bull; 15 iunie
+                </span>
+            </div>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    PETRE ISPIRESCU &bull; 16 iunie
+                </span>
+            </div>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    ION LUCA CARAGIALE &bull; 16 iunie
+                </span>
+            </div>
+        </div>
     </div>
 
-    <div class="col-sm-4">
-      <p>
-        {% set url = url_for('.policy_tacit') %}
-        <a href="{{ url }}">legi adoptate tacit ({{ tacit_approvals_count }})</a>
-      </p>
+<!--
+      <div class="row">
+        <div class="col-sm-8">
 
-      <p>
-        {% set url = url_for('.policy_controversy') %}
-        <a href="{{ url }}">legi controversate ({{ controversy_count }})</a>
-      </p>
+          <h2>Contribuie</h2>
 
-      <p>
-        <a href="{{ url_for('.person_migrations') }}">migrări recente</a>
-      </p>
+          <p>
+            <a href="{{ url_for('.text_page', name='donations') }}">
+              citește mai mult
+            </a>
+          </p>
+        </div>
 
-      <h3>Propuneri legislative</h3>
+        <div class="col-sm-4">
+          <p>
+            {% set url = url_for('.policy_tacit') %}
+            <a href="{{ url }}">legi adoptate tacit ({{ tacit_approvals_count }})</a>
+          </p>
 
-      <ul class="list-unstyled">
-        {% for item in recent_proposals %}
-          {% set url = url_for(
-              '.policy_proposal',
-              proposal_id=item['proposal_id'],
-            ) %}
-          <li>
-            <strong>{{ item['date']|datefmt }}:</strong>
+          <p>
+            {% set url = url_for('.policy_controversy') %}
+            <a href="{{ url }}">legi controversate ({{ controversy_count }})</a>
+          </p>
 
-            <a href="{{ url }}">{{ item['text'] }}</a>
-          </li>
-        {% endfor %}
-      </ul>
+          <p>
+            <a href="{{ url_for('.person_migrations') }}">migrări recente</a>
+          </p>
 
-      <h3>Întrebări și interpelări</h3>
+          <h3>Propuneri legislative</h3>
 
-      <ul class="list-unstyled">
-        {% for item in recent_questions %}
-          {% set url = url_for(
-              '.person_question',
-              question_id=item['question_id'],
-            ) %}
-          <li>
-            <strong>{{ item['date']|datefmt }}:</strong>
+          <ul class="list-unstyled">
+            {% for item in recent_proposals %}
+              {% set url = url_for(
+                  '.policy_proposal',
+                  proposal_id=item['proposal_id'],
+                ) %}
+              <li>
+                <strong>{{ item['date']|datefmt }}:</strong>
 
-            <a href="{{ url }}">{{ item['text'] }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
+                <a href="{{ url }}">{{ item['text'] }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+
+          <h3>Întrebări și interpelări</h3>
+
+          <ul class="list-unstyled">
+            {% for item in recent_questions %}
+              {% set url = url_for(
+                  '.person_question',
+                  question_id=item['question_id'],
+                ) %}
+              <li>
+                <strong>{{ item['date']|datefmt }}:</strong>
+
+                <a href="{{ url }}">{{ item['text'] }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+</div>
+-->
 {% endblock %}

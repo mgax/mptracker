@@ -1,13 +1,16 @@
-<div class="container">
-  <nav class="navbar navbar-default">
-    <a class="navbar-brand" href="{{ url_for('pages.home') }}">Open Parlament</a>
-
-    <ul class="nav navbar-nav">
-      {%- for link in nav_link_list %}
-        <li {%- if g.section == link['section'] %} class="active"{% endif %}>
-          <a href="{{ link['url'] }}">{{ link['label'] }}</a>
-        </li>
-      {%- endfor %}
-    </ul>
-  </nav>
+<div class="topbar">
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <a class="navbar-brand" href="{{ url_for('pages.home') }}">
+                <img src="/static/img/open-parlament.png" alt="Open Parlament" title="Open Parlament" />
+            </a>
+            <ul class="nav navbar-nav">
+            {%- for link in nav_link_list %}
+                <li {%- if g.section == link['section'] %} class="active"{% endif %}>
+                  <a href="{{ link['url'] }}">{{ link['label'] }}</a>
+                </li>
+            {%- endfor %}
+            </ul>
+        </nav>
+    </div>
 </div>

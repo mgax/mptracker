@@ -1,0 +1,258 @@
+/*---------------------------------------------------
+    LESS Elements 0.9
+  ---------------------------------------------------
+    A set of useful LESS mixins
+    More info at: http://lesselements.com
+  ---------------------------------------------------*/
+html,
+body {
+  background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
+  font-family: 'Open Sans', sans-serif;
+}
+a {
+  color: #267cbe;
+}
+a:hover {
+  color: #175789;
+  text-decoration: none;
+}
+.topbar {
+  background: url(../img/semi-opaque-bg.png) repeat;
+  width: 100%;
+}
+.topbar .navbar {
+  background: none;
+  border: none;
+  margin-bottom: 0;
+}
+.topbar .navbar .navbar-brand {
+  padding: 15px 0;
+}
+.topbar .navbar ul.nav.navbar-nav {
+  float: right;
+  padding-top: 25px;
+}
+.topbar .navbar ul.nav.navbar-nav li {
+  margin-left: 20px;
+}
+.topbar .navbar ul.nav.navbar-nav li a {
+  font-weight: 700;
+  color: #000;
+  font-size: 20px;
+}
+.topbar .navbar ul.nav.navbar-nav li a:hover {
+  color: #069;
+}
+.home-header-search {
+  margin: 80px 0 20px 0;
+  background: url(../img/home-header-search-bg.png) repeat;
+  padding: 15px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.home-header-search .search-title {
+  color: #267cbe;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 16px;
+}
+.home-header-search .search-advanced {
+  text-align: right;
+  font-weight: 700;
+}
+.home-header-search hr {
+  border-top: 1px solid #bebebe;
+  border-bottom: 1px solid #dce0e0;
+}
+.home-header-search form .form-group {
+  padding-left: 0;
+  padding-right: 15px;
+}
+.home-header-search form .form-group.col-sm-1 {
+  padding: 0 15px;
+}
+.home-header-search form input,
+.home-header-search form select {
+  border: none;
+  color: #267cbe;
+}
+.container-content {
+  background: #fff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.content-home .home-section {
+  border-bottom: 1px solid #dce0e0;
+  margin-left: 0;
+  margin-right: 0;
+}
+.content-home .editorial {
+  padding: 15px;
+}
+.content-home .editorial h2 {
+  font-weight: 900;
+  font-size: 14px;
+}
+.content-home .article-featured {
+  padding: 15px 25px;
+}
+.content-home .article-featured .article-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.content-home .article-featured .article-meta {
+  margin-bottom: 20px;
+}
+.content-home .article-featured .article-meta .article-author-image img {
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  border-radius: 35px;
+}
+.content-home .article-featured .article-meta .article-author-meta {
+  padding-top: 10px;
+}
+.content-home .article-featured .article-meta .article-author-meta .article-author-date {
+  font-weight: 700;
+}
+.content-home .article-featured .article-meta .article-author-meta .article-author-occupation {
+  font-style: italic;
+}
+.content-home .middle-info {
+  background: #f4f6f7;
+  padding: 15px;
+}
+.content-home .middle-info h2 {
+  font-size: 14px;
+  font-weight: 700;
+}
+.content-home .middle-info p {
+  font-size: 13px;
+  font-style: italic;
+}
+.content-home .middle-info p a {
+  font-style: normal;
+}
+.content-home .articles-list {
+  padding: 15px;
+}
+.content-home .articles-list h3 {
+  font-weight: 300;
+  font-size: 20px;
+  color: #45515b;
+  padding-left: 10px;
+}
+.content-home .articles-list .article-single {
+  padding: 18px 25px;
+  border-bottom: 1px solid #dce0e0;
+}
+.content-home .articles-list .article-single:last-child {
+  border-bottom: none;
+}
+.content-home .articles-list .article-single .article-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+figure {
+  margin-bottom: 15px;
+}
+.placeholder {
+  background: #fda;
+  font-size: 200%;
+  color: #555;
+  padding: 20px;
+}
+.leaflet-popup-content {
+  font-size: 130%;
+}
+.proposal-activity-at-cd {
+  background: #fff0d8;
+}
+.proposal-activity-at-se {
+  background: #dfefff;
+}
+.proposal-status-inprogress {
+  background: #f5f5a6;
+}
+.proposal-status-approved {
+  background: #9df39d;
+}
+.proposal-status-rejected {
+  background: #fcc1c1;
+}
+.person-image-box {
+  text-align: center;
+}
+.person-image-box img {
+  width: 200px;
+}
+.romania-curata-text {
+  white-space: pre-wrap;
+}
+.transcript-text {
+  white-space: pre-wrap;
+}
+.person-index-search-form {
+  margin-bottom: 40px;
+}
+.compare-headline {
+  cursor: pointer;
+}
+.compare-headline-expanded {
+  display: none;
+}
+.compare-headline.expanded .compare-headline-expanded {
+  display: inline;
+}
+.compare-headline.expanded .compare-headline-collapsed {
+  display: none;
+}
+.compare-list {
+  display: none;
+}
+/*************************
+ *   activitychart   *
+ *************************/
+.chart-axis line,
+.chart-axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.chart-axis.y line {
+  display: none;
+}
+.activitychart-line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+.activitychart-vacation {
+  stroke: none;
+}
+.membershipchart-rect {
+  cursor: pointer;
+}
+.wordcloud {
+  height: 250px;
+}
+.similarity-circle {
+  fill-opacity: 0.5;
+}
+.similarity-barchart .bar.me {
+  fill: steelblue;
+}
+.similarity-barchart .bar.other {
+  fill: grey;
+}
+.similarity-barchart .number {
+  font-size: 10px;
+}
+.similarity-barchart .number.me {
+  stroke: steelblue;
+}
+.similarity-barchart .number.other {
+  stroke: grey;
+}
