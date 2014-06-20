@@ -80,9 +80,16 @@ def inject_nav_links():
     }
 
 
-def template_text(name, fold=False):
+def template_text(name, fold=False, below_fold=False):
     html = flask.render_template('text_%s.html' % name, layout=False)
-    return jinja2.Markup(html.split('<!-- fold -->')[0] if fold else html)
+
+    if fold:
+        html = html.split('<!-- fold -->')[0]
+
+    elif below_fold:
+        html = html.split('<!-- fold -->')[1]
+
+    return jinja2.Markup(html)
 
 
 @pages.record
