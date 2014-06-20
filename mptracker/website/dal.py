@@ -44,6 +44,12 @@ def read_activity_item(item):
     }
 
 
+def pluck_tacit_approval(proposal):
+    for item in json.loads(proposal.activity):
+        if TACIT_APPROVAL_SUBSTRING in item['html']:
+            return read_activity_item(item)
+
+
 def _get_recent_questions(mandate, limit):
     recent_questions_query = (
         Question.query
@@ -1446,11 +1452,6 @@ class DataAccess:
         ]
 
     def get_policy_tacit_approval_list(self):
-        def pluck_tacit_approval(proposal):
-            for item in json.loads(proposal.activity):
-                if TACIT_APPROVAL_SUBSTRING in item['html']:
-                    return read_activity_item(item)
-
         qs = (
             self.get_policy_tacit_approval_qs()
             .order_by(Proposal.date.desc())
@@ -1474,8 +1475,8 @@ class DataAccess:
     def get_policy_controversy_list(self):
         tacit_approval_query = self.get_policy_tacit_approval_qs()
         tacit_approval = {
-            item.proposal_id: {'date': item.date, 'location': item.location}
-            for item in tacit_approval_query
+            proposal.id: pluck_tacit_approval(proposal)
+            for proposal in tacit_approval_query
         }
         qs = (
             self.get_policy_controversy_qs()
