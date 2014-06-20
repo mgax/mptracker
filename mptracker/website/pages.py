@@ -483,6 +483,7 @@ def vote_controversy(controversy_id):
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local'})
 @pages.route('/info/editorial', defaults={'name': 'editorial'})
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
+@pages.route('/info/controverse', defaults={'name': 'voting_controversy'})
 def text_page(name):
     return flask.render_template('text_%s.html' % name, layout=True)
 

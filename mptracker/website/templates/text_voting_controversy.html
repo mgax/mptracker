@@ -1,0 +1,18 @@
+{% if layout %}{% extends 'layout.html' %}{% endif %}
+
+
+{%- block content %}
+  <h2>Voturi controversate</h2>
+
+  <p>Secțiunea <strong>voturi controversate</strong> prezintă și explică votul fiecărui deputat asupra unor proiecte de lege și propuneri legislative inițiate în această legislatură sau în precedentele, care au fost considerate problematice de către media, organizații non-guvernamentale sau experții Median Research Centre.</p>
+
+  <!-- fold -->
+
+  <p>Aceste voturi acoperă o gamă largă de subiecte: de la probleme de mediu și patrimoniu cultural (ex.: Roșia Montană) la probleme de etică aplicată (ex.: obligativitatea consilierii psihologice înainte de avort), de la aspecte ce țin de libertatea presei și libertatea de expresie (ex.: reincriminarea insultei și a calomniei) până la reglementări legate de funcționarea justiției (ex. scoaterea parlamentarilor și altor demnitari aleși de sub incidența conflictului de interese).</p>
+
+  <p>Desigur, disciplina la vot a parlamentarilor este necesară pentru implementarea politicilor publice asumate de guvern sau pentru menținerea profilului ideologic în cazul partidelor de opoziție. De aceea, parlamentarii votează de multe ori urmând doar decizia indicată de expertul partidului în acel domeniu, respectiv de liderii grupului parlament.</p>
+
+  <p>Totuși, dincolo de aceste circumstanțe, poziția parlamentarului asupra unor subiecte foarte delicate sau intens mediatizate rămâne un criteriu valid pentru decizia de vot de la alegerile următoare. Compararea propriei poziții asupra subiectelor respective cu cea a deputatului reprezintă un prim pas spre stabilirea gradului de compatibilitate sau incompatibilitate ideologică, un criteriu extrem de important pentru modul de funcționare al democrației reprezentative dar și pentru misiunea OpenParlament.</p>
+
+  <p>Caută <a href="{{ url_for('.person_index') }}">aici</a> deputatul care te reprezintă sau de care ești interesat pentru a vedea cum a votat în cazul acestor propuneri. Lista voturilor controversate va fi actualizată periodic, folosind, sperăm, și contribuția dumneavoastră, a utilizatorilor.</p>
+{% endblock %}
