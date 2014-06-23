@@ -244,7 +244,7 @@ class DalPerson:
         }
 
         if self.mandate.picture_url is not None:
-            rv['picture_filename'] = '%s-300px.jpg' % str(self.mandate.id)
+            rv['picture_filename'] = '%s.jpg' % str(self.person.slug)
 
         rv['assets'] = self.get_assets_data()
 

@@ -208,7 +208,7 @@ def person_detail(person_slug):
     ctx['policy_domains'] = person.get_top_policies()
 
     if 'picture_filename' in ctx:
-        picture_rel_path = path('mandate-pictures') / ctx['picture_filename']
+        picture_rel_path = path('pictures/2012') / ctx['picture_filename']
         if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
             ctx['picture_url'] = flask.url_for(
                 'static',
