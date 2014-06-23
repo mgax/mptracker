@@ -1550,6 +1550,8 @@ class DataAccess:
             .filter(MpGroupMembership.interval.contains(Question.date))
             .join(Question.policy_domain)
             .filter(PolicyDomain.slug == policy_slug)
+            .join(MpGroupMembership.mp_group)
+            .filter(MpGroup.year == 2012)
             .group_by(MpGroupMembership.mp_group_id)
         )
 
@@ -1569,6 +1571,8 @@ class DataAccess:
             .filter(MpGroupMembership.interval.contains(Proposal.date))
             .join(Proposal.policy_domain)
             .filter(PolicyDomain.slug == policy_slug)
+            .join(MpGroupMembership.mp_group)
+            .filter(MpGroup.year == 2012)
             .group_by(MpGroupMembership.mp_group_id)
         )
 
