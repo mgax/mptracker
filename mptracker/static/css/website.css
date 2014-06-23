@@ -9,6 +9,14 @@ body {
   background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
   font-family: 'Open Sans', sans-serif;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Open Sans', sans-serif;
+}
 a {
   color: #267cbe;
 }
@@ -130,6 +138,7 @@ a:hover {
   padding: 15px;
 }
 .content-home .middle-info h2 {
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
 }
@@ -164,7 +173,6 @@ a:hover {
   font-size: 22px;
   font-weight: 900;
   color: #45515b;
-  font-family: 'Open Sans', sans-serif;
 }
 .content-home h3 span.number {
   background: #45515b;
@@ -172,6 +180,7 @@ a:hover {
   font-size: 15px;
   padding: 5px;
   width: 70px;
+  margin-left: 10px;
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   border-radius: 35px;
@@ -179,13 +188,36 @@ a:hover {
 .content-home .sub-section {
   padding: 20px 0 0 20px;
 }
+.content-home .sub-section.comparison {
+  border-bottom: 1px solid #dce0e0;
+}
+.content-home .sub-section.comparison h4 {
+  font-size: 22px;
+  margin-top: 20px;
+}
+.content-home .sub-section.comparison h4 a {
+  font-size: 16px;
+}
+.content-home .sub-section.comparison .graph-info {
+  margin: 25px 0;
+}
+.content-home .sub-section.comparison .graph-info .icon-info {
+  padding-top: 7px;
+  text-align: right;
+}
+.content-home .sub-section.proposals {
+  border-bottom: 1px solid #dce0e0;
+  font-size: 14px;
+}
+.content-home .sub-section.proposals a.date {
+  font-weight: 700;
+}
 .laws-list {
   padding-left: 0;
 }
 .laws-list .law {
-  border-top: 1px solid #dde1db;
-  border-bottom: 1px solid #dde1db;
-  border-right: 1px solid #dde1db;
+  border: 1px solid #dde1db;
+  border-left: none;
   margin-bottom: 7px;
   background: #fbfbfb;
 }
@@ -212,13 +244,59 @@ a:hover {
 .laws-list .law .law-status-text {
   float: right;
   width: 23%;
+  font-size: 13px;
   text-align: right;
   padding: 7px 15px 7px 0;
   font-weight: 700;
   color: #c1c1c1;
   text-transform: uppercase;
 }
-.laws-list .full-list {
+.persons-list {
+  border-bottom: 1px solid #dce0e0;
+}
+.persons-list .person {
+  border: 1px solid #dde1db;
+  border-left: none;
+  margin-bottom: 7px;
+  background: #fbfbfb;
+}
+.persons-list .person .person-status-color {
+  background: #c1c1c1;
+  float: left;
+  width: 1.5%;
+  height: 60px;
+}
+.persons-list .person .person-image {
+  float: left;
+  margin-left: 1px;
+  width: 7.5%;
+}
+.persons-list .person .person-details {
+  float: left;
+  width: 51%;
+  padding: 20px 5px;
+}
+.persons-list .person .person-details span.date {
+  margin-right: 25px;
+}
+.persons-list .person .person-details span.name {
+  font-weight: bold;
+}
+.persons-list .person .person-from,
+.persons-list .person .person-to {
+  float: left;
+  width: 19.5%;
+  padding: 20px 15px 20px 0;
+  text-align: right;
+}
+.persons-list .person span.term {
+  text-transform: uppercase;
+  color: #d0d0d0;
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 13px;
+}
+p.full-list {
   text-align: right;
 }
 .clear {

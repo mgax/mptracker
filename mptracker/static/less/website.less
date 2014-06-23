@@ -9,6 +9,10 @@ html, body {
     font-family: 'Open Sans', sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', sans-serif;
+}
+
 a {
     color: @colorLink;
     &:hover {
@@ -129,6 +133,7 @@ a {
         background: #f4f6f7;
         padding: 15px;
         h2 {
+            font-family: 'Open Sans', sans-serif;
             font-size: 14px;
             font-weight: 700;
         }
@@ -164,7 +169,6 @@ a {
         font-size: 22px;
         font-weight: 900;
         color: @colorHeader;
-        font-family: 'Open Sans', sans-serif;
         span {
             &.number {
                 background: @colorHeader;
@@ -172,21 +176,45 @@ a {
                 font-size: 15px;
                 padding: 5px;
                 width: 70px;
+                margin-left: 10px;
                 .rounded(35px);
             }
         }
     }
     .sub-section {
         padding: 20px 0 0 20px;
+        &.comparison {
+            border-bottom: 1px solid #dce0e0;
+            h4 {
+                font-size: 22px;
+                margin-top: 20px;
+                a {
+                    font-size: 16px;
+                }
+            }
+            .graph-info {
+                margin: 25px 0;
+                .icon-info {
+                    padding-top: 7px;
+                    text-align: right;
+                }
+            }
+        }
+        &.proposals {
+            border-bottom: 1px solid #dce0e0;
+            font-size: 14px;
+            a.date {
+                font-weight: 700;
+            }
+        }
     }
 }
 
 .laws-list {
     padding-left: 0;
     .law {
-        border-top: 1px solid #dde1db;
-        border-bottom: 1px solid #dde1db;
-        border-right: 1px solid #dde1db;
+        border: 1px solid #dde1db;
+        border-left: none;
         margin-bottom: 7px;
         background: #fbfbfb;
         .law-status-color {
@@ -212,6 +240,7 @@ a {
         .law-status-text {
             float: right;
             width: 23%;
+            font-size: 13px;
             text-align: right;
             padding: 7px 15px 7px 0;
             font-weight: 700;
@@ -219,9 +248,59 @@ a {
             text-transform: uppercase;
         }
     }
-    .full-list {
-        text-align: right;
+}
+
+.persons-list {
+    border-bottom: 1px solid #dce0e0;
+    .person {
+        border: 1px solid #dde1db;
+        border-left: none;
+        margin-bottom: 7px;
+        background: #fbfbfb;
+        .person-status-color {
+            background: #c1c1c1;
+            float: left;
+            width: 1.5%;
+            height: 60px;
+        }
+        .person-image {
+            float: left;
+            margin-left: 1px;
+            width: 7.5%;
+        }
+        .person-details {
+            float: left;
+            width: 51%;
+            padding: 20px 5px;
+            span {
+                &.date {
+                    margin-right: 25px;
+                }
+                &.name {
+                    font-weight: bold;
+                }
+            }
+        }
+        .person-from, .person-to {
+            float: left;
+            width: 19.5%;
+            padding: 20px 15px 20px 0;
+            text-align: right;
+        }
+        span {
+            &.term {
+                text-transform: uppercase;
+                color: #d0d0d0;
+                font-weight: 700;
+                margin-right: 10px;
+                font-size: 13px;
+            }
+        }
     }
+}
+
+p.full-list {
+    text-align: right;
 }
 
 .clear {

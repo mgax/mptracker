@@ -228,6 +228,119 @@
                     <a href="#">lista completă &raquo;</a>
                 </p>
             </div>
+            <!-- Persons List -->
+            <div class="row sub-section persons-list">
+                <h3>
+                    Migrări recente
+                    <span class="number">14</span>
+                </h3>
+                <!-- Individual Persons -->
+                <div class="person">
+                    <div class="person-status-color"></div>
+                    <div class="person-image">
+                        <img src="http://placehold.it/40x60" alt="Adrian-Nicolae Diaconu" />
+                    </div>
+                    <div class="person-details">
+                        <span class="date">1 iunie 2014</span>
+                        <span class="name">Adrian-Nicolae Diaconu</span>
+                    </div>
+                    <div class="person-from">
+                        <span class="term">De la:</span>
+                        <span class="definition">Indep.</span>
+                    </div>
+                    <div class="person-to">
+                        <span class="term">la:</span>
+                        <span class="definition">PSD</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="person">
+                    <div class="person-status-color"></div>
+                    <div class="person-image">
+                        <img src="http://placehold.it/40x60" alt="Marioara Nistor" />
+                    </div>
+                    <div class="person-details">
+                        <span class="date">28 mai 2014</span>
+                        <span class="name">Marioara Nistor</span>
+                    </div>
+                    <div class="person-from">
+                        <span class="term">De la:</span>
+                        <span class="definition">PP-DD</span>
+                    </div>
+                    <div class="person-to">
+                        <span class="term">la:</span>
+                        <span class="definition">PNL</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <p class="full-list">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+            <div class="row sub-section comparison">
+                <h3>Verifică similaritatea la vot a deputatului tău cu toți ceilalți deputați</h3>
+                <h4>
+                    Ion Călin
+                    <a href="#">(alege deputatul tău)</a>
+                </h4>
+                <div class="graph">
+                    <img src="/static/img/placeholders/homepage-graph-comparison.jpg" /> <br />
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1">
+                        <img src="/static/img/cursor-indicator.png" />
+                    </div>
+                </div>
+                <div class="row graph-info">
+                    <div class="col-sm-1 icon-info">
+                        <img src="/static/img/icon-info.png" alt="Info" />
+                    </div>
+                    <div class="col-sm-11">
+                        <p>Plimbă cursorul deasupra barelor colorate pentru a vedea gradul de similaritate a votului respectivului deputat în comparație cu votul celui comparat.</p>
+                    </div>
+                </div>
+                <p class="full-list">
+                    <a href="#">statistică detaliată &raquo;</a>
+                </p>
+            </div>
+            <!-- Propuneri Legislative -->
+            <div class="row sub-section proposals">
+                <h3>Propuneri legislative</h3>
+                {% for item in recent_proposals %}
+                  {% set url = url_for(
+                      '.policy_proposal',
+                      proposal_id=item['proposal_id'],
+                    ) %}
+                    <p>
+                        <a class="date" href="{{ url }}">
+                            {{ item['date']|datefmt }}
+                        </a><br />
+                        {{ item['text'] }}
+                    </p>
+                {% endfor %}
+                <p class="full-list">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+            <!-- Întrebări și interpelări -->
+            <div class="row sub-section proposals">
+                <h3>Întrebări și interpelări</h3>
+                {% for item in recent_questions %}
+                  {% set url = url_for(
+                      '.person_question',
+                      question_id=item['question_id'],
+                    ) %}
+                  <p>
+                    <a class="date" href="#">
+                        {{ item['date']|datefmt }}
+                    </a> <br />
+                    {{ item['text'] }}
+                  </p>
+                {% endfor %}
+                <p class="full-list">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
         </div>
         <div class="col-sm-4">
             <div class="row sub-section">
@@ -235,68 +348,4 @@
             </div>
         </div>
     </div>
-
-<!--
-      <div class="row">
-        <div class="col-sm-8">
-
-          <h2>Contribuie</h2>
-
-          <p>
-            <a href="{{ url_for('.text_page', name='donations') }}">
-              citește mai mult
-            </a>
-          </p>
-        </div>
-
-        <div class="col-sm-4">
-          <p>
-            {% set url = url_for('.policy_tacit') %}
-            <a href="{{ url }}">legi adoptate tacit ({{ tacit_approvals_count }})</a>
-          </p>
-
-          <p>
-            {% set url = url_for('.policy_controversy') %}
-            <a href="{{ url }}">legi controversate ({{ controversy_count }})</a>
-          </p>
-
-          <p>
-            <a href="{{ url_for('.person_migrations') }}">migrări recente</a>
-          </p>
-
-          <h3>Propuneri legislative</h3>
-
-          <ul class="list-unstyled">
-            {% for item in recent_proposals %}
-              {% set url = url_for(
-                  '.policy_proposal',
-                  proposal_id=item['proposal_id'],
-                ) %}
-              <li>
-                <strong>{{ item['date']|datefmt }}:</strong>
-
-                <a href="{{ url }}">{{ item['text'] }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-
-          <h3>Întrebări și interpelări</h3>
-
-          <ul class="list-unstyled">
-            {% for item in recent_questions %}
-              {% set url = url_for(
-                  '.person_question',
-                  question_id=item['question_id'],
-                ) %}
-              <li>
-                <strong>{{ item['date']|datefmt }}:</strong>
-
-                <a href="{{ url }}">{{ item['text'] }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-</div>
--->
 {% endblock %}
