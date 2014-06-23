@@ -1,6 +1,12 @@
 import requests
 import flask
 from werkzeug.urls import Href
+from mptracker.scraper.common import GenericModel
+
+
+class File(GenericModel):
+
+    pass
 
 
 def authorize():
@@ -52,3 +58,57 @@ def get_access_token():
     )
     assert resp.status_code == 200
     return resp.json()['access_token']
+
+
+class PictureFolder:
+
+    def __init__(self):
+        self.token = get_access_token()
+
+
+    def list(self, folder_key):
+        resp = requests.get(
+            'https://www.googleapis.com/drive/v2/files',
+            params={
+                'maxResults': 1000,
+                'q': "'%s' in parents" % folder_key,
+            },
+            headers={
+                'Authorization': 'Bearer ' + self.token,
+            },
+        )
+        assert resp.status_code == 200
+
+        latest = {}
+
+        for item in resp.json()['items']:
+            f = File(
+                filename=item['title'],
+                md5=item['md5Checksum'],
+                url=item['downloadUrl'],
+                modified=item['modifiedDate'],
+            )
+
+            if f.filename in latest:
+                if latest[f.filename].modified > f.modified:
+                    continue
+
+            latest[f.filename] = f
+
+        return (latest[k] for k in sorted(latest))
+
+
+    def download(self, item, chunk_size=65536):
+        resp = requests.get(
+            item.url,
+            stream=True,
+            headers={
+                'Authorization': 'Bearer ' + self.token,
+            },
+        )
+        assert resp.status_code == 200
+
+        try:
+            yield from resp.iter_content(chunk_size)
+        finally:
+            resp.close()

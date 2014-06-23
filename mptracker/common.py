@@ -7,6 +7,7 @@ import re
 import math
 from io import StringIO
 from itertools import chain
+import hashlib
 import unicodedata
 import flask
 from werkzeug.routing import BaseConverter, ValidationError
@@ -187,6 +188,21 @@ def buffer_on_disk(data_iter):
     tmp.flush()
     tmp.seek(0)
     return FileWrapper(tmp)
+
+
+def iter_file(f, buffer_size=65536):
+    while True:
+        chunk = f.read(buffer_size)
+        if not chunk:
+            return
+        yield chunk
+
+
+def calculate_md5(chunk_iter):
+    md5 = hashlib.md5()
+    for chunk in chunk_iter:
+        md5.update(chunk)
+    return md5.hexdigest()
 
 
 class DateAwareJSONEncoder(flask.json.JSONEncoder):

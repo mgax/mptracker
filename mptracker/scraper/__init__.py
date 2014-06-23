@@ -2,6 +2,7 @@ import logging
 from datetime import timedelta, date, datetime
 from collections import defaultdict
 import re
+import tempfile
 import flask
 from flask.ext.script import Manager
 from psycopg2.extras import DateRange
@@ -11,7 +12,7 @@ from mptracker.scraper.common import get_cached_session, create_session, \
                                      get_gdrive_csv, parse_interval
 from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args, almost_eq, \
-                             generate_slug
+                             generate_slug, iter_file, calculate_md5
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -281,6 +282,33 @@ def download_pictures(year='2012'):
                 ])
                 logger.info('Resized %s (%d bytes)',
                             thumb_path.name, thumb_path.stat().st_size)
+
+
+@scraper_manager.command
+def pictures(year='2012'):
+    from mptracker.scraper.gdrive import PictureFolder
+
+    pictures_dir = path(flask.current_app.static_folder) / 'pictures' / year
+    pictures_dir.mkdir_p()
+
+    gdrive = PictureFolder()
+
+    for picture in gdrive.list(PICTURES_FOLDER_KEY):
+        fs_path = pictures_dir / picture.filename
+        if fs_path.exists():
+            with fs_path.open('rb') as f:
+                md5 = calculate_md5(iter_file(f))
+
+            if md5 == picture.md5:
+                logger.info("Already up to date %r", picture.filename)
+                continue
+
+        logger.info("Downloading %r", picture.filename)
+        with tempfile.NamedTemporaryFile(dir=pictures_dir, delete=False) as f:
+            for chunk in gdrive.download(picture):
+                f.write(chunk)
+
+        path(f.name).rename(fs_path)
 
 
 @scraper_manager.command
