@@ -1827,6 +1827,8 @@ class DataAccess:
         return {
             'title': controversy.title,
             'date': controversy.voting_session.date,
+            'cdeppk': controversy.voting_session.cdeppk,
+            'reason': controversy.reason,
             'meaning_yes': controversy.vote_meaning_yes,
             'meaning_no': controversy.vote_meaning_no,
             'press_link_list': controversy.press_links.split(),
