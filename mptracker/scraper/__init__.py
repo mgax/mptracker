@@ -12,7 +12,7 @@ from mptracker.scraper.common import get_cached_session, create_session, \
                                      get_gdrive_csv, parse_interval
 from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args, almost_eq, \
-                             generate_slug, iter_file, calculate_md5
+                             generate_slug, iter_file, calculate_md5, temp_dir
 from mptracker.patcher import TablePatcher
 
 logger = logging.getLogger(__name__)
@@ -255,33 +255,67 @@ def people(
 
 
 @scraper_manager.command
-def download_pictures(year='2012'):
+def update_pictures(year='2012'):
     import subprocess
+    from sqlalchemy.orm import joinedload
+    from mptracker.scraper.gdrive import PictureFolder
+
+    gdrive = PictureFolder(PICTURES_FOLDER_KEY)
+    existing = set(p.filename for p in gdrive.list())
+
     localdir = path(flask.current_app.static_folder) / 'mandate-pictures'
     localdir.mkdir_p()
-    for mandate in models.Mandate.query.filter_by(year=int(year)):
-        if mandate.picture_url is not None:
-            assert mandate.picture_url.endswith('.jpg')
-            local_path = localdir / ('%s.jpg' % mandate.id)
-            if not local_path.isfile():
-                resp = requests.get(mandate.picture_url)
-                assert resp.headers['Content-Type'] == 'image/jpeg'
-                with local_path.open('wb') as f:
-                    f.write(resp.content)
-                logger.info('Saved %s (%d bytes)',
-                            local_path.name, len(resp.content))
 
-            thumb_path = localdir / ('%s-300px.jpg' % mandate.id)
-            if not thumb_path.isfile():
-                subprocess.check_call([
-                    'convert',
-                    local_path,
-                    '-geometry', '300x300^',
-                    '-quality', '85',
-                    thumb_path,
-                ])
-                logger.info('Resized %s (%d bytes)',
-                            thumb_path.name, thumb_path.stat().st_size)
+    query = (
+        models.Mandate.query
+        .filter_by(year=int(year))
+        .options(joinedload('person'))
+    )
+
+    for mandate in query:
+        person = mandate.person
+        filename = '%s.jpg' % person.slug
+        if filename in existing:
+            continue
+
+        if mandate.picture_url is None:
+            logger.warn("No picure available for %r", person.name_first_last)
+            continue
+        assert mandate.picture_url.endswith('.jpg')
+
+        logger.info("Downloading %r" % filename)
+
+        with temp_dir() as tmp:
+            orig_path = tmp / 'orig.jpg'
+            thumb_path = tmp / 'thumb.jpg'
+
+            resp = requests.get(mandate.picture_url, stream=True)
+            assert resp.status_code == 200
+            assert resp.headers['Content-Type'] == 'image/jpeg'
+
+            try:
+                with orig_path.open('wb') as f:
+                    for chunk in resp.iter_content(65536):
+                        f.write(chunk)
+            finally:
+                resp.close()
+
+            logger.info("Converting to thumbnail")
+            subprocess.check_call([
+                'convert',
+                orig_path,
+                '-geometry', '300x300^',
+                '-quality', '85',
+                thumb_path,
+            ])
+
+            logger.info("Uploading to gdrive")
+
+            with thumb_path.open('rb') as f:
+                data = f.read()
+
+            file_id = gdrive.upload(filename, data)
+            logger.info("Upload successful: %r", file_id)
 
 
 @scraper_manager.command
@@ -291,9 +325,9 @@ def pictures(year='2012'):
     pictures_dir = path(flask.current_app.static_folder) / 'pictures' / year
     pictures_dir.mkdir_p()
 
-    gdrive = PictureFolder()
+    gdrive = PictureFolder(PICTURES_FOLDER_KEY)
 
-    for picture in gdrive.list(PICTURES_FOLDER_KEY):
+    for picture in gdrive.list():
         fs_path = pictures_dir / picture.filename
         if fs_path.exists():
             with fs_path.open('rb') as f:

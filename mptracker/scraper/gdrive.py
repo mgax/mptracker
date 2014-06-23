@@ -1,3 +1,5 @@
+import string
+import random
 import requests
 import flask
 from werkzeug.urls import Href
@@ -62,16 +64,17 @@ def get_access_token():
 
 class PictureFolder:
 
-    def __init__(self):
+    def __init__(self, folder_id):
         self.token = get_access_token()
+        self.folder_id = folder_id
 
 
-    def list(self, folder_key):
+    def list(self):
         resp = requests.get(
             'https://www.googleapis.com/drive/v2/files',
             params={
                 'maxResults': 1000,
-                'q': "'%s' in parents" % folder_key,
+                'q': "'%s' in parents" % self.folder_id,
             },
             headers={
                 'Authorization': 'Bearer ' + self.token,
@@ -112,3 +115,52 @@ class PictureFolder:
             yield from resp.iter_content(chunk_size)
         finally:
             resp.close()
+
+    def upload(self, filename, data):
+        meta = {
+            'title': filename,
+            'parents': [
+                {'id': self.folder_id},
+            ],
+        }
+
+        boundary = ''.join(
+            random.choice(string.ascii_letters)
+            for _ in range(20)
+        )
+
+        body = (
+            '--{boundary}\r\n'
+            'Content-Type: application/json\r\n'
+            '\r\n'
+            '{meta}\r\n'
+            '\r\n'
+            '--{boundary}\r\n'
+            'Content-Type: image/jpeg\r\n'
+            '\r\n'
+            '{data}\r\n'
+            '--{boundary}--'
+            .format(
+                boundary=boundary,
+                meta=flask.json.dumps(meta),
+                data=data.decode('latin-1'),
+            )
+            .encode('latin-1')
+        )
+
+        headers = {
+            'Content-Type': 'multipart/related; boundary=' + boundary,
+            'Content-Length': len(body),
+            'Authorization': 'Bearer ' + self.token,
+        }
+
+        resp = requests.post(
+            'https://www.googleapis.com/upload/drive/v2/files',
+            params={'uploadType': 'multipart'},
+            headers=headers,
+            data=body,
+        )
+        import pdb; pdb.set_trace()
+        assert resp.status_code == 200
+
+        return resp.json()['id']
