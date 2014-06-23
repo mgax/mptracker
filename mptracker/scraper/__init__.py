@@ -44,6 +44,7 @@ MINORITIES_CSV_KEY = '0Ao01Fbm0wOCAdC1neEk0RXV1Z05hRG9QU2FPTlNYZ0E'
 COMMITTEE_ROLL_CALL_CSV_KEY = '1w4IufznSMLMxMOxfS-ggp3IwXePEoDHiTAjAsHgMOpE'
 PROPOSAL_CONTROVERSY_CSV_KEY = '1gsEHB8PhMMgEVJEv-yCBopFl2aMfnXg_JVaJ1aUgLpI'
 PARTY_DESCRIPTION_CSV_KEY = '1cDN2PXcuF0qZE0fBQmAzCnWvUemCo0iacNOy4_tAsIE'
+PICTURES_FOLDER_KEY = '0B1BmcLkxpBOXVGZyNHhqc0tWZkk'
 
 
 def _get_config_cache_name():
@@ -280,6 +281,12 @@ def download_pictures(year='2012'):
                 ])
                 logger.info('Resized %s (%d bytes)',
                             thumb_path.name, thumb_path.stat().st_size)
+
+
+@scraper_manager.command
+def authorize_gdrive():
+    from mptracker.scraper import gdrive
+    gdrive.authorize()
 
 
 @scraper_manager.command
