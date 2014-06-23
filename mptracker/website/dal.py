@@ -1406,8 +1406,8 @@ class DataAccess:
     def get_policy_proposal_list(self, policy_slug, mandate=None, party=None):
         tacit_approval_query = self.get_policy_tacit_approval_qs()
         tacit_approval = {
-            item.proposal_id: {'date': item.date, 'location': item.location}
-            for item in tacit_approval_query
+            proposal.id: pluck_tacit_approval(proposal)
+            for proposal in tacit_approval_query
         }
 
         proposal_query = (
