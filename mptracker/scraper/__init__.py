@@ -51,7 +51,7 @@ def _get_config_cache_name():
 
 
 @scraper_manager.command
-def questions(
+def get_questions(
         year='2014',
         reimport_existing=False,
         cache_name=None,
@@ -283,7 +283,7 @@ def download_pictures(year='2012'):
 
 
 @scraper_manager.command
-def groups(
+def get_groups(
         cache_name=None,
         throttle=None,
         no_commit=False,
@@ -500,7 +500,7 @@ def committee_summaries(year=2014):
 
 
 @scraper_manager.command
-def proposal_pages(
+def get_proposal_pages(
         throttle=None,
         cache_name=None,
         year=None,
@@ -549,7 +549,7 @@ def proposal_pages(
 
 
 @scraper_manager.command
-def proposals(
+def get_proposals(
         autoanalyze=False,
         no_commit=False,
         limit=None,
@@ -732,7 +732,7 @@ def proposals(
 
 
 @scraper_manager.command
-def transcripts(start=None, n_sessions=1, cache_name=None, throttle=None):
+def get_transcripts(start=None, n_sessions=1, cache_name=None, throttle=None):
     from mptracker.scraper.transcripts import TranscriptScraper
 
     if start is None:
@@ -882,7 +882,7 @@ def import_person_xls(xls_path):
 
 
 @scraper_manager.command
-def votes(
+def get_votes(
         start=None,
         days=1,
         cache_name=None,
@@ -1340,12 +1340,12 @@ def assets(file_path, no_commit=False):
 
 @scraper_manager.command
 def auto(cache_name=None):
-    transcripts(n_sessions=20, cache_name=cache_name)
-    questions(autoanalyze=True, cache_name=cache_name)
-    votes(days=20, autoanalyze=True, cache_name=cache_name)
-    groups(cache_name=cache_name)
-    proposal_pages(cache_name=cache_name)
-    proposals(autoanalyze=True)
+    get_transcripts(n_sessions=20, cache_name=cache_name)
+    get_questions(autoanalyze=True, cache_name=cache_name)
+    get_votes(days=20, autoanalyze=True, cache_name=cache_name)
+    get_groups(cache_name=cache_name)
+    get_proposal_pages(cache_name=cache_name)
+    get_proposals(autoanalyze=True)
 
 
 @scraper_manager.command
