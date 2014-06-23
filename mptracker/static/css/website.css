@@ -186,7 +186,11 @@ a:hover {
   border-radius: 35px;
 }
 .content-home .sub-section {
-  padding: 20px 0 0 20px;
+  padding: 30px 0 30px 20px;
+}
+.content-home .sub-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 .content-home .sub-section.comparison {
   border-bottom: 1px solid #dce0e0;
@@ -209,8 +213,73 @@ a:hover {
   border-bottom: 1px solid #dce0e0;
   font-size: 14px;
 }
+.content-home .sub-section.proposals:last-child {
+  border-bottom: none;
+}
 .content-home .sub-section.proposals a.date {
   font-weight: 700;
+}
+.content-home .sub-section.statistic {
+  margin-left: 20px;
+  padding-left: 0;
+  border-bottom: 1px solid #dce0e0;
+}
+.content-home .sub-section.statistic .statistic-title {
+  position: relative;
+}
+.content-home .sub-section.statistic .statistic-title .statistic-title-image img {
+  width: 100%;
+}
+.content-home .sub-section.statistic .statistic-title .statistic-title-text {
+  position: absolute;
+  bottom: 0;
+  font-size: 16px;
+  padding: 10px;
+}
+.content-home .sub-section.statistic .statistic-title .statistic-title-text a {
+  color: #fff;
+  text-shadow: -3px -1px 2px #969696;
+}
+.content-home .sub-section.statistic p {
+  margin-top: 15px;
+}
+.content-home .sub-section.public-politics {
+  border-bottom: 1px solid #dce0e0;
+  /* Will probably not be needed once the graph is made dynamic */
+}
+.content-home .sub-section.public-politics .piechart {
+  text-align: center;
+}
+.content-home .sub-section.public-politics ul {
+  margin-top: 20px;
+}
+.content-home .sub-section.public-politics .percentage {
+  font-weight: 700;
+}
+.content-home .sub-section.social .icons {
+  margin-bottom: 15px;
+}
+.content-home .sub-section.social .icons a {
+  margin-right: 7px;
+}
+.content-home .sub-section.contribute {
+  border: 1px solid #dce0e0;
+  padding-left: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 22px;
+}
+.content-home .sub-section.contribute .btn-contribute {
+  margin-top: 20px;
+  background: #f6d782;
+  color: #67541e;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 16px;
+  padding: 8px 15px;
+}
+.content-home .sub-section.contribute .btn-contribute:hover {
+  background: #e6c56b;
 }
 .laws-list {
   padding-left: 0;

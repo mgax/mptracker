@@ -3,6 +3,7 @@
 @colorLink: #267cbe;
 @colorLinkHover: #175789;
 @colorHeader: #45515b;
+@colorBorder: #dce0e0;
 
 html, body {
     background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
@@ -66,7 +67,7 @@ a {
     }
     hr {
         border-top: 1px solid #bebebe;
-        border-bottom: 1px solid #dce0e0;
+        border-bottom: 1px solid @colorBorder;
     }
     form {
         .form-group {
@@ -91,7 +92,7 @@ a {
 .content-home {
     margin-bottom: 20px;
     .home-section {
-        border-bottom: 1px solid #dce0e0;
+        border-bottom: 1px solid @colorBorder;
         margin: 0 20px;
         &:last-child {
             border-bottom: none;
@@ -155,7 +156,7 @@ a {
         }
         .article-single {
             padding: 23px 25px;
-            border-bottom: 1px solid #dce0e0;
+            border-bottom: 1px solid @colorBorder;
             &:last-child {
                 border-bottom: none;
             }
@@ -182,9 +183,13 @@ a {
         }
     }
     .sub-section {
-        padding: 20px 0 0 20px;
+        padding: 30px 0 30px 20px;
+        h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
         &.comparison {
-            border-bottom: 1px solid #dce0e0;
+            border-bottom: 1px solid  @colorBorder;
             h4 {
                 font-size: 22px;
                 margin-top: 20px;
@@ -201,10 +206,79 @@ a {
             }
         }
         &.proposals {
-            border-bottom: 1px solid #dce0e0;
+            border-bottom: 1px solid @colorBorder;
             font-size: 14px;
+            &:last-child {
+                border-bottom: none;
+            }
             a.date {
                 font-weight: 700;
+            }
+        }
+        &.statistic {
+            margin-left: 20px;
+            padding-left: 0;
+            border-bottom: 1px solid @colorBorder;
+            .statistic-title {
+                position: relative;
+                .statistic-title-image {
+                    img {
+                        width: 100%;
+                    }
+                }
+                .statistic-title-text {
+                    position: absolute;
+                    bottom: 0;
+                    font-size: 16px;
+                    padding: 10px;
+                    a {
+                        color: #fff;
+                        text-shadow: -3px -1px 2px rgba(150, 150, 150, 1);
+                    }
+                }
+            }
+            p {
+                margin-top: 15px;
+            }
+        }
+        &.public-politics {
+            border-bottom: 1px solid @colorBorder;
+            /* Will probably not be needed once the graph is made dynamic */
+            .piechart {
+                text-align: center;
+            }
+            ul {
+                margin-top: 20px;
+            }
+            .percentage {
+                font-weight: 700;
+            }
+        }
+        &.social {
+            .icons {
+                margin-bottom: 15px;
+                a {
+                    margin-right: 7px;
+                }
+            }
+        }
+        &.contribute {
+            border: 1px solid @colorBorder;
+            padding-left: 0;
+            text-align: center;
+            font-weight: 700;
+            font-size: 22px;
+            .btn-contribute {
+                margin-top: 20px;
+                background: #f6d782;
+                color: #67541e;
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 16px;
+                padding: 8px 15px;
+                &:hover {
+                    background: #e6c56b;
+                }
             }
         }
     }
@@ -251,7 +325,7 @@ a {
 }
 
 .persons-list {
-    border-bottom: 1px solid #dce0e0;
+    border-bottom: 1px solid @colorBorder;
     .person {
         border: 1px solid #dde1db;
         border-left: none;
