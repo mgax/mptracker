@@ -263,9 +263,6 @@ def update_pictures(year='2012'):
     gdrive = PictureFolder(PICTURES_FOLDER_KEY)
     existing = set(p.filename for p in gdrive.list())
 
-    localdir = path(flask.current_app.static_folder) / 'mandate-pictures'
-    localdir.mkdir_p()
-
     query = (
         models.Mandate.query
         .filter_by(year=int(year))
