@@ -402,8 +402,10 @@ class DalPerson:
         return [
             {
                 'id': sp.proposal.id,
-                'date': sp.proposal.date,
                 'title': sp.proposal.title,
+                'status': sp.proposal.status,
+                'tacit_approval': pluck_tacit_approval(sp.proposal),
+                'controversy': sp.proposal.controversy.all(),
             }
             for sp in (
                 self.mandate.sponsorships
