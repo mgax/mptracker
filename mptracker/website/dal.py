@@ -45,7 +45,7 @@ def read_activity_item(item):
 
 
 def pluck_tacit_approval(proposal):
-    for item in json.loads(proposal.activity):
+    for item in json.loads(proposal.activity or '[]'):
         if TACIT_APPROVAL_SUBSTRING in item['html']:
             return read_activity_item(item)
 
