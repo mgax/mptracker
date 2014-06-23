@@ -49,6 +49,9 @@ def pluck_tacit_approval(proposal):
         if TACIT_APPROVAL_SUBSTRING in item['html']:
             return read_activity_item(item)
 
+    else:
+        return None
+
 
 def _get_recent_questions(mandate, limit):
     recent_questions_query = (
@@ -1404,12 +1407,6 @@ class DataAccess:
         )
 
     def get_policy_proposal_list(self, policy_slug, mandate=None, party=None):
-        tacit_approval_query = self.get_policy_tacit_approval_qs()
-        tacit_approval = {
-            proposal.id: pluck_tacit_approval(proposal)
-            for proposal in tacit_approval_query
-        }
-
         proposal_query = (
             db.session.query(
                 distinct(Proposal.id)
@@ -1441,7 +1438,7 @@ class DataAccess:
                 'title': proposal.title,
                 'id': proposal.id,
                 'status': proposal.status,
-                'tacit_approval': tacit_approval.get(proposal.id),
+                'tacit_approval': pluck_tacit_approval(proposal),
                 'controversy': proposal.controversy.all(),
             }
             for proposal in (
@@ -1473,11 +1470,6 @@ class DataAccess:
         return Proposal.query.join(ProposalControversy)
 
     def get_policy_controversy_list(self):
-        tacit_approval_query = self.get_policy_tacit_approval_qs()
-        tacit_approval = {
-            proposal.id: pluck_tacit_approval(proposal)
-            for proposal in tacit_approval_query
-        }
         qs = (
             self.get_policy_controversy_qs()
             .order_by(Proposal.modification_date.desc())
@@ -1488,7 +1480,7 @@ class DataAccess:
                 'title': proposal.title,
                 'id': proposal.id,
                 'status': proposal.status,
-                'tacit_approval': tacit_approval.get(proposal.id),
+                'tacit_approval': pluck_tacit_approval(proposal),
                 'controversy': proposal.controversy.all(),
             }
             for proposal in qs
