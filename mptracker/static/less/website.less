@@ -2,6 +2,7 @@
 
 @colorLink: #267cbe;
 @colorLinkHover: #175789;
+@colorHeader: #45515b;
 
 html, body {
     background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
@@ -84,23 +85,26 @@ a {
 }
 
 .content-home {
+    margin-bottom: 20px;
     .home-section {
         border-bottom: 1px solid #dce0e0;
-        margin-left: 0;
-        margin-right: 0;
+        margin: 0 20px;
+        &:last-child {
+            border-bottom: none;
+        }
     }
     .editorial {
-        padding: 15px;
+        padding: 15px 0;
         h2 {
             font-weight: 900;
             font-size: 14px;
         }
     }
     .article-featured {
-        padding: 15px 25px;
+        padding: 15px 0;
         .article-title {
             font-size: 32px;
-            font-weight: 600;
+            font-weight: 400;
             margin-bottom: 20px;
         }
         .article-meta {
@@ -141,11 +145,11 @@ a {
         h3 {
             font-weight: 300;
             font-size: 20px;
-            color: #45515b;
+            color: @colorHeader;
             padding-left: 10px;
         }
         .article-single {
-            padding: 18px 25px;
+            padding: 23px 25px;
             border-bottom: 1px solid #dce0e0;
             &:last-child {
                 border-bottom: none;
@@ -156,6 +160,72 @@ a {
             }
         }
     }
+    h3 {
+        font-size: 22px;
+        font-weight: 900;
+        color: @colorHeader;
+        font-family: 'Open Sans', sans-serif;
+        span {
+            &.number {
+                background: @colorHeader;
+                color: #fff;
+                font-size: 15px;
+                padding: 5px;
+                width: 70px;
+                .rounded(35px);
+            }
+        }
+    }
+    .sub-section {
+        padding: 20px 0 0 20px;
+    }
+}
+
+.laws-list {
+    padding-left: 0;
+    .law {
+        border-top: 1px solid #dde1db;
+        border-bottom: 1px solid #dde1db;
+        border-right: 1px solid #dde1db;
+        margin-bottom: 7px;
+        background: #fbfbfb;
+        .law-status-color {
+            float: left;
+            width: 1.5%;
+            padding: 7px 0;
+            height: 35px;
+            &.approved {
+                background: #6abb2d;
+            }
+            &.pending {
+                background: #fcbe18;
+            }
+            &.rejected {
+                background: #e83c14;
+            }
+        }
+        .law-title {
+            float: left;
+            width: 75.5%;
+            padding: 7px 20px;
+        }
+        .law-status-text {
+            float: right;
+            width: 23%;
+            text-align: right;
+            padding: 7px 15px 7px 0;
+            font-weight: 700;
+            color: #c1c1c1;
+            text-transform: uppercase;
+        }
+    }
+    .full-list {
+        text-align: right;
+    }
+}
+
+.clear {
+    clear: both;
 }
 
 figure {

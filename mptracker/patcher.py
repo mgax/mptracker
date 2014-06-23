@@ -13,7 +13,8 @@ AddResult = namedtuple('AddResult', ['row', 'is_new', 'is_changed'])
 class TablePatcher:
 
     logger = logging.getLogger(__name__ + '.TablePatcher')
-    logger.setLevel(logging.INFO)
+    if not logger.level:
+        logger.setLevel(logging.INFO)
 
     def __init__(self, model, session, key_columns, filter=None):
         from mptracker.models import random_uuid
@@ -71,7 +72,7 @@ class TablePatcher:
                 new_val = record[k]
                 if old_val != new_val:
                     self.logger.debug(
-                        "Value change for %s %r: %s %r != %r",
+                        "Value change for %s %r: %s %r -> %r",
                         self.table_name, key, k, old_val, new_val,
                     )
                     changes.append(k)

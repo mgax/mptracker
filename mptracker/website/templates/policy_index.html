@@ -2,6 +2,8 @@
 
 
 {% block content %}
+  {{ text('policy', fold=True) }}
+
   <ul class="list-unstyled">
     {% for policy in policy_list %}
       <li>
@@ -15,4 +17,6 @@
       <a href="{{ url }}">Altele</a>
     </li>
   </ul>
+
+  {{ text('policy', below_fold=True) }}
 {% endblock %}

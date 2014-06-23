@@ -3,6 +3,8 @@ from collections import defaultdict
 from sqlalchemy import func, distinct, and_, desc
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
+from flask import json
+from mptracker.common import parse_date
 from mptracker.models import (
     Chamber,
     County,
@@ -13,7 +15,6 @@ from mptracker.models import (
     MpCommittee,
     MpCommitteeMembership,
     Proposal,
-    ProposalActivityItem,
     Sponsorship,
     TranscriptChapter,
     Transcript,
@@ -32,6 +33,21 @@ from mptracker.models import (
 )
 
 LEGISLATURE_2012_START = date(2012, 12, 17)
+TACIT_APPROVAL_SUBSTRING = 'art.75'
+
+
+def read_activity_item(item):
+    return {
+        'date': parse_date(item['date']),
+        'location': item['location'].lower(),
+        'html': item['html'],
+    }
+
+
+def pluck_tacit_approval(proposal):
+    for item in json.loads(proposal.activity):
+        if TACIT_APPROVAL_SUBSTRING in item['html']:
+            return read_activity_item(item)
 
 
 def _get_recent_questions(mandate, limit):
@@ -506,6 +522,7 @@ class DalPerson:
                 func.count('*'),
             )
             .select_from(Proposal)
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .filter_by(mandate=self.mandate)
             .outerjoin(Proposal.policy_domain)
@@ -1013,6 +1030,7 @@ class DalParty:
                 func.count(distinct(Proposal.id)),
             )
             .select_from(Proposal)
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .join(Mandate.group_memberships)
@@ -1378,8 +1396,11 @@ class DataAccess:
 
     def get_policy_tacit_approval_qs(self):
         return (
-            ProposalActivityItem.query
-            .filter(ProposalActivityItem.html.like('%art.75%'))
+            Proposal.query
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(
+                Proposal.activity.like('%' + TACIT_APPROVAL_SUBSTRING + '%')
+            )
         )
 
     def get_policy_proposal_list(self, policy_slug, mandate=None, party=None):
@@ -1393,6 +1414,7 @@ class DataAccess:
             db.session.query(
                 distinct(Proposal.id)
             )
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .outerjoin(Proposal.policy_domain)
             .filter_by(slug=policy_slug)
         )
@@ -1432,19 +1454,20 @@ class DataAccess:
     def get_policy_tacit_approval_list(self):
         qs = (
             self.get_policy_tacit_approval_qs()
-            .join(Proposal)
-            .order_by(ProposalActivityItem.date.desc())
+            .order_by(Proposal.date.desc())
         )
-        return [
+        rv = [
             {
-                'title': pi.proposal.title,
-                'id': pi.proposal.id,
-                'status': pi.proposal.status,
-                'tacit_approval': pi,
-                'controversy': pi.proposal.controversy.all(),
+                'title': proposal.title,
+                'id': proposal.id,
+                'status': proposal.status,
+                'tacit_approval': pluck_tacit_approval(proposal),
+                'controversy': proposal.controversy.all(),
             }
-            for pi in qs
+            for proposal in qs
         ]
+        rv.sort(key=lambda r: r['tacit_approval']['date'], reverse=True)
+        return rv
 
     def get_policy_controversy_qs(self):
         return Proposal.query.join(ProposalControversy)
@@ -1452,13 +1475,12 @@ class DataAccess:
     def get_policy_controversy_list(self):
         tacit_approval_query = self.get_policy_tacit_approval_qs()
         tacit_approval = {
-            item.proposal_id: {'date': item.date, 'location': item.location}
-            for item in tacit_approval_query
+            proposal.id: pluck_tacit_approval(proposal)
+            for proposal in tacit_approval_query
         }
         qs = (
             self.get_policy_controversy_qs()
-            .outerjoin(ProposalActivityItem)
-            .order_by(ProposalActivityItem.date.desc())
+            .order_by(Proposal.modification_date.desc())
         )
 
         return [
@@ -1540,6 +1562,7 @@ class DataAccess:
                 func.count(distinct(Proposal.id))
             )
             .select_from(Proposal)
+            .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .join(Mandate.group_memberships)
@@ -1575,20 +1598,19 @@ class DataAccess:
         proposal = Proposal.query.get(proposal_id)
         if proposal is None:
             raise self.missing()
-        rv = {'title': proposal.title,
-              'controversy': proposal.controversy.all()}
 
-        rv['activity'] = []
-        activity_query = (
-            proposal.activity
-            .order_by(ProposalActivityItem.order.desc())
-        )
-        for item in activity_query:
-            rv['activity'].append({
-                'date': item.date,
-                'location': item.location.lower(),
-                'html': item.html,
-            })
+        activity = [
+            read_activity_item(item)
+            for item in reversed(json.loads(proposal.activity or '[]'))
+        ]
+
+        rv = {
+            'title': proposal.title,
+            'controversy': proposal.controversy.all(),
+            'pk_cdep': proposal.cdeppk_cdep,
+            'pk_senate': proposal.cdeppk_senate,
+            'activity': activity,
+        }
 
         sponsors_query = (
             Person.query

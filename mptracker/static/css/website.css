@@ -83,24 +83,29 @@ a:hover {
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+.content-home {
+  margin-bottom: 20px;
+}
 .content-home .home-section {
   border-bottom: 1px solid #dce0e0;
-  margin-left: 0;
-  margin-right: 0;
+  margin: 0 20px;
+}
+.content-home .home-section:last-child {
+  border-bottom: none;
 }
 .content-home .editorial {
-  padding: 15px;
+  padding: 15px 0;
 }
 .content-home .editorial h2 {
   font-weight: 900;
   font-size: 14px;
 }
 .content-home .article-featured {
-  padding: 15px 25px;
+  padding: 15px 0;
 }
 .content-home .article-featured .article-title {
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 20px;
 }
 .content-home .article-featured .article-meta {
@@ -145,7 +150,7 @@ a:hover {
   padding-left: 10px;
 }
 .content-home .articles-list .article-single {
-  padding: 18px 25px;
+  padding: 23px 25px;
   border-bottom: 1px solid #dce0e0;
 }
 .content-home .articles-list .article-single:last-child {
@@ -154,6 +159,70 @@ a:hover {
 .content-home .articles-list .article-single .article-title {
   font-size: 16px;
   font-weight: 700;
+}
+.content-home h3 {
+  font-size: 22px;
+  font-weight: 900;
+  color: #45515b;
+  font-family: 'Open Sans', sans-serif;
+}
+.content-home h3 span.number {
+  background: #45515b;
+  color: #fff;
+  font-size: 15px;
+  padding: 5px;
+  width: 70px;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  border-radius: 35px;
+}
+.content-home .sub-section {
+  padding: 20px 0 0 20px;
+}
+.laws-list {
+  padding-left: 0;
+}
+.laws-list .law {
+  border-top: 1px solid #dde1db;
+  border-bottom: 1px solid #dde1db;
+  border-right: 1px solid #dde1db;
+  margin-bottom: 7px;
+  background: #fbfbfb;
+}
+.laws-list .law .law-status-color {
+  float: left;
+  width: 1.5%;
+  padding: 7px 0;
+  height: 35px;
+}
+.laws-list .law .law-status-color.approved {
+  background: #6abb2d;
+}
+.laws-list .law .law-status-color.pending {
+  background: #fcbe18;
+}
+.laws-list .law .law-status-color.rejected {
+  background: #e83c14;
+}
+.laws-list .law .law-title {
+  float: left;
+  width: 75.5%;
+  padding: 7px 20px;
+}
+.laws-list .law .law-status-text {
+  float: right;
+  width: 23%;
+  text-align: right;
+  padding: 7px 15px 7px 0;
+  font-weight: 700;
+  color: #c1c1c1;
+  text-transform: uppercase;
+}
+.laws-list .full-list {
+  text-align: right;
+}
+.clear {
+  clear: both;
 }
 figure {
   margin-bottom: 15px;

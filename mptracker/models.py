@@ -421,9 +421,11 @@ class Proposal(db.Model):
     number_senate = db.Column(db.Text, unique=True)
     number_bpi = db.Column(db.Text, unique=True)
     date = db.Column(db.Date)
+    modification_date = db.Column(db.Date)
     proposal_type = db.Column(db.Text)
     status = db.Column(db.Text)
     status_text = db.Column(db.Text)
+    activity = db.Column(db.Text)
 
     decision_chamber_id = db.Column(UUID, db.ForeignKey('chamber.id'))
     decision_chamber = db.relationship('Chamber')
@@ -447,18 +449,6 @@ class Proposal(db.Model):
     @text.setter
     def text(self, value):
         self._get_text_row().text = value
-
-
-class ProposalActivityItem(db.Model):
-    id = db.Column(UUID, primary_key=True, default=random_uuid)
-    date = db.Column(db.Date)
-    location = db.Column(db.Text)
-    html = db.Column(db.Text)
-    order = db.Column(db.Integer)
-
-    proposal_id = db.Column(UUID, db.ForeignKey('proposal.id'), nullable=False)
-    proposal = db.relationship('Proposal', lazy='eager',
-        backref=db.backref('activity', lazy='dynamic', cascade='all'))
 
 
 class ProposalControversy(db.Model):
@@ -595,6 +585,15 @@ class User(db.Model, UserMixin):
                 db.session.add(row)
                 db.session.commit()
             return row
+
+
+class ScrapedProposalPage(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    chamber = db.Column(db.Integer)
+    pk = db.Column(db.Integer)
+    date = db.Column(db.Date)
+    result = db.Column(db.Binary)
+    parsed = db.Column(db.Boolean, nullable=False, default=False)
 
 
 class LookupError(Exception):
