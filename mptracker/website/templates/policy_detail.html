@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% from '_policy_bits.html' import policy_tables, question_tables %}
+{% from '_policy_bits.html' import proposals_table, questions_table %}
 
 {% block content %}
   <h1>{{ policy_name }}</h1>
@@ -9,8 +9,8 @@
     <div class="col-sm-8">
       <p class="placeholder" style="height: 200px">analiză, hot issues</p>
 
-      {{ policy_tables(proposal_list) }}
-      {{ question_tables(question_list) }}
+      {{ proposals_table(proposal_list) }}
+      {{ questions_table(question_list) }}
     </div>
     <div class="col-sm-4">
       <div>

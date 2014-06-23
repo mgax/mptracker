@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% from '_policy_bits.html' import policy_tables %}
+{% from '_policy_bits.html' import proposals_table %}
 
 {% block content %}
   <h2>Proiecte de lege adoptate tacit</h2>
@@ -44,5 +44,5 @@
     <li>Popovici și Moraru, A. 2014. „Raportul de monitorizare IPP: oglinda activității parlamentarilor în anul 2013”, Seria de Rapoarte de monitorizare a activităţii parlamentare, Bucureşti: Institutul pentru Politici Publice.</li>
   </ul>
 
-  {{ policy_tables(proposal_list) }}
+  {{ proposals_table(proposal_list) }}
 {% endblock %}
