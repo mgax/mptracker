@@ -13,14 +13,16 @@
     <a href="http://www.cdep.ro/pls/steno/evot.nominal?idv={{ cdeppk }}">cdep</a>
   </p>
 
-  <p>{{ reason }}</p>
+  <div class="alert-danger">
+    <p>{{ reason }}</p>
+  </div>
 
   <p>Semnificație "da": {{ meaning_yes }}</p>
 
   <p>Semnificație "nu": {{ meaning_no }}</p>
 
   {% if press_link_list %}
-    <h4>presă</h4>
+    <h4>Citește mai mult despre vot</h4>
     <ul>
       {%- for link in press_link_list %}
         <li><a href="{{ link }}">{{ link }}</a>
