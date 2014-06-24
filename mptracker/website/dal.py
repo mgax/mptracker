@@ -211,6 +211,7 @@ class DalPerson:
             )
             .join(VotingSessionControversy.voting_session)
             .outerjoin(vote_subquery)
+            .order_by(VotingSession.date.desc())
         )
 
         def meaning(vote_choice, controversy):
