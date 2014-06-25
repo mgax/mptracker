@@ -1,5 +1,4 @@
 -e git+https://github.com/mgax/flask-browserid.git@8e610c302bca5336076c13278005456fc40df3fd#egg=Flask_BrowserID-dev
--e git+https://github.com/mgax/SIRUTA.git@b9d3a5e0af36a60e450cdc14e6417614df92ed68#egg=SIRUTAlib-dev
 -e git+https://github.com/mitsuhiko/flask.git@2e17ad7fd42d8575f308af9c17496d38ceb72b5e#egg=Flask-dev
 alembic==0.6.0
 Babel==1.3
