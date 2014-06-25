@@ -169,6 +169,8 @@
 
       <h4>Domenii de politici publice</h4>
 
+      <div class="policychart"></div>
+
       <ul>
         {%- for policy in policy_domains %}
           <li>
@@ -196,6 +198,7 @@
 <script src="{{ url_for('static', filename='activitychart.js') }}"></script>
 <script src="{{ url_for('static', filename='membershipchart.js') }}"></script>
 <script src="{{ url_for('static', filename='wordcloud.js') }}"></script>
+<script src="{{ url_for('static', filename='policychart.js') }}"></script>
 <script>
 (function() {
   "use strict";
@@ -222,6 +225,11 @@
 
     var top_words = {{ top_words|tojson|safe }};
     app.render_wordcloud($('.wordcloud').empty(), top_words);
+
+    app.render_policy_chart({
+      container: $('.policychart').empty()[0],
+      data: {{ policy_domains|tojson }}
+    });
 
     Math.seedrandom(Date());
   }

@@ -205,7 +205,7 @@ def person_detail(person_slug):
     ctx['stats'] = person.get_stats()
     ctx['activitychart_data'] = person.get_activitychart_data()
     ctx['group_history'] = person.get_group_history()
-    ctx['policy_domains'] = person.get_top_policies()
+    ctx['policy_domains'] = person.get_top_policies(cutoff=0)
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('pictures/2012') / ctx['picture_filename']
