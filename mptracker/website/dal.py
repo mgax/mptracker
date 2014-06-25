@@ -289,8 +289,9 @@ class DalPerson:
         rv = {}
         voting_session_count = (
             VotingSession.query
-            .filter(VotingSession.date >= LEGISLATURE_2012_START)
             .filter(VotingSession.final == True)
+            .filter(VotingSession.date >= self.mandate.interval.lower)
+            .filter(VotingSession.date < self.mandate.interval.upper)
             .count()
         )
         final_votes = (
