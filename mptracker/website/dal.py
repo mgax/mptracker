@@ -544,12 +544,11 @@ class DalPerson:
         if total:
             for policy_domain in PolicyDomain.query:
                 interest = count_map.get(policy_domain.id, 0) / total
-                if interest > cutoff:
-                    policy_list.append({
-                        'slug': policy_domain.slug,
-                        'name': policy_domain.name,
-                        'interest': interest,
-                    })
+                policy_list.append({
+                    'slug': policy_domain.slug,
+                    'name': policy_domain.name,
+                    'interest': interest,
+                })
 
         return sorted(
             policy_list,
