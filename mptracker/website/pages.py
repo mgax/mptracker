@@ -123,6 +123,7 @@ def home():
         'controversy_count': dal.get_controversy_count(),
         'recent_proposals': dal.get_recent_proposals(3),
         'recent_questions': dal.get_recent_questions(3),
+        'policy_domains': dal.get_top_policies(),
     })
 
 
@@ -210,7 +211,7 @@ def person_detail(person_slug):
     ctx['stats'] = person.get_stats()
     ctx['activitychart_data'] = person.get_activitychart_data()
     ctx['group_history'] = person.get_group_history()
-    ctx['policy_domains'] = person.get_top_policies(cutoff=0)
+    ctx['policy_domains'] = person.get_top_policies()
 
     if 'picture_filename' in ctx:
         picture_rel_path = path('pictures/2012') / ctx['picture_filename']

@@ -85,6 +85,46 @@
           </li>
         {% endfor %}
       </ul>
+
+      <h3>Top domenii de politici publice</h3>
+
+      <div class="policychart"></div>
+
+      <ul>
+        {%- for policy in policy_domains %}
+          <li>
+            {{ policy.name|link_for(
+                '.policy_detail',
+                policy_slug=policy.slug,
+              ) }}
+            ({{ policy.interest|percent }})
+          </li>
+        {%- endfor %}
+      </ul>
     </div>
   </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static', filename='policychart.js') }}"></script>
+<script>
+(function() {
+  "use strict";
+
+  $(document).ready(render);
+  $(window).resize(render);
+
+  function render() {
+    app.render_policy_chart({
+      container: $('.policychart').empty()[0],
+      data: {{ policy_domains|tojson }},
+      cutoff: 0.02
+    });
+  }
+
+})();
+</script>
 {% endblock %}
