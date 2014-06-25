@@ -157,7 +157,7 @@ def get_questions(
 
 
 @scraper_manager.command
-def people(
+def get_people(
     year='2012',
     cache_name=None,
     throttle=None,
@@ -256,7 +256,7 @@ def people(
 
 
 @scraper_manager.command
-def update_pictures(year='2012'):
+def get_update_pictures(year='2012'):
     import subprocess
     from sqlalchemy.orm import joinedload
     from mptracker.scraper.gdrive import PictureFolder
@@ -317,7 +317,7 @@ def update_pictures(year='2012'):
 
 
 @scraper_manager.command
-def pictures(year='2012'):
+def get_pictures(year='2012'):
     from mptracker.scraper.gdrive import PictureFolder
 
     pictures_dir = path(flask.current_app.static_folder) / 'pictures' / year
@@ -479,7 +479,7 @@ def get_groups(
 
 
 @scraper_manager.command
-def committees(
+def get_committees(
     cache_name=None,
     throttle=None,
     no_commit=False,
@@ -1048,7 +1048,7 @@ def get_votes(
 
 
 @scraper_manager.command
-def vote_controversy(no_commit=False):
+def get_vote_controversy(no_commit=False):
     controversy_patcher = TablePatcher(
         models.VotingSessionControversy,
         models.db.session,
@@ -1076,7 +1076,7 @@ def vote_controversy(no_commit=False):
 
 
 @scraper_manager.command
-def position(no_commit=False):
+def get_position(no_commit=False):
     name_search = models.NameSearch(
         models.Person.query
         .join(models.Mandate)
@@ -1143,7 +1143,7 @@ def position(no_commit=False):
 
 
 @scraper_manager.command
-def cabinet_party():
+def get_cabinet_party():
     patcher = TablePatcher(
         models.CabinetMembership,
         models.db.session,
@@ -1165,7 +1165,7 @@ def cabinet_party():
 
 
 @scraper_manager.command
-def policy_domain():
+def get_policy_domain():
     patcher = TablePatcher(
         models.PolicyDomain,
         models.db.session,
@@ -1180,7 +1180,7 @@ def policy_domain():
 
 
 @scraper_manager.command
-def stop_words():
+def get_stop_words():
     from mptracker.nlp import normalize_to_ascii
     patcher = TablePatcher(
         models.Stopword,
@@ -1196,7 +1196,7 @@ def stop_words():
 
 
 @scraper_manager.command
-def committee_attendance(no_commit=False):
+def get_committee_attendance(no_commit=False):
     # Nume
     # Comisia Permanenta 1
     # Numar sedinte comisia permanenta 1
@@ -1406,13 +1406,31 @@ def assets(file_path, no_commit=False):
 
 
 @scraper_manager.command
-def auto(cache_name=None):
-    get_transcripts(n_sessions=20, cache_name=cache_name)
-    get_questions(autoanalyze=True, cache_name=cache_name)
-    get_votes(days=20, autoanalyze=True, cache_name=cache_name)
-    get_groups(cache_name=cache_name)
-    get_proposal_pages(cache_name=cache_name)
+def daily():
+    get_transcripts(n_sessions=20)
+    get_questions(autoanalyze=True)
+    get_votes(days=20, autoanalyze=True)
+    get_groups()
+    get_proposal_pages()
     get_proposals(autoanalyze=True)
+
+
+@scraper_manager.command
+def daily_long():
+    get_people()
+    get_committees()
+
+
+@scraper_manager.command
+def daily_gdrive():
+    get_vote_controversy()
+    get_position()
+    get_cabinet_party()
+    get_policy_domain()
+    get_stop_words()
+    #get_committee_attendance()
+    get_proposal_controversy()
+    get_party_description()
 
 
 @scraper_manager.command
@@ -1446,7 +1464,7 @@ def update_person_xls():
 
 
 @scraper_manager.command
-def proposal_controversy():
+def get_proposal_controversy():
     """ Update proposal controversies from csv"""
 
     def extract_proposal(url):
@@ -1469,7 +1487,7 @@ def proposal_controversy():
 
 
 @scraper_manager.command
-def party_description():
+def get_party_description():
     patcher = TablePatcher(
         models.MpGroup,
         models.db.session,
