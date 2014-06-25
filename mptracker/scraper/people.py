@@ -56,6 +56,7 @@ class MandateScraper(Scraper):
                 person_first_name=first_name,
                 person_last_name=last_name,
                 minority=False,
+                start_date=None,
                 end_date=None,
                 picture_url=picture.attr('href'),
             )
@@ -89,6 +90,12 @@ class MandateScraper(Scraper):
                     cols.eq(end_date_col).text(),
                     fmt='ro_short_month',
                 )
+
+            if has_start_date:
+                start_date_txt = cols.eq(6).text()
+                if start_date_txt:
+                    mandate.start_date = parse_date(
+                        start_date_txt, 'ro_short_month')
 
             yield mandate
 

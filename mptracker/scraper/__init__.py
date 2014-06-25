@@ -201,8 +201,9 @@ def people(
             ])
             assert mandate.chamber_number == 2
             row['chamber_id'] = chamber_by_slug['cdep'].id
+            start_date = mandate.start_date or term_interval.lower
             end_date = mandate.end_date or term_interval.upper or date.max
-            row['interval'] = DateRange(term_interval.lower, end_date)
+            row['interval'] = DateRange(start_date, end_date)
 
             person = (
                 models.Person.query
