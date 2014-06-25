@@ -14,9 +14,15 @@
     {% endfor %}
   </p>
 
-  <h4>Text întrebare</h4>
+  {% if question['question_pdf_url'] %}
+    <h4>Text întrebare</h4>
+    <iframe class="embed-pdf img-thumbnail"
+            src="{{ question['question_pdf_url'] }}"></iframe>
+  {% endif %}
 
-  <div>
-    {{- question['text'] -}}
-  </div>
+  {% if question['answer_pdf_url'] %}
+    <h4>Text răspuns</h4>
+    <iframe class="embed-pdf img-thumbnail"
+            src="{{ question['answer_pdf_url'] }}"></iframe>
+  {% endif %}
 {% endblock %}

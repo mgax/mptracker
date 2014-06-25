@@ -122,3 +122,8 @@ figure {
 .similarity-barchart .number.other {
     stroke: grey;
 }
+
+.embed-pdf {
+    width: 100%;
+    height: 400px;
+}

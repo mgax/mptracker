@@ -1297,7 +1297,7 @@ class DataAccess:
         if question is None:
             raise self.missing()
 
-        rv = {'title': question.title, 'text': question.text}
+        rv = {'title': question.title}
 
         asked_query = (
             Person.query
@@ -1311,6 +1311,12 @@ class DataAccess:
                 'name': person.name_first_last,
                 'slug': person.slug,
             })
+
+        if question.pdf_url:
+            rv['question_pdf_url'] = question.pdf_url
+
+        if question.answer and question.answer.pdf_url:
+            rv['answer_pdf_url'] = question.answer.pdf_url
 
         return rv
 
