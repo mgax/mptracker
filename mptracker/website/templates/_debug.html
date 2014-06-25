@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+
+{% block styles %}
+<style>
+  .policy-sample text {
+    fill: white;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+  <h1>Debug</h1>
+
+  <h3>Domenii de politici publice</h3>
+
+  <div>
+    {% for domain in models.PolicyDomain.query %}
+      <svg width=300 height=50 class="policy-sample">
+        <rect width=300 height=50 class="policy-{{ domain.slug }}"></rect>
+        <text transform="translate(10, 30)">{{ domain.name }}</text>
+      </svg>
+    {% endfor %}
+  </div>
+{% endblock %}

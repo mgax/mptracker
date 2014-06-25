@@ -111,6 +111,11 @@ def ping():
     return 'mptracker is ok'
 
 
+@pages.route('/_debug')
+def debug():
+    return flask.render_template('_debug.html', models=models)
+
+
 @pages.route('/')
 def home():
     return flask.render_template('home.html', **{
