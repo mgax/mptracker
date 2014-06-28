@@ -4,6 +4,9 @@
 @colorLinkHover: #175789;
 @colorHeader: #45515b;
 @colorBorder: #dce0e0;
+@colorOrange: #e64c00;
+@colorYellow: #ffc528;
+@colorGreen: #94c938;
 
 html, body {
     font-family: 'Open Sans', sans-serif;
@@ -91,11 +94,11 @@ a {
 
 .container-content {
     background: #fff;
+    margin-bottom: 20px;
     .rounded(5px);
 }
 
 .content-home {
-    margin-bottom: 20px;
     .home-section {
         border-bottom: 1px solid @colorBorder;
         margin: 0 20px;
@@ -374,14 +377,14 @@ a {
     padding: 15px;
     h3 {
         margin: 10px 0 20px 20px;
-        font-weight: 600;
+        font-weight: 700;
         color: @colorHeader;
+        span {
+            margin-left: 20px;
+        }
     }
     form {
         margin: 0 0 0 20px;
-    }
-    .search-section {
-        margin-bottom: 25px;
     }
     #map {
         margin-left: 20px;
@@ -393,9 +396,63 @@ a {
             width: 47%;
             background: #fcfcfc;
             border: 1px solid @colorBorder;
-            border-left: 5px solid @colorLink;
             margin: 1% 2% 0 0;
-            padding: 5px 10px;
+            font-weight: 700;
+            a {
+                padding: 10px;
+                display: block;
+            }
+        }
+    }
+    .search-section {
+        margin-bottom: 25px;
+        &.search-by-name {
+            li {
+                border-left: 5px solid @colorLink;
+            }
+        }
+        &.search-by-policy {
+            li {
+                border-left: 5px solid @colorOrange;
+            }
+        }
+        &.search-by-contracts {
+            li {
+                border-left: 5px solid @colorYellow;
+            }
+        }
+        &.geocode {
+            li {
+                border-left: 5px solid @colorGreen;
+            }
+        }
+    }
+    .bullet {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        .rounded(6px);
+        position: absolute;
+        top: 8px;
+        &.blue {
+            background-color: @colorLink;
+        }
+        &.orange {
+            background-color: @colorOrange;
+        }
+        &.yellow {
+            background-color: @colorYellow;
+        }
+        &.green {
+            background-color: @colorGreen;
+        }
+    }
+    .btn {
+        &.btn-default {
+            color: @colorLink;
+            text-transform: uppercase;
+            font-weight: 700;
+            background: #fcfcfc;
         }
     }
 }
@@ -432,6 +489,14 @@ p.full-list {
             margin-right: 7px;
         }
     }
+}
+
+.tooltip .tooltip-inner {
+    background: @colorLink;
+    color: #fff;
+}
+.tooltip .tooltip-arrow {
+    border-top-color: red;
 }
 
 figure {

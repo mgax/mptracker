@@ -93,12 +93,10 @@ a:hover {
 }
 .container-content {
   background: #fff;
+  margin-bottom: 20px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-}
-.content-home {
-  margin-bottom: 20px;
 }
 .content-home .home-section {
   border-bottom: 1px solid #dce0e0;
@@ -370,14 +368,14 @@ a:hover {
 }
 .person-index h3 {
   margin: 10px 0 20px 20px;
-  font-weight: 600;
+  font-weight: 700;
   color: #45515b;
+}
+.person-index h3 span {
+  margin-left: 20px;
 }
 .person-index form {
   margin: 0 0 0 20px;
-}
-.person-index .search-section {
-  margin-bottom: 25px;
 }
 .person-index #map {
   margin-left: 20px;
@@ -388,9 +386,55 @@ a:hover {
   width: 47%;
   background: #fcfcfc;
   border: 1px solid #dce0e0;
-  border-left: 5px solid #267cbe;
   margin: 1% 2% 0 0;
-  padding: 5px 10px;
+  font-weight: 700;
+}
+.person-index .results li a {
+  padding: 10px;
+  display: block;
+}
+.person-index .search-section {
+  margin-bottom: 25px;
+}
+.person-index .search-section.search-by-name li {
+  border-left: 5px solid #267cbe;
+}
+.person-index .search-section.search-by-policy li {
+  border-left: 5px solid #e64c00;
+}
+.person-index .search-section.search-by-contracts li {
+  border-left: 5px solid #ffc528;
+}
+.person-index .search-section.geocode li {
+  border-left: 5px solid #94c938;
+}
+.person-index .bullet {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  position: absolute;
+  top: 8px;
+}
+.person-index .bullet.blue {
+  background-color: #267cbe;
+}
+.person-index .bullet.orange {
+  background-color: #e64c00;
+}
+.person-index .bullet.yellow {
+  background-color: #ffc528;
+}
+.person-index .bullet.green {
+  background-color: #94c938;
+}
+.person-index .btn.btn-default {
+  color: #267cbe;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: #fcfcfc;
 }
 .breadcrumb {
   color: #fff;
@@ -416,6 +460,13 @@ p.full-list {
 }
 .social .icons a {
   margin-right: 7px;
+}
+.tooltip .tooltip-inner {
+  background: #267cbe;
+  color: #fff;
+}
+.tooltip .tooltip-arrow {
+  border-top-color: red;
 }
 figure {
   margin-bottom: 15px;

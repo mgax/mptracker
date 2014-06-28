@@ -16,14 +16,17 @@
 <div class="container-content">
     <div class="row">
         <div class="col-sm-8 person-index">
-            <div class="row search-section">
+            <div class="row search-section search-by-name">
                 <div class="col-sm-12">
-                    <h3>Căutare după nume</h3>
+                    <h3>
+                        <div class="bullet blue"></div>
+                        <span>Căutare după nume</span>
+                    </h3>
                     <form name="search-by-name" class="person-index-search-form form-inline">
                         <div class="row">
                             <div class="form-group col-sm-10">
                                 <label for="search-by-name-input" class="sr-only">nume</label>
-                                <input type="search" class="form-control" id="search-by-name-input" name="name_query" tabindex="1" placeholder="Nume deputat" />
+                                <input type="search" class="form-control" id="search-by-name-input" name="name_query" tabindex="1" placeholder="Nume deputat" data-toggle="tooltip" data-placement="top" title="Apăsați Enter pentru a vedea lista tuturor deputaților" />
                             </div>
                             <div class="col-sm-2">
                                 <button type="submit" class="btn btn-default">Caută</button>
@@ -32,9 +35,12 @@
                     </form>
                 </div>
             </div>
-            <div class="row search-section">
+            <div class="row search-section search-by-policy">
                 <div class="col-sm-12">
-                    <h3>Căutare după politici publice</h3>
+                    <h3>
+                        <div class="bullet orange"></div>
+                        <span>Căutare după politici publice</span>
+                    </h3>
                     <form name="search-by-policy" class="person-index-search-form">
                         <div class="row">
                             <div class="form-group col-sm-10">
@@ -53,9 +59,12 @@
                     </form>
                 </div>
             </div>
-            <div class="row search-section">
+            <div class="row search-section search-by-contracts">
                 <div class="col-sm-12">
-                    <h3>Căutare după contracte cu statul</h3>
+                    <h3>
+                        <div class="bullet yellow"></div>
+                        <span>Căutare după contracte cu statul</span>
+                    </h3>
                     <form name="search-by-contracts" class="person-index-search-form">
                         <div class="row">
                             <div class="form-group col-sm-10">
@@ -70,9 +79,12 @@
                 </div>
             </div>
 
-            <div class="row search-section">
+            <div class="row search-section geocode">
                 <div class="col-sm-12">
-                    <h3>Căutare după circumscripție</h3>
+                    <h3>
+                        <div class="bullet green"></div>
+                        <span>Căutare după circumscripție</span>
+                    </h3>
                     <div class="row">
                         <form name="geocode" class="person-index-search-form">
                             <div class="form-group col-sm-10">
