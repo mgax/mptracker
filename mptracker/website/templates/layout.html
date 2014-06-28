@@ -17,9 +17,21 @@
     </script>
   </head>
 
-  <body>
+  <body {% if body_class %}class="{{ body_class }}"{% endif %}>
     {% include 'header.html' %}
     <div class="container">
+        {% if breadcrumb %}
+        <div class="row">
+            <div class="breadcrumb col-sm-12">
+                {% for crumb in breadcrumb %}
+                    {{ crumb }}
+                    {% if not loop.last %}
+                        &raquo;
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
       {% block content %}{% endblock %}
     </div>
 

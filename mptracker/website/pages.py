@@ -118,6 +118,7 @@ def home():
         'controversy_count': dal.get_controversy_count(),
         'recent_proposals': dal.get_recent_proposals(3),
         'recent_questions': dal.get_recent_questions(3),
+        'body_class': 'home'
     })
 
 
@@ -136,6 +137,7 @@ def person_index():
         'county_name_map': dal.get_county_name_map(),
         'mandates_by_county': mandates_by_county,
         'policy_list': dal.get_policy_list(),
+        'breadcrumb': ['Deputați', 'Căutare']
     })
 
 

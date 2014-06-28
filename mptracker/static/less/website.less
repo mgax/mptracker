@@ -6,8 +6,13 @@
 @colorBorder: #dce0e0;
 
 html, body {
-    background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
     font-family: 'Open Sans', sans-serif;
+    /* Default pages have the background image a bit higher */
+    background: url(../img/header-bg.jpg) 0 -160px no-repeat #f6f4ef;
+    /* While the homepage has it full */
+    &.home {
+        background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
+    }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -254,14 +259,6 @@ a {
                 font-weight: 700;
             }
         }
-        &.social {
-            .icons {
-                margin-bottom: 15px;
-                a {
-                    margin-right: 7px;
-                }
-            }
-        }
         &.contribute {
             border: 1px solid @colorBorder;
             padding-left: 0;
@@ -373,12 +370,68 @@ a {
     }
 }
 
+.person-index {
+    padding: 15px;
+    h3 {
+        margin: 10px 0 20px 20px;
+        font-weight: 600;
+        color: @colorHeader;
+    }
+    form {
+        margin: 0 0 0 20px;
+    }
+    .search-section {
+        margin-bottom: 25px;
+    }
+    #map {
+        margin-left: 20px;
+        margin-right: 35px;
+    }
+    .results {
+        li {
+            float: left;
+            width: 47%;
+            background: #fcfcfc;
+            border: 1px solid @colorBorder;
+            border-left: 5px solid @colorLink;
+            margin: 1% 2% 0 0;
+            padding: 5px 10px;
+        }
+    }
+}
+
+.breadcrumb {
+    color: #fff;
+    font-weight: 500;
+    background: none;
+    font-size: 24px;
+    margin-bottom: 0;
+    padding-top: 20px;
+    text-shadow: -3px -1px 2px rgba(150, 150, 150, 1);
+}
+
 p.full-list {
     text-align: right;
 }
 
 .clear {
     clear: both;
+}
+
+.sidebar {
+    h3 {
+        font-weight: 600;
+        color: @colorHeader;
+    }
+}
+
+.social {
+    .icons {
+        margin-bottom: 15px;
+        a {
+            margin-right: 7px;
+        }
+    }
 }
 
 figure {

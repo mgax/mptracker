@@ -6,8 +6,14 @@
   ---------------------------------------------------*/
 html,
 body {
-  background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
   font-family: 'Open Sans', sans-serif;
+  /* Default pages have the background image a bit higher */
+  background: url(../img/header-bg.jpg) 0 -160px no-repeat #f6f4ef;
+  /* While the homepage has it full */
+}
+html.home,
+body.home {
+  background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
 }
 h1,
 h2,
@@ -256,12 +262,6 @@ a:hover {
 .content-home .sub-section.public-politics .percentage {
   font-weight: 700;
 }
-.content-home .sub-section.social .icons {
-  margin-bottom: 15px;
-}
-.content-home .sub-section.social .icons a {
-  margin-right: 7px;
-}
 .content-home .sub-section.contribute {
   border: 1px solid #dce0e0;
   padding-left: 0;
@@ -365,11 +365,57 @@ a:hover {
   margin-right: 10px;
   font-size: 13px;
 }
+.person-index {
+  padding: 15px;
+}
+.person-index h3 {
+  margin: 10px 0 20px 20px;
+  font-weight: 600;
+  color: #45515b;
+}
+.person-index form {
+  margin: 0 0 0 20px;
+}
+.person-index .search-section {
+  margin-bottom: 25px;
+}
+.person-index #map {
+  margin-left: 20px;
+  margin-right: 35px;
+}
+.person-index .results li {
+  float: left;
+  width: 47%;
+  background: #fcfcfc;
+  border: 1px solid #dce0e0;
+  border-left: 5px solid #267cbe;
+  margin: 1% 2% 0 0;
+  padding: 5px 10px;
+}
+.breadcrumb {
+  color: #fff;
+  font-weight: 500;
+  background: none;
+  font-size: 24px;
+  margin-bottom: 0;
+  padding-top: 20px;
+  text-shadow: -3px -1px 2px #969696;
+}
 p.full-list {
   text-align: right;
 }
 .clear {
   clear: both;
+}
+.sidebar h3 {
+  font-weight: 600;
+  color: #45515b;
+}
+.social .icons {
+  margin-bottom: 15px;
+}
+.social .icons a {
+  margin-right: 7px;
 }
 figure {
   margin-bottom: 15px;
