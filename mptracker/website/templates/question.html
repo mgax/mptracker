@@ -2,21 +2,25 @@
 
 
 {% block content %}
-  <h1>{{ question['title'] }}</h1>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ question['title'] }}</h1>
+            <p>
+                Adresant:
+                {% for person in question['asked_by'] %}
+                    <a href="{{ url_for('.person_detail', person_slug=person['slug']) }}">
+                        {{- person['name'] -}}
+                    </a>
+                    {%- if not loop.last %},{% endif %}
+            {% endfor %}
+            </p>
 
-  <p>
-    Adresant:
-    {% for person in question['asked_by'] %}
-      <a href="{{ url_for('.person_detail', person_slug=person['slug']) }}">
-        {{- person['name'] -}}
-      </a>
-      {%- if not loop.last %},{% endif %}
-    {% endfor %}
-  </p>
-
-  <h4>Text întrebare</h4>
-
-  <div>
-    {{- question['text'] -}}
-  </div>
+            <h4>Text întrebare</h4>
+            <div>
+                {{- question['text'] -}}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

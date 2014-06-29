@@ -304,7 +304,7 @@ span.number {
 .laws-list .law .law-status-color.approved {
   background: #6abb2d;
 }
-.laws-list .law .law-status-color.pending {
+.laws-list .law .law-status-color.inprogress {
   background: #fcbe18;
 }
 .laws-list .law .law-status-color.rejected {
@@ -605,6 +605,24 @@ span.number {
 }
 .container-general {
   padding: 25px 20px;
+}
+.container-general h1,
+.container-general h2,
+.container-general h3,
+.container-general h4,
+.container-general h5,
+.container-general h6 {
+  font-weight: 700;
+  color: #45515b;
+}
+.container-general h1 {
+  margin-top: 0;
+}
+.container-general.no-breadcrumb {
+  margin-top: 20px;
+}
+.container-general.no-breadcrumb h1 {
+  margin-top: 0;
 }
 .breadcrumb {
   color: #fff;

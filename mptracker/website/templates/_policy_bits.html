@@ -5,44 +5,40 @@
   } %}
 
 {% macro policy_tables(proposal_list) %}
-  <h2>Propuneri legislative</h2>
+    <h2>Propuneri legislative</h2>
 
-  <table class="table">
-    <thead>
-    </thead>
-
-    <tbody>
-      {%- for proposal in proposal_list %}
-        <tr>
-          {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
-          <td>
-            <a href="{{ url }}">
-              {{- proposal.title|truncate(80) -}}
-            </a>
-          </td>
-
-          <td class="proposal-status-{{ proposal.status }}">
-            {{- STATUS_LABEL[proposal.status] -}}
-            {%- if proposal.tacit_approval %}
-              {%- set title =
-                  "Aprobare tacită, " +
-                  proposal.tacit_approval.date|datefmt + ", " +
-                  proposal.tacit_approval.location %}
-              <span title="{{ title }}">
-                <i class="fa fa-exclamation-triangle"></i>
-              </span>
-            {%- endif %}
-            {%- if proposal.controversy %}
-              {% set title = "Controverse" %}
-              <span title="{{ title }}">
-                <i class="fa fa-exclamation-circle"></i>
-              </span>
-            {%- endif %}
-          </td>
-        </tr>
-      {%- endfor %}
-    </tbody>
-  </table>
+    <div class="laws-list">
+        {%- for proposal in proposal_list %}
+            <div class="law">
+                <div class="law-status-color {{ proposal.status }}"></div>
+                <div class="law-title">
+                    {%- set url = url_for('.policy_proposal', proposal_id=proposal.id) %}
+                    <a href="{{ url }}">
+                        {{- proposal.title|truncate(70) -}}
+                    </a>
+                </div>
+                <div class="law-status-text">
+                    {%- if proposal.tacit_approval %}
+                        {%- set title =
+                        "Aprobare tacită, " +
+                        proposal.tacit_approval.date|datefmt + ", " +
+                        proposal.tacit_approval.location %}
+                        <span title="{{ title }}">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </span>
+                    {%- endif %}
+                    {%- if proposal.controversy %}
+                        {% set title = "Controverse" %}
+                        <span title="{{ title }}">
+                            <i class="fa fa-exclamation-circle"></i>
+                        </span>
+                    {%- endif %}
+                    {{- STATUS_LABEL[proposal.status] -}}
+                </div>
+                <div class="clear"></div>
+            </div>
+        {%- endfor %}
+    </div>
 {% endmacro %}
 
 {% macro question_tables(question_list) %}

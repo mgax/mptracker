@@ -5,19 +5,25 @@
 
 
 {% block content %}
-  {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
-  <h1><a href="{{ url }}">{{ party.name }} – {{ policy.name }}</a></h1>
+    {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
+    <div class="container-content container-general">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1><a href="{{ url }}">{{ party.name }} – {{ policy.name }}</a></h1>
 
-  <h2>Membri activi</h2>
+                <h2>Membri activi</h2>
 
-  <p>
-    {%- for member in policy_members %}
-      {{ member.name|link_for('.person_detail', person_slug=member.slug) }}
-      {%- if not loop.last %}, {% endif %}
-    {%- endfor %}
-  </p>
+                <p>
+                {%- for member in policy_members %}
+                {{ member.name|link_for('.person_detail', person_slug=member.slug) }}
+                {%- if not loop.last %}, {% endif %}
+                {%- endfor %}
+                </p>
 
-  {% from '_policy_bits.html' import policy_tables, question_tables %}
-  {{ policy_tables(policy.proposal_list) }}
-  {{ question_tables(policy.question_list) }}
+                {% from '_policy_bits.html' import policy_tables, question_tables %}
+                {{ policy_tables(policy.proposal_list) }}
+                {{ question_tables(policy.question_list) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

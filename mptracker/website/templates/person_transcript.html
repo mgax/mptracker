@@ -5,10 +5,16 @@
 
 
 {% block content %}
-  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
-  <h1><a href="{{ url }}">{{ name }}</a></h1>
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            {%- set url = url_for('.person_detail', person_slug=person_slug) %}
+            <h1><a href="{{ url }}">{{ name }}</a></h1>
 
-  <h3>Luare de cuvânt ({{ transcript.date }})</h3>
+            <h3>Luare de cuvânt ({{ transcript.date }})</h3>
 
-  <p class="transcript-text">{{ transcript.text }}</p>
+            <p class="transcript-text">{{ transcript.text }}</p>
+        </div>
+    </div>
+</div>
 {% endblock %}

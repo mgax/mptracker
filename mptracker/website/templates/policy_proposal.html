@@ -8,56 +8,58 @@
 
 
 {% block content %}
-  <h1>{{ proposal['title'] }}</h1>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            <p>
+            Sponsori:
+            {% for person in proposal['sponsors'] %}
+                <a href="{{ url_for('.person_detail', person_slug=person['slug']) }}">
+                    {{- person['name'] -}}
+                </a>
+                {%- if not loop.last %},{% endif %}
+            {% endfor %}
+            </p>
 
-  <p>
-    Sponsori:
-    {% for person in proposal['sponsors'] %}
-      <a href="{{ url_for('.person_detail', person_slug=person['slug']) }}">
-        {{- person['name'] -}}
-      </a>
-      {%- if not loop.last %},{% endif %}
-    {% endfor %}
-  </p>
+            <p>
+            {% if proposal.pk_cdep %}
+                <a href="http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=2&idp={{ proposal.pk_cdep }}">cdep</a>
+            {% endif %}
 
-  <p>
-    {% if proposal.pk_cdep %}
-      <a href="http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=2&idp={{ proposal.pk_cdep }}">cdep</a>
-    {% endif %}
+            {% if proposal.pk_senate %}
+                <a href="http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=1&idp={{ proposal.pk_senate }}">senat</a>
+            {% endif %}
+            </p>
 
-    {% if proposal.pk_senate %}
-      <a href="http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=1&idp={{ proposal.pk_senate }}">senat</a>
-    {% endif %}
-  </p>
+            {% if proposal['controversy'] %}
+            <div class="alert-danger">
+                <p>Controverse:</p>
+                <ul>
+                {% for controversy in proposal['controversy'] %}
+                    <li>{{ controversy.reason }}
+                    {% for link, title in controversy.links %}
+                        <a target="_blank" title="{{ title }}" href="{{ link }}">[{{ loop.index }}]</a>
+                    {% endfor %}
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-  {% if proposal['controversy'] %}
-  <div class="alert-danger">
-  <p>Controverse:</p>
-    <ul>
-    {% for controversy in proposal['controversy'] %}
-      <li>{{ controversy.reason }}
-        {% for link, title in controversy.links %}
-          <a target="_blank"
-             title="{{ title }}" href="{{ link }}">[{{ loop.index }}]</a>
-        {% endfor %}
-      </li>
-    {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-
-  <table class="table table-condensed table-bordered">
-    {% for item in proposal['activity'] %}
-      <tr>
-        {% set location = LOCATION_MAP.get(item['location']) %}
-        <th class="proposal-activity-at-{{ item['location'] }}">
-          {{ item['date']|datefmt }}<br>
-          {{ location }}
-        </th>
-
-        <td>{{ item['html']|safe }}</td>
-      </tr>
-    {% endfor %}
-  </table>
+            <table class="table table-condensed table-bordered">
+                {% for item in proposal['activity'] %}
+                <tr>
+                    {% set location = LOCATION_MAP.get(item['location']) %}
+                    <th class="proposal-activity-at-{{ item['location'] }}">
+                        {{ item['date']|datefmt }}<br>
+                        {{ location }}
+                    </th>
+                    <td>{{ item['html']|safe }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -4,19 +4,24 @@
 
 
 {% block content %}
-  <h1>{{ date|datefmt }} – {{ headline }}</h1>
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ date|datefmt }} – {{ headline }}</h1>
 
-  {%- for transcript in transcript_list %}
-    <p id="{{ transcript.serial_id }}">
-      {%- set url = url_for(
-          '.person_detail',
-          person_slug=transcript.person_slug,
-        ) %}
-      <a href="{{ url }}">{{ transcript.person_name }}</a>
-
-      {{ transcript.text }}
-    </p>
-  {%- endfor %}
+            {%- for transcript in transcript_list %}
+                <p id="{{ transcript.serial_id }}">
+                {%- set url = url_for(
+                '.person_detail',
+                person_slug=transcript.person_slug,
+                ) %}
+                <a href="{{ url }}">{{ transcript.person_name }}</a>
+                {{ transcript.text }}
+                </p>
+            {%- endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}

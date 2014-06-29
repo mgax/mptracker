@@ -310,7 +310,7 @@ span {
             &.approved {
                 background: #6abb2d;
             }
-            &.pending {
+            &.inprogress {
                 background: #fcbe18;
             }
             &.rejected {
@@ -656,6 +656,19 @@ span {
 
 .container-general {
     padding: 25px 20px;
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        color: @colorHeader;
+    }
+    h1 {
+        margin-top: 0;
+    }
+    &.no-breadcrumb {
+        margin-top: 20px;
+        h1 {
+            margin-top: 0;
+        }
+    }
 }
 
 .breadcrumb {

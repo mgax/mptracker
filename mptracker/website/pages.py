@@ -374,8 +374,10 @@ def person_migrations():
 
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
 def person_question(question_id):
+    question = dal.get_question_details(question_id)
     return flask.render_template('question.html', **{
-        'question': dal.get_question_details(question_id),
+        'question': question,
+        'breadcrumb': ['Întrebări și interpelări']
     })
 
 
@@ -418,10 +420,13 @@ def party_detail(party_short_name):
 @section('party')
 def party_policy(party_short_name, policy_slug):
     party = dal.get_party(party_short_name)
+    policy = party.get_policy(policy_slug)
     return flask.render_template('party_policy.html', **{
         'party': party.get_main_details(),
-        'policy': party.get_policy(policy_slug),
-        'policy_members': party.get_policy_members(policy_slug)
+        'policy': policy,
+        'policy_members': party.get_policy_members(policy_slug),
+        # the breadcrumb below needs a third parameter, The name of the policy
+        'breadcrumb': ['Partide', party.get_name()]
     })
 
 
@@ -475,6 +480,7 @@ def policy_detail(policy_slug=None):
         'proposal_list': dal.get_policy_proposal_list(policy_slug),
         'question_list': dal.get_policy_question_list(policy_slug),
         'active_parties': dal.get_policy_top_parties(policy_slug),
+        'breadcrumb': ['Domenii de politici publice', policy_name]
     }
     return flask.render_template('policy_detail.html', **ctx)
 
@@ -483,7 +489,8 @@ def policy_detail(policy_slug=None):
 @section('policy')
 def policy_proposal(proposal_id):
     proposal = dal.get_proposal_details(proposal_id)
-    return flask.render_template('policy_proposal.html', proposal=proposal)
+    breadcrumb = ['Politici', proposal['title']]
+    return flask.render_template('policy_proposal.html', proposal=proposal, breadcrumb = breadcrumb)
 
 
 @pages.route('/politici/vot-controversat/<uuid:controversy_id>')
