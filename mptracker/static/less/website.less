@@ -184,17 +184,6 @@ a {
         font-size: 22px;
         font-weight: 900;
         color: @colorHeader;
-        span {
-            &.number {
-                background: @colorHeader;
-                color: #fff;
-                font-size: 15px;
-                padding: 5px;
-                width: 70px;
-                margin-left: 10px;
-                .rounded(35px);
-            }
-        }
     }
     .sub-section {
         padding: 30px 0 30px 20px;
@@ -264,6 +253,20 @@ a {
                 }
             }
         }
+    }
+}
+
+span {
+    &.number {
+        background: @colorHeader;
+        color: #fff;
+        font-size: 15px;
+        padding: 5px;
+        min-width: 28px;
+        margin-left: 10px;
+        display: inline-block;
+        text-align: center;
+        .rounded(35px);
     }
 }
 

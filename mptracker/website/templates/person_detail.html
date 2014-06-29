@@ -140,7 +140,10 @@
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-sm-12 person-details-section">
-                    <h3 class="section-header">Voturi controversate</h3>
+                    <h3 class="section-header">
+                        Voturi controversate
+                        <span class="number">{{ controversy_list|length }}</span>
+                    </h3>
                     <div class="votes-list">
                         {%- for controversy in controversy_list %}
                         <div class="vote">

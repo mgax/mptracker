@@ -183,17 +183,6 @@ a:hover {
   font-weight: 900;
   color: #45515b;
 }
-.content-home h3 span.number {
-  background: #45515b;
-  color: #fff;
-  font-size: 15px;
-  padding: 5px;
-  width: 70px;
-  margin-left: 10px;
-  -webkit-border-radius: 35px;
-  -moz-border-radius: 35px;
-  border-radius: 35px;
-}
 .content-home .sub-section {
   padding: 30px 0 30px 20px;
 }
@@ -260,6 +249,19 @@ a:hover {
 }
 .content-home .sub-section.contribute .btn-contribute:hover {
   background: #e6c56b;
+}
+span.number {
+  background: #45515b;
+  color: #fff;
+  font-size: 15px;
+  padding: 5px;
+  min-width: 28px;
+  margin-left: 10px;
+  display: inline-block;
+  text-align: center;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  border-radius: 35px;
 }
 .public-politics {
   border-bottom: 1px solid #dce0e0;
