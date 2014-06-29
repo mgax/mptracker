@@ -603,6 +603,9 @@ span.number {
 .container-content.parties-content .social h3 {
   margin-top: 0;
 }
+.container-general {
+  padding: 25px 20px;
+}
 .breadcrumb {
   color: #fff;
   font-weight: 700;

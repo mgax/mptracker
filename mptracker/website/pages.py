@@ -421,7 +421,7 @@ def party_policy(party_short_name, policy_slug):
     return flask.render_template('party_policy.html', **{
         'party': party.get_main_details(),
         'policy': party.get_policy(policy_slug),
-        'policy_members': party.get_policy_members(policy_slug),
+        'policy_members': party.get_policy_members(policy_slug)
     })
 
 
@@ -440,6 +440,7 @@ def party_members(party_short_name):
 def policy_index():
     return flask.render_template('policy_index.html', **{
         'policy_list': dal.get_policy_list(),
+        'breadcrumb': ['Domenii de politici publice']
     })
 
 
@@ -503,7 +504,10 @@ def text_page(name):
 @pages.route('/export')
 @section('export')
 def export_index():
-    return flask.render_template('export.html')
+    ctx = {
+        'breadcrumb': ['Export de date']
+    }
+    return flask.render_template('export.html', **ctx)
 
 
 @pages.route('/export/membri_grupuri.csv')
