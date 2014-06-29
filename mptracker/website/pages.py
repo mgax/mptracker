@@ -399,6 +399,7 @@ def person_county(county_code):
 def party_index():
     return flask.render_template('party_index.html', **{
         'party_list': dal.get_party_list(),
+        'breadcrumb': ['Partide']
     })
 
 
@@ -409,6 +410,7 @@ def party_detail(party_short_name):
     return flask.render_template('party_detail.html', **{
         'party': party.get_details(),
         'policy_domains': party.get_top_policies(),
+        'breadcrumb': ['Partide', party.get_name()]
     })
 
 

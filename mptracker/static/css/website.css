@@ -546,11 +546,68 @@ span.number {
 .container-content.person-details .wordcloud {
   margin-top: 15px;
 }
+.container-content.parties-content {
+  padding: 15px 25px;
+}
+.container-content.parties-content h1 {
+  margin-bottom: 35px;
+}
+.container-content.parties-content h4 {
+  color: #b0b0b0;
+  font-weight: bold;
+  padding-bottom: 15px;
+}
+.container-content.parties-content h4.members {
+  padding: 25px 0 0 15px;
+  height: 125px;
+  border-right: 1px solid #dce0e0;
+}
+.container-content.parties-content h4.stats {
+  padding: 25px 0 0 0;
+}
+.container-content.parties-content .parties-list {
+  padding-left: 0;
+  list-style-type: none;
+}
+.container-content.parties-content .parties-list li {
+  margin-bottom: 7px;
+}
+.container-content.parties-content .party-meta {
+  margin-bottom: 30px;
+}
+.container-content.parties-content .party-meta .party-logo {
+  text-align: center;
+}
+.container-content.parties-content .party-seats {
+  text-align: center;
+  padding: 30px 0;
+}
+.container-content.parties-content .public-politics {
+  border-right: 1px solid #dce0e0;
+  border-bottom: none;
+}
+.container-content.parties-content .stat {
+  border-bottom: 1px solid #dce0e0;
+  padding: 20px 0;
+}
+.container-content.parties-content .stat .number {
+  float: right;
+  font-weight: 700;
+  font-size: 36px;
+}
+.container-content.parties-content .stat .description {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+}
+.container-content.parties-content .social h3 {
+  margin-top: 0;
+}
 .breadcrumb {
   color: #fff;
-  font-weight: 500;
+  font-weight: 700;
   background: none;
-  font-size: 24px;
+  font-size: 26px;
   margin-bottom: 0;
   padding-top: 20px;
   text-shadow: -3px -1px 2px #969696;
@@ -563,6 +620,10 @@ p.full-list {
 }
 .sidebar h3 {
   font-weight: 600;
+  color: #45515b;
+}
+.social h3 {
+  font-weight: 700;
   color: #45515b;
 }
 .social .icons {

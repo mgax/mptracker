@@ -2,12 +2,16 @@
 
 
 {% block content %}
-  <ul class="list-unstyled">
-    {% for party in party_list %}
-      <li>
-        {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
-        <a href="{{ url }}">{{ party.name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+<div class="container-content parties-content">
+    <div class="col-sm-12">
+      <ul class="parties-list">
+        {% for party in party_list %}
+          <li>
+            {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
+            <a href="{{ url }}">{{ party.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+</div>
 {% endblock %}

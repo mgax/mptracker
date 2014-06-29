@@ -589,11 +589,76 @@ span {
     }
 }
 
+.container-content.parties-content {
+    padding: 15px 25px;
+    h1 {
+        margin-bottom: 35px;
+    }
+    h4 {
+        color: #b0b0b0;
+        font-weight: bold;
+        padding-bottom: 15px;
+        &.members {
+            padding: 25px 0 0 15px;
+            height: 125px;
+            border-right: 1px solid @colorBorder;
+        }
+        &.stats {
+            padding: 25px 0 0 0;
+        }
+    }
+    .parties-list {
+        padding-left: 0;
+        list-style-type: none;
+        li {
+            margin-bottom: 7px;
+        }
+    }
+    .party-meta {
+        margin-bottom: 30px;
+        .party-logo {
+            text-align: center;
+        }
+    }
+    .party-seats {
+        text-align: center;
+        padding: 30px 0;
+    }
+    .public-politics {
+        border-right: 1px solid @colorBorder;
+        border-bottom: none;
+        ul {
+            li {
+
+            }
+        }
+    }
+    .stat {
+        border-bottom: 1px solid @colorBorder;
+        padding: 20px 0;
+        .number {
+            float: right;
+            font-weight: 700;
+            font-size: 36px;
+        }
+        .description {
+            text-transform: uppercase;
+            font-size: 13px;
+            font-weight: 700;
+        }
+    }
+    .social {
+        h3 {
+            margin-top: 0;
+        }
+    }
+}
+
 .breadcrumb {
     color: #fff;
-    font-weight: 500;
+    font-weight: 700;
     background: none;
-    font-size: 24px;
+    font-size: 26px;
     margin-bottom: 0;
     padding-top: 20px;
     text-shadow: -3px -1px 2px rgba(150, 150, 150, 1);
@@ -615,6 +680,10 @@ p.full-list {
 }
 
 .social {
+    h3 {
+        font-weight: 700;
+        color: @colorHeader;
+    }
     .icons {
         margin-bottom: 15px;
         a {
