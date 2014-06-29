@@ -49,12 +49,11 @@
 
 
 {%- macro activity_item(item) %}
-  <li>
-    <strong>
-      {{ item['date']|datefmt }},
-      {{ QUESTION_TYPE_LABEL.get(item['type']) }}
-    </strong>:
-
-    {{ item['text']|maybe_url(item['url']) }}
-  </li>
+    <p>
+        <a href="{{ item['url'] }}" class="date">
+            {{ item['date']|datefmt }}
+        </a><br />
+        {{ QUESTION_TYPE_LABEL.get(item['type']) }},
+        {{ item['text'] }}
+    </p>
 {%- endmacro %}

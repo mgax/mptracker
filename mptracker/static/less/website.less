@@ -11,7 +11,7 @@
 html, body {
     font-family: 'Open Sans', sans-serif;
     /* Default pages have the background image a bit higher */
-    background: url(../img/header-bg.jpg) 0 -160px no-repeat #f6f4ef;
+    background: url(../img/header-bg-dark.jpg) 0 -160px no-repeat #f6f4ef;
     /* While the homepage has it full */
     &.home {
         background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
@@ -20,6 +20,11 @@ html, body {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+    font-weight: 700;
+    color: @colorHeader;
 }
 
 a {
@@ -32,6 +37,7 @@ a {
 
 .topbar {
     background: url(../img/semi-opaque-bg.png) repeat;
+    border-bottom: 3px solid #ffad00;
     width: 100%;
     .navbar {
         background: none;
@@ -213,16 +219,6 @@ a {
                 }
             }
         }
-        &.proposals {
-            border-bottom: 1px solid @colorBorder;
-            font-size: 14px;
-            &:last-child {
-                border-bottom: none;
-            }
-            a.date {
-                font-weight: 700;
-            }
-        }
         &.statistic {
             margin-left: 20px;
             padding-left: 0;
@@ -249,19 +245,6 @@ a {
                 margin-top: 15px;
             }
         }
-        &.public-politics {
-            border-bottom: 1px solid @colorBorder;
-            /* Will probably not be needed once the graph is made dynamic */
-            .piechart {
-                text-align: center;
-            }
-            ul {
-                margin-top: 20px;
-            }
-            .percentage {
-                font-weight: 700;
-            }
-        }
         &.contribute {
             border: 1px solid @colorBorder;
             padding-left: 0;
@@ -281,6 +264,31 @@ a {
                 }
             }
         }
+    }
+}
+
+.public-politics {
+    border-bottom: 1px solid @colorBorder;
+    /* Will probably not be needed once the graph is made dynamic */
+    .piechart {
+        text-align: center;
+    }
+    ul {
+        margin-top: 20px;
+    }
+    .percentage {
+        font-weight: 700;
+    }
+}
+
+.proposals {
+    border-bottom: 1px solid @colorBorder;
+    font-size: 14px;
+    &:last-child {
+        border-bottom: none;
+    }
+    a.date {
+        font-weight: 700;
     }
 }
 
@@ -320,6 +328,41 @@ a {
             font-weight: 700;
             color: #c1c1c1;
             text-transform: uppercase;
+        }
+    }
+}
+
+.votes-list {
+    margin-left: 20px;
+    .vote {
+        border: 1px solid #dde1db;
+        border-left: none;
+        margin-bottom: 7px;
+        background: #fbfbfb;
+        height: 50px;
+        .vote-for {
+            float: left;
+            width: 1.5%;
+            padding: 7px 0;
+            height: 50px;
+            &.da {
+                background: #6abb2d;
+            }
+            &.nu {
+                background: #e83c14;
+            }
+            &.abstained {
+                background: #fcbe18;
+            }
+        }
+        .vote-details {
+            padding-top: 5px;
+            padding-left: 20px;
+        }
+        .vote-subtitle {
+            color: #c2c2c2;
+            font-weight: 700;
+            font-size: 13px;
         }
     }
 }
@@ -447,13 +490,99 @@ a {
             background-color: @colorGreen;
         }
     }
+}
+
+.btn {
+    &.btn-default {
+        color: @colorLink;
+        text-transform: uppercase;
+        font-weight: 700;
+        background: #fcfcfc;
+    }
+}
+
+.container-content.person-details {
+    padding: 20px 15px;
+    h1 {
+        margin-top: 5px;
+    }
     .btn {
         &.btn-default {
-            color: @colorLink;
-            text-transform: uppercase;
-            font-weight: 700;
-            background: #fcfcfc;
+            margin-right: 15px;
         }
+    }
+    p {
+        &.emphasis {
+            margin-top: 15px;
+        }
+    }
+    .person-details-section {
+        padding-bottom: 20px;
+        border-bottom: 1px solid @colorBorder;
+        padding: 15px;
+        h3 {
+            color: @colorHeader;
+            font-weight: 700;
+            margin: 30px 0 0 10px;
+            &.section-header {
+                margin: 30px 0 15px 20px;
+            }
+        }
+    }
+    .person-details-header {
+        .person-details-meta {
+            padding-top: 10px;
+        }
+        .person-details-statistics {
+            h4 {
+                color: #b0b0b0;
+                font-weight: 700;
+                margin-top: 30px;
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+            ul {
+                list-style-type: none;
+                padding-left: 0;
+                li {
+                    a {
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+        .cta {
+            margin-top: 15px;
+        }
+    }
+    .person-details-activity {
+        h3 {
+            &:first-child {
+                margin-top: 10px;
+            }
+        }
+        .activitychart, .membershipchart {
+            margin-left: 10px;
+        }
+    }
+    .person-details-recent-activity, .person-details-assets {
+        p {
+            margin-left: 20px;
+        }
+
+    }
+    .piechart {
+        margin-top: 20px;
+    }
+    .social {
+        padding: 20px 25px;
+        h3 {
+            margin: 10px 0 15px 0;
+        }
+    }
+    .wordcloud {
+        margin-top: 15px;
     }
 }
 
@@ -497,6 +626,10 @@ p.full-list {
 }
 .tooltip .tooltip-arrow {
     border-top-color: red;
+}
+
+.emphasis {
+    font-weight: 700;
 }
 
 figure {

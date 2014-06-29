@@ -1,7 +1,9 @@
 {% extends 'layout.html' %}
 
 
-{% block title %}{{ super() }} – {{ name }}{% endblock %}
+{% block title %}
+    {{ super() }} – {{ name }}
+{% endblock %}
 
 
 {%- macro ordinal(n) %}
@@ -13,176 +15,229 @@
   {%- endif %}
 {%- endmacro %}
 
-
 {% block content %}
-  <h1>{{ name }}</h1>
-  <!-- person_id='{{ person_id }}' -->
-  <!-- mandate_id='{{ mandate_id }}' -->
+<div class="container-content person-details row">
+    <div class="col-sm-12 person-details-section person-details-header">
+        <div class="row">
+            <!-- Person Name and Quick Details -->
+            <div class="col-sm-8 person-details-meta">
+                <div class="row">
+                    <div class="col-sm-3">
+                        {%- if picture_url %}
+                            <img src="{{ picture_url }}" alt="{{ name }}" />
+                        {% else %}
+                            <img src="http://placehold.it/160x212" />
+                        {%- endif %}
+                    </div>
+                    <div class="col-sm-9">
+                        <h1>{{ name }}</h1>
+                        <ul class="list-unstyled">
+                        {% if college %}
+                            <li>
+                                Deputat de
+                                {%- if college.county_code %}
+                                    {% set url = url_for(
+                                    '.person_county',
+                                    county_code=college.county_code,
+                                    ) %}
+                                    <a href="{{ url }}">{{ college.county_name }}</a>
+                                {%- else %}
+                                    {{ college.county_name }}
+                                {%- endif %},
+                                colegiul D{{ college.number }}
 
-  <div class="row">
-    <div class="col-sm-8">
-      <h3>Activitate</h3>
-      <div class="activitychart"></div>
+                                {%- if college.election_votes_fraction %}
+                                    ({{ college.election_votes_fraction|percent }} din voturi)
+                                {%- endif %},
+                                {{ ordinal(mandate_count) }} mandat
+                            </li>
+                        {% else %}
+                            <li>Ales la nivel național</li>
+                        {% endif %}
 
-      <h3>Afiliere politică</h3>
-      <div class="membershipchart"></div>
+                        {% for position in position_list %}
+                            <li>
+                                {{ position.title|maybe_url(position.url) }}
+                                ({{ position.start_date|datefmt }} &ndash;
+                                {{ position.end_date|datefmt or 'prezent' }})
+                            </li>
+                        {% endfor %}
 
-      {%- set activity_url = url_for('.person_activity',
-                                     person_slug=person_slug) %}
-      <p><a href="{{ activity_url }}">grafice pentru întregul mandat</a></p>
+                        {% for membership in committee_list %}
+                            <li>
+                                {% if membership.role %}{{ membership.role }}, {% endif %}
+                                {{ membership.committee_name|maybe_url(membership.committee_url) }}
+                                ({{ membership.start_date|datefmt }} &ndash;
+                                {{ membership.end_date|datefmt or 'prezent' }})
+                                {% if membership.attendance_2013 is not none %}
+                                    prezență {{ membership.attendance_2013|percent }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
 
-      <ul class="list-unstyled">
-        {% if college %}
-          <li>
-            Deputat de
-            {%- if college.county_code %}
-              {% set url = url_for(
-                  '.person_county',
-                  county_code=college.county_code,
-                ) %}
-              <a href="{{ url }}">{{ college.county_name }}</a>
-            {%- else %}
-              {{ college.county_name }}
-            {%- endif %},
-            colegiul D{{ college.number }}
+                        {% for membership in group_history %}
+                            <li>
+                                {{ membership.group_short_name|link_for(
+                                '.party_detail',
+                                party_short_name=membership.group_short_name,
+                                ) }}
+                                ({{ membership.start_date|datefmt }} &ndash;
+                                {{ membership.end_date|datefmt or 'prezent' }})
+                                {% if membership.role %}({{ membership.role }}){% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                        <p class="cta">
+                            {%- set url = url_for('.person_compare_index', person_slug=person_slug) %}
+                            <a href="{{ url }}" class="btn btn-default btn-lg">Compară</a>
 
-            {%- if college.election_votes_fraction %}
-              ({{ college.election_votes_fraction|percent }} din voturi)
-            {%- endif %},
-            {{ ordinal(mandate_count) }} mandat
-          </li>
-        {% else %}
-          <li>Ales la nivel național</li>
-        {% endif %}
+                            {% set url = url_for('.person_contact', person_slug=person_slug) %}
+                            <a href="{{ url }}" class="btn btn-default btn-lg">contact</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Person Statistics -->
+            <div class="col-sm-4 person-details-statistics">
+                <h4>Statistici</h4>
 
-        {% for position in position_list %}
-          <li>
-            {{ position.title|maybe_url(position.url) }}
-            ({{ position.start_date|datefmt }} &ndash;
-             {{ position.end_date|datefmt or 'prezent' }})
-          </li>
-        {% endfor %}
+                {%- from '_person_bits.html' import person_stats %}
+                {{ person_stats(person_slug, stats) }}
 
-        {% for membership in committee_list %}
-          <li>
-            {% if membership.role %}{{ membership.role }}, {% endif %}
-            {{ membership.committee_name|maybe_url(membership.committee_url) }}
-            ({{ membership.start_date|datefmt }} &ndash;
-             {{ membership.end_date|datefmt or 'prezent' }})
-            {% if membership.attendance_2013 is not none %}
-              prezență {{ membership.attendance_2013|percent }}
-            {% endif %}
-          </li>
-        {% endfor %}
+                <h4>Domenii de politici publice</h4>
 
-        {% for membership in group_history %}
-          <li>
-            {{ membership.group_short_name|link_for(
-                '.party_detail',
-                party_short_name=membership.group_short_name,
-              ) }}
-            ({{ membership.start_date|datefmt }} &ndash;
-             {{ membership.end_date|datefmt or 'prezent' }})
-            {% if membership.role %}({{ membership.role }}){% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-
-      <div class="wordcloud"></div>
-
-      <div>
-        <h3>Activitate recentă</h3>
-
-        {% from '_person_bits.html' import activity_item %}
-        <ul class="list-unstyled">
-          {% for item in recent_activity %}
-            {{ activity_item(item) }}
-          {% endfor %}
-        </ul>
-
-        <p><a href="{{ activity_url }}">întreaga activitate</a></p>
-      </div>
-
-      {%- if romania_curata_text %}
-        <h3>
-          <a href="http://verificaintegritatea.romaniacurata.ro/">
-            Contracte cu statul și probleme de integritate - România Curată
-          </a>
-        </h3>
-
-        <p class="romania-curata-text">{{ romania_curata_text }}</p>
-      {%- endif %}
-
-      {%- if assets %}
-        <h3>Declarația de avere</h3>
-        <p>
-          avere: €{{ assets['net_worth_eur'] }};
-          terenuri:
-            {{ "%.2f"|format(assets['land_agri_area'] / MP_HA) }} ha agricol,
-            {{ assets['land_city_area'] }} m<sup>2</sup> intravilan;
-          imobile: {{ assets['realty_count'] }};
-          vehicule: {{ assets['vehicle_count'] }};
-          venit anul trecut: €{{ assets['year_income_eur'] }};
-          {{ "detalii"|link_for('.person_assets', person_slug=person_slug) }}
-        </p>
-      {%- endif %}
-
-      <h3>Voturi controversate</h3>
-
-      <ul>
-      {%- for controversy in controversy_list %}
-        <li>
-          <strong>{{ controversy.date|datefmt }}</strong> –
-          {{ controversy.title|link_for(
-                '.vote_controversy',
-                controversy_id=controversy.id) }}:
-          <strong>{{ VOTE_LABEL[controversy.choice] }}</strong>
-          {% if controversy.meaning %}({{ controversy.meaning }}){% endif %}
-        </li>
-      {%- endfor %}
-      </ul>
+                <ul>
+                {%- for policy in policy_domains %}
+                    <li>
+                        {{ policy.name|link_for(
+                        '.person_policy',
+                        person_slug=person_slug,
+                        policy_slug=policy.slug,
+                        ) }}
+                        ({{ policy.interest|percent }})
+                    </li>
+                {%- endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
+    <!-- person_id='{{ person_id }}' -->
+    <!-- mandate_id='{{ mandate_id }}' -->
 
-    <div class="col-sm-4">
-      <div>
-        {%- if picture_url %}
-          <div class="person-image-box">
-            <img src="{{ picture_url }}">
-          </div>
-        {%- endif %}
-
-        <p>
-          {% set url = url_for('.person_contact', person_slug=person_slug) %}
-          <a href="{{ url }}" class="btn btn-primary">contact</a>
-        </p>
-
-        <h4>Statistici</h4>
-
-        {%- from '_person_bits.html' import person_stats %}
-        {{ person_stats(person_slug, stats) }}
-
-        <p>
-          {%- set url = url_for('.person_compare_index', person_slug=person_slug) %}
-          <a href="{{ url }}">Comparații cu alți deputați</a>
-        </p>
-      </div>
-
-      <h4>Domenii de politici publice</h4>
-
-      <ul>
-        {%- for policy in policy_domains %}
-          <li>
-            {{ policy.name|link_for(
-                '.person_policy',
-                person_slug=person_slug,
-                policy_slug=policy.slug,
-              ) }}
-            ({{ policy.interest|percent }})
-          </li>
-        {%- endfor %}
-      </ul>
+    <div class="row person-details-section person-details-activity">
+        <div class="col-sm-12">
+            <h3>Activitate</h3>
+            <div class="activitychart"></div>
+            <h3>Afiliere politică</h3>
+            <div class="membershipchart"></div>
+            {%- set activity_url = url_for('.person_activity', person_slug=person_slug) %}
+            <p class="emphasis">
+                <a href="{{ activity_url }}">Grafice și detalii despre întreaga activitate &raquo;</a>
+            </p>
+        </div>
     </div>
-  </div>
+    <div class="row person-details-affiliation">
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-12 person-details-section">
+                    <h3 class="section-header">Voturi controversate</h3>
+                    <div class="votes-list">
+                        {%- for controversy in controversy_list %}
+                        <div class="vote">
+                            <div class="vote-for {% if VOTE_LABEL[controversy.choice] == 'abținere' or VOTE_LABEL[controversy.choice] == '—' %}abstained{% else %} {{ VOTE_LABEL[controversy.choice] }} {% endif %}">
+                            </div>
+                            <div class="vote-details">
+                                <p>
+                                <strong>{{ controversy.date|datefmt }}</strong> –
+                                {{ controversy.title|link_for(
+                                '.vote_controversy',
+                                controversy_id=controversy.id) }}<br />
+                                <span class="vote-subtitle">{{ VOTE_LABEL[controversy.choice] }}
+                                    {% if controversy.meaning %}
+                                        ({{ controversy.meaning }})
+                                    {% endif %}
+                                </span>
+                                </p>
+                            </div>
+                        </div>
+                        {%- endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 person-details-section person-details-recent-activity">
+                    <h3 class="section-header">Activitate recentă</h3>
+                    {% from '_person_bits.html' import activity_item %}
+                    <div class="proposals">
+                    {% for item in recent_activity %}
+                        {{ activity_item(item) }}
+                    {% endfor %}
+                    </ul>
+                    <p class="full-list"><a href="{{ activity_url }}">Întreaga activitate &raquo;</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 person-details-section person-details-assets">
+                    {%- if assets %}
+                        <h3 class="section-header">Declarația de avere</h3>
+                        <p>
+                            <strong>avere</strong>: €{{ assets['net_worth_eur'] }};
+                            <strong>terenuri</strong>:
+                            {{ "%.2f"|format(assets['land_agri_area'] / MP_HA) }} ha agricol,
+                            {{ assets['land_city_area'] }} m<sup>2</sup> intravilan;
+                            <strong>imobile</strong>: {{ assets['realty_count'] }};
+                            <strong>vehicule</strong>: {{ assets['vehicle_count'] }};
+                            <strong>venit anul trecut</strong>: €{{ assets['year_income_eur'] }};
+                        </p>
+                        <p class="full-list">
+                            {{ "Detalii"|link_for('.person_assets', person_slug=person_slug) }}
+                        </p>
+                    {%- endif %}
+                </div>
+            </div>
+
+            {%- if romania_curata_text %}
+            <div class="row">
+                <div class="col-sm-12 person-details-section">
+                    <h3 class="section-header">
+                        <a href="http://verificaintegritatea.romaniacurata.ro/">
+                        Contracte cu statul și probleme de integritate - România Curată
+                        </a>
+                    </h3>
+                    <p class="romania-curata-text">{{ romania_curata_text }}</p>
+                </div>
+            </div>
+            {%- endif %}
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12 person-details-section public-politics">
+                    <h3>Domeniile de politici publice ale lui {{ name }}</h3>
+                    <div class="row piechart">
+                        <img src="/static/img/placeholders/piechart.png" />
+                    </div>
+                    <ul>
+                    {%- for policy in policy_domains %}
+                        <li>
+                            {{ policy.name }}
+                            ({{ policy.interest|percent }})
+                        </li>
+                    {%- endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 person-details-section social">
+                    {{ text('social') }}
+                </div>
+            </div>
+            <div class="wordcloud"></div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 
