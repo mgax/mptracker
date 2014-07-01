@@ -621,7 +621,8 @@ span.number {
 .container-general.no-breadcrumb {
   margin-top: 20px;
 }
-.container-general.no-breadcrumb h1 {
+.container-general.no-breadcrumb h1,
+.container-general.no-breadcrumb h2 {
   margin-top: 0;
 }
 .breadcrumb {

@@ -2,6 +2,11 @@
 
 
 {%- block content %}
+{% if layout %}
+<div class="container-content container-general no-breadcrumb">
+  <div class="row">
+    <div class="col-sm-12">
+{% endif %}
   <h2>Reprezentarea intereselor locale în Camera Deputaților</h2>
 
   <p>
@@ -58,4 +63,9 @@
     <li>Martin, S. 2011. ‘Using Parliamentary Questions to Measure Constituency Focus: An Application to the Irish Case’, Political Studies, 59: 472–488</li>
     <li>Russo, F. 2011. ‘The Constituency as a Focus of Representation: Studying the Italian Case through the Analysis of Parliamentary Questions’, The Journal of Legislative Studies 17(3): 290-301.</li>
   </ul>
+{% if layout %}
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

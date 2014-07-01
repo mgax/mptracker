@@ -5,38 +5,63 @@
 
 
 {% block content %}
-  <h1>
-    {{ name|link_for('.person_detail', person_slug=person_slug) }}
-    – contact
-  </h1>
+<div class="container-content container-general">
+    <h1>
+        {{ name|link_for('.person_detail', person_slug=person_slug) }}
+    </h1>
 
-  <p>
-    Deputatul {{ name }} poate fi contactat folosind informațiile și
-    opțiunile de mai jos. Dacă faceți parte dintre cetățenii din
-    colegiul sau circumscripția (judetul) pe care o reprezintă în
-    Parlament nu uitați să menționați acest aspect.
-  </p>
+    <p>
+        Deputatul {{ name }} poate fi contactat folosind informațiile și
+        opțiunile de mai jos. Dacă faceți parte dintre cetățenii din
+        colegiul sau circumscripția (judetul) pe care o reprezintă în
+        Parlament nu uitați să menționați acest aspect.
+    </p>
 
-  <dl class="dl-horizontal">
-    <dt>site</dt>
-    <dd>{{ (contact.website_url or '')|urlize }}</dd>
-
-    <dt>blog</dt>
-    <dd>{{ (contact.blog_url or '')|urlize }}</dd>
-
-    <dt>email</dt>
-    <dd>{{ (contact.email_value or '')|urlize }}</dd>
-
-    <dt>facebook</dt>
-    <dd>{{ (contact.facebook_url or '')|urlize }}</dd>
-
-    <dt>twitter</dt>
-    <dd>{{ (contact.twitter_url or '')|urlize }}</dd>
-
-    <dt>phone</dt>
-    <dd>{{ contact.phone or '' }}</dd>
-
-    <dt>address</dt>
-    <dd>{{ contact.address or '' }}</dd>
-  </dl>
+    <table class="table table-striped table-condensed">
+        <tbody>
+            <tr>
+                <th>Site</th>
+                <td>
+                    {{ (contact.website_url or '')|urlize }}
+                </td>
+            </tr>
+            <tr>
+                <th>Blog</th>
+                <td>
+                    {{ (contact.blog_url or '')|urlize }}
+                </td>
+            </tr>
+            <tr>
+                <th>E-mail</th>
+                <td>
+                    {{ (contact.email_value or '')|urlize }}
+                </td>
+            </tr>
+            <tr>
+                <th>Facebook</th>
+                <td>
+                    {{ (contact.facebook_url or '')|urlize }}
+                </td>
+            </tr>
+            <tr>
+                <th>Twitter</th>
+                <td>
+                    {{ (contact.twitter_url or '')|urlize }}
+                </td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>
+                    {{ contact.phone or '' }}
+                </td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>
+                    {{ contact.address or '' }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 {% endblock %}

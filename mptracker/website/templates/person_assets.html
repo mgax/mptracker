@@ -5,100 +5,106 @@
 
 
 {% block content %}
-  <h1>{{ name }}</h1>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ name|link_for('.person_detail', person_slug=person_slug) }}</h1>
 
-  <h2>Terenuri</h2>
+            <h2>Terenuri</h2>
 
-  {%- set raw_data = assets['raw_data'] %}
-  {%- set has_city_land = (raw_data['land_city_count'] or
+            {%- set raw_data = assets['raw_data'] %}
+            {%- set has_city_land = (raw_data['land_city_count'] or
                            raw_data['land_city_area']) %}
-  {%- set has_agri_land = (raw_data['land_agri_count'] or
+            {%- set has_agri_land = (raw_data['land_agri_count'] or
                            raw_data['land_agri_area']) %}
 
-  {%- if has_city_land or has_agri_land %}
-    <dl class="dl-horizontal">
-      {%- if has_city_land %}
-        <dt>Intravilan</dt>
-        <dd>
-          {%- set many = raw_data['land_city_count'] > 1 %}
-          {{ raw_data['land_city_count'] }} teren{% if many %}uri{% endif %},
-          {{ raw_data['land_city_area']|int }} mp
-          {% if many %}total{% endif %}
-        </dd>
-      {%- endif %}
+            {%- if has_city_land or has_agri_land %}
+                <dl class="dl-horizontal">
+                    {%- if has_city_land %}
+                        <dt>Intravilan</dt>
+                        <dd>
+                            {%- set many = raw_data['land_city_count'] > 1 %}
+                            {{ raw_data['land_city_count'] }} teren{% if many %}uri{% endif %},
+                            {{ raw_data['land_city_area']|int }} mp
+                            {% if many %}total{% endif %}
+                        </dd>
+                    {%- endif %}
 
-      {%- if has_agri_land %}
-        <dt>Agricol</dt>
-        <dd>
-          {%- set many = raw_data['land_agri_count'] > 1 %}
-          {{ raw_data['land_agri_count'] }} teren{% if many %}uri{% endif %},
-          {{ "%.2f"|format(raw_data['land_agri_area'] / MP_HA) }} ha
-          {% if many %}total{% endif %}
-        </dd>
-      {%- endif %}
-    </dl>
-  {%- else %}
-    <p>Nu deține terenuri.</p>
-  {%- endif %}
+                    {%- if has_agri_land %}
+                        <dt>Agricol</dt>
+                        <dd>
+                            {%- set many = raw_data['land_agri_count'] > 1 %}
+                            {{ raw_data['land_agri_count'] }} teren{% if many %}uri{% endif %},
+                            {{ "%.2f"|format(raw_data['land_agri_area'] / MP_HA) }} ha
+                            {% if many %}total{% endif %}
+                        </dd>
+                    {%- endif %}
+                </dl>
+            {%- else %}
+                <p>Nu deține terenuri.</p>
+            {%- endif %}
 
-  <h2>Imobile, vehicule</h2>
+            <h2>Imobile, vehicule</h2>
 
-  {%- set has_buildings_vehicles = (
-        raw_data['realty_apartment_count'] or raw_data['realty_house_count'] or
-        raw_data['realty_business_count'] or raw_data['vehicle_count']) %}
+            {%- set has_buildings_vehicles = (
+            raw_data['realty_apartment_count'] or raw_data['realty_house_count'] or
+            raw_data['realty_business_count'] or raw_data['vehicle_count']) %}
 
-  {%- if has_buildings_vehicles %}
-    <dl class="dl-horizontal">
-      {%- if raw_data['realty_apartment_count'] %}
-        <dt>Apartamente</dt> <dd>{{ raw_data['realty_apartment_count'] }}</dd>
-      {%- endif %}
+            {%- if has_buildings_vehicles %}
+                <dl class="dl-horizontal">
+                    {%- if raw_data['realty_apartment_count'] %}
+                        <dt>Apartamente</dt> <dd>{{ raw_data['realty_apartment_count'] }}</dd>
+                    {%- endif %}
 
-      {%- if raw_data['realty_house_count'] %}
-        <dt>Case</dt> <dd>{{ raw_data['realty_house_count'] }}</dd>
-      {%- endif %}
+                    {%- if raw_data['realty_house_count'] %}
+                        <dt>Case</dt> <dd>{{ raw_data['realty_house_count'] }}</dd>
+                    {%- endif %}
 
-      {%- if raw_data['realty_business_count'] %}
-        <dt>Comerciale, producție</dt>
-        <dd>{{ raw_data['realty_business_count'] }}</dd>
-      {%- endif %}
+                    {%- if raw_data['realty_business_count'] %}
+                        <dt>Comerciale, producție</dt>
+                        <dd>{{ raw_data['realty_business_count'] }}</dd>
+                    {%- endif %}
 
-      {%- if raw_data['vehicle_count'] %}
-        <dt>Vehicule</dt> <dd>{{ raw_data['vehicle_count'] }}</dd>
-      {%- endif %}
-    </dl>
-  {%- else %}
-    <p>Nu deține imobile sau vehicule.</p>
-  {%- endif %}
+                    {%- if raw_data['vehicle_count'] %}
+                        <dt>Vehicule</dt> <dd>{{ raw_data['vehicle_count'] }}</dd>
+                    {%- endif %}
+                </dl>
+            {%- else %}
+                <p>Nu deține imobile sau vehicule.</p>
+            {%- endif %}
 
-  <h2>Financiar</h2>
+            <h2>Financiar</h2>
 
-  {%- macro financial_value(value_dict, label) %}
-    {%- set currency_list = value_dict|list|sort %}
-    {%- do currency_list.remove('TOTAL_EUR') %}
+            {%- macro financial_value(value_dict, label) %}
+                {%- set currency_list = value_dict|list|sort %}
+                {%- do currency_list.remove('TOTAL_EUR') %}
 
-    {%- if currency_list %}
-      <dt>{{ label }}</dt>
+                {%- if currency_list %}
+                    <dt>{{ label }}</dt>
 
-      {%- for currency in currency_list %}
-        {%- set amount = value_dict[currency] %}
-        <dd>{{ amount|money(currency) }}</dd>
-      {%- endfor %}
-    {%- endif %}
-  {%- endmacro %}
+                    {%- for currency in currency_list %}
+                        {%- set amount = value_dict[currency] %}
+                        <dd>{{ amount|money(currency) }}</dd>
+                    {%- endfor %}
+                {%- endif %}
+            {%- endmacro %}
 
-  <dl class="dl-horizontal">
-    {{ financial_value(raw_data['invest_value'], "Investiții") }}
+            <dl class="dl-horizontal">
+                {{ financial_value(raw_data['invest_value'], "Investiții") }}
 
-    {{ financial_value(raw_data['valuables_value'], "Bijuterii, artă") }}
+                {{ financial_value(raw_data['valuables_value'], "Bijuterii, artă") }}
 
-    {{ financial_value(raw_data['acct_value'], "Conturi") }}
+                {{ financial_value(raw_data['acct_value'], "Conturi") }}
 
-    {{ financial_value(raw_data['debt_value'], "Datorii") }}
+                {{ financial_value(raw_data['debt_value'], "Datorii") }}
 
-    {{ financial_value(raw_data['family_income_value'], "Venit anual (familie)") }}
+                {{ financial_value(raw_data['family_income_value'], "Venit anual (familie)") }}
 
-    {{ financial_value(raw_data['gift_value'], "Cadouri primite") }}
+                {{ financial_value(raw_data['gift_value'], "Cadouri primite") }}
 
-    {{ financial_value(raw_data['sales_value'], "Venituri din vânzări") }}
-  </dl>
+                {{ financial_value(raw_data['sales_value'], "Venituri din vânzări") }}
+            </dl>
+        </div>
+    </div>
+</div>
 {% endblock %}

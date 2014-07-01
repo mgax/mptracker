@@ -2,43 +2,52 @@
 
 
 {% block content %}
-  <h2>Migrări recente</h2>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Migrări recente</h2>
 
-  <table class="table">
-    <thead>
-      <th>Dată</th>
-      <th>Persoană</th>
-      <th>Partid vechi</th>
-      <th>Partid nou</th>
-    </thead>
+            <table class="table">
+                <thead>
+                    <th>Dată</th>
+                    <th>Persoană</th>
+                    <th>Partid vechi</th>
+                    <th>Partid nou</th>
+                </thead>
 
-    {%- for migration in migration_list %}
-      <tr>
-        <td>{{ migration.date|datefmt }}</td>
+                {%- for migration in migration_list %}
+                    <tr>
+                        <td>{{ migration.date|datefmt }}</td>
+                        <td>
+                            {{ migration.person.name|link_for(
+                            '.person_detail',
+                            person_slug=migration.person.slug,
+                            ) }}
+                        </td>
+                        <td>
+                            {{ migration.old_group.short_name|link_for(
+                            '.party_detail',
+                            party_short_name=migration.old_group.short_name,
+                            ) }}
+                        </td>
+                        <td>
+                            {{ migration.new_group.short_name|link_for(
+                            '.party_detail',
+                            party_short_name=migration.new_group.short_name,
+                            ) }}
+                        </td>
+                    </tr>
+                {%- endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            {{ text('migrations') }}
+        </div>
+    </div>
+</div>
 
-        <td>
-          {{ migration.person.name|link_for(
-                  '.person_detail',
-                  person_slug=migration.person.slug,
-              ) }}
-        </td>
-
-        <td>
-          {{ migration.old_group.short_name|link_for(
-                  '.party_detail',
-                  party_short_name=migration.old_group.short_name,
-              ) }}
-        </td>
-
-        <td>
-          {{ migration.new_group.short_name|link_for(
-                  '.party_detail',
-                  party_short_name=migration.new_group.short_name,
-              ) }}
-        </td>
-      </tr>
-    {%- endfor %}
-  </table>
-
-  {{ text('migrations') }}
 {% endblock %}

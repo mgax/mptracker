@@ -5,27 +5,33 @@
 
 
 {% block content %}
-  <h1>{{ name }}</h1>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ name|link_for('.person_detail', person_slug=person_slug) }}</h1>
 
-  <table class="table">
-    <thead>
-      <th>dată</th>
-      <th>vot</th>
-      <th>{{ name }}</th>
-      <th>partid</th>
-      <th>guvern</th>
-    </thead>
+            <table class="table table-striped">
+                <thead>
+                    <th>dată</th>
+                    <th>vot</th>
+                    <th>{{ name }}</th>
+                    <th>partid</th>
+                    <th>guvern</th>
+                </thead>
 
-    <tbody>
-    {%- for vote in voting_session_list %}
-      <tr>
-        <td>{{ vote.date|datefmt }}</td>
-        <td>{{ vote.subject|truncate(80) }}</td>
-        <td>{{ VOTE_LABEL[vote.person_choice] }}</td>
-        <td>{{ VOTE_LABEL[vote.group_choice] }} ({{ vote.group_short_name }})</td>
-        <td>{{ VOTE_LABEL[vote.cabinet_choice] }}</td>
-      </tr>
-    {%- endfor %}
-    </tbody>
-  </table>
+                <tbody>
+                    {%- for vote in voting_session_list %}
+                        <tr>
+                            <td>{{ vote.date|datefmt }}</td>
+                            <td>{{ vote.subject|truncate(80) }}</td>
+                            <td>{{ VOTE_LABEL[vote.person_choice] }}</td>
+                            <td>{{ VOTE_LABEL[vote.group_choice] }} ({{ vote.group_short_name }})</td>
+                            <td>{{ VOTE_LABEL[vote.cabinet_choice] }}</td>
+                        </tr>
+                    {%- endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

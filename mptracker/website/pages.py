@@ -137,7 +137,7 @@ def person_index():
         'county_name_map': dal.get_county_name_map(),
         'mandates_by_county': mandates_by_county,
         'policy_list': dal.get_policy_list(),
-        'breadcrumb': ['Deputați', 'Căutare']
+        'breadcrumb': ['Deputați', 'Căutare'],
     })
 
 
@@ -231,6 +231,7 @@ def person_contact(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_details()
     ctx['person_slug'] = person_slug
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Contact']
     return flask.render_template('person_contact.html', **ctx)
 
 
@@ -243,6 +244,7 @@ def person_activity(person_slug):
     ctx['group_history'] = person.get_group_history()
     ctx['recent_activity'] = person.get_recent_activity()
     ctx['person_slug'] = person_slug
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Activitate']
     for item in ctx['recent_activity']:
         _add_activity_url(person_slug, item)
     return flask.render_template('person_activity.html', **ctx)
@@ -255,6 +257,7 @@ def person_local(person_slug):
     ctx = person.get_main_details()
     ctx.update(person.get_local_activity())
     ctx['person_slug'] = person_slug
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Activitate Locală']
     return flask.render_template('person_local.html', **ctx)
 
 
@@ -265,6 +268,7 @@ def person_questions(person_slug):
     ctx = person.get_main_details()
     ctx['question_list'] = person.get_questions()
     ctx['person_slug'] = person_slug
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Întrebări']
     return flask.render_template('person_questions.html', **ctx)
 
 
@@ -275,6 +279,7 @@ def person_proposals(person_slug):
     ctx = person.get_main_details()
     ctx['proposal_list'] = person.get_proposals()
     ctx['person_slug'] = person_slug
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Propuneri']
     return flask.render_template('person_proposals.html', **ctx)
 
 
@@ -284,6 +289,7 @@ def person_votes(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['voting_session_list'] = person.get_votes_data()
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Voturi']
     return flask.render_template('person_votes.html', **ctx)
 
 
@@ -293,6 +299,7 @@ def person_assets(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_main_details()
     ctx['assets'] = person.get_assets_data()
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Avere']
     return flask.render_template('person_assets.html', **ctx)
 
 
@@ -304,6 +311,7 @@ def person_compare_index(person_slug):
     ctx['person_slug'] = person_slug
     ctx.update(person.get_comparison_lists())
     ctx['vote_similarity_list'] = person.get_voting_similarity_list()
+    ctx['breadcrumb'] = ['Deputați', ctx['name'], 'Comparație']
     return flask.render_template('person_compare_index.html', **ctx)
 
 
@@ -330,6 +338,7 @@ def person_compare(person_slug, other_person_slug):
         [attendance_data(row, 'other') for row in
          ctx['other']['stats']['committee_attendance']]
     )
+    ctx['breadcrumb'] = ['Deputați', 'Comparație între ' + ctx['name'] + ' și ' + ctx['other']['name']]
     return flask.render_template('person_compare.html', **ctx)
 
 
@@ -369,6 +378,7 @@ def person_migrations():
     migration_list = list(dal.get_latest_migrations())
     return flask.render_template('person_migrations.html', **{
         'migration_list': migration_list,
+        'breadcrumb': ['Deputați', 'Migrări'],
     })
 
 
@@ -377,7 +387,7 @@ def person_question(question_id):
     question = dal.get_question_details(question_id)
     return flask.render_template('question.html', **{
         'question': question,
-        'breadcrumb': ['Întrebări și interpelări']
+        'breadcrumb': ['Întrebări și interpelări'],
     })
 
 
@@ -393,6 +403,7 @@ def person_county(county_code):
     county = dal.get_county(county_code)
     ctx = county.get_details()
     ctx['mandate_list'] = county.get_mandates_data()
+    ctx['breadcrumb'] = ['Deputați', ctx['name']]
     return flask.render_template('person_county.html', **ctx)
 
 
@@ -401,7 +412,7 @@ def person_county(county_code):
 def party_index():
     return flask.render_template('party_index.html', **{
         'party_list': dal.get_party_list(),
-        'breadcrumb': ['Partide']
+        'breadcrumb': ['Partide'],
     })
 
 
@@ -412,7 +423,7 @@ def party_detail(party_short_name):
     return flask.render_template('party_detail.html', **{
         'party': party.get_details(),
         'policy_domains': party.get_top_policies(),
-        'breadcrumb': ['Partide', party.get_name()]
+        'breadcrumb': ['Partide', party.get_name()],
     })
 
 
@@ -426,7 +437,7 @@ def party_policy(party_short_name, policy_slug):
         'policy': policy,
         'policy_members': party.get_policy_members(policy_slug),
         # the breadcrumb below needs a third parameter, The name of the policy
-        'breadcrumb': ['Partide', party.get_name()]
+        'breadcrumb': ['Partide', party.get_name()],
     })
 
 
@@ -437,6 +448,7 @@ def party_members(party_short_name):
     return flask.render_template('party_members.html', **{
         'party': party.get_main_details(),
         'members': party.get_members(),
+        'breadcrumb': ['Partide', party.get_name(), 'Membri'],
     })
 
 
@@ -445,7 +457,7 @@ def party_members(party_short_name):
 def policy_index():
     return flask.render_template('policy_index.html', **{
         'policy_list': dal.get_policy_list(),
-        'breadcrumb': ['Domenii de politici publice']
+        'breadcrumb': ['Domenii de politici publice'],
     })
 
 
@@ -480,7 +492,7 @@ def policy_detail(policy_slug=None):
         'proposal_list': dal.get_policy_proposal_list(policy_slug),
         'question_list': dal.get_policy_question_list(policy_slug),
         'active_parties': dal.get_policy_top_parties(policy_slug),
-        'breadcrumb': ['Domenii de politici publice', policy_name]
+        'breadcrumb': ['Domenii de politici publice', policy_name],
     }
     return flask.render_template('policy_detail.html', **ctx)
 
@@ -489,8 +501,7 @@ def policy_detail(policy_slug=None):
 @section('policy')
 def policy_proposal(proposal_id):
     proposal = dal.get_proposal_details(proposal_id)
-    breadcrumb = ['Politici', proposal['title']]
-    return flask.render_template('policy_proposal.html', proposal=proposal, breadcrumb = breadcrumb)
+    return flask.render_template('policy_proposal.html', proposal=proposal)
 
 
 @pages.route('/politici/vot-controversat/<uuid:controversy_id>')
@@ -512,7 +523,7 @@ def text_page(name):
 @section('export')
 def export_index():
     ctx = {
-        'breadcrumb': ['Export de date']
+        'breadcrumb': ['Export de date'],
     }
     return flask.render_template('export.html', **ctx)
 
