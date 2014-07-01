@@ -38,6 +38,7 @@ a:hover {
   background: url(../img/semi-opaque-bg.png) repeat;
   border-bottom: 3px solid #ffad00;
   width: 100%;
+  max-height: 100px;
 }
 .topbar .navbar {
   background: none;
@@ -53,6 +54,13 @@ a:hover {
 }
 .topbar .navbar ul.nav.navbar-nav li {
   margin-left: 20px;
+}
+.topbar .navbar ul.nav.navbar-nav li.active {
+  color: #069;
+}
+.topbar .navbar ul.nav.navbar-nav li.active a {
+  background: none;
+  border-bottom: 1px solid #ffad00;
 }
 .topbar .navbar ul.nav.navbar-nav li a {
   font-weight: 700;
@@ -95,6 +103,9 @@ a:hover {
 .home-header-search form select {
   border: none;
   color: #267cbe;
+}
+.home-header-search .btn.btn-success {
+  width: 100%;
 }
 .container-content {
   background: #fff;
@@ -207,6 +218,9 @@ a:hover {
   padding-top: 7px;
   text-align: right;
 }
+.content-home .sub-section.comparison .graph img {
+  width: 100%;
+}
 .content-home .sub-section.statistic {
   margin-left: 20px;
   padding-left: 0;
@@ -237,6 +251,7 @@ a:hover {
   text-align: center;
   font-weight: 700;
   font-size: 22px;
+  margin-bottom: 15px;
 }
 .content-home .sub-section.contribute .btn-contribute {
   margin-top: 20px;
@@ -764,4 +779,55 @@ figure {
 }
 .similarity-barchart .number.other {
   stroke: grey;
+}
+@media screen and (max-width: 1200px) {
+  .topbar .navbar ul.nav.navbar-nav li a {
+    font-size: 16px;
+    padding: 10px 2px;
+  }
+}
+@media screen and (max-width: 1000px) and (min-width: 601px) {
+  .topbar {
+    max-height: 140px;
+  }
+  .topbar .navbar a.navbar-brand {
+    padding-top: 30px;
+  }
+  .topbar .navbar ul.nav.navbar-nav {
+    width: 300px;
+    padding-top: 0;
+  }
+  .topbar .navbar ul.nav.navbar-nav li {
+    width: 100%;
+    float: right;
+    text-align: right;
+  }
+  .topbar .navbar ul.nav.navbar-nav li a {
+    padding: 5px 0;
+  }
+}
+@media screen and (max-width: 600px) {
+  .topbar {
+    max-height: 207px;
+  }
+  .topbar .navbar a.navbar-brand {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 0;
+  }
+  .topbar .navbar a.navbar-brand img {
+    width: 70%;
+  }
+  .topbar .navbar ul.nav.navbar-nav {
+    width: 100%;
+    margin-top: 0;
+  }
+  .topbar .navbar ul.nav.navbar-nav li {
+    float: left;
+    text-align: center;
+  }
+  .breadcrumb {
+    color: #45515b;
+    text-shadow: none;
+  }
 }

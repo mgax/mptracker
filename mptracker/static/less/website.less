@@ -39,6 +39,7 @@ a {
     background: url(../img/semi-opaque-bg.png) repeat;
     border-bottom: 3px solid #ffad00;
     width: 100%;
+    max-height: 100px;
     .navbar {
         background: none;
         border: none;
@@ -51,6 +52,13 @@ a {
             padding-top: 25px;
             li {
                 margin-left: 20px;
+                &.active {
+                    color: #069;
+                    a {
+                        background: none;
+                        border-bottom: 1px solid #ffad00;
+                    }
+                }
                 a {
                     font-weight: 700;
                     color: #000;
@@ -94,6 +102,11 @@ a {
         input, select {
             border: none;
             color: @colorLink;
+        }
+    }
+    .btn {
+        &.btn-success {
+            width: 100%;
         }
     }
 }
@@ -207,6 +220,11 @@ a {
                     text-align: right;
                 }
             }
+            .graph {
+                img {
+                    width: 100%;
+                }
+            }
         }
         &.statistic {
             margin-left: 20px;
@@ -240,6 +258,7 @@ a {
             text-align: center;
             font-weight: 700;
             font-size: 22px;
+            margin-bottom: 15px;
             .btn-contribute {
                 margin-top: 20px;
                 background: #f6d782;
@@ -844,4 +863,70 @@ figure {
 
 .similarity-barchart .number.other {
     stroke: grey;
+}
+
+@media screen and (max-width: 1200px) {
+    .topbar {
+        .navbar {
+            ul.nav.navbar-nav {
+                li {
+                    a {
+                        font-size: 16px;
+                        padding: 10px 2px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) and (min-width: 601px) {
+    .topbar {
+        max-height: 140px;
+        .navbar {
+            a.navbar-brand {
+                padding-top: 30px;
+            }
+            ul.nav.navbar-nav {
+                width: 300px;
+                padding-top: 0;
+                li {
+                    width: 100%;
+                    float: right;
+                    text-align: right;
+                    a {
+                        padding: 5px 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .topbar {
+        max-height: 207px;
+        .navbar {
+            a.navbar-brand {
+                width: 100%;
+                text-align: center;
+                padding-bottom: 0;
+                img {
+                    width: 70%;
+                }
+            }
+            ul.nav.navbar-nav {
+                width: 100%;
+                margin-top: 0;
+                li {
+                    float: left;
+                    text-align: center;
+                }
+            }
+        }
+    }
+    .breadcrumb {
+        color: @colorHeader;
+        text-shadow: none;
+    }
 }
