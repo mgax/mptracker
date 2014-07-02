@@ -5,24 +5,30 @@
 
 
 {% block content %}
-  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
-  <h1><a href="{{ url }}">{{ name }}</a></h1>
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            {%- set url = url_for('.person_detail', person_slug=person_slug) %}
+            <h1><a href="{{ url }}">{{ name }}</a></h1>
 
-  <h3>Luări de cuvânt</h3>
+            <h3>Luări de cuvânt</h3>
 
-  <table class="table">
-    <thread>
-      <th>dată</th>
-      <th>text</th>
-    </thread>
+            <table class="table">
+                <thead>
+                    <th>dată</th>
+                    <th>text</th>
+                </thead>
 
-    <tbody>
-      {% for transcript in transcript_list %}
-        <tr>
-          <td>{{ transcript.date }}</td>
-          <td><a href="{{ transcript.url }}">{{ transcript.text|truncate(120) }}</a></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+                <tbody>
+                {% for transcript in transcript_list %}
+                    <tr>
+                        <td>{{ transcript.date }}</td>
+                        <td><a href="{{ transcript.url }}">{{ transcript.text|truncate(120) }}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

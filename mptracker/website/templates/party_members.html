@@ -2,16 +2,22 @@
 
 
 {% block content %}
-  {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
-  <h1><a href="{{ url }}">{{ party['name'] }}</a></h1>
-  <h2>Listă membri: <small>({{ members|count }})</small></h2>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
+            <h1><a href="{{ url }}">{{ party['name'] }}</a></h1>
+            <h2>Listă membri: <small>({{ members|count }})</small></h2>
 
-  <ul>
-    {%- for member in members %}
-      <li>
-        {%- set url = url_for('.person_detail', person_slug=member['slug']) %}
-        <a href="{{ url }}">{{ member['name'] }}</a>
-      </li>
-    {%- endfor %}
-  </ul>
+            <ul>
+                {%- for member in members %}
+                    <li>
+                        {%- set url = url_for('.person_detail', person_slug=member['slug']) %}
+                        <a href="{{ url }}">{{ member['name'] }}</a>
+                    </li>
+                {%- endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

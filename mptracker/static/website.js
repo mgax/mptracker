@@ -81,3 +81,7 @@ app.translate_time = function(value) {
 };
 
 })();
+
+$(document).ready(function(){
+    $("*[data-toggle=tooltip]").tooltip();
+})

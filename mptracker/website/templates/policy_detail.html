@@ -3,31 +3,28 @@
 {% from '_policy_bits.html' import proposals_table, questions_table %}
 
 {% block content %}
-  <h1>{{ policy_name }}</h1>
-
-  <div class="row">
-    <div class="col-sm-8">
-      <p class="placeholder" style="height: 200px">analiză, hot issues</p>
-
-      {{ proposals_table(proposal_list) }}
-      {{ questions_table(question_list) }}
+<div class="container-content container-general container-policies">
+    <div class="row">
+        <div class="col-sm-8">
+            {{ proposals_table(proposal_list) }}
+            {{ questions_table(question_list) }}
+        </div>
+        <div class="col-sm-4">
+            <div>
+                <h4>Partide active</h4>
+                <ul class="list-unstyled">
+                    {%- for party in active_parties %}
+                        <li>
+                            {{ party.short_name|link_for(
+                            '.party_detail',
+                            party_short_name=party.short_name)
+                            }}
+                            ({{ party.interest|percent }})
+                        </li>
+                    {%- endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-4">
-      <div>
-        <h4>Partide active</h4>
-
-        <ul class="list-unstyled">
-          {%- for party in active_parties %}
-            <li>
-              {{ party.short_name|link_for(
-                  '.party_detail',
-                  party_short_name=party.short_name)
-              }}
-              ({{ party.interest|percent }})
-            </li>
-          {%- endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
+</div>
 {% endblock %}

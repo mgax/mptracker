@@ -5,25 +5,31 @@
 
 
 {% block content %}
-  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
-  <h1><a href="{{ url }}">{{ name }}</a> - activitate locală</h1>
+    <div class="container-content container-general">
+        <div class="row">
+            <div class="col-sm-12">
+                {%- set url = url_for('.person_detail', person_slug=person_slug) %}
+                <h1><a href="{{ url }}">{{ name }}</a></h1>
 
-  <p>
-    <a href="{{ url_for('.text_page', name='local') }}">
-      citește mai mult despre reprezentarea locală
-    </a>
-  </p>
+                <p>
+                    <a href="{{ url_for('.text_page', name='local') }}">
+                        citește mai mult despre reprezentarea locală
+                    </a>
+                </p>
 
-  <h2>Întrebări și interpelări</h2>
-  <ul>
-    {%- for question in question_list %}
-      <li>
-        {%- set url = url_for('.person_question', question_id=question.id) %}
-        {{ question['date']|datefmt }}:
-        <a href="{{ url }}">
-          {{- question.title|truncate(80) -}}
-        </a>
-      </li>
-    {%- endfor %}
-  </ul>
+                <h2>Întrebări și interpelări</h2>
+                <ul>
+                    {%- for question in question_list %}
+                    <li>
+                        {%- set url = url_for('.person_question', question_id=question.id) %}
+                        {{ question['date']|datefmt }}:
+                        <a href="{{ url }}">
+                            {{- question.title|truncate(80) -}}
+                        </a>
+                    </li>
+                {%- endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

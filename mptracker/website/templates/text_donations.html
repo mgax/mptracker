@@ -2,6 +2,11 @@
 
 
 {%- block content %}
+{% if layout %}
+<div class="container-content container-general no-breadcrumb">
+  <div class="row">
+    <div class="col-sm-12">
+{% endif %}
   <h2>Ajută la dezvoltarea proiectului OpenParlament</h2>
 
   <p>OpenParlament este un proiect independent, non-profit al Fundației Median Research Centre și al OpenPolitics.ro. Întreținerea platformei precum și dezvoltarea altor funcții complementare necesită noi resurse, de aceea orice donație este binevenită.</p>
@@ -23,4 +28,9 @@
   </p>
 
   <p>Echipa OpenParlament</p>
+{% if layout %}
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

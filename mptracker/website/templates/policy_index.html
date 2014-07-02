@@ -2,21 +2,25 @@
 
 
 {% block content %}
-  {{ text('policy', fold=True) }}
+<div class="container-content container-general">
+    <div class="col-sm-12">
+      {{ text('policy', fold=True) }}
 
-  <ul class="list-unstyled">
-    {% for policy in policy_list %}
-      <li>
-        {%- set url = url_for('.policy_detail', policy_slug=policy.slug) %}
-        <a href="{{ url }}">{{ policy.name }}</a>
-      </li>
-    {% endfor %}
+      <ul class="list-unstyled">
+        {% for policy in policy_list %}
+          <li>
+            {%- set url = url_for('.policy_detail', policy_slug=policy.slug) %}
+            <a href="{{ url }}">{{ policy.name }}</a>
+          </li>
+        {% endfor %}
 
-    <li>
-      {%- set url = url_for('.policy_detail', policy_slug=None) %}
-      <a href="{{ url }}">Altele</a>
-    </li>
-  </ul>
+        <li>
+          {%- set url = url_for('.policy_detail', policy_slug=None) %}
+          <a href="{{ url }}">Altele</a>
+        </li>
+      </ul>
 
-  {{ text('policy', below_fold=True) }}
+      {{ text('policy', below_fold=True) }}
+  </div>
+</div>
 {% endblock %}

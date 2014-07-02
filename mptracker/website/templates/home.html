@@ -2,107 +2,395 @@
 
 
 {% block content %}
-  <h1>Open Parlament</h1>
-
-  <div class="row">
-    <div class="col-sm-8">
-      {{ text('editorial', fold=True) }}
-
-      <p>
-        <a href="{{ url_for('.text_page', name='editorial') }}">
-          citește mai mult
-        </a>
-      </p>
-
-      {{ text('local', fold=True) }}
-
-      <p>
-        <a href="{{ url_for('.text_page', name='local') }}">
-          citește mai mult
-        </a>
-      </p>
-
-      {{ text('voting_controversy', fold=True) }}
-
-      <p>
-        <a href="{{ url_for('.text_page', name='voting_controversy') }}">
-          citește mai mult
-        </a>
-      </p>
-
-      <h2>Contribuie</h2>
-
-      <p>
-        <a href="{{ url_for('.text_page', name='donations') }}">
-          citește mai mult
-        </a>
-      </p>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="home-header-search">
+            <div class="row">
+                <div class="col-sm-4 pull-left search-title">
+                    Caută în Open Parlament după:
+                </div>
+                <div class="col-sm-2 pull-right search-advanced">
+                    <a href="#">
+                    Căutare avansată &raquo;
+                    </a>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form-inline">
+                        <div class="form-group col-sm-6">
+                            <label for="name" class="sr-only">Nume / Prenume Deputat</label>
+                            <input type="text" name="name" class="form-control" placeholder="Nume / Prenume Deputat" />
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="politics" class="sr-only">Politici Publice</label>
+                            <select name="politics" class="form-control">
+                                <option>Politici Publice</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <button class="btn btn-success">
+                                <i class="fa fa-search"></i> Caută
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="col-sm-4">
-      <p>
-        {% set url = url_for('.policy_tacit') %}
-        <a href="{{ url }}">legi adoptate tacit ({{ tacit_approvals_count }})</a>
-      </p>
-
-      <p>
-        {% set url = url_for('.policy_controversy') %}
-        <a href="{{ url }}">legi controversate ({{ controversy_count }})</a>
-      </p>
-
-      <p>
-        <a href="{{ url_for('.person_migrations') }}">migrări recente</a>
-      </p>
-
-      <h3>Propuneri legislative</h3>
-
-      <ul class="list-unstyled">
-        {% for item in recent_proposals %}
-          {% set url = url_for(
-              '.policy_proposal',
-              proposal_id=item['proposal_id'],
-            ) %}
-          <li>
-            <strong>{{ item['date']|datefmt }}:</strong>
-
-            <a href="{{ url }}">{{ item['text'] }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-
-      <h3>Întrebări și interpelări</h3>
-
-      <ul class="list-unstyled">
-        {% for item in recent_questions %}
-          {% set url = url_for(
-              '.person_question',
-              question_id=item['question_id'],
-            ) %}
-          <li>
-            <strong>{{ item['date']|datefmt }}:</strong>
-
-            <a href="{{ url }}">{{ item['text'] }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-
-      <h3>Top domenii de politici publice</h3>
-
-      <div class="policychart"></div>
-
-      <ul>
-        {%- for policy in policy_domains %}
-          <li>
-            {{ policy.name|link_for(
-                '.policy_detail',
-                policy_slug=policy.slug,
-              ) }}
-            ({{ policy.interest|percent }})
-          </li>
-        {%- endfor %}
-      </ul>
+</div>
+<div class="container-content content-home">
+    <div class="row home-section">
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-9">
+                    <!-- De ce este necesar -->
+                    <div class="row editorial">
+                        <div class="col-sm-12">
+                            {{ text('editorial', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='editorial') }}">
+                                continuare &raquo;
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Articol Featured -->
+                    <div class="row article-featured placeholder">
+                        <div class="col-sm-12">
+                            <!-- Titlu Articol -->
+                            <div class="row">
+                                <div class="col-sm-12 article-title">
+                                    <a href="#">
+                                        Leapșa printre legi și prea multe proiecte
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Meta Articol -->
+                            <div class="row article-meta">
+                                <div class="col-sm-2 article-author-image">
+                                    <img src="http://placehold.it/70x70" alt="Lavinia Niculescu" />
+                                </div>
+                                <div class="col-sm-10 article-author-meta">
+                                    <span class="article-author-date">
+                                        LAVINIA NICULESCU &bull; 28 mai
+                                    </span><br />
+                                    <span class="article-author-occupation">
+                                        jurnalist freelance
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Excerpt Articol -->
+                            <div class="row article-excerpt">
+                                <div class="col-sm-12">
+                                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi an, sed choro mediocritatem id. His ad duis recusabo forensibus, usu meliore legendos acusam... <a href="#">continuare &raquo;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 middle-info">
+                    <!-- Local STUFF -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ text('local', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='local') }}">continuare &raquo;</a>
+                        </div>
+                    </div>
+                    <!-- Voturi Controversate -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ text('voting_controversy', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='voting_controversy') }}">continuare &raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 articles-list placeholder">
+            <h3>Articole recente:</h3>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    OANA RĂDESCU &bull; 13 iunie
+                </span>
+            </div>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    OANA RĂDULESCU &bull; 15 iunie
+                </span>
+            </div>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    PETRE ISPIRESCU &bull; 16 iunie
+                </span>
+            </div>
+            <div class="row article-single">
+                <a href="#" class="article-title">
+                    Lorem ipsum dolor sit amet, pro nobis labore delicatissimi
+                </a><br />
+                <span class="article-author-date">
+                    ION LUCA CARAGIALE &bull; 16 iunie
+                </span>
+            </div>
+        </div>
     </div>
-  </div>
+    <div class="row home-section">
+        <div class="col-sm-8">
+            <!-- A list of all the laws -->
+            <div class="row sub-section laws-list placeholder">
+                <h3>
+                    Legi adoptate tacit
+                    <span class="number">50</span>
+                </h3>
+                <!-- Individual Laws -->
+                <div class="law">
+                    <div class="law-status-color rejected"></div>
+                    <div class="law-title">
+                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
+                    </div>
+                    <div class="law-status-text">
+                        Respins
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="law">
+                    <div class="law-status-color inprogress"></div>
+                    <div class="law-title">
+                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
+                    </div>
+                    <div class="law-status-text">
+                        În lucru
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="law">
+                    <div class="law-status-color approved"></div>
+                    <div class="law-title">
+                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
+                    </div>
+                    <div class="law-status-text">
+                        Aprobat
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <p class="full-list">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+            <div class="row sub-section laws-list placeholder">
+                <h3>
+                    Legi controversate
+                    <span class="number">27</span>
+                </h3>
+                <!-- Individual Laws -->
+                <div class="law">
+                    <div class="law-status-color inprogress"></div>
+                    <div class="law-title">
+                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
+                    </div>
+                    <div class="law-status-text">
+                        În lucru
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="law">
+                    <div class="law-status-color approved"></div>
+                    <div class="law-title">
+                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
+                    </div>
+                    <div class="law-status-text">
+                        Aprobat
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="law">
+                    <div class="law-status-color rejected"></div>
+                    <div class="law-title">
+                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
+                    </div>
+                    <div class="law-status-text">
+                        Respins
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <p class="full-list">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+            <!-- Persons List -->
+            <div class="row sub-section persons-list placeholder">
+                <h3>
+                    Migrări recente
+                    <span class="number">14</span>
+                </h3>
+                <!-- Individual Persons -->
+                <div class="person">
+                    <div class="person-status-color"></div>
+                    <div class="person-image">
+                        <img src="http://placehold.it/40x60" alt="Adrian-Nicolae Diaconu" />
+                    </div>
+                    <div class="person-details">
+                        <span class="date">1 iunie 2014</span>
+                        <span class="name">Adrian-Nicolae Diaconu</span>
+                    </div>
+                    <div class="person-from">
+                        <span class="term">De la:</span>
+                        <span class="definition">Indep.</span>
+                    </div>
+                    <div class="person-to">
+                        <span class="term">la:</span>
+                        <span class="definition">PSD</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="person">
+                    <div class="person-status-color"></div>
+                    <div class="person-image">
+                        <img src="http://placehold.it/40x60" alt="Marioara Nistor" />
+                    </div>
+                    <div class="person-details">
+                        <span class="date">28 mai 2014</span>
+                        <span class="name">Marioara Nistor</span>
+                    </div>
+                    <div class="person-from">
+                        <span class="term">De la:</span>
+                        <span class="definition">PP-DD</span>
+                    </div>
+                    <div class="person-to">
+                        <span class="term">la:</span>
+                        <span class="definition">PNL</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <p class="full-list">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+            <div class="row sub-section comparison placeholder">
+                <h3>Verifică similaritatea la vot a deputatului tău cu toți ceilalți deputați</h3>
+                <h4>
+                    Ion Călin
+                    <a href="#">(alege deputatul tău)</a>
+                </h4>
+                <div class="graph">
+                    <img src="/static/img/placeholders/homepage-graph-comparison.jpg" /> <br />
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-1">
+                        <img src="/static/img/cursor-indicator.png" />
+                    </div>
+                </div>
+                <div class="row graph-info">
+                    <div class="col-sm-1 icon-info">
+                        <img src="/static/img/icon-info.png" alt="Info" />
+                    </div>
+                    <div class="col-sm-11">
+                        <p>Plimbă cursorul deasupra barelor colorate pentru a vedea gradul de similaritate a votului respectivului deputat în comparație cu votul celui comparat.</p>
+                    </div>
+                </div>
+                <p class="full-list">
+                    <a href="#">statistică detaliată &raquo;</a>
+                </p>
+            </div>
+            <!-- Propuneri Legislative -->
+            <div class="row sub-section proposals">
+                <h3>Propuneri legislative</h3>
+                {% for item in recent_proposals %}
+                  {% set url = url_for(
+                      '.policy_proposal',
+                      proposal_id=item['proposal_id'],
+                    ) %}
+                    <p>
+                        <a class="date" href="{{ url }}">
+                            {{ item['date']|datefmt }}
+                        </a><br />
+                        {{ item['text'] }}
+                    </p>
+                {% endfor %}
+                <p class="full-list placeholder">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+            <!-- Întrebări și interpelări -->
+            <div class="row sub-section proposals">
+                <h3>Întrebări și interpelări</h3>
+                {% for item in recent_questions %}
+                  {% set url = url_for(
+                      '.person_question',
+                      question_id=item['question_id'],
+                    ) %}
+                  <p>
+                    <a class="date" href="{{ url }}">
+                        {{ item['date']|datefmt }}
+                    </a> <br />
+                    {{ item['text'] }}
+                  </p>
+                {% endfor %}
+                <p class="full-list placeholder">
+                    <a href="#">lista completă &raquo;</a>
+                </p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="row sub-section statistic placeholder">
+                <h3>Statistica Lunii</h3>
+                <div class="statistic-title">
+                    <div class="statistic-title-image">
+                        <img src="/static/img/placeholders/statistic.jpg" />
+                    </div>
+                    <div class="statistic-title-text">
+                        <a href="#">Top 10 cei mai activi deputați în luna mai</a>
+                    </div>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt magnam, exercitationem explicabo suscipit itaque minus numquam labore.
+                </p>
+            </div>
+            <div class="sub-section public-politics">
+                <h3>Top domenii de politici publice</h3>
+                <div class="row piechart">
+                    <div class="policychart"></div>
+                </div>
+                <ul>
+                  {%- for policy in policy_domains %}
+                    <li>
+                      {{ policy.name|link_for(
+                          '.policy_detail',
+                          policy_slug=policy.slug,
+                        ) }}
+                      <span class="percentage">({{ policy.interest|percent }})</span>
+                    </li>
+                  {%- endfor %}
+                </ul>
+            </div>
+            <div class="sub-section social placeholder">
+                {{ text('social') }}
+            </div>
+            <div class="sub-section contribute placeholder">
+                <p>
+                    Ajută la <br />
+                    dezvoltarea proiectului <br />
+                    OpenParlament
+                </p>
+                <p>
+                    <a class="btn btn-contribute" href="#">
+                        Contribuie
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 

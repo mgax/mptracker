@@ -5,9 +5,15 @@
 
 
 {% block content %}
-  {%- set url = url_for('.person_detail', person_slug=person_slug) %}
-  <h1><a href="{{ url }}">{{ name }}</a></h1>
+<div class="container-content container-general">
+    <div class="row">
+        <div class="col-sm-12">
+            {%- set url = url_for('.person_detail', person_slug=person_slug) %}
+            <h1><a href="{{ url }}">{{ name }}</a></h1>
 
-  {% from '_policy_bits.html' import proposals_table %}
-  {{ proposals_table(proposal_list) }}
+            {% from '_policy_bits.html' import proposals_table %}
+            {{ proposals_table(proposal_list) }}
+        </div>
+    </div>
+</div>
 {% endblock %}

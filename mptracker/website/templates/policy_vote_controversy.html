@@ -5,30 +5,30 @@
 
 
 {% block content %}
-  <h1>Vot controversat - {{ title }}</h1>
-
-  <p>Dată: {{ date|datefmt }}</p>
-
-  <p>
-    <a href="http://www.cdep.ro/pls/steno/evot.nominal?idv={{ cdeppk }}">
-      Mai multe detalii despre vot
-    </a>
-  </p>
-
-  <div class="alert-danger">
-    <p>{{ reason }}</p>
-  </div>
-
-  <p>Semnificație "da": {{ meaning_yes }}</p>
-
-  <p>Semnificație "nu": {{ meaning_no }}</p>
-
-  {% if press_link_list %}
-    <h4>Citește mai mult despre vot</h4>
-    <ul>
-      {%- for link in press_link_list %}
-        <li><a href="{{ link }}">{{ link }}</a>
-      {%- endfor %}
-    </ul>
-  {% endif %}
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Vot controversat - {{ title }}</h1>
+            <p>Dată: {{ date|datefmt }}</p>
+            <p>
+              <a href="http://www.cdep.ro/pls/steno/evot.nominal?idv={{ cdeppk }}">
+                Mai multe detalii despre vot
+              </a>
+            </p>
+            <div class="alert-danger">
+              <p>{{ reason }}</p>
+            </div>
+            <p>Semnificație "da": {{ meaning_yes }}</p>
+            <p>Semnificație "nu": {{ meaning_no }}</p>
+            {% if press_link_list %}
+                <h4>Citește mai mult despre vot</h4>
+                <ul>
+                {%- for link in press_link_list %}
+                    <li><a href="{{ link }}">{{ link }}</a>
+                {%- endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

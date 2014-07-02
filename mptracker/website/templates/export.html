@@ -1,94 +1,97 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <h1>Export de date</h1>
+<div class="container-content container-general">
+    <div class="col-sm-12">
 
-  {{ text('export', fold=True) }}
+      {{ text('export', fold=True) }}
 
-  <table class="table">
-    <tr>
-      <th>Date</th>
-      <th>Export</th>
-    </tr>
+      <table class="table">
+        <tr>
+          <th>Date</th>
+          <th>Export</th>
+        </tr>
 
-    <tr>
-      <td>Componența partidelor</td>
-      <td>
-        {% set url = url_for('.export_group_membership', migrare='initial') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> alegeri 2012
-        </a>
+        <tr>
+          <td>Componența partidelor</td>
+          <td>
+            {% set url = url_for('.export_group_membership', migrare='initial') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> alegeri 2012
+            </a>
 
-        {% set url = url_for('.export_group_membership', migrare='curent') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> actual
-        </a>
+            {% set url = url_for('.export_group_membership', migrare='curent') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> actual
+            </a>
 
-        {% set url = url_for('.export_group_membership', migrare='incheiat') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> mandate încheiate
-        </a>
+            {% set url = url_for('.export_group_membership', migrare='incheiat') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> mandate încheiate
+            </a>
 
-        {% set url = url_for('.export_group_membership', migrare='2013') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> migrări 2013
-        </a>
+            {% set url = url_for('.export_group_membership', migrare='2013') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> migrări 2013
+            </a>
 
-        {% set url = url_for('.export_group_membership', migrare='2014') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> migrări 2014
-        </a>
+            {% set url = url_for('.export_group_membership', migrare='2014') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> migrări 2014
+            </a>
 
-        {% set url = url_for('.export_group_membership') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> toate
-        </a>
-      </td>
-    </tr>
+            {% set url = url_for('.export_group_membership') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> toate
+            </a>
+          </td>
+        </tr>
 
-    <tr>
-      <td>Voturi</td>
-      <td>
-        {% set url = url_for('.export_votes', an='2012') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> 2012
-        </a>
+        <tr>
+          <td>Voturi</td>
+          <td>
+            {% set url = url_for('.export_votes', an='2012') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> 2012
+            </a>
 
-        {% set url = url_for('.export_votes', an='2013') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> 2013
-        </a>
+            {% set url = url_for('.export_votes', an='2013') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> 2013
+            </a>
 
-        {% set url = url_for('.export_votes', an='2014') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> 2014
-        </a>
+            {% set url = url_for('.export_votes', an='2014') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> 2014
+            </a>
 
-        {% set url = url_for('.export_votes') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> toate
-        </a>
-      </td>
-    </tr>
+            {% set url = url_for('.export_votes') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> toate
+            </a>
+          </td>
+        </tr>
 
-    <tr>
-      <td>Întrebări și interpelări</td>
-      <td>
-        {% set url = url_for('.export_questions', an='2013') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> 2013
-        </a>
+        <tr>
+          <td>Întrebări și interpelări</td>
+          <td>
+            {% set url = url_for('.export_questions', an='2013') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> 2013
+            </a>
 
-        {% set url = url_for('.export_questions', an='2014') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> 2014
-        </a>
+            {% set url = url_for('.export_questions', an='2014') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> 2014
+            </a>
 
-        {% set url = url_for('.export_questions') %}
-        <a href="{{ url }}" class="btn btn-sm btn-primary">
-          <i class="icon-download"></i> toate
-        </a>
-      </td>
-    </tr>
-  </table>
+            {% set url = url_for('.export_questions') %}
+            <a href="{{ url }}" class="btn btn-sm btn-primary">
+              <i class="icon-download"></i> toate
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+</div>
 {% endblock %}

@@ -5,8 +5,9 @@
     <link rel="stylesheet" href="{{ url_for('static',
         filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',
-        filename='website.css') }}">
+        filename='css/website.css') }}">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <title>{% block title %}Open Parlament{% endblock %}</title>
     {% block styles %}{% endblock %}
     <script>
@@ -16,9 +17,21 @@
     </script>
   </head>
 
-  <body>
+  <body {% if body_class %}class="{{ body_class }}"{% endif %}>
     {% include 'header.html' %}
     <div class="container">
+        {% if breadcrumb %}
+        <div class="row">
+            <div class="breadcrumb col-sm-12">
+                {% for crumb in breadcrumb %}
+                    {{ crumb }}
+                    {% if not loop.last %}
+                        &raquo;
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
       {% block content %}{% endblock %}
     </div>
 

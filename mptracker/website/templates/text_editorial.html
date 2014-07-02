@@ -2,15 +2,22 @@
 
 
 {%- block content %}
+{% if layout %}
+<div class="container-content container-general no-breadcrumb">
+  <div class="row">
+    <div class="col-sm-12">
+{% endif %}
   <h2>De ce este necesar OpenParlament?</h2>
 
-  <p>Pentru mulți dintre români Parlamentul este o instituție bugetofagă, populată de traseiști, penali și chiulangii. Această atitudine de respingere in corpore contribuie la perpetuarea stiuației actuale în care politica este hiper-personalizată, dominată de teme simbolice și de acuzații mutuale de corupție.</p>
+  <p>Pentru mulți dintre români Parlamentul este o instituție bugetofagă, populată de traseiști, penali și chiulangii. Această atitudine de respingere in corpore contribuie la perpetuarea stiuației actuale în care politica este hiper-personalizată, dominată de teme simbolice și de acuzații mutuale de corupție.
+  <!-- fold -->
+  </p>
+
 
   <p>În același timp, o majoritate a cetățenilor știe foarte puține despre procesul legislativ, despre ce fac grupurile parlamentare, dar și despre activitatea individuală a parlamentarilor - fie că e vorba de specializare în anumite politici, fie că vorbim de reprezentarea intereselor locuitorilor din circumscripțiile și colegiile lor.</p>
 
   <p>OpenParlament este un proiect non-guvernamental, non-profit al Fundației Median Research Centre și al OpenPolitics.ro ce răspunde direct acestei probleme, prezentând în mod accesibil și ușor de înțeles informații despre toate aceste aspect. Astfel, OpenParlament este un efort de a deschide cutia neagră a reprezentării politice din România, ce se concentrează pe trei dimensiuni: activitatea individuală a deputaților, procesul legislativ și funcționarea grupurilor parlamentare.</p>
 
-  <!-- fold -->
 
   <p>Informațiile prezentate de aplicație pot fi folosite de jurnaliști, activiști sau simplii cetățeni. Astfel, unul dintre scopurile proiectului este de a crește nivelul de cunoștințe și înțelegere al cetățenilor cu privire la activitatea partidelor parlamentare și a deputaților, sporind astfel, pe termen lung, șansele responsabilizării aleșilor și ale unei decizii de vot informate. Un alt scop este de a facilita monitorizarea procesului legislativ pe subiecte majore de politici publice de către cetățenii și organizații non-guvernamentale interesate.</p>
 
@@ -85,4 +92,9 @@
   <p>Secțiunea export date permite descărcarea datelor asupra migrației parlamentare, a tuturor voturilor, întrebărilor și interpelărilor parlamentare în format csv. Toate datele din aplicația sunt distribuite sub licență CC BY 4.0. Aceasta implică necesitatea de a credita OpenParlament, de exemplu printr-un link, dacă folosiți datele. De asemenea, orice aplicații rezultate din această utilizare trebuie să fie distribuite folosind o licență de date deschise compatibilă.</p>
 
   <p>Proiectul a fost realizat cu sprijinul financiar al Open Society Foundations. Întreținerea precum și dezvoltarea unor funcții complementare necesită noi resurse, de aceea orice donație este binevenită.</p>
+{% if layout %}
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

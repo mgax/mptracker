@@ -2,76 +2,130 @@
 
 
 {% block content %}
-  <h1>{{ party['name'] }}</h1>
-
-  {%- if party['description'] %}
-    <p><strong>{{ party['short_name'] }}</strong> {{ party['description'] }}</p>
-  {%- endif %}
-
-  <div class="row">
-    <div class="col-sm-8">
-      <h3>Domenii de politici publice</h3>
-
-      <ul>
-        {%- for policy in policy_domains %}
-          <li>
-            {{ policy.name|link_for(
-                '.party_policy',
-                party_short_name=party.short_name,
-                policy_slug=policy.slug,
-              ) }}
-            ({{ policy.interest|percent }})
-          </li>
-        {%- endfor %}
-      </ul>
+<div class="container-content parties-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{ party['name'] }}</h1>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="row party-meta">
+                <div class="col-sm-3 party-logo placeholder">
+                    <img src="http://placehold.it/130x130" alt="{{ party['name'] }}" />
+                </div>
+                <div class="col-sm-9">
+                    {%- if party['description'] %}
+                        <p><strong>{{ party['short_name'] }}</strong> {{ party['description'] }}</p>
+                    {%- endif %}
+                </div>
+            </div>
 
-    <div class="col-sm-4">
-      <div>
-        <h4>Statistici</h4>
+            <div class="row placeholder">
+                <div class="col-sm-3">
+                    <h4 class="members">Evoluția numărului de membri:</h4>
+                </div>
+                <div class="col-sm-9">
+                    <img src="/static/img/placeholders/party-evolution-chart.png" />
+                </div>
+            </div>
 
-        <dl class="dl-horizontal">
-          <dt>loialitatea membrilor</dt>
-          <dd>{{ party['loyalty']['all']|percent }}</dd>
+            <div class="row party-seats placeholder">
+                <div class="col-sm-12">
+                    <img src="/static/img/placeholders/party-seats.png" />
+                </div>
+            </div>
 
-          {%- if 'to-cabinet' in party['loyalty'] %}
-            <dt>loialitate pentru guvern</dt>
-            <dd>{{ party['loyalty']['to-cabinet']|percent }}</dd>
-          {%- endif %}
+            <div class="row">
+                <div class="col-sm-6 public-politics">
+                    <h4>Domenii de politici publice</h4>
+                    <div class="row piechart placeholder">
+                        <img src="/static/img/placeholders/piechart.png" />
+                    </div>
+                    <ul>
+                        {%- for policy in policy_domains %}
+                        <li>
+                            {{ policy.name|link_for(
+                            '.party_policy',
+                            party_short_name=party.short_name,
+                            policy_slug=policy.slug,
+                            ) }}
+                            <span class="percentage">({{ policy.interest|percent }})</span>
+                        </li>
+                        {%- endfor %}
+                    </ul>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5">
+                    <div class="row stat">
+                        <div class="col-sm-7">
+                            {% set url = url_for('.party_members', party_short_name=party.short_name) %}
+                            <a href="{{ url }}" class="number">
+                                {{ party['member_list']|count }}
+                            </a>
+                        </div>
+                        <div class="col-sm-5 description">
+                            Membri în mandatul curent
+                        </div>
+                    </div>
+                    <div class="row stat placeholder">
+                        <div class="col-sm-7">
+                            <a href="#" class="number">
+                                205
+                            </a>
+                        </div>
+                        <div class="col-sm-5 description">
+                            Membri<br /> în total
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="stats">Statistici</h4>
+                            <dl class="dl-horizontal">
+                                <dt>loialitatea membrilor</dt>
+                                <dd>{{ party['loyalty']['all']|percent }}</dd>
 
-          {%- for category, value in party['loyalty']['by-category'].items() %}
-            {%- set title = POSITION_CATEGORY_TITLE.get(category, category) %}
-            <dt>{{ title }}</dt>
-            <dd>{{ value|percent }}</dd>
-          {%- endfor %}
+                                {%- if 'to-cabinet' in party['loyalty'] %}
+                                    <dt>loialitate pentru guvern</dt>
+                                    <dd>{{ party['loyalty']['to-cabinet']|percent }}</dd>
+                                {%- endif %}
 
-          <dt>membri la primul mandat</dt>
-          <dd>{{ party['loyalty']['by-mandate-count']['one']|percent }}</dd>
+                                {%- for category, value in party['loyalty']['by-category'].items() %}
+                                    {%- set title = POSITION_CATEGORY_TITLE.get(category, category) %}
+                                    <dt>{{ title }}</dt>
+                                    <dd>{{ value|percent }}</dd>
+                                {%- endfor %}
 
-          <dt>membri cu mai multe mandate</dt>
-          <dd>{{ party['loyalty']['by-mandate-count']['multiple']|percent }}</dd>
+                                <dt>membri la primul mandat</dt>
+                                <dd>{{ party['loyalty']['by-mandate-count']['one']|percent }}</dd>
 
-          <dt>întrebări</dt>
-          <dd>{{ party['questions']['total'] }}</dd>
+                                <dt>membri cu mai multe mandate</dt>
+                                <dd>{{ party['loyalty']['by-mandate-count']['multiple']|percent }}</dd>
 
-          <dt>întrebări cu subiect local</dt>
-          <dd>
-            {{ party['questions']['local'] }}
-            {% if party['questions']['total'] %}
-              {%- set fraction = (party['questions']['local'] /
-                                  party['questions']['total']) %}
-              ({{ fraction|percent }})
-            {% endif %}
-          </dd>
-        </dl>
-      </div>
+                                <dt>întrebări</dt>
+                                <dd>{{ party['questions']['total'] }}</dd>
 
-      <div>
-        <h4>Membri</h4>
-        {% set url = url_for('.party_members', party_short_name=party.short_name) %}
-        <a href="{{ url }}">Lista completă ({{ party['member_list']|count }})</a>
-      </div>
+                                <dt>întrebări cu subiect local</dt>
+                                <dd>
+                                {{ party['questions']['local'] }}
+                                {% if party['questions']['total'] %}
+                                    {%- set fraction = (party['questions']['local'] /
+                                    party['questions']['total']) %}
+                                    ({{ fraction|percent }})
+                                {% endif %}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 sidebar">
+            <div class="social">
+                {{ text('social') }}
+            </div>
+        </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}

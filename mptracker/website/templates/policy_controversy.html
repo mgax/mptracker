@@ -3,9 +3,15 @@
 {% from '_policy_bits.html' import proposals_table %}
 
 {% block content %}
-  <h1>Inițiative de lege controversate</h1>
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Inițiative de lege controversate</h1>
 
-  {{ text('proposal_controversy') }}
+            {{ text('proposal_controversy') }}
 
-  {{ proposals_table(proposal_list) }}
+            {{ proposals_table(proposal_list) }}
+        </div>
+    </div>
+</div>
 {% endblock %}
