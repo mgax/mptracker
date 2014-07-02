@@ -103,21 +103,6 @@
 
                 {%- from '_person_bits.html' import person_stats %}
                 {{ person_stats(person_slug, stats) }}
-
-                <h4>Domenii de politici publice</h4>
-
-                <ul>
-                {%- for policy in policy_domains %}
-                    <li>
-                        {{ policy.name|link_for(
-                        '.person_policy',
-                        person_slug=person_slug,
-                        policy_slug=policy.slug,
-                        ) }}
-                        ({{ policy.interest|percent }})
-                    </li>
-                {%- endfor %}
-                </ul>
             </div>
         </div>
     </div>
@@ -223,7 +208,11 @@
                     <ul>
                     {%- for policy in policy_domains %}
                         <li>
-                            {{ policy.name }}
+                            {{ policy.name|link_for(
+                                '.person_policy',
+                                person_slug=person_slug,
+                                policy_slug=policy.slug,
+                                ) }}
                             ({{ policy.interest|percent }})
                         </li>
                     {%- endfor %}

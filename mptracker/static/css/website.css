@@ -520,6 +520,10 @@ span.number {
 .container-content.person-details .person-details-header .person-details-meta {
   padding-top: 10px;
 }
+.container-content.person-details .person-details-header .person-details-meta img {
+  max-width: 160px;
+  max-height: 212px;
+}
 .container-content.person-details .person-details-header .person-details-statistics h4 {
   color: #b0b0b0;
   font-weight: 700;
