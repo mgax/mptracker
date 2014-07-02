@@ -26,7 +26,7 @@ app.render_policy_chart = function(options) {
 
     var width = $(options.container).width(),
         margin = 20,
-        height = 300,
+        height = 250,
         radius = d3.min([width, height]) / 2 - margin;
 
     var percent = d3.format("2%");

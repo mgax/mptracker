@@ -783,6 +783,10 @@ figure {
     fill: white;
     font-weight: bold;
 }
+.policy-chart .arc path {
+    stroke: #FFF;
+    stroke-width: 1px;
+}
 .policy-interne               { fill: steelblue; }
 .policy-it                    { fill: silver; }
 .policy-drepturile-omului     { fill: purple; }
