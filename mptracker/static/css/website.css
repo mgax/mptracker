@@ -682,6 +682,10 @@ p.full-list {
 figure {
   margin-bottom: 15px;
 }
+.placeholder {
+  border: 3px dashed #bbb;
+  opacity: .5;
+}
 .leaflet-popup-content {
   font-size: 130%;
 }

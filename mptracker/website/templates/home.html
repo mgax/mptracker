@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <!-- Articol Featured -->
-                    <div class="row article-featured">
+                    <div class="row article-featured placeholder">
                         <div class="col-sm-12">
                             <!-- Titlu Articol -->
                             <div class="row">
@@ -102,14 +102,14 @@
                     <!-- Voturi Controversate -->
                     <div class="row">
                         <div class="col-sm-12">
-                            {{ text('local', fold=True) }}
-                            <a href="{{ url_for('.text_page', name='local') }}">continuare &raquo;</a>
+                            {{ text('voting_controversy', fold=True) }}
+                            <a href="{{ url_for('.text_page', name='voting_controversy') }}">continuare &raquo;</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 articles-list">
+        <div class="col-sm-4 articles-list placeholder">
             <h3>Articole recente:</h3>
             <div class="row article-single">
                 <a href="#" class="article-title">
@@ -148,7 +148,7 @@
     <div class="row home-section">
         <div class="col-sm-8">
             <!-- A list of all the laws -->
-            <div class="row sub-section laws-list">
+            <div class="row sub-section laws-list placeholder">
                 <h3>
                     Legi adoptate tacit
                     <span class="number">50</span>
@@ -188,7 +188,7 @@
                     <a href="#">lista completă &raquo;</a>
                 </p>
             </div>
-            <div class="row sub-section laws-list">
+            <div class="row sub-section laws-list placeholder">
                 <h3>
                     Legi controversate
                     <span class="number">27</span>
@@ -229,7 +229,7 @@
                 </p>
             </div>
             <!-- Persons List -->
-            <div class="row sub-section persons-list">
+            <div class="row sub-section persons-list placeholder">
                 <h3>
                     Migrări recente
                     <span class="number">14</span>
@@ -277,7 +277,7 @@
                     <a href="#">lista completă &raquo;</a>
                 </p>
             </div>
-            <div class="row sub-section comparison">
+            <div class="row sub-section comparison placeholder">
                 <h3>Verifică similaritatea la vot a deputatului tău cu toți ceilalți deputați</h3>
                 <h4>
                     Ion Călin
@@ -318,7 +318,7 @@
                         {{ item['text'] }}
                     </p>
                 {% endfor %}
-                <p class="full-list">
+                <p class="full-list placeholder">
                     <a href="#">lista completă &raquo;</a>
                 </p>
             </div>
@@ -331,19 +331,19 @@
                       question_id=item['question_id'],
                     ) %}
                   <p>
-                    <a class="date" href="#">
+                    <a class="date" href="{{ url }}">
                         {{ item['date']|datefmt }}
                     </a> <br />
                     {{ item['text'] }}
                   </p>
                 {% endfor %}
-                <p class="full-list">
+                <p class="full-list placeholder">
                     <a href="#">lista completă &raquo;</a>
                 </p>
             </div>
         </div>
         <div class="col-sm-4">
-            <div class="row sub-section statistic">
+            <div class="row sub-section statistic placeholder">
                 <h3>Statistica Lunii</h3>
                 <div class="statistic-title">
                     <div class="statistic-title-image">
@@ -357,7 +357,7 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt magnam, exercitationem explicabo suscipit itaque minus numquam labore.
                 </p>
             </div>
-            <div class="sub-section public-politics">
+            <div class="sub-section public-politics placeholder">
                 <h3>Top domenii de politici publice</h3>
                 <div class="row piechart">
                     <img src="/static/img/placeholders/piechart.png" />
@@ -389,10 +389,10 @@
                     </li>
                 </ul>
             </div>
-            <div class="sub-section social">
+            <div class="sub-section social placeholder">
                 {{ text('social') }}
             </div>
-            <div class="sub-section contribute">
+            <div class="sub-section contribute placeholder">
                 <p>
                     Ajută la <br />
                     dezvoltarea proiectului <br />
