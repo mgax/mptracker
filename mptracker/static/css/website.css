@@ -682,12 +682,6 @@ p.full-list {
 figure {
   margin-bottom: 15px;
 }
-.placeholder {
-  background: #fda;
-  font-size: 200%;
-  color: #555;
-  padding: 20px;
-}
 .leaflet-popup-content {
   font-size: 130%;
 }
