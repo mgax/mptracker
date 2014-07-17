@@ -125,6 +125,8 @@ def home():
         'recent_questions': dal.get_recent_questions(3),
         'policy_domains': dal.get_top_policies(),
         'body_class': 'home',
+        'tacit_proposal_list': dal.get_policy_tacit_approval_list(limit=3),
+        'tacit_proposal_count': dal.get_policy_tacit_approval_count(),
     })
 
 

@@ -1457,11 +1457,13 @@ class DataAccess:
             )
         ]
 
-    def get_policy_tacit_approval_list(self):
+    def get_policy_tacit_approval_list(self, limit=None):
         qs = (
             self.get_policy_tacit_approval_qs()
             .order_by(Proposal.date.desc())
         )
+        if limit:
+            qs = qs.limit(limit)
         rv = [
             {
                 'title': proposal.title,
@@ -1474,6 +1476,9 @@ class DataAccess:
         ]
         rv.sort(key=lambda r: r['tacit_approval']['date'], reverse=True)
         return rv
+
+    def get_policy_tacit_approval_count(self):
+        return self.get_policy_tacit_approval_qs().count()
 
     def get_policy_controversy_qs(self):
         return Proposal.query.join(ProposalControversy)
