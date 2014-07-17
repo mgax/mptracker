@@ -5,8 +5,6 @@
   } %}
 
 {% macro proposals_table(proposal_list) %}
-    <h2>Propuneri legislative</h2>
-
     <div class="laws-list">
         {%- for proposal in proposal_list %}
             <div class="law">
@@ -42,8 +40,6 @@
 {% endmacro %}
 
 {% macro questions_table(question_list) %}
-  <h2>Întrebări și interpelări</h2>
-
   <table class="table">
     <tbody>
       {%- for question in question_list %}

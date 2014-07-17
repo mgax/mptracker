@@ -21,7 +21,12 @@
                 </p>
 
                 {% from '_policy_bits.html' import proposals_table, questions_table %}
+                <h2>Propuneri legislative</h2>
+
                 {{ proposals_table(policy.proposal_list) }}
+
+                <h2>Întrebări și interpelări</h2>
+
                 {{ questions_table(policy.question_list) }}
             </div>
         </div>

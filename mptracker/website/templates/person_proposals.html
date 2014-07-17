@@ -12,6 +12,9 @@
             <h1><a href="{{ url }}">{{ name }}</a></h1>
 
             {% from '_policy_bits.html' import proposals_table %}
+
+            <h2>Propuneri legislative</h2>
+
             {{ proposals_table(proposal_list) }}
         </div>
     </div>
