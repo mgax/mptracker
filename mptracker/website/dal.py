@@ -1483,11 +1483,13 @@ class DataAccess:
     def get_policy_controversy_qs(self):
         return Proposal.query.join(ProposalControversy)
 
-    def get_policy_controversy_list(self):
+    def get_policy_controversy_list(self, limit=None):
         qs = (
             self.get_policy_controversy_qs()
             .order_by(Proposal.modification_date.desc())
         )
+        if limit:
+            qs = qs.limit(limit)
 
         return [
             {
@@ -1499,6 +1501,9 @@ class DataAccess:
             }
             for proposal in qs
         ]
+
+    def get_policy_controversy_count(self):
+        return self.get_policy_controversy_qs().count()
 
     def get_policy_question_list(self, policy_slug, mandate=None, party=None):
         question_query = (

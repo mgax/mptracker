@@ -163,44 +163,17 @@
                     <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
-            <div class="row sub-section laws-list placeholder">
+            <div class="row sub-section">
                 <h3>
                     Legi controversate
-                    <span class="number">27</span>
+                    <span class="number">{{ controversy_proposal_count }}</span>
                 </h3>
-                <!-- Individual Laws -->
-                <div class="law">
-                    <div class="law-status-color inprogress"></div>
-                    <div class="law-title">
-                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
-                    </div>
-                    <div class="law-status-text">
-                        În lucru
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="law">
-                    <div class="law-status-color approved"></div>
-                    <div class="law-title">
-                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
-                    </div>
-                    <div class="law-status-text">
-                        Aprobat
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="law">
-                    <div class="law-status-color rejected"></div>
-                    <div class="law-title">
-                        PI-x nr. 160/2014 Propunere legislativă pentru modificarea și...
-                    </div>
-                    <div class="law-status-text">
-                        Respins
-                    </div>
-                    <div class="clear"></div>
-                </div>
+
+                {{ proposals_table(controversy_proposal_list) }}
+
                 <p class="full-list">
-                    <a href="#">lista completă &raquo;</a>
+                    {%- set url = url_for('.policy_controversy') %}
+                    <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
             <!-- Persons List -->
