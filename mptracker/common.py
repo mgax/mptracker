@@ -50,21 +50,21 @@ PARTY_COLOR = {
 
 
 POLICY_COLOR = {
-  'interne':               'steelblue',
-  'it':                    'silver',
-  'drepturile-omului':     'purple',
-  'educatie':              'navy',
-  'ue':                    'blue',
-  'sanatate':              'lightpink',
-  'agricultura':           'forestgreen',
-  'economie':              'gold',
-  'cultura':               'antiquewhite',
-  'finante':               'olive',
-  'aparare':               'firebrick',
-  'transporturi':          'darkslategray',
-  'externe':               'antiquewhite',
-  'administratie-publica': 'teal',
-  'munca':                 'maroon',
+  'interne':               '#CCC537',
+  'it':                    '#D7553B',
+  'drepturile-omului':     '#487AAA',
+  'educatie':              '#A08F5A',
+  'ue':                    '#D2BA62',
+  'sanatate':              '#A0C176',
+  'agricultura':           '#2B3B53',
+  'economie':              '#EF8D32',
+  'cultura':               '#2CACC2',
+  'finante':               '#67AEAF',
+  'aparare':               '#A6ABA4',
+  'transporturi':          '#ACAE38',
+  'externe':               '#009B89',
+  'administratie-publica': '#1F7C92',
+  'munca':                 '#DE2B32',
 }
 
 
