@@ -1,5 +1,12 @@
 {% extends 'layout.html' %}
 
+{% from '_policy_bits.html' import proposals_table, policy_css_svg %}
+
+
+{% block styles %}
+{{ policy_css_svg() }}
+{% endblock %}
+
 
 {% block content %}
 <div class="container-content parties-content">
@@ -39,8 +46,8 @@
             <div class="row">
                 <div class="col-sm-6 public-politics">
                     <h4>Domenii de politici publice</h4>
-                    <div class="row piechart placeholder">
-                        <img src="/static/img/placeholders/piechart.png" />
+                    <div class="row piechart">
+                        <div class="policychart"></div>
                     </div>
                     <ul>
                         {%- for policy in policy_domains %}
@@ -128,4 +135,28 @@
     </div>
 </div>
 
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static', filename='policychart.js') }}"></script>
+<script>
+(function() {
+  "use strict";
+
+  $(document).ready(render);
+  $(window).resize(render);
+
+  function render() {
+    app.render_policy_chart({
+      container: $('.policychart').empty()[0],
+      data: {{ policy_domains|tojson }},
+      cutoff: 0.02
+    });
+  }
+
+})();
+</script>
 {% endblock %}
