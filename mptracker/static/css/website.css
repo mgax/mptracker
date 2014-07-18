@@ -795,21 +795,6 @@ figure {
     stroke: #FFF;
     stroke-width: 1px;
 }
-.policy-interne               { fill: steelblue; }
-.policy-it                    { fill: silver; }
-.policy-drepturile-omului     { fill: purple; }
-.policy-educatie              { fill: navy; }
-.policy-ue                    { fill: blue; }
-.policy-sanatate              { fill: lightpink; }
-.policy-agricultura           { fill: forestgreen; }
-.policy-economie              { fill: gold; }
-.policy-cultura               { fill: antiquewhite; }
-.policy-finante               { fill: olive; }
-.policy-aparare               { fill: firebrick; }
-.policy-transporturi          { fill: darkslategray; }
-.policy-externe               { fill: antiquewhite; }
-.policy-administratie-publica { fill: teal; }
-.policy-munca                 { fill: maroon; }
 .embed-pdf {
     width: 100%;
     height: 400px;

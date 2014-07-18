@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 
-{% from '_policy_bits.html' import proposals_table %}
+{% from '_policy_bits.html' import proposals_table, policy_css_svg %}
+
+
+{% block styles %}
+{{ policy_css_svg() }}
+{% endblock %}
 
 
 {% block content %}

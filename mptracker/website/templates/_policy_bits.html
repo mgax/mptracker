@@ -4,6 +4,7 @@
     'rejected': "Respins",
   } %}
 
+
 {% macro proposals_table(proposal_list) %}
     <div class="laws-list">
         {%- for proposal in proposal_list %}
@@ -39,6 +40,7 @@
     </div>
 {% endmacro %}
 
+
 {% macro questions_table(question_list) %}
   <table class="table">
     <tbody>
@@ -55,4 +57,13 @@
       {%- endfor %}
     </tbody>
   </table>
+{% endmacro %}
+
+
+{% macro policy_css_svg() %}
+<style>
+  {%- for policy, color in POLICY_COLOR.items() %}
+    svg .policy-{{ policy }} { fill: {{ color }}; }
+  {%- endfor %}
+</style>
 {% endmacro %}

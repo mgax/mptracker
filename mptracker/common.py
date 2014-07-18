@@ -49,6 +49,25 @@ PARTY_COLOR = {
 }
 
 
+POLICY_COLOR = {
+  'interne':               'steelblue',
+  'it':                    'silver',
+  'drepturile-omului':     'purple',
+  'educatie':              'navy',
+  'ue':                    'blue',
+  'sanatate':              'lightpink',
+  'agricultura':           'forestgreen',
+  'economie':              'gold',
+  'cultura':               'antiquewhite',
+  'finante':               'olive',
+  'aparare':               'firebrick',
+  'transporturi':          'darkslategray',
+  'externe':               'antiquewhite',
+  'administratie-publica': 'teal',
+  'munca':                 'maroon',
+}
+
+
 class UuidConverter(BaseConverter):
 
     def to_python(self, value):
@@ -88,6 +107,7 @@ def inject_constants(state):
         'VOTE_LABEL': VOTE_LABEL,
         'QUESTION_TYPE_LABEL': QUESTION_TYPE_LABEL,
         'PARTY_COLOR': PARTY_COLOR,
+        'POLICY_COLOR': POLICY_COLOR,
         'POSITION_CATEGORY_TITLE': {
           'minister': "ministru",
           'permanent-bureau': "membru al biroului permanent",

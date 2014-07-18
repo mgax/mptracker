@@ -1,8 +1,15 @@
 {% extends 'layout.html' %}
 
+{% from '_policy_bits.html' import policy_css_svg %}
+
 
 {% block title %}
     {{ super() }} – {{ name }}
+{% endblock %}
+
+
+{% block styles %}
+{{ policy_css_svg() }}
 {% endblock %}
 
 
