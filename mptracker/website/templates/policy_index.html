@@ -1,14 +1,21 @@
 {% extends 'layout.html' %}
 
+{% from '_policy_bits.html' import policy_css_background %}
+
+
+{% block styles %}
+{{ policy_css_background() }}
+{% endblock %}
+
 
 {% block content %}
-<div class="container-content container-general">
+<div class="container-content container-general policy-index-page">
     <div class="col-sm-12">
       {{ text('policy', fold=True) }}
 
-      <ul class="list-unstyled">
+      <ul class="list-unstyled policy-list">
         {% for policy in policy_list %}
-          <li>
+          <li class="policy-{{ policy.slug }}">
             {%- set url = url_for('.policy_detail', policy_slug=policy.slug) %}
             <a href="{{ url }}">{{ policy.name }}</a>
           </li>

@@ -795,6 +795,23 @@ figure {
     stroke: #FFF;
     stroke-width: 1px;
 }
+.policy-index-page .policy-list {
+    overflow: hidden;
+}
+.policy-index-page .policy-list > li {
+    width: 30%;
+    margin: 2px;
+    float: left;
+}
+.policy-index-page .policy-list > li a {
+    color: white;
+    widht: 100%;
+    display: block;
+    padding: 8px;
+}
+.policy-index-page .policy-list > li a:hover {
+    color: #ddd;
+}
 .embed-pdf {
     width: 100%;
     height: 400px;

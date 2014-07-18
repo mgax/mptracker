@@ -67,3 +67,12 @@
   {%- endfor %}
 </style>
 {% endmacro %}
+
+
+{% macro policy_css_background() %}
+<style>
+  {%- for policy, color in POLICY_COLOR.items() %}
+    .policy-list .policy-{{ policy }} { background-color: {{ color }}; }
+  {%- endfor %}
+</style>
+{% endmacro %}
