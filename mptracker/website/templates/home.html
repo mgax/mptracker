@@ -188,8 +188,12 @@
                 <div class="person">
                     <div class="person-status-color"></div>
                     <div class="person-image">
-                        <img src="http://placehold.it/40x60"
+                    {% if migration.person.picture_url %}
+                        <img src="{{ migration.person.picture_url }}"
                              alt="{{ migration.person.name }}">
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
                     </div>
                     <div class="person-details">
                         <span class="date">{{ migration.date|datefmt }}</span>

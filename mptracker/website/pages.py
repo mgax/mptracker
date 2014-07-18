@@ -25,6 +25,16 @@ def section(name):
     return decorator
 
 
+def picture_url(person):
+    if person.picture_filename:
+        picture_rel_path = path('pictures/2012') / person.picture_filename
+        if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
+            return flask.url_for(
+                'static',
+                filename=picture_rel_path,
+            )
+
+
 @pages.app_template_filter('maybe_url')
 def maybe_url(text, url):
     if url:
@@ -118,6 +128,12 @@ def debug():
 
 @pages.route('/')
 def home():
+    migration_list = []
+    for item in dal.get_migrations(limit=2):
+        person = dal.get_person(item['person']['slug'])
+        item['person']['picture_url'] = picture_url(person)
+        migration_list.append(item)
+
     return flask.render_template('home.html', **{
         'tacit_approvals_count': dal.get_tacit_approvals_count(),
         'controversy_count': dal.get_controversy_count(),
@@ -129,7 +145,7 @@ def home():
         'tacit_proposal_count': dal.get_policy_tacit_approval_count(),
         'controversy_proposal_list': dal.get_policy_controversy_list(limit=3),
         'controversy_proposal_count': dal.get_policy_controversy_count(),
-        'migration_list': list(dal.get_migrations(limit=2)),
+        'migration_list': migration_list,
         'migration_count': dal.get_migration_count(),
     })
 
@@ -221,14 +237,7 @@ def person_detail(person_slug):
     ctx['group_history'] = person.get_group_history()
     ctx['policy_domains'] = person.get_top_policies()
     ctx['breadcrumb'] = ['Deputați', ctx['name']]
-
-    if 'picture_filename' in ctx:
-        picture_rel_path = path('pictures/2012') / ctx['picture_filename']
-        if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
-            ctx['picture_url'] = flask.url_for(
-                'static',
-                filename=picture_rel_path,
-            )
+    ctx['picture_url'] = picture_url(person)
 
     ctx['recent_activity'] = person.get_recent_activity(limit=3, limit_each=2)
     for item in ctx['recent_activity']:

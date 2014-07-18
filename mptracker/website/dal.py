@@ -144,6 +144,11 @@ class DalPerson:
         }
 
     @property
+    def picture_filename(self):
+        if self.mandate.picture_url is not None:
+            return '%s.jpg' % str(self.person.slug)
+
+    @property
     def _local_ask_query(self):
         return (
             self.mandate.asked
@@ -243,9 +248,6 @@ class DalPerson:
             'phone': self.mandate.phone,
             'address': self.mandate.address,
         }
-
-        if self.mandate.picture_url is not None:
-            rv['picture_filename'] = '%s.jpg' % str(self.person.slug)
 
         rv['assets'] = self.get_assets_data()
 

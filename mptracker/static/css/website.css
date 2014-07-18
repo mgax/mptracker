@@ -394,6 +394,10 @@ span.number {
   margin-left: 1px;
   width: 7.5%;
 }
+.persons-list .person .person-image img {
+    max-width: 40px;
+    max-height: 60px;
+}
 .persons-list .person .person-details {
   float: left;
   width: 51%;
