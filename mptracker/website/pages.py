@@ -129,6 +129,8 @@ def home():
         'tacit_proposal_count': dal.get_policy_tacit_approval_count(),
         'controversy_proposal_list': dal.get_policy_controversy_list(limit=3),
         'controversy_proposal_count': dal.get_policy_controversy_count(),
+        'migration_list': list(dal.get_migrations(limit=2)),
+        'migration_count': dal.get_migration_count(),
     })
 
 
@@ -385,7 +387,7 @@ def person_policy(person_slug, policy_slug):
 @pages.route('/persoane/migrari')
 @section('person')
 def person_migrations():
-    migration_list = list(dal.get_latest_migrations())
+    migration_list = list(dal.get_migrations())
     return flask.render_template('person_migrations.html', **{
         'migration_list': migration_list,
         'breadcrumb': ['Deputați', 'Migrări'],

@@ -1767,7 +1767,7 @@ class DataAccess:
                 'local_score': local_score,
             }
 
-    def get_latest_migrations(self):
+    def _get_migrations_query(self, limit):
         OldGroup = aliased(MpGroup)
         NewGroup = aliased(MpGroup)
         OldMembership = aliased(MpGroupMembership)
@@ -1781,13 +1781,14 @@ class DataAccess:
                 Person.id.label('person_id'),
             )
             .join(MpGroupMembership.mandate)
+            .filter_by(year=2012)
             .join(Mandate.person)
             .order_by(MpGroupMembership.interval.desc())
-            .limit(10)
+            .limit(limit)
             .cte()
         )
 
-        migrations_query = (
+        return (
             db.session.query(
                 Person,
                 migrations_cte.c.interval,
@@ -1821,6 +1822,8 @@ class DataAccess:
             .order_by(NewMembership.interval.desc())
         )
 
+    def get_migrations(self, limit=None):
+        migrations_query = self._get_migrations_query(limit)
         for (person, interval, old_group, new_group) in migrations_query:
             yield {
                 'person': {
@@ -1835,6 +1838,9 @@ class DataAccess:
                 },
                 'date': interval.lower,
             }
+
+    def get_migration_count(self):
+        return self._get_migrations_query(limit=None).count()
 
     def get_vote_controversy(self, controversy_id):
         controversy = VotingSessionControversy.query.get(controversy_id)

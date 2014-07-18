@@ -176,55 +176,58 @@
                     <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
+
             <!-- Persons List -->
-            <div class="row sub-section persons-list placeholder">
+            <div class="row sub-section persons-list">
                 <h3>
                     Migrări recente
-                    <span class="number">14</span>
+                    <span class="number">{{ migration_count }}</span>
                 </h3>
-                <!-- Individual Persons -->
+
+                {%- for migration in migration_list %}
                 <div class="person">
                     <div class="person-status-color"></div>
                     <div class="person-image">
-                        <img src="http://placehold.it/40x60" alt="Adrian-Nicolae Diaconu" />
+                        <img src="http://placehold.it/40x60"
+                             alt="{{ migration.person.name }}">
                     </div>
                     <div class="person-details">
-                        <span class="date">1 iunie 2014</span>
-                        <span class="name">Adrian-Nicolae Diaconu</span>
+                        <span class="date">{{ migration.date|datefmt }}</span>
+                        <span class="name">
+                            {{- migration.person.name|link_for(
+                                '.person_detail',
+                                person_slug=migration.person.slug,
+                                ) -}}
+                        </span>
                     </div>
                     <div class="person-from">
                         <span class="term">De la:</span>
-                        <span class="definition">Indep.</span>
+                        <span class="definition">
+                            {{- migration.old_group.short_name|link_for(
+                                '.party_detail',
+                                party_short_name=migration.old_group.short_name,
+                                ) -}}
+                        </span>
                     </div>
                     <div class="person-to">
                         <span class="term">la:</span>
-                        <span class="definition">PSD</span>
+                        <span class="definition">
+                            {{- migration.new_group.short_name|link_for(
+                                '.party_detail',
+                                party_short_name=migration.new_group.short_name,
+                                ) -}}
+                        </span>
                     </div>
                     <div class="clear"></div>
                 </div>
-                <div class="person">
-                    <div class="person-status-color"></div>
-                    <div class="person-image">
-                        <img src="http://placehold.it/40x60" alt="Marioara Nistor" />
-                    </div>
-                    <div class="person-details">
-                        <span class="date">28 mai 2014</span>
-                        <span class="name">Marioara Nistor</span>
-                    </div>
-                    <div class="person-from">
-                        <span class="term">De la:</span>
-                        <span class="definition">PP-DD</span>
-                    </div>
-                    <div class="person-to">
-                        <span class="term">la:</span>
-                        <span class="definition">PNL</span>
-                    </div>
-                    <div class="clear"></div>
-                </div>
+                {%- endfor %}
+
                 <p class="full-list">
-                    <a href="#">lista completă &raquo;</a>
+                    {%- set url = url_for('.person_migrations') %}
+                    <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
+
             <div class="row sub-section comparison placeholder">
                 <h3>Verifică similaritatea la vot a deputatului tău cu toți ceilalți deputați</h3>
                 <h4>
