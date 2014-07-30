@@ -25,19 +25,20 @@
 {% block content %}
 <div class="container-content person-details row">
     <div class="col-sm-12 person-details-section person-details-header">
+        <!-- Person Name and Quick Details -->
         <div class="row">
-            <!-- Person Name and Quick Details -->
-            <div class="col-sm-8 person-details-meta">
+            <div class="col-md-3">
+                {%- if picture_url %}
+                    <img src="{{ picture_url }}" alt="{{ name }}" class="person-details-photo" />
+                {% else %}
+                    <img src="http://placehold.it/160x212" />
+                {%- endif %}
+            </div>
+            <div class="col-md-9">
+                <h1>{{ name }}</h1>
+
                 <div class="row">
-                    <div class="col-sm-3">
-                        {%- if picture_url %}
-                            <img src="{{ picture_url }}" alt="{{ name }}" />
-                        {% else %}
-                            <img src="http://placehold.it/160x212" />
-                        {%- endif %}
-                    </div>
-                    <div class="col-sm-9">
-                        <h1>{{ name }}</h1>
+                    <div class="col-md-8">
                         <ul class="list-unstyled">
                         {% if college %}
                             <li>
@@ -102,14 +103,14 @@
                             <a href="{{ url }}" class="btn btn-default btn-lg">contact</a>
                         </p>
                     </div>
-                </div>
-            </div>
-            <!-- Person Statistics -->
-            <div class="col-sm-4 person-details-statistics">
-                <h4>Statistici</h4>
+                    <!-- Person Statistics -->
+                    <div class="col-md-4 person-details-statistics">
+                        <h4>Statistici</h4>
 
-                {%- from '_person_bits.html' import person_stats %}
-                {{ person_stats(person_slug, stats) }}
+                        {%- from '_person_bits.html' import person_stats %}
+                        {{ person_stats(person_slug, stats) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
