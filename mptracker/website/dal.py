@@ -1509,15 +1509,17 @@ class DataAccess:
     def get_policy_controversy_count(self):
         return self.get_policy_controversy_qs().count()
 
-    def get_policy_question_list(self, policy_slug, mandate=None, party=None):
+    def get_policy_question_list(self, policy_slug=None, mandate=None, party=None):
         question_query = (
             db.session.query(
                 distinct(Question.id),
             )
             .outerjoin(Question.policy_domain)
-            .filter_by(slug=policy_slug)
             .filter(Question.date >= LEGISLATURE_2012_START)
         )
+
+        if policy_slug:
+            question_query = question_query.filter_by(slug=policy_slug)
 
         if mandate is not None:
             question_query = (

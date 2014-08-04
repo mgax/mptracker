@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% from '_policy_bits.html' import questions_table %}
+
+{% block content %}
+<div class="container-content container-general container-policies">
+    <h2>Întrebări și interpelări</h2>
+
+    {{ questions_table(question_list) }}
+</div>
+{% endblock %}

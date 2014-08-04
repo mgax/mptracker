@@ -403,6 +403,15 @@ def person_migrations():
     })
 
 
+@pages.route('/intrebari-interpelari/')
+@section('person')
+def person_question_index():
+    ctx = {
+        'question_list': dal.get_policy_question_list(),
+    }
+    return flask.render_template('question_index.html', **ctx)
+
+
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
 @section('person')
 def person_question(question_id):
