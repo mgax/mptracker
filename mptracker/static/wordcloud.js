@@ -12,6 +12,9 @@ app.render_wordcloud = function(box, word_data) {
   var min = d3.min(word_data, function(pair) { return pair[1]; });
   var sizeScale = d3.scale.sqrt().domain([min, max]).range([10, 40]);
 
+  var tooltip_text = "cuvinte frecvente în declarațiile, inițiativele " +
+                     "și întrebările deputatului";
+
   d3.layout.cloud().size([width, height])
       .words(
         _.map(shuffle(word_data), function(pair) {
@@ -29,8 +32,17 @@ app.render_wordcloud = function(box, word_data) {
     var svg = d3.select(box[0])
         .append('svg')
         .attr("width", width)
-        .attr("height", height)
-      .append("g")
+        .attr("height", height);
+
+    svg.append('rect')
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .attr("width", "100%")
+        .attr("height", "100%")
+      .append('title')
+        .text(tooltip_text);
+
+    svg.append("g")
         .attr("transform", "translate(" + width/2 + "," + height/2 + ")")
       .selectAll("text")
         .data(words)
@@ -46,7 +58,9 @@ app.render_wordcloud = function(box, word_data) {
         .text(function(d) { return d.text; })
         .on("click", function(d) {
           //console.log("click!", d.text);
-        });
+        })
+        .append('title')
+          .text(tooltip_text);
   }
 };
 
