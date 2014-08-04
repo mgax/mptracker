@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% from '_policy_bits.html' import proposals_table %}
+
+{% block content %}
+<div class="container-content container-general container-policies">
+    <h2>Propuneri legislative și proiecte de lege</h2>
+
+    {{ proposals_table(proposal_list) }}
+</div>
+{% endblock %}

@@ -278,8 +278,9 @@
                         {{ item['text'] }}
                     </p>
                 {% endfor %}
-                <p class="full-list placeholder">
-                    <a href="#">lista completă &raquo;</a>
+                <p class="full-list">
+                    {% set url = url_for('.policy_proposal_index') %}
+                    <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
             <!-- Întrebări și interpelări -->

@@ -1417,15 +1417,17 @@ class DataAccess:
             )
         )
 
-    def get_policy_proposal_list(self, policy_slug, mandate=None, party=None):
+    def get_policy_proposal_list(self, policy_slug=None, mandate=None, party=None):
         proposal_query = (
             db.session.query(
                 distinct(Proposal.id)
             )
             .filter(Proposal.date >= LEGISLATURE_2012_START)
             .outerjoin(Proposal.policy_domain)
-            .filter_by(slug=policy_slug)
         )
+
+        if policy_slug:
+            proposal_query = proposal_query.filter_by(slug=policy_slug)
 
         if mandate is not None:
             proposal_query = (

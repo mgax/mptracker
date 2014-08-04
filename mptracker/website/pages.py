@@ -518,6 +518,16 @@ def policy_detail(policy_slug=None):
     return flask.render_template('policy_detail.html', **ctx)
 
 
+@pages.route('/politici/propuneri/')
+@section('policy')
+def policy_proposal_index():
+    ctx = {
+        'proposal_list': dal.get_policy_proposal_list(),
+        'breadcrumb': ['Domenii de politici publice'],
+    }
+    return flask.render_template('policy_proposal_index.html', **ctx)
+
+
 @pages.route('/politici/propuneri/<uuid:proposal_id>')
 @section('policy')
 def policy_proposal(proposal_id):
