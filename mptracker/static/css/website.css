@@ -395,8 +395,8 @@ span.number {
   width: 7.5%;
 }
 .persons-list .person .person-image img {
-    max-width: 40px;
-    max-height: 60px;
+  max-width: 40px;
+  max-height: 60px;
 }
 .persons-list .person .person-details {
   float: left;
@@ -786,34 +786,34 @@ figure {
   stroke: grey;
 }
 .policy-chart .arc text {
-    text-anchor: middle;
-    fill: white;
-    font-weight: bold;
+  text-anchor: middle;
+  fill: white;
+  font-weight: bold;
 }
 .policy-chart .arc path {
-    stroke: #FFF;
-    stroke-width: 1px;
+  stroke: #FFF;
+  stroke-width: 1px;
 }
 .policy-index-page .policy-list {
-    overflow: hidden;
+  overflow: hidden;
 }
 .policy-index-page .policy-list > li {
-    width: 30%;
-    margin: 2px;
-    float: left;
+  width: 30%;
+  margin: 2px;
+  float: left;
 }
 .policy-index-page .policy-list > li a {
-    color: white;
-    widht: 100%;
-    display: block;
-    padding: 8px;
+  color: white;
+  widht: 100%;
+  display: block;
+  padding: 8px;
 }
 .policy-index-page .policy-list > li a:hover {
-    color: #ddd;
+  color: #ddd;
 }
 .embed-pdf {
-    width: 100%;
-    height: 400px;
+  width: 100%;
+  height: 400px;
 }
 @media screen and (max-width: 1200px) {
   .topbar .navbar ul.nav.navbar-nav li a {
