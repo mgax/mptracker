@@ -80,7 +80,8 @@ class PictureFolder:
                 'Authorization': 'Bearer ' + self.token,
             },
         )
-        assert resp.status_code == 200
+        if resp.status_code != 200:
+            raise RuntimeError("Auth failure: %s" % resp.text)
 
         latest = {}
 
