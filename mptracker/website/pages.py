@@ -404,6 +404,7 @@ def person_migrations():
 
 
 @pages.route('/intrebari-interpelari/<uuid:question_id>')
+@section('person')
 def person_question(question_id):
     question = dal.get_question_details(question_id)
     return flask.render_template('question.html', **{
@@ -413,6 +414,7 @@ def person_question(question_id):
 
 
 @pages.route('/stenograme/<path:serial>')
+@section('person')
 def transcript_chapter(serial):
     ctx = dal.get_transcript_chapter(serial)
     return flask.render_template('transcript_chapter.html', **ctx)
