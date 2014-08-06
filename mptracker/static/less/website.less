@@ -11,11 +11,12 @@
 html, body {
     font-family: 'Open Sans', sans-serif;
     /* Default pages have the background image a bit higher */
-    background: url(../img/header-bg-dark.jpg) 0 -160px no-repeat #f6f4ef;
+    background: url(../img/header-bg-dark.jpg) 0 -160px no-repeat #eee0a1;
     /* While the homepage has it full */
     &.home {
-        background: url(../img/header-bg.jpg) top no-repeat #f6f4ef;
+        background: url(../img/header-bg.jpg) top no-repeat #eee0a1;
     }
+    color: #747d84;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -39,17 +40,20 @@ a {
     background: url(../img/semi-opaque-bg.png) repeat;
     border-bottom: 3px solid #ffad00;
     width: 100%;
-    max-height: 100px;
+    max-height: 80px;
     .navbar {
         background: none;
         border: none;
         margin-bottom: 0;
         .navbar-brand {
-            padding: 15px 0;
+            padding: 12px 0 15px 0;
+            img {
+                height: 55px;
+            }
         }
         ul.nav.navbar-nav {
             float: right;
-            padding-top: 25px;
+            padding-top: 16px;
             li {
                 margin-left: 20px;
                 &.active {
@@ -60,8 +64,8 @@ a {
                     }
                 }
                 a {
-                    font-weight: 700;
-                    color: #000;
+                    font-weight: 600;
+                    color: @colorLink;
                     font-size: 20px;
                     &:hover {
                         color: #069;
@@ -80,12 +84,12 @@ a {
     .search-title {
         color: @colorLink;
         text-transform: uppercase;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 16px;
     }
     .search-advanced {
         text-align: right;
-        font-weight: 700;
+        font-weight: 600;
     }
     hr {
         border-top: 1px solid #bebebe;
@@ -107,7 +111,32 @@ a {
     .btn {
         &.btn-success {
             width: 100%;
+            text-transform: uppercase;
+            font-weight: 600;
+            background: #80c637; /* Old browsers */
+            background: -moz-linear-gradient(top,  #80c637 0%, #299a0b 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#80c637), color-stop(100%,#299a0b)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  #80c637 0%,#299a0b 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  #80c637 0%,#299a0b 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  #80c637 0%,#299a0b 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  #80c637 0%,#299a0b 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80c637', endColorstr='#299a0b',GradientType=0 ); /* IE6-9 */
+
         }
+    }
+    ::-webkit-input-placeholder { /* WebKit browsers */
+        color: @colorLink;
+    }
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: @colorLink;
+        opacity:  1;
+    }
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: @colorLink;
+        opacity:  1;
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10+ */
+        color:    #999;
     }
 }
 
