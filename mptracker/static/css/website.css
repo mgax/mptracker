@@ -836,6 +836,24 @@ figure {
 .similarity-barchart .number.other {
   stroke: grey;
 }
+.groupmemberchart .line {
+  fill: none;
+  stroke: #BBBFC2;
+  stroke-width: 2px;
+}
+.groupmemberchart .chart-axis.x {
+  stroke: #435860;
+}
+.groupmemberchart .chart-axis.x .tick line {
+  stroke: none;
+}
+.groupmemberchart .chart-axis.y text {
+  stroke: #435860;
+}
+.groupmemberchart .chart-axis.y .domain {
+  stroke: none;
+  fill: none;
+}
 .policy-chart .arc text {
   text-anchor: middle;
   fill: white;

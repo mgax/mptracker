@@ -28,11 +28,12 @@
                 </div>
             </div>
 
-            <div class="row placeholder">
+            <div class="row">
                 <div class="col-sm-3">
                     <h4 class="members">Evoluția numărului de membri:</h4>
                 </div>
                 <div class="col-sm-9">
+                    <div class="groupmemberchart"></div>
                     <img src="/static/img/placeholders/party-evolution-chart.png" />
                 </div>
             </div>
@@ -40,7 +41,6 @@
             <div class="row party-seats placeholder">
                 <div class="col-sm-12">
                     <img src="/static/img/placeholders/party-seats.png" />
-                    <div class="groupmemberchart"></div>
                 </div>
             </div>
 
@@ -148,6 +148,8 @@
 (function() {
   "use strict";
 
+  var member_count = {{ member_count|tojson }};
+
   $(document).ready(render);
   $(window).resize(render);
 
@@ -158,10 +160,12 @@
       cutoff: 0.02
     });
 
-    app.render_groupmember_chart({
-      container: $('.groupmemberchart').empty()[0],
-      data: {{ member_count|tojson }}
-    });
+    if(member_count.length > 0) {
+      app.render_groupmember_chart({
+        container: $('.groupmemberchart').empty()[0],
+        data: member_count
+      });
+    }
   }
 
 })();
