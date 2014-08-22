@@ -330,6 +330,9 @@ span.number {
 .public-politics .percentage {
   font-weight: 700;
 }
+.public-politics a {
+  color: #747d84;
+}
 .proposals {
   border-bottom: 1px solid #dce0e0;
   font-size: 14px;
