@@ -40,6 +40,7 @@
             <div class="row party-seats placeholder">
                 <div class="col-sm-12">
                     <img src="/static/img/placeholders/party-seats.png" />
+                    <div class="groupmemberchart"></div>
                 </div>
             </div>
 
@@ -142,6 +143,7 @@
 <script src="{{ url_for('static',
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static', filename='policychart.js') }}"></script>
+<script src="{{ url_for('static', filename='groupmemberchart.js') }}"></script>
 <script>
 (function() {
   "use strict";
@@ -154,6 +156,11 @@
       container: $('.policychart').empty()[0],
       data: {{ policy_domains|tojson }},
       cutoff: 0.02
+    });
+
+    app.render_groupmember_chart({
+      container: $('.groupmemberchart').empty()[0],
+      data: {{ member_count|tojson }}
     });
   }
 

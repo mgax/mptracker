@@ -459,6 +459,7 @@ def party_detail(party_short_name):
         'party': party.get_details(),
         'policy_domains': party.get_top_policies(),
         'breadcrumb': ['Partide', party.get_name()],
+        'member_count': party.get_member_count(),
     })
 
 

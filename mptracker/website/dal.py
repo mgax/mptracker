@@ -30,6 +30,7 @@ from mptracker.models import (
     NameSearch,
     db,
     ProposalControversy,
+    MemberCount,
 )
 
 LEGISLATURE_2012_START = date(2012, 12, 17)
@@ -1154,6 +1155,17 @@ class DalParty:
                 'action_count': n,
             }
             for person, n in top_95
+        ]
+
+    def get_member_count(self):
+        query = (
+            MemberCount.query
+            .filter_by(short_name=self.party.short_name)
+            .order_by('year')
+        )
+        return [
+            dict(year=mc.year, count=mc.count)
+            for mc in query
         ]
 
 
