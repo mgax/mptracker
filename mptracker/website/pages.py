@@ -455,11 +455,13 @@ def party_index():
 @section('party')
 def party_detail(party_short_name):
     party = dal.get_party(party_short_name)
+    member_count = party.get_member_count()
     return flask.render_template('party_detail.html', **{
         'party': party.get_details(),
         'policy_domains': party.get_top_policies(),
         'breadcrumb': ['Partide', party.get_name()],
-        'member_count': party.get_member_count(),
+        'member_count': member_count,
+        'total_members': sum(mc['count'] for mc in member_count),
     })
 
 

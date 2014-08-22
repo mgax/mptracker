@@ -68,17 +68,18 @@
                         <div class="col-sm-7">
                             {% set url = url_for('.party_members', party_short_name=party.short_name) %}
                             <a href="{{ url }}" class="number">
-                                {{ party['member_list']|count }}
+                                {% set current_member_count = party['member_list']|count %}
+                                {{ current_member_count }}
                             </a>
                         </div>
                         <div class="col-sm-5 description">
                             Membri în mandatul curent
                         </div>
                     </div>
-                    <div class="row stat placeholder">
+                    <div class="row stat">
                         <div class="col-sm-7">
                             <a href="#" class="number">
-                                205
+                                {{ total_members or current_member_count }}
                             </a>
                         </div>
                         <div class="col-sm-5 description">
