@@ -6,6 +6,7 @@ app.render_groupmember_chart = function(options) {
     var box = $(options.container);
     var data = options.data;
     var margin = 25;
+    var r = 4;
     var width = box.width() - 2*margin;
     var height = 100;
 
@@ -47,6 +48,24 @@ app.render_groupmember_chart = function(options) {
         .datum(data)
         .attr("class", "line")
         .attr("d", line);
+
+    var circles = svg.selectAll("circle")
+        .data(data)
+      .enter();
+
+    circles.append("circle")
+        .attr("class", "halo")
+        .attr("r", r + 2)
+        .attr("cx", function(d) { return x(d.year); })
+        .attr("cy", function(d) { return y(d.count); });
+
+    circles.append("circle")
+        .attr("class", "clickable")
+        .attr("r", r)
+        .attr("cx", function(d) { return x(d.year); })
+        .attr("cy", function(d) { return y(d.count); })
+      .append('title')
+        .text(function(d) { return d.count + ' membri'; });
 
     svg.append("g")
         .attr("class", "chart-axis x")

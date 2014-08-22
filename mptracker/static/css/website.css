@@ -836,6 +836,21 @@ figure {
 .similarity-barchart .number.other {
   stroke: grey;
 }
+.groupmemberchart {
+  font-size: 10px;
+}
+.groupmemberchart .halo {
+  fill: white;
+}
+.groupmemberchart .clickable {
+  fill: white;
+  stroke: #BBBFC2;
+  stroke-width: 2px;
+}
+.groupmemberchart .clickable:hover {
+  stroke: orange;
+  cursor: pointer;
+}
 .groupmemberchart .line {
   fill: none;
   stroke: #BBBFC2;
@@ -844,11 +859,14 @@ figure {
 .groupmemberchart .chart-axis.x {
   stroke: #435860;
 }
+.groupmemberchart .chart-axis.x .domain {
+  stroke-width: .3px;
+}
 .groupmemberchart .chart-axis.x .tick line {
   stroke: none;
 }
 .groupmemberchart .chart-axis.y text {
-  stroke: #435860;
+  stroke: #BBBFC2;
 }
 .groupmemberchart .chart-axis.y .domain {
   stroke: none;

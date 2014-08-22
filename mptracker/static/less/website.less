@@ -918,20 +918,41 @@ figure {
 }
 
 .groupmemberchart {
+    font-size: 10px;
+
+    .halo {
+        fill: white;
+    }
+
+    .clickable {
+        fill: white;
+        stroke: #BBBFC2;
+        stroke-width: 2px;
+    }
+
+    .clickable:hover {
+        stroke: orange;
+        cursor: pointer;
+    }
+
     .line {
         fill: none;
         stroke: #BBBFC2;
         stroke-width: 2px;
     }
+
     .chart-axis.x {
         stroke: #435860;
+        .domain {
+            stroke-width: .3px;
+        }
         .tick line {
             stroke: none;
         }
     }
     .chart-axis.y {
         text {
-            stroke: #435860;
+            stroke: #BBBFC2;
         }
         .domain {
             stroke: none;
