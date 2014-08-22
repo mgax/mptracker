@@ -45,6 +45,7 @@ MINORITIES_CSV_KEY = '0Ao01Fbm0wOCAdC1neEk0RXV1Z05hRG9QU2FPTlNYZ0E'
 COMMITTEE_ROLL_CALL_CSV_KEY = '1w4IufznSMLMxMOxfS-ggp3IwXePEoDHiTAjAsHgMOpE'
 PROPOSAL_CONTROVERSY_CSV_KEY = '1gsEHB8PhMMgEVJEv-yCBopFl2aMfnXg_JVaJ1aUgLpI'
 PARTY_DESCRIPTION_CSV_KEY = '1cDN2PXcuF0qZE0fBQmAzCnWvUemCo0iacNOy4_tAsIE'
+MEMBER_COUNT_CSV_KEY = '13FcF2cCqM7OL0ML9UFchyOnn9uUjYTs7RFIIvLFztFs'
 PICTURES_FOLDER_KEY = '0B1BmcLkxpBOXVGZyNHhqc0tWZkk'
 
 
@@ -1501,5 +1502,26 @@ def get_party_description():
                 'short_name': row['short_name'],
                 'description': row['description'],
             })
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def get_member_count():
+    patcher = TablePatcher(
+        models.MemberCount,
+        models.db.session,
+        key_columns=['short_name', 'year'],
+    )
+
+    with patcher.process(remove=True) as add_member_count:
+        for row in get_gdrive_csv(MEMBER_COUNT_CSV_KEY):
+            short_name = row.pop('')
+            for year, count in row.items():
+                add_member_count({
+                    'short_name': short_name,
+                    'year': int(year),
+                    'count': int(count),
+                })
 
     models.db.session.commit()
