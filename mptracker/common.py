@@ -65,6 +65,7 @@ POLICY_COLOR = {
   'externe':               '#009B89',
   'administratie-publica': '#1F7C92',
   'munca':                 '#DE2B32',
+  'other':                 '#CCCCCC',
 }
 
 
