@@ -786,22 +786,31 @@ figure {
 /*************************
  *   activitychart   *
  *************************/
-.chart-axis line,
-.chart-axis path {
+.activitychart .chart-axis line,
+.activitychart .chart-axis path {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
-.chart-axis.y line {
+.activitychart .chart-axis.y line {
   display: none;
 }
-.activitychart-line {
+.activitychart .activitychart-line {
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
 }
-.activitychart-vacation {
+.activitychart .activitychart-vacation {
   stroke: none;
+}
+.membershipchart .chart-axis line,
+.membershipchart .chart-axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.membershipchart .chart-axis.y line {
+  display: none;
 }
 .membershipchart-rect {
   cursor: pointer;

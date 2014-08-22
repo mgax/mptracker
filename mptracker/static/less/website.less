@@ -849,25 +849,40 @@ figure {
  *   activitychart   *
  *************************/
 
-.chart-axis line,
-.chart-axis path {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+.activitychart {
+    .chart-axis line,
+    .chart-axis path {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .chart-axis.y line {
+        display: none;
+    }
+
+    .activitychart-line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+    .activitychart-vacation {
+        stroke: none;
+    }
 }
 
-.chart-axis.y line {
-    display: none;
-}
+.membershipchart {
+    .chart-axis line,
+    .chart-axis path {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
 
-.activitychart-line {
-    fill: none;
-    stroke: steelblue;
-    stroke-width: 1.5px;
-}
-
-.activitychart-vacation {
-    stroke: none;
+    .chart-axis.y line {
+        display: none;
+    }
 }
 
 .membershipchart-rect {
