@@ -145,8 +145,7 @@ class DalPerson:
 
     @property
     def picture_filename(self):
-        if self.mandate.picture_url is not None:
-            return '%s.jpg' % str(self.person.slug)
+        return '%s.jpg' % str(self.person.slug)
 
     @property
     def _local_ask_query(self):
