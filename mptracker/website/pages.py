@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 import functools
+import re
 import flask
 from werkzeug.exceptions import NotFound
 import jinja2
@@ -92,12 +93,14 @@ def inject_nav_links():
 
 def template_text(name, fold=False, below_fold=False):
     html = flask.render_template('text_%s.html' % name, layout=False)
+    fold_pattern = r'^(?P<intro>.*)<!-- fold (?P<close>.*?)-->(?P<below>.*)$'
 
     if fold:
-        html = html.split('<!-- fold -->')[0]
+        match = re.match(fold_pattern, html, re.DOTALL)
+        html = match.group('intro') + match.group('close')
 
     elif below_fold:
-        html = html.split('<!-- fold -->')[1]
+        html = re.match(fold_pattern, html, re.DOTALL).group('below')
 
     return jinja2.Markup(html)
 
