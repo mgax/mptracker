@@ -570,6 +570,13 @@ class Stopword(db.Model):
     id = db.Column(db.Text, primary_key=True)
 
 
+class MemberCount(db.Model):
+    id = db.Column(db.Text, primary_key=True)
+    short_name = db.Column(db.Text)
+    year = db.Column(db.Integer)
+    count = db.Column(db.Integer)
+
+
 class User(db.Model, UserMixin):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     email = db.Column(db.Text)
