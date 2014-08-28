@@ -149,6 +149,7 @@ def home():
         migration_list.append(item)
 
     return flask.render_template('home.html', **{
+        'policy_list': dal.get_policy_list(),
         'tacit_approvals_count': dal.get_tacit_approvals_count(),
         'controversy_count': dal.get_controversy_count(),
         'recent_proposals': dal.get_recent_proposals(3),

@@ -31,12 +31,12 @@
                             <input type="text" id="person-saerch-name-query" name="name_query" class="form-control" placeholder="Nume / Prenume Deputat" />
                         </div>
                         <div class="form-group col-sm-4">
-                            <label for="politics" class="sr-only">Politici Publice</label>
-                            <select name="politics" class="form-control">
-                                <option>Politici Publice</option>
-                                <option value="1">Option 1</option>
-                                <option value="2">Option 2</option>
-                                <option value="3">Option 3</option>
+                            <label for="person-saerch-policy-domains" class="sr-only">Politici Publice</label>
+                            <select id="person-saerch-policy-domains" name="policy-domains" class="form-control">
+                              <option>Politici Publice</option>
+                              {% for policy in policy_list %}
+                                <option value="{{ policy.slug }}">{{ policy.name }}</option>
+                              {% endfor %}
                             </select>
                         </div>
                         <div class="form-group col-sm-2">
@@ -329,6 +329,12 @@
   app.person_search = new app.PersonSearch({
     el: $('form[name=person-search]'),
     url: {{ url_for('.person_index_search_name')|tojson|safe }}
+  });
+
+  var policy_select = $('select[name=policy-domains]');
+  policy_select.change(function() {
+    var url = {{ url_for('.policy_detail', policy_slug='') }} + policy_select.val();
+    window.location.href = url;
   });
 
 })();
