@@ -953,3 +953,6 @@ figure {
     text-shadow: none;
   }
 }
+.dl-horizontal dt {
+  white-space: normal;
+}
