@@ -27,13 +27,12 @@ def section(name):
 
 
 def picture_url(person):
-    if person.picture_filename:
-        picture_rel_path = path('pictures/2012') / person.picture_filename
-        if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
-            return flask.url_for(
-                'static',
-                filename=picture_rel_path,
-            )
+    picture_rel_path = path('pictures/2012') / person.picture_filename
+    if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
+        return flask.url_for(
+            'static',
+            filename=picture_rel_path,
+        )
 
 
 @pages.app_template_filter('maybe_url')
