@@ -289,14 +289,15 @@
             <div class="sub-section social">
                 {{ text('social') }}
             </div>
-            <div class="sub-section contribute placeholder">
+            <div class="sub-section contribute">
                 <p>
                     Ajută la <br />
                     dezvoltarea proiectului <br />
                     OpenParlament
                 </p>
                 <p>
-                    <a class="btn btn-contribute" href="#">
+                    <a class="btn btn-contribute"
+                       href="{{ url_for('.text_page', name='donations') }}">
                         Contribuie
                     </a>
                 </p>
