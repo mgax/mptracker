@@ -35,6 +35,15 @@ def picture_url(person):
         )
 
 
+def logo_url(party):
+    picture_rel_path = path('parties') / party.logo_filename
+    if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
+        return flask.url_for(
+            'static',
+            filename=picture_rel_path,
+        )
+
+
 @pages.app_template_filter('maybe_url')
 def maybe_url(text, url):
     if url:
@@ -464,6 +473,7 @@ def party_detail(party_short_name):
         'breadcrumb': ['Partide', party.get_name()],
         'member_count': member_count,
         'total_members': sum(mc['count'] for mc in member_count),
+        'logo_url': logo_url(party),
     })
 
 

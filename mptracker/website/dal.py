@@ -835,6 +835,10 @@ class DalParty:
             'short_name': self.party.short_name,
         }
 
+    @property
+    def logo_filename(self):
+        return self.party.short_name + '.jpg'
+
     def get_details(self):
         rv = self.get_main_details()
 
