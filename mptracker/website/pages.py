@@ -97,10 +97,13 @@ def template_text(name, fold=False, below_fold=False):
 
     if fold:
         match = re.match(fold_pattern, html, re.DOTALL)
-        html = match.group('intro') + match.group('close')
+        if match is not None:
+            html = match.group('intro') + match.group('close')
 
     elif below_fold:
-        html = re.match(fold_pattern, html, re.DOTALL).group('below')
+        match = re.match(fold_pattern, html, re.DOTALL)
+        if match is not None:
+            html = re.match(fold_pattern, html, re.DOTALL).group('below')
 
     return jinja2.Markup(html)
 
