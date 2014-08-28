@@ -38,10 +38,10 @@ app.PersonSearch = Backbone.View.extend({
     },
 
     got_update_result: function(data) {
-        this.$el.find('.results').remove();
+        this.$el.find('.search-results').remove();
 
         if(data['results'].length > 0) {
-            var result_list = $('<ul class="list-unstyled results">');
+            var result_list = $('<ul class="list-unstyled search-results">');
             result_list.appendTo(this.el);
             _(data['results']).forEach(function(result) {
                 var link = $('<a>').attr('href', result['url']).text(name);
@@ -50,7 +50,7 @@ app.PersonSearch = Backbone.View.extend({
             }, this);
         }
         else {
-            var message = $('<p class="results">');
+            var message = $('<p class="search-results">');
             message.text("Nu am găsit nicio persoană.");
             this.$el.append(message);
         }

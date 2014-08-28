@@ -465,6 +465,18 @@ span.number {
   margin-right: 10px;
   font-size: 13px;
 }
+.search-results li {
+  float: left;
+  width: 47%;
+  background: #fcfcfc;
+  border: 1px solid #dce0e0;
+  margin: 1% 2% 0 0;
+  font-weight: 700;
+}
+.search-results li a {
+  padding: 10px;
+  display: block;
+}
 .person-index {
   padding: 15px;
 }
@@ -482,18 +494,6 @@ span.number {
 .person-index #map {
   margin-left: 20px;
   margin-right: 35px;
-}
-.person-index .results li {
-  float: left;
-  width: 47%;
-  background: #fcfcfc;
-  border: 1px solid #dce0e0;
-  margin: 1% 2% 0 0;
-  font-weight: 700;
-}
-.person-index .results li a {
-  padding: 10px;
-  display: block;
 }
 .person-index .search-section {
   margin-bottom: 25px;

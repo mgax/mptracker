@@ -25,10 +25,10 @@
             <hr />
             <div class="row">
                 <div class="col-sm-12">
-                    <form class="form-inline">
+                    <form class="form-inline" name="person-search">
                         <div class="form-group col-sm-6">
-                            <label for="name" class="sr-only">Nume / Prenume Deputat</label>
-                            <input type="text" name="name" class="form-control" placeholder="Nume / Prenume Deputat" />
+                            <label for="person-saerch-name-query" class="sr-only">Nume / Prenume Deputat</label>
+                            <input type="text" id="person-saerch-name-query" name="name_query" class="form-control" placeholder="Nume / Prenume Deputat" />
                         </div>
                         <div class="form-group col-sm-4">
                             <label for="politics" class="sr-only">Politici Publice</label>
@@ -325,6 +325,11 @@
       cutoff: 0.02
     });
   }
+
+  app.person_search = new app.PersonSearch({
+    el: $('form[name=person-search]'),
+    url: {{ url_for('.person_index_search_name')|tojson|safe }}
+  });
 
 })();
 </script>
