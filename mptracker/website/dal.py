@@ -1275,12 +1275,19 @@ class DataAccess:
             .filter(Mandate.year == 2012)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
-            .filter(
-                "to_tsvector('romanian', person.romania_curata) "
-                "@@ plainto_tsquery('romanian', :contracts_query)"
-            )
-            .params(contracts_query=contracts_query)
+            .filter(Person.romania_curata != '')
+            .filter(Person.romania_curata != None)
         )
+        if contracts_query:
+            person_query = (
+                person_query
+                .filter(
+                    "to_tsvector('romanian', person.romania_curata) "
+                    "@@ plainto_tsquery('romanian', :contracts_query)"
+                )
+                .params(contracts_query=contracts_query)
+            )
+
         return [
             {'name': person.name_first_last, 'slug': person.slug}
             for person in person_query
