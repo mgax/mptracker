@@ -1400,15 +1400,23 @@ class DataAccess:
                 .filter(func.upper(Mandate.interval) >= q_upper)
             )
 
-        return (
-            {
-                'name': membership.mandate.person.name_first_last,
-                'group': membership.mp_group.name,
-                'start': membership.interval.lower,
-                'end': null_end(membership.interval.upper),
-            }
-            for membership in membership_query
-        )
+        by_mandate = defaultdict(list)
+
+        for membership in membership_query:
+            by_mandate[membership.mandate].append(membership)
+
+        for mandate in sorted(by_mandate, key=lambda m: m.id):
+            membership_list = by_mandate[mandate]
+            if len(membership_list) < 2:
+                continue
+
+            for membership in membership_list:
+                yield {
+                    'name': mandate.person.name_first_last,
+                    'group': membership.mp_group.name,
+                    'start': membership.interval.lower,
+                    'end': null_end(membership.interval.upper),
+                }
 
     def get_party_list(self):
         mp_group_query = self.get_party_qs()
