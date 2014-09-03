@@ -39,11 +39,7 @@
                 </div>
             </div>
 
-            <div class="row party-seats placeholder">
-                <div class="col-sm-12">
-                    <img src="/static/img/placeholders/party-seats.png" />
-                </div>
-            </div>
+            <div class="seatchart"></div>
 
             <div class="row">
                 <div class="col-sm-6 public-politics">
@@ -146,6 +142,7 @@
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static', filename='policychart.js') }}"></script>
 <script src="{{ url_for('static', filename='groupmemberchart.js') }}"></script>
+<script src="{{ url_for('static', filename='seatchart.js') }}"></script>
 <script>
 (function() {
   "use strict";
@@ -168,6 +165,14 @@
         data: member_count
       });
     }
+
+    app.render_seatchart({
+      container: $('.seatchart').empty()[0],
+      total: 404,
+      offset: 88,
+      count: 22,
+      color: {{ PARTY_COLOR[party['short_name']]|tojson }}
+    });
   }
 
 })();

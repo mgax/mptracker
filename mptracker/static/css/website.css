@@ -642,10 +642,6 @@ span.number {
 .container-content.parties-content .party-meta .party-logo {
   text-align: center;
 }
-.container-content.parties-content .party-seats {
-  text-align: center;
-  padding: 30px 0;
-}
 .container-content.parties-content .public-politics {
   border-right: 1px solid #dce0e0;
   border-bottom: none;
@@ -871,6 +867,9 @@ figure {
 .groupmemberchart .chart-axis.y .domain {
   stroke: none;
   fill: none;
+}
+.seatchart circle {
+  fill: #bbb;
 }
 .policy-chart .arc text {
   text-anchor: middle;
