@@ -78,7 +78,7 @@ function percent(value) {
 
 app.render_similarity_barchart = function(options) {
 
-    var margin = {top: 5, right: 100, bottom: 5, left: 160},
+    var margin = {top: 5, right: 100, bottom: 5, left: 200},
         text_margin = 10,
         bar_height = 8,
         bar_margin = 2,
