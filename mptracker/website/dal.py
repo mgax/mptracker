@@ -1172,31 +1172,6 @@ class DalParty:
             for mc in query
         ]
 
-    def get_seats(self):
-        by_party = dict(
-            db.session.query(
-                MpGroup.short_name,
-                func.count(MpGroupMembership.id),
-            )
-            .join(MpGroup.memberships)
-            .filter(func.upper(MpGroupMembership.interval) == 'infinity')
-            .group_by(MpGroup.short_name)
-            .all()
-        )
-
-        offset = 0
-
-        for short_name in PARTY_ORDER:
-            if short_name == self.party.short_name:
-                break
-
-            offset += by_party.get(short_name)
-
-        return {
-            'total': sum(by_party.values()),
-            'offset': offset,
-        }
-
 
 class DataAccess:
 
@@ -1969,6 +1944,32 @@ class DataAccess:
             reverse=True,
             key=lambda p: p['interest'],
         )
+
+    def get_seats(self):
+        by_party = dict(
+            db.session.query(
+                MpGroup.short_name,
+                func.count(MpGroupMembership.id),
+            )
+            .join(MpGroup.memberships)
+            .filter(func.upper(MpGroupMembership.interval) == 'infinity')
+            .group_by(MpGroup.short_name)
+            .all()
+        )
+
+        offset = 0
+        rv = []
+
+        for short_name in PARTY_ORDER:
+            count = by_party.get(short_name)
+            rv.append({
+                'party': short_name,
+                'count': count,
+                'offset': offset,
+            })
+            offset += count
+
+        return rv
 
 
 def get_top_words(mandate_id, number):

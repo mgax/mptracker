@@ -468,6 +468,8 @@ def party_index():
 def party_detail(party_short_name):
     party = dal.get_party(party_short_name)
     member_count = party.get_member_count()
+    seats = {r['party']: r for r in dal.get_seats()}
+
     return flask.render_template('party_detail.html', **{
         'party': party.get_details(),
         'policy_domains': party.get_top_policies(),
@@ -475,7 +477,8 @@ def party_detail(party_short_name):
         'member_count': member_count,
         'total_members': sum(mc['count'] for mc in member_count),
         'logo_url': logo_url(party),
-        'seats': party.get_seats(),
+        'seats': seats.get(party_short_name),
+        'seats_total': sum(r['count'] for r in seats.values()),
     })
 
 
