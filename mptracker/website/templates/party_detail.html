@@ -168,9 +168,9 @@
 
     app.render_seatchart({
       container: $('.seatchart').empty()[0],
-      total: 404,
-      offset: 88,
-      count: 22,
+      total: {{ seats['total'] }},
+      offset: {{ seats['offset'] }},
+      count: {{ party['member_list']|count|tojson }},
       color: {{ PARTY_COLOR[party['short_name']]|tojson }}
     });
   }

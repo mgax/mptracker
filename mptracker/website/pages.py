@@ -475,6 +475,7 @@ def party_detail(party_short_name):
         'member_count': member_count,
         'total_members': sum(mc['count'] for mc in member_count),
         'logo_url': logo_url(party),
+        'seats': party.get_seats(),
     })
 
 

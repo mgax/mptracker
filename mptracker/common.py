@@ -49,6 +49,18 @@ PARTY_COLOR = {
 }
 
 
+PARTY_ORDER = [
+    'PP-DD',
+    'PSD',
+    'PC',
+    'Mino.',
+    'Indep.',
+    'UDMR',
+    'PNL',
+    'PDL',
+]
+
+
 POLICY_COLOR = {
   'interne':               '#CCC537',
   'it':                    '#D7553B',

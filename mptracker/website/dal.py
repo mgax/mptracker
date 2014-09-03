@@ -4,7 +4,7 @@ from sqlalchemy import func, distinct, and_, desc
 from sqlalchemy.orm import joinedload, aliased
 from jinja2 import filters
 from flask import json
-from mptracker.common import parse_date
+from mptracker.common import parse_date, PARTY_ORDER
 from mptracker.models import (
     Chamber,
     County,
@@ -1171,6 +1171,31 @@ class DalParty:
             dict(year=mc.year, count=mc.count)
             for mc in query
         ]
+
+    def get_seats(self):
+        by_party = dict(
+            db.session.query(
+                MpGroup.short_name,
+                func.count(MpGroupMembership.id),
+            )
+            .join(MpGroup.memberships)
+            .filter(func.upper(MpGroupMembership.interval) == 'infinity')
+            .group_by(MpGroup.short_name)
+            .all()
+        )
+
+        offset = 0
+
+        for short_name in PARTY_ORDER:
+            if short_name == self.party.short_name:
+                break
+
+            offset += by_party.get(short_name)
+
+        return {
+            'total': sum(by_party.values()),
+            'offset': offset,
+        }
 
 
 class DataAccess:
