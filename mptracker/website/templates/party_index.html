@@ -13,5 +13,33 @@
         {% endfor %}
       </ul>
     </div>
+
+    <div class="col-sm-12">
+        <div class="seatchart"></div>
+    </div>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static',
+    filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
+<script src="{{ url_for('static', filename='seatchart.js') }}"></script>
+<script>
+(function() {
+  "use strict";
+
+  $(document).ready(render);
+  $(window).resize(render);
+
+  function render() {
+    app.render_seatchart({
+      container: $('.seatchart').empty()[0],
+      total: {{ seats_total }},
+      highlight: {{ seats|tojson }}
+    });
+  }
+
+})();
+</script>
 {% endblock %}

@@ -9,9 +9,7 @@ app.render_seatchart = function(options) {
     var rows = 8,
         rowStep = 3,
         total = options.total,
-        offset = options.offset,
-        count = options.count,
-        color = options.color,
+        highlight = options.highlight,
         minRanks = Math.ceil(total/rows - rowStep*(rows-1)/2),
         margin = 20,
         radius = 200,
@@ -61,8 +59,10 @@ app.render_seatchart = function(options) {
         d.n = n;
     });
 
-    dots.slice(offset, offset + count).forEach(function(d) {
-        d.color = color;
+    highlight.forEach(function(h) {
+        dots.slice(h.offset, h.offset + h.count).forEach(function(d) {
+            d.color = h.color;
+        });
     });
 
     var r = d3.scale.linear()

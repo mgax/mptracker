@@ -7,7 +7,7 @@ import jinja2
 from babel.numbers import format_currency
 from mptracker import models
 from mptracker.common import csv_lines, csv_response, buffer_on_disk
-from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL
+from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
 from path import path
 
@@ -457,9 +457,15 @@ def person_county(county_code):
 @pages.route('/partide/')
 @section('party')
 def party_index():
+    seats = [
+        dict(r, color=PARTY_COLOR.get(r['party']))
+        for r in dal.get_seats()
+    ]
     return flask.render_template('party_index.html', **{
         'party_list': dal.get_party_list(),
         'breadcrumb': ['Partide'],
+        'seats': seats,
+        'seats_total': sum(r['count'] for r in seats),
     })
 
 

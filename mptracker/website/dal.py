@@ -1951,7 +1951,7 @@ class DataAccess:
                 MpGroup.short_name,
                 func.count(MpGroupMembership.id),
             )
-            .join(MpGroup.memberships)
+            .join(MpGroupMembership.mp_group)
             .filter(func.upper(MpGroupMembership.interval) == 'infinity')
             .group_by(MpGroup.short_name)
             .all()
