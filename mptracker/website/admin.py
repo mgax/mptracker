@@ -1,10 +1,21 @@
 import flask
 from flask.ext.oauthlib.client import OAuth
+from flask.ext.principal import (
+    Principal, Permission, RoleNeed,
+    Identity, identity_changed,
+)
+
+principals = Principal(use_sessions=False)
+
+class perm:
+    admin = Permission(RoleNeed('admin'))
 
 admin = flask.Blueprint('admin', __name__)
 
 
 def setup_admin(app):
+    principals.init_app(app)
+
     oauth = OAuth(app)
     google = oauth.remote_app(
         'google',
@@ -50,9 +61,16 @@ def setup_admin(app):
     def get_google_oauth_token():
         return flask.session.get('identity', {}).get('google_token')
 
+    @principals.identity_loader
+    def load_identity():
+        data = flask.session.get('identity')
+        if data is not None:
+            return Identity(data['email'])
+
     app.register_blueprint(admin)
 
 
 @admin.route('/admin')
+#@perm.admin.require()
 def home():
-    return repr(flask.session.get('identity'))
+    return repr(flask.g.identity)

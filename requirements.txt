@@ -7,6 +7,7 @@ cssselect==0.8
 Flask-Admin==1.0.7
 Flask-Login==0.2.6
 Flask-OAuthlib==0.7.0
+Flask-Principal==0.4.0
 Flask-RQ==0.2
 Flask-Script==0.6.2
 Flask-SQLAlchemy==1.0
