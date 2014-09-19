@@ -6,6 +6,7 @@ chaussette==1.0
 cssselect==0.8
 Flask-Admin==1.0.7
 Flask-Login==0.2.6
+Flask-OAuthlib==0.7.0
 Flask-RQ==0.2
 Flask-Script==0.6.2
 Flask-SQLAlchemy==1.0
@@ -15,6 +16,7 @@ Jinja2==2.7.1
 lxml==3.2.3
 Mako==0.8.1
 MarkupSafe==0.18
+oauthlib==0.6.3
 path.py==4.3
 psycopg2==2.5.1
 pyquery==1.2.8

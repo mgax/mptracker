@@ -8,12 +8,14 @@ def create_website_app():
     from mptracker import models
     from mptracker.common import common
     from mptracker.website.pages import pages
+    from mptracker.website.admin import setup_admin
 
     app = flask.Flask(__name__, static_folder='../static')
     app.config.from_pyfile('../../settings.py', silent=True)
     app.jinja_env.add_extension('jinja2.ext.do')
     app._logger = logger
     models.init_app(app)
+    setup_admin(app)
     app.register_blueprint(common)
     app.register_blueprint(pages)
 
