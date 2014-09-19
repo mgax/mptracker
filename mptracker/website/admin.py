@@ -4,6 +4,7 @@ from flask.ext.principal import (
     Principal, Permission, RoleNeed,
     Identity, identity_changed,
 )
+import requests
 
 principals = Principal(use_sessions=False)
 
@@ -40,7 +41,12 @@ def setup_admin(app):
 
     @app.route('/admin/logout')
     def logout():
-        flask.session.pop('identity', None)
+        google_token = flask.session.pop('identity', {}).get('google_token')
+        if google_token:
+            requests.get(
+                'https://accounts.google.com/o/oauth2/revoke',
+                params={'token': google_token[0]}
+            )
         return flask.redirect(flask.url_for('admin.home'))
 
     @app.route('/admin/login/google')
