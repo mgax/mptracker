@@ -9,6 +9,7 @@ from mptracker import models
 from mptracker.common import csv_lines, csv_response, buffer_on_disk
 from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
+from mptracker.website.texts import get_text
 from path import path
 
 dal = DataAccess(missing=NotFound)
@@ -100,7 +101,7 @@ def inject_nav_links():
 
 
 def template_text(name, fold=False, below_fold=False):
-    html = flask.render_template('text_%s.html' % name, layout=False)
+    html = get_text('general', name)
     fold_pattern = r'^(?P<intro>.*)<!-- fold (?P<close>.*?)-->(?P<below>.*)$'
 
     if fold:
@@ -587,7 +588,7 @@ def vote_controversy(controversy_id):
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
 @pages.route('/info/controverse', defaults={'name': 'voting_controversy'})
 def text_page(name):
-    return flask.render_template('text_%s.html' % name, layout=True)
+    return flask.render_template('text.html', text=get_text('general', name))
 
 
 @pages.route('/export')
