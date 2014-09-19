@@ -72,6 +72,12 @@ def setup_admin(app):
 
     @principals.identity_loader
     def load_identity():
+        devel_identity = app.config.get('DEVEL_IDENTITY')
+        if devel_identity:
+            identity = Identity(devel_identity)
+            identity.provides.add(role.admin)
+            return identity
+
         data = flask.session.get('identity')
         if data is not None:
             identity = Identity(data['email'])
