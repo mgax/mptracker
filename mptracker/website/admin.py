@@ -7,8 +7,11 @@ from flask.ext.principal import (
 
 principals = Principal(use_sessions=False)
 
+class role:
+    admin = RoleNeed('admin')
+
 class perm:
-    admin = Permission(RoleNeed('admin'))
+    admin = Permission(role.admin)
 
 admin = flask.Blueprint('admin', __name__)
 
@@ -65,7 +68,10 @@ def setup_admin(app):
     def load_identity():
         data = flask.session.get('identity')
         if data is not None:
-            return Identity(data['email'])
+            identity = Identity(data['email'])
+            if data['email'] in app.config.get('ADMIN_EMAILS'):
+                identity.provides.add(role.admin)
+            return identity
 
     app.register_blueprint(admin)
 
