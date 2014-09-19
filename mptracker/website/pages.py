@@ -70,7 +70,7 @@ def money(value, currency):
     )
 
 
-@pages.app_context_processor
+@pages.context_processor
 def inject_nav_links():
     return {
         'nav_link_list': [

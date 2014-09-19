@@ -77,6 +77,8 @@ def setup_admin(app):
 
 
 @admin.route('/admin')
-#@perm.admin.require()
 def home():
-    return repr(flask.g.identity)
+    if not perm.admin.can():
+        return flask.redirect(flask.url_for('login'))
+
+    return flask.render_template('admin_index.html')

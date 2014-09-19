@@ -1,0 +1,11 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="{{ url_for('static',
+    filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
+
+<body>
+
+<p>
+  <a href="{{ url_for('logout') }}">logout</a>
+  ({{ g.identity.id }})
+</p>
