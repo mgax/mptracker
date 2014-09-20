@@ -24,4 +24,24 @@
     <button type="submit" class="btn btn-primary">Save</button>
     <a href="{{ url_for('.home') }}" class="btn btn-default">Cancel</a>
   </form>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.1/ckeditor.js"></script>
+  <script>
+  (function() {
+    var options = {
+      toolbar: [
+        {name: 'styles', items: ['Format']},
+        {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike']},
+        {name: 'paragraph', items: ['NumberedList', 'BulletedList', 'Indent', 'Outdent', '-', 'Blockquote']},
+        {name: 'table', items: ['Table']},
+        {name: 'links', items: ['Link', 'Unlink', '-', 'Anchor']},
+        {name: 'subsuper', items: ['Subscript', 'Superscript']},
+        {name: 'colors', items: ['TextColor', 'BGColor']},
+        {name: 'tools', items: ['SpecialChar', '-', 'RemoveFormat', 'Maximize', '-', 'Source']}
+      ]
+    }
+    CKEDITOR.replace('edit-content', options);
+    CKEDITOR.replace('edit-more-content', options);
+  })();
+  </script>
 {% endblock %}
