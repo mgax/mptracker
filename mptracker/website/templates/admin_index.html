@@ -1,20 +1,18 @@
-<!doctype html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="{{ url_for('static',
-    filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
+{% extends 'admin_layout.html' %}
 
-<body>
 
-<p>
-  <a href="{{ url_for('logout') }}">logout</a>
-  ({{ g.identity.id }})
-</p>
+{% block content %}
+  <p>
+    <a href="{{ url_for('logout') }}">logout</a>
+    ({{ g.identity.id }})
+  </p>
 
-<ul class="unstyled">
-  {% for (ns, name) in text_list %}
-    <li>
-      {%- set url = url_for('.edit', ns=ns, name=name) %}
-      <a href="{{ url }}">{{ ns }}/{{ name }}</a>
-    </li>
-  {% endfor %}
-</ul>
+  <ul>
+    {% for (ns, name) in text_list %}
+      <li>
+        {%- set url = url_for('.edit', ns=ns, name=name) %}
+        <a href="{{ url }}">{{ ns }}/{{ name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,10 +1,8 @@
-<!doctype html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="{{ url_for('static',
-    filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
+{% extends 'admin_layout.html' %}
 
-<body>
 
-<p>
-  <a href="{{ url_for('login_google') }}">login cu google</a>
-</p>
+{% block content %}
+  <p>
+    <a href="{{ url_for('login_google') }}">login cu google</a>
+  </p>
+{% endblock %}

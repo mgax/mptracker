@@ -1,11 +1,7 @@
-<!doctype html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="{{ url_for('static',
-    filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
+{% extends 'admin_layout.html' %}
 
-<body>
 
-<div class="container">
+{% block content %}
   <h1>Edit <tt>{{ ns }}/{{ name }}</tt></h1>
 
   <form method="post">
@@ -28,4 +24,4 @@
     <button type="submit" class="btn btn-primary">Save</button>
     <a href="{{ url_for('.home') }}" class="btn btn-default">Cancel</a>
   </form>
-</div>
+{% endblock %}
