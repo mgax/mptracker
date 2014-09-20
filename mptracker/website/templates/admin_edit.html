@@ -1,0 +1,31 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="{{ url_for('static',
+    filename='lib/bootstrap-3.0.2/css/bootstrap.min.css') }}">
+
+<body>
+
+<div class="container">
+  <h1>Edit <tt>{{ ns }}/{{ name }}</tt></h1>
+
+  <form method="post">
+    <div class="form-group">
+      <label for="edit-content">Content</label>
+      <textarea name="content"
+        id="edit-content" class="form-control" rows="6">
+        {{- content|safe -}}
+      </textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="edit-more-content">More content</label>
+      <textarea name="more_content"
+        id="edit-more-content" class="form-control" rows="16">
+        {{- more_content|safe -}}
+      </textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{{ url_for('.home') }}" class="btn btn-default">Cancel</a>
+  </form>
+</div>

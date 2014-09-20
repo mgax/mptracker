@@ -9,3 +9,12 @@
   <a href="{{ url_for('logout') }}">logout</a>
   ({{ g.identity.id }})
 </p>
+
+<ul class="unstyled">
+  {% for (ns, name) in text_list %}
+    <li>
+      {%- set url = url_for('.edit', ns=ns, name=name) %}
+      <a href="{{ url }}">{{ ns }}/{{ name }}</a>
+    </li>
+  {% endfor %}
+</ul>

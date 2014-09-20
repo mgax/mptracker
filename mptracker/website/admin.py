@@ -5,6 +5,7 @@ from flask.ext.principal import (
     Identity, identity_changed,
 )
 import requests
+from mptracker.website.texts import get_text_list, get_text, save_text
 
 principals = Principal(use_sessions=False)
 
@@ -97,4 +98,27 @@ def home():
     if not perm.admin.can():
         return flask.redirect(flask.url_for('login'))
 
-    return flask.render_template('admin_index.html')
+    return flask.render_template(
+        'admin_index.html',
+        text_list=get_text_list(),
+    )
+
+
+@admin.route('/admin/edit', methods=['GET', 'POST'])
+def edit():
+    ns = flask.request.args['ns']
+    name = flask.request.args['name']
+    text = get_text(ns, name)
+
+    if flask.request.method == 'POST':
+        form = flask.request.form
+        save_text(ns, name, form['content'], form['more_content'])
+        return flask.redirect(flask.url_for('.edit', ns=ns, name=name))
+
+    return flask.render_template(
+        'admin_edit.html',
+        ns=ns,
+        name=name,
+        content=text['content'],
+        more_content=text['more_content'],
+    )
