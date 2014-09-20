@@ -113,6 +113,7 @@ def edit():
     if flask.request.method == 'POST':
         form = flask.request.form
         save_text(ns, name, form['content'], form['more_content'])
+        flask.flash("Text saved", 'success')
         return flask.redirect(flask.url_for('.edit', ns=ns, name=name))
 
     return flask.render_template(
