@@ -92,7 +92,7 @@ def setup_admin(app):
     app.register_blueprint(admin)
 
 
-@admin.route('/admin')
+@admin.route('/admin/')
 def home():
     if not perm.admin.can():
         return flask.redirect(flask.url_for('login'))
