@@ -36,6 +36,10 @@ def setup_admin(app):
 
     @app.route('/admin/login')
     def login():
+        return flask.render_template('admin_login.html')
+
+    @app.route('/admin/login/google')
+    def login_google():
         url = flask.url_for('authorized', _external=True)
         return google.authorize(callback=url)
 
@@ -49,7 +53,7 @@ def setup_admin(app):
             )
         return flask.redirect(flask.url_for('admin.home'))
 
-    @app.route('/admin/login/google')
+    @app.route('/admin/login/google_callback')
     @google.authorized_handler
     def authorized(resp):
         if resp is None:
