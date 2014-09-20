@@ -603,6 +603,23 @@ class ScrapedProposalPage(db.Model):
     parsed = db.Column(db.Boolean, nullable=False, default=False)
 
 
+class Text(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    ns = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=False)
+
+
+class TextVersion(db.Model):
+    id = db.Column(UUID, primary_key=True, default=random_uuid)
+    text_id = db.Column(db.ForeignKey('text.id'), nullable=False)
+    time = db.Column(db.DateTime)
+    content = db.Column(db.Text)
+    more_content = db.Column(db.Text)
+
+    text = db.relationship('Text',
+        backref=db.backref('versions', lazy='dynamic'))
+
+
 class LookupError(Exception):
     pass
 
