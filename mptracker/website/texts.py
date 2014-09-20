@@ -1,4 +1,14 @@
+from mptracker.models import Text, TextVersion
+
+
 def get_text(ns, name):
-    assert ns == 'general'
-    import flask
-    return flask.render_template('text_%s.html' % name)
+    text = Text.query.filter_by(ns=ns, name=name).first()
+    if text:
+        version = text.versions.order_by(TextVersion.time.desc()).first()
+        if version:
+            return {
+                'content': version.content,
+                'more_content': version.more_content,
+            }
+
+    return {'content': "", 'more_content': ""}

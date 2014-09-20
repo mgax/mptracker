@@ -101,18 +101,16 @@ def inject_nav_links():
 
 
 def template_text(name, fold=False, below_fold=False):
-    html = get_text('general', name)
-    fold_pattern = r'^(?P<intro>.*)<!-- fold (?P<close>.*?)-->(?P<below>.*)$'
+    text = get_text('general', name)
 
     if fold:
-        match = re.match(fold_pattern, html, re.DOTALL)
-        if match is not None:
-            html = match.group('intro') + match.group('close')
+        html = text['content']
 
     elif below_fold:
-        match = re.match(fold_pattern, html, re.DOTALL)
-        if match is not None:
-            html = re.match(fold_pattern, html, re.DOTALL).group('below')
+        html = text['more_content']
+
+    else:
+        html = text['content'] + text['more_content']
 
     return jinja2.Markup(html)
 
@@ -588,7 +586,11 @@ def vote_controversy(controversy_id):
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
 @pages.route('/info/controverse', defaults={'name': 'voting_controversy'})
 def text_page(name):
-    return flask.render_template('text.html', text=get_text('general', name))
+    text = get_text('general', name)
+    return flask.render_template(
+        'text.html',
+        text=text['content'] + text['more_content'],
+    )
 
 
 @pages.route('/export')
