@@ -120,7 +120,7 @@
     url: {{ url_for('.person_index_search_policy')|tojson|safe }}
   });
 
-  app.person_search = new app.PersonSearch({
+  app.person_search = new app.PersonContractSearch({
     el: $('form[name=search-by-contracts]'),
     url: {{ url_for('.person_index_search_contracts')|tojson|safe }}
   });

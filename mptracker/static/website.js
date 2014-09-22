@@ -79,6 +79,14 @@ app.PersonPolicySearch = app.PersonSearch.extend({
 });
 
 
+app.PersonContractSearch = app.PersonSearch.extend({
+
+    item_html: app.template(
+        '<li><a href="{{ url }}#contracte-cu-statul">{{ name }}</a></li>'),
+
+});
+
+
 app.months_en = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 app.months_ro = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
