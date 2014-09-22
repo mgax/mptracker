@@ -1430,6 +1430,7 @@ def daily_gdrive():
     get_stop_words()
     #get_committee_attendance()
     get_proposal_controversy()
+    get_member_count()
 
 
 @scraper_manager.command
