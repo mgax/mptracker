@@ -61,8 +61,20 @@ app.PersonSearch = Backbone.View.extend({
 
 app.PersonPolicySearch = app.PersonSearch.extend({
 
-    item_html: app.template(
-        '<li><a href="{{ url }}">{{ name }}</a> ({{ count }})</li>')
+    _tmpl: app.template(
+      '<li><a href="{{ url }}/politici/{{ policy_slug }}">' +
+        '{{ name }}</a> ({{ count }})</li>'),
+
+    item_html: function(vars) {
+        vars.policy_slug = this.policy_slug;
+        return this._tmpl(vars);
+    },
+
+    update: function(query) {
+        console.log(query);
+        this.policy_slug = query.policy_slug;
+        return app.PersonSearch.prototype.update.apply(this, arguments);
+    }
 
 });
 
