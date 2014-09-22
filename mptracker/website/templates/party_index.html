@@ -10,6 +10,7 @@
   <ul class="parties-list">
     {% for party in party_list %}
       <li>
+        {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
         <a href="{{ url }}">
           <div class="party-logo">
             {%- if party.logo_url %}
@@ -17,7 +18,6 @@
             {%- endif %}
           </div>
 
-          {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
           <p>{{ party.name }}</p>
 
         </a>
