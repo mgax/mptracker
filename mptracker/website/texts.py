@@ -30,4 +30,8 @@ def get_text_list():
     for text in Text.query:
         rv.add((text.ns, text.name))
 
+    from mptracker.website.pages import dal
+    for policy in dal.get_policy_list():
+        rv.add(('policy', policy['slug']))
+
     return sorted(rv)

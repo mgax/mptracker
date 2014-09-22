@@ -548,6 +548,7 @@ def policy_detail(policy_slug=None):
     else:
         policy_name = dal.get_policy(policy_slug)['name']
     ctx = {
+        'policy_slug': policy_slug,
         'policy_name': policy_name,
         'proposal_list': dal.get_policy_proposal_list(policy_slug),
         'question_list': dal.get_policy_question_list(policy_slug),
