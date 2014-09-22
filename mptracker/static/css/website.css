@@ -155,7 +155,7 @@ a:hover {
   border-radius: 5px;
 }
 .content-home .home-section {
-  border-bottom: 1px solid #dce0e0;
+  border-bottom: 2px solid #1bbaba;
   margin: 0 20px;
 }
 .content-home .home-section:last-child {
@@ -241,7 +241,7 @@ a:hover {
   margin-bottom: 20px;
 }
 .content-home .sub-section.comparison {
-  border-bottom: 1px solid #dce0e0;
+  border-bottom: 2px solid #1bbaba;
 }
 .content-home .sub-section.comparison h4 {
   font-size: 22px;
@@ -334,7 +334,7 @@ span.number {
   color: #747d84;
 }
 .proposals {
-  border-bottom: 1px solid #dce0e0;
+  border-bottom: 2px solid #1bbaba;
   font-size: 14px;
 }
 .proposals:last-child {
@@ -417,7 +417,7 @@ span.number {
   font-size: 13px;
 }
 .persons-list {
-  border-bottom: 1px solid #dce0e0;
+  border-bottom: 2px solid #1bbaba;
 }
 .persons-list .person {
   border: 1px solid #dde1db;
