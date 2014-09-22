@@ -25,13 +25,17 @@ def save_text(ns, name, content, more_content):
 
 
 def get_text_list():
+    from mptracker.website.pages import dal
+
     rv = set()
 
     for text in Text.query:
         rv.add((text.ns, text.name))
 
-    from mptracker.website.pages import dal
     for policy in dal.get_policy_list():
         rv.add(('policy', policy['slug']))
+
+    for party in dal.get_parties():
+        rv.add(('party', party.get_name()))
 
     return sorted(rv)
