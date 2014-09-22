@@ -460,8 +460,11 @@ def party_index():
         dict(r, color=PARTY_COLOR.get(r['party']))
         for r in dal.get_seats()
     ]
+    party_list = dal.get_party_list()
+    for party in party_list:
+        party['logo_url'] = logo_url(dal.get_party(party['short_name']))
     return flask.render_template('party_index.html', **{
-        'party_list': dal.get_party_list(),
+        'party_list': party_list,
         'breadcrumb': ['Partide'],
         'seats': seats,
         'seats_total': sum(r['count'] for r in seats),
