@@ -215,6 +215,7 @@
                     <div class="policychart"></div>
                     <ul>
                     {%- for policy in policy_domains %}
+                      {%- if policy.interest > 0.001 %}
                         <li>
                             {{ policy.name|link_for(
                                 '.person_policy',
@@ -223,6 +224,7 @@
                                 ) }}
                             ({{ policy.interest|percent }})
                         </li>
+                      {%- endif %}
                     {%- endfor %}
                     </ul>
                 </div>
