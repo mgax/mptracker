@@ -44,7 +44,6 @@ STOP_WORDS_CSV_KEY = '0AlBmcLkxpBOXdDRtTExMWDh1Mm1IQ3dVQ085RkJudGc'
 MINORITIES_CSV_KEY = '0Ao01Fbm0wOCAdC1neEk0RXV1Z05hRG9QU2FPTlNYZ0E'
 COMMITTEE_ROLL_CALL_CSV_KEY = '1w4IufznSMLMxMOxfS-ggp3IwXePEoDHiTAjAsHgMOpE'
 PROPOSAL_CONTROVERSY_CSV_KEY = '1gsEHB8PhMMgEVJEv-yCBopFl2aMfnXg_JVaJ1aUgLpI'
-PARTY_DESCRIPTION_CSV_KEY = '1cDN2PXcuF0qZE0fBQmAzCnWvUemCo0iacNOy4_tAsIE'
 MEMBER_COUNT_CSV_KEY = '13FcF2cCqM7OL0ML9UFchyOnn9uUjYTs7RFIIvLFztFs'
 PICTURES_FOLDER_KEY = '0B1BmcLkxpBOXVGZyNHhqc0tWZkk'
 
@@ -1431,7 +1430,6 @@ def daily_gdrive():
     get_stop_words()
     #get_committee_attendance()
     get_proposal_controversy()
-    get_party_description()
 
 
 @scraper_manager.command
@@ -1483,25 +1481,6 @@ def get_proposal_controversy():
                       'proposal_id': proposal_id,
                       'press_links': row['Link presa']}
             add(record)
-
-    models.db.session.commit()
-
-
-@scraper_manager.command
-def get_party_description():
-    patcher = TablePatcher(
-        models.MpGroup,
-        models.db.session,
-        key_columns=['year', 'short_name'],
-    )
-
-    with patcher.process() as add_mp_group:
-        for row in get_gdrive_csv(PARTY_DESCRIPTION_CSV_KEY):
-            add_mp_group({
-                'year': row['legislatura'],
-                'short_name': row['short_name'],
-                'description': row['description'],
-            })
 
     models.db.session.commit()
 
