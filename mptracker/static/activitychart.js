@@ -7,16 +7,34 @@ app.render_activitychart = function(options) {
     var data = options.data;
     var margin = 25;
     var width = box.width() - 2*margin;
-    var height = 100;
-
-    var svg = d3.select(box[0])
-        .append('svg')
-        .attr('width', width + 2*margin)
-        .attr('height', height + 2*margin)
-        .append("g")
-          .attr("transform", "translate(" + margin + "," + margin + ")");
 
     var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+    var color = d3.scale.category10();
+
+    var labels = ['proposals', 'questions'];
+    color.domain(labels);
+
+    data.forEach(function(d) {
+      d.date = parseDate(d.date);
+    });
+
+    var activities = color.domain().map(function(name) {
+      return {
+        name: name,
+        values: data.map(function(d) {
+          return {date: d.date, value: +d[name]};
+        })
+      };
+    });
+
+    var max_y = d3.max([
+      10,
+      d3.max(activities, function(act) {
+        return d3.max(act.values, function(d) { return d.value });
+      })
+    ]);
+    var height = 5 * max_y;
 
     var x = d3.time.scale()
         .range([0, width]);
@@ -24,7 +42,12 @@ app.render_activitychart = function(options) {
     var y = d3.scale.linear()
         .range([height, 0]);
 
-    var color = d3.scale.category10();
+    var svg = d3.select(box[0])
+        .append('svg')
+        .attr('width', width + 2*margin)
+        .attr('height', height + 2*margin)
+        .append("g")
+          .attr("transform", "translate(" + margin + "," + margin + ")");
 
     var xAxis = d3.svg.axis()
         .ticks(6)
@@ -47,22 +70,6 @@ app.render_activitychart = function(options) {
         .x(function(d) { return x(d.date); })
         .y(function(d) { return d.vacation ? height : 0 });
 
-    var labels = ['proposals', 'questions'];
-    color.domain(labels);
-
-    data.forEach(function(d) {
-      d.date = parseDate(d.date);
-    });
-
-    var activities = color.domain().map(function(name) {
-      return {
-        name: name,
-        values: data.map(function(d) {
-          return {date: d.date, value: +d[name]};
-        })
-      };
-    });
-
     if(options.one_year) {
       var today = new Date();
       var one_year_ago = new Date();
@@ -73,7 +80,7 @@ app.render_activitychart = function(options) {
       x.domain(d3.extent(data, function(d) { return d.date; }));
     }
 
-    y.domain([0, 15]);
+    y.domain([0, max_y]);
 
     svg.append("path")
         .datum(data)
