@@ -27,10 +27,19 @@ def save_text(ns, name, content, more_content):
 def get_text_list():
     from mptracker.website.pages import dal
 
+    GENERAL_PAGES = [
+        'donations', 'editorial', 'export', 'local', 'migrations',
+        'party_intro', 'policy', 'proposal_controversy', 'social',
+        'voting_controversy',
+    ]
+
     rv = set()
 
     for text in Text.query:
         rv.add((text.ns, text.name))
+
+    for name in GENERAL_PAGES:
+        rv.add(('general', name))
 
     for policy in dal.get_policy_list():
         rv.add(('policy', policy['slug']))
