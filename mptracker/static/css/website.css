@@ -914,6 +914,17 @@ figure {
   width: 100%;
   height: 400px;
 }
+.page-footer {
+  text-align: center;
+  color: #222;
+  margin-bottom: 40px;
+}
+.page-footer a {
+  color: #222;
+}
+.page-footer a:hover {
+  text-decoration: underline;
+}
 @media screen and (max-width: 1200px) {
   .topbar .navbar ul.nav.navbar-nav li a {
     font-size: 13px;

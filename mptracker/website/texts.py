@@ -28,8 +28,19 @@ def get_text_list():
     from mptracker.website.pages import dal
 
     GENERAL_PAGES = [
-        'donations', 'editorial', 'export', 'local', 'migrations',
-        'party_intro', 'policy', 'proposal_controversy', 'voting_controversy',
+        'about',
+        'contact',
+        'donations',
+        'editorial',
+        'export',
+        'local',
+        'migrations',
+        'party_intro',
+        'policy',
+        'proposal_controversy',
+        'team',
+        'terms_of_use',
+        'voting_controversy',
     ]
 
     rv = set()

@@ -586,6 +586,10 @@ def vote_controversy(controversy_id):
 @pages.route('/info/editorial', defaults={'name': 'editorial'})
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
 @pages.route('/info/controverse', defaults={'name': 'voting_controversy'})
+@pages.route('/info/despre', defaults={'name': 'about'})
+@pages.route('/info/echipa', defaults={'name': 'team'})
+@pages.route('/info/contact', defaults={'name': 'contact'})
+@pages.route('/info/termeni', defaults={'name': 'terms_of_use'})
 def text_page(name):
     text = get_text('general', name)
     return flask.render_template(

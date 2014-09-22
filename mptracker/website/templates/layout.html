@@ -34,6 +34,7 @@
         {% endif %}
       {% block content %}{% endblock %}
     </div>
+    {% include 'footer.html' %}
 
     <script src="{{ url_for('static',
         filename='lib/jquery-1.10.1/jquery.min.js') }}"></script>
