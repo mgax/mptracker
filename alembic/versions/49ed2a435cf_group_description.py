@@ -38,6 +38,10 @@ def upgrade():
 
     for name, description in data:
         text_id = random_uuid()
+        content = (
+            jinja2.Markup('<p><strong>%s</strong> %s</p>')
+            % (name, description)
+        )
         op.execute(text.insert().values({
             'id': text_id,
             'ns': 'party',
@@ -47,7 +51,7 @@ def upgrade():
             'id': random_uuid(),
             'text_id': text_id,
             'time': time,
-            'content': '<p>' + jinja2.escape(description) + '</p>',
+            'content': content,
             'more_content': '',
         }))
 
