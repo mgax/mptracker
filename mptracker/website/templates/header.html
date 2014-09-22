@@ -2,7 +2,7 @@
     <div class="container">
         <nav class="navbar navbar-default">
             <a class="navbar-brand" href="{{ url_for('pages.home') }}">
-                <img src="/static/img/open-parlament.png" alt="Open Parlament" title="Open Parlament" />
+                <img src="{{ url_for('static', filename='img/open-parlament.png') }}" alt="Open Parlament" title="Open Parlament" />
             </a>
             <ul class="nav navbar-nav navbar-collapse">
             {%- for link in nav_link_list %}
