@@ -33,7 +33,7 @@ function calculateVennDistance(f, debug) {
 app.render_similarity_vote_venn = function(options) {
     var box = options.container;
     var margin = 25;
-    var height = 100;
+    var height = 75;
     var width = box.width() - 2*margin;
     var r = 50;
 
@@ -42,7 +42,7 @@ app.render_similarity_vote_venn = function(options) {
         .attr('width', width + 2*margin)
         .attr('height', height + 2*margin)
         .append("g")
-          .attr("transform", "translate(" + (margin + 4*r) + "," + margin + ")");
+          .attr("transform", "translate(" + (margin + 4*r) + ",40)");
 
     var percent = Math.round(options.overlap * 100);
     var text = svg
