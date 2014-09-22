@@ -38,6 +38,13 @@
             {% if vote_similarity_list %}
                 <h2>Grad de similaritate la vot</h2>
                 <div id="compare-votes"></div>
+                <p>
+                  Graficul în calcul toate sesiunile de vot în care a
+                  votat parlamentarul curent, și redă, pentru fiecare
+                  dintre ceilalți deputați, procentul în care au votat
+                  la fel. Dacă celălat deputat nu a votat, similaritate
+                  la vot scade.
+                </p>
             {% endif %}
 
             {% for similar_position in same_position_category %}
