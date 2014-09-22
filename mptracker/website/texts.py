@@ -29,8 +29,7 @@ def get_text_list():
 
     GENERAL_PAGES = [
         'donations', 'editorial', 'export', 'local', 'migrations',
-        'party_intro', 'policy', 'proposal_controversy', 'social',
-        'voting_controversy',
+        'party_intro', 'policy', 'proposal_controversy', 'voting_controversy',
     ]
 
     rv = set()
