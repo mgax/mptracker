@@ -5,18 +5,16 @@
 app.render_policy_chart = function(options) {
 
     var data = [],
-        other = 0;
+        other = 1;
 
     options.data.forEach(function(d) {
+        other -= d.interest;
         if(d.interest > (options.cutoff || 0)) {
             data.push(d);
         }
-        else {
-            other += d.interest;
-        }
     });
 
-    if(other) {
+    if(other > .001) {
         data.push({
             slug: 'other',
             name: "altele",
