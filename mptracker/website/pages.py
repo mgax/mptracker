@@ -100,8 +100,8 @@ def inject_nav_links():
     }
 
 
-def template_text(name, fold=False, below_fold=False):
-    text = get_text('general', name)
+def template_text(name, fold=False, below_fold=False, ns='general'):
+    text = get_text(ns, name)
 
     if fold:
         html = text['content']

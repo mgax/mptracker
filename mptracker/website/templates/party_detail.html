@@ -24,9 +24,7 @@
                   {% endif %}
                 </div>
                 <div class="col-sm-9">
-                    {%- if party['description'] %}
-                        <p><strong>{{ party['short_name'] }}</strong> {{ party['description'] }}</p>
-                    {%- endif %}
+                  {{ text(party['short_name'], ns='party') }}
                 </div>
             </div>
 
