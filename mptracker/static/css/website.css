@@ -907,6 +907,9 @@ figure {
 .policy-index-page .policy-list > li a:hover {
   color: #ddd;
 }
+.export-page p {
+  margin-bottom: 25px;
+}
 .embed-pdf {
   width: 100%;
   height: 400px;
