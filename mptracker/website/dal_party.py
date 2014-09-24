@@ -242,7 +242,7 @@ class DalParty:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == self.party)
             .filter(MpGroupMembership.interval.contains(Question.date))
-            .outerjoin(Question.policy_domain)
+            .join(Question.policy_domain)
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in question_query:
@@ -260,7 +260,7 @@ class DalParty:
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group == self.party)
             .filter(MpGroupMembership.interval.contains(Proposal.date))
-            .outerjoin(Proposal.policy_domain)
+            .join(Proposal.policy_domain)
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in proposal_query:

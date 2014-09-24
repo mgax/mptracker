@@ -802,7 +802,7 @@ class DataAccess:
             .join(Question.asked)
             .join(Ask.mandate)
             .filter_by(year=2012)
-            .outerjoin(Question.policy_domain)
+            .join(Question.policy_domain)
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in question_query:
@@ -818,7 +818,7 @@ class DataAccess:
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .filter_by(year=2012)
-            .outerjoin(Proposal.policy_domain)
+            .join(Proposal.policy_domain)
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in proposal_query:

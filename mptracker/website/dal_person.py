@@ -443,7 +443,7 @@ class DalPerson:
             .select_from(Question)
             .join(Question.asked)
             .filter_by(mandate=self.mandate)
-            .outerjoin(Question.policy_domain)
+            .join(Question.policy_domain)
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in question_query:
@@ -458,7 +458,7 @@ class DalPerson:
             .filter(Proposal.date >= LEGISLATURE_2012_START)
             .join(Proposal.sponsorships)
             .filter_by(mandate=self.mandate)
-            .outerjoin(Proposal.policy_domain)
+            .join(Proposal.policy_domain)
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in proposal_query:
