@@ -46,6 +46,7 @@ COMMITTEE_ROLL_CALL_CSV_KEY = '1w4IufznSMLMxMOxfS-ggp3IwXePEoDHiTAjAsHgMOpE'
 PROPOSAL_CONTROVERSY_CSV_KEY = '1gsEHB8PhMMgEVJEv-yCBopFl2aMfnXg_JVaJ1aUgLpI'
 MEMBER_COUNT_CSV_KEY = '13FcF2cCqM7OL0ML9UFchyOnn9uUjYTs7RFIIvLFztFs'
 PICTURES_FOLDER_KEY = '0B1BmcLkxpBOXVGZyNHhqc0tWZkk'
+COMMITTEE_POLICY_CSV_KEY = '0AlBmcLkxpBOXdHQ5clB4a1hyUUxlTE5pTmNKa0ZzYmc'
 
 
 def _get_config_cache_name():
@@ -1431,6 +1432,7 @@ def daily_gdrive():
     #get_committee_attendance()
     get_proposal_controversy()
     get_member_count()
+    get_committee_policy()
 
 
 @scraper_manager.command
@@ -1503,5 +1505,33 @@ def get_member_count():
                     'year': int(year),
                     'count': int(count),
                 })
+
+    models.db.session.commit()
+
+
+@scraper_manager.command
+def get_committee_policy():
+    patcher = TablePatcher(
+        models.MpCommittee,
+        models.db.session,
+        key_columns=['id'],
+    )
+
+    with patcher.process() as update_committee:
+        for row in get_gdrive_csv(COMMITTEE_POLICY_CSV_KEY):
+            slug = row['policy']
+
+            policy_id = None
+            if slug:
+                policy = models.PolicyDomain.query.filter_by(slug=slug).first()
+                if policy is None:
+                    logger.warn("Unknown policy domain %r", slug)
+                else:
+                    policy_id = policy.id
+
+            update_committee(
+                dict(id=row['id'], policy_domain_id=policy_id),
+                create=False
+            )
 
     models.db.session.commit()
