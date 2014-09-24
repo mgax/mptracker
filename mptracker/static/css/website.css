@@ -81,8 +81,14 @@ a:hover {
   padding: 5px;
   float: right;
 }
-.topbar .navbar .navbar-social img {
-  height: 25px;
+.topbar .navbar .navbar-social a .social-button {
+  display: inline-block;
+  padding: 5px;
+  border-radius: 50px;
+  min-width: 30px;
+  text-align: center;
+  background: #549ACD;
+  color: white;
 }
 .home-header-search {
   margin: 80px 0 20px 0;

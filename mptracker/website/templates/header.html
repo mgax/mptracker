@@ -12,14 +12,25 @@
             {%- endfor %}
               <li class="navbar-social">
                 <a href="http://www.facebook.com/OpenPolitics.ro">
-                    <img src="/static/img/icons/facebook.jpg" />
+                  <span class="social-button">
+                    <i class="fa fa-facebook"></i>
+                  </span>
                 </a>
 
                 <a href="https://plus.google.com/104858678072022158034/">
-                    <img src="/static/img/icons/google-plus.jpg" />
+                  <span class="social-button">
+                    <i class="fa fa-google-plus"></i>
+                  </span>
                 </a>
                 <a href="http://www.youtube.com/user/OpenPoliticsRO?feature=watch">
-                    <img src="/static/img/icons/youtube.jpg" />
+                  <span class="social-button">
+                    <i class="fa fa-youtube"></i>
+                  </span>
+                </a>
+                <a href="{{ url_for('pages.text_page', name='contact') }}">
+                  <span class="social-button">
+                    <i class="fa fa-envelope"></i>
+                  </span>
                 </a>
               </li>
             </ul>
