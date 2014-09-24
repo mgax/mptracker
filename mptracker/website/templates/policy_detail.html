@@ -23,9 +23,10 @@
                     {%- for party in active_parties %}
                         <li>
                             {{ party.short_name|link_for(
-                            '.party_detail',
-                            party_short_name=party.short_name)
-                            }}
+                            '.party_policy',
+                            party_short_name=party.short_name,
+                            policy_slug=policy_slug,
+                            ) }}
                             ({{ party.interest|percent }})
                         </li>
                     {%- endfor %}
