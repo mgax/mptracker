@@ -26,7 +26,8 @@ def iter_committees(proposal):
                     .filter_by(cdep_id=int(args['idc']))
                     .first()
                 )
-                assert committee is not None
+                assert committee is not None, \
+                    "No such committee: %r/%r" % (args['cam'], args['idc'])
                 yield committee
 
 
