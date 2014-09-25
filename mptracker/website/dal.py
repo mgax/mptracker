@@ -868,3 +868,14 @@ class DataAccess:
             offset += count
 
         return rv
+
+    def get_policy_committees(self, slug):
+        policy = PolicyDomain.query.filter_by(slug=slug).one()
+        return [
+            {
+                'name': committee.name,
+                'id': committee.id,
+                'chamber': committee.chamber_id,
+            }
+            for committee in policy.committees.order_by('-chamber_id', 'name')
+        ]

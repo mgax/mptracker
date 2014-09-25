@@ -17,6 +17,18 @@
       {{ questions_table(question_list) }}
     </div>
     <div class="col-sm-4">
+      <h4>Comisii parlamentare</h4>
+
+      <ul class="list-unstyled">
+        {%- for committee in committee_list %}
+          {%- set url = url_for('.committee_detail', committee_id=committee.id) %}
+          <li>
+            <a href="{{ url }}">{{ committee.name }}</a>
+            ({{ CHAMBER_NAME[committee.chamber] }})
+          </li>
+        {%- endfor %}
+      </ul>
+
       <h4>Partide active</h4>
 
       <ul class="list-unstyled">

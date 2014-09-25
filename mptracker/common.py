@@ -80,6 +80,12 @@ POLICY_COLOR = {
   'other':                 '#CCCCCC',
 }
 
+CHAMBER_NAME = {
+    0: "comună",
+    1: "senat",
+    2: "camera deputaților",
+}
+
 
 class UuidConverter(BaseConverter):
 
@@ -121,6 +127,7 @@ def inject_constants(state):
         'QUESTION_TYPE_LABEL': QUESTION_TYPE_LABEL,
         'PARTY_COLOR': PARTY_COLOR,
         'POLICY_COLOR': POLICY_COLOR,
+        'CHAMBER_NAME': CHAMBER_NAME,
         'POSITION_CATEGORY_TITLE': {
           'minister': "ministru",
           'permanent-bureau': "membru al biroului permanent",

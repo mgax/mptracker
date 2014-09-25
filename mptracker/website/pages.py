@@ -558,6 +558,7 @@ def policy_detail(policy_slug=None):
         'active_parties': dal.get_policy_top_parties(policy_slug),
         'breadcrumb': ['Domenii de politici publice', policy_name],
         'active_people': dal.search_person_by_policy(policy_slug),
+        'committee_list': dal.get_policy_committees(policy_slug),
     }
     return flask.render_template('policy_detail.html', **ctx)
 
@@ -584,6 +585,11 @@ def policy_proposal(proposal_id):
 def vote_controversy(controversy_id):
     ctx = dal.get_vote_controversy(controversy_id)
     return flask.render_template('policy_vote_controversy.html', **ctx)
+
+
+@pages.route('/politici/comisii/<uuid:committee_id>')
+def committee_detail(committee_id):
+    return '[%s]' % committee_id
 
 
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local'})
