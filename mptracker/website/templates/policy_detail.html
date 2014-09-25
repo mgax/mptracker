@@ -50,8 +50,9 @@
         {%- for person in active_people %}
           <li>
             {{ person.name|link_for(
-                '.person_detail',
+                '.person_policy',
                 person_slug=person.slug,
+                policy_slug=policy_slug,
               ) }}
             ({{ person.count }})
           </li>
