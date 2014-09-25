@@ -210,7 +210,7 @@ class DataAccess:
         return self.get_policy_tacit_approval_qs().count()
 
     def get_controversy_count(self):
-        return self.get_policy_controversy_qs().count()
+        return ProposalControversy.query.count()
 
     def get_question_details(self, question_id):
         question = Question.query.get(question_id)
@@ -411,12 +411,13 @@ class DataAccess:
     def get_policy_tacit_approval_count(self):
         return self.get_policy_tacit_approval_qs().count()
 
-    def get_policy_controversy_qs(self):
-        return Proposal.query.join(ProposalControversy)
-
     def get_policy_controversy_list(self, limit=None):
         qs = (
-            self.get_policy_controversy_qs()
+            db.session.query(
+                ProposalControversy,
+                Proposal,
+            )
+            .join(ProposalControversy.proposal)
             .order_by(Proposal.modification_date.desc())
         )
         if limit:
@@ -424,17 +425,17 @@ class DataAccess:
 
         return [
             {
-                'title': proposal.title,
+                'title': controversy.title,
                 'id': proposal.id,
                 'status': proposal.status,
                 'tacit_approval': pluck_tacit_approval(proposal),
                 'controversy': proposal.controversy.all(),
             }
-            for proposal in qs
+            for (controversy, proposal) in qs
         ]
 
     def get_policy_controversy_count(self):
-        return self.get_policy_controversy_qs().count()
+        return ProposalControversy.query.count()
 
     def get_policy_question_list(self, policy_slug=None, mandate=None, party=None):
         question_query = (
