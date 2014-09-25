@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% from '_policy_bits.html' import proposals_table, questions_table %}
+
+{% block content %}
+<div class="container-content container-general container-policies">
+  <h2>{{ name }} ({{ CHAMBER_NAME[chamber] }})</h2>
+
+  <h3>Membri</h3>
+
+  <ul class="list-unstyled">
+    {%- for member in member_list %}
+      <li>
+        {%- set url = url_for('.person_detail', person_slug=member.slug) %}
+        <a href="{{ url }}">{{ member.name }}</a>
+        {%- if member.role != "Membru" %}
+          ({{ member.role }})
+        {%- endif %}
+      </li>
+    {%- endfor %}
+  </ul>
+</div>
+{% endblock %}

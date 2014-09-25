@@ -589,7 +589,8 @@ def vote_controversy(controversy_id):
 
 @pages.route('/politici/comisii/<uuid:committee_id>')
 def committee_detail(committee_id):
-    return '[%s]' % committee_id
+    ctx = dal.get_committee_details(committee_id)
+    return flask.render_template('committee_detail.html', **ctx)
 
 
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local'})

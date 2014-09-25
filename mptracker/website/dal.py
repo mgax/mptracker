@@ -10,6 +10,8 @@ from mptracker.models import (
     GroupVote,
     Mandate,
     Match,
+    MpCommittee,
+    MpCommitteeMembership,
     MpGroup,
     MpGroupMembership,
     NameSearch,
@@ -879,3 +881,35 @@ class DataAccess:
             }
             for committee in policy.committees.order_by('-chamber_id', 'name')
         ]
+
+    def get_committee_details(self, committee_id):
+        committee = MpCommittee.query.get(committee_id)
+        if committee is None:
+            raise self.missing()
+
+        person_query = (
+            db.session.query(
+                Person,
+                MpCommitteeMembership,
+            )
+            .join(Person.mandates)
+            .join(Mandate.committee_memberships)
+            .filter(MpCommitteeMembership.mp_committee == committee)
+            .filter(MpCommitteeMembership.interval.contains(date.today()))
+            .order_by(Person.slug)
+        )
+
+        member_list = [
+            {
+                'slug': person.slug,
+                'name': person.name_first_last,
+                'role': membership.role,
+            }
+            for (person, membership) in person_query
+        ]
+
+        return {
+            'name': committee.name,
+            'chamber': committee.chamber_id,
+            'member_list': member_list,
+        }
