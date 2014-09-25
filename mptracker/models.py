@@ -453,6 +453,7 @@ class Proposal(db.Model):
 class ProposalControversy(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
 
+    title = db.Column(db.Text)
     reason = db.Column(db.Text)
     press_links = db.Column(db.Text)
 
