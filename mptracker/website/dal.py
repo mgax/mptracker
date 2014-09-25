@@ -418,7 +418,7 @@ class DataAccess:
                 Proposal,
             )
             .join(ProposalControversy.proposal)
-            .order_by(Proposal.modification_date.desc())
+            .order_by(Proposal.date.desc())
         )
         if limit:
             qs = qs.limit(limit)
