@@ -1474,15 +1474,18 @@ def get_proposal_controversy():
 
     controversy_patcher = TablePatcher(models.ProposalControversy,
                                        models.db.session,
-                                       key_columns=['reason', 'proposal_id'])
+                                       key_columns=['proposal_id'])
     with controversy_patcher.process() as add:
         for row in get_gdrive_csv(PROPOSAL_CONTROVERSY_CSV_KEY):
             proposal_id = extract_proposal(row['Link MP Tracker'])
             assert models.Proposal.query.get(proposal_id)
 
-            record = {'reason': row['Motive controversa'],
-                      'proposal_id': proposal_id,
-                      'press_links': row['Link presa']}
+            record = {
+                'proposal_id': proposal_id,
+                'title': row['Titlu'],
+                'reason': row['Motive controversa'],
+                'press_links': row['Link presa'],
+            }
             add(record)
 
     models.db.session.commit()
