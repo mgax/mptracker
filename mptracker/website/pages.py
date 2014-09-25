@@ -557,6 +557,7 @@ def policy_detail(policy_slug=None):
         'question_list': dal.get_policy_question_list(policy_slug),
         'active_parties': dal.get_policy_top_parties(policy_slug),
         'breadcrumb': ['Domenii de politici publice', policy_name],
+        'active_people': dal.search_person_by_policy(policy_slug),
     }
     return flask.render_template('policy_detail.html', **ctx)
 

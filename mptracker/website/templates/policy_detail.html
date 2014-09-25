@@ -17,21 +17,34 @@
       {{ questions_table(question_list) }}
     </div>
     <div class="col-sm-4">
-      <div>
-        <h4>Partide active</h4>
-        <ul class="list-unstyled">
-          {%- for party in active_parties %}
-            <li>
-              {{ party.short_name|link_for(
-                  '.party_policy',
-                  party_short_name=party.short_name,
-                  policy_slug=policy_slug,
-                ) }}
-              ({{ party.interest|percent }})
-            </li>
-          {%- endfor %}
-        </ul>
-      </div>
+      <h4>Partide active</h4>
+
+      <ul class="list-unstyled">
+        {%- for party in active_parties %}
+          <li>
+            {{ party.short_name|link_for(
+                '.party_policy',
+                party_short_name=party.short_name,
+                policy_slug=policy_slug,
+              ) }}
+            ({{ party.interest|percent }})
+          </li>
+        {%- endfor %}
+      </ul>
+
+      <h4>Deputați activi</h4>
+
+      <ul class="list-unstyled">
+        {%- for person in active_people %}
+          <li>
+            {{ person.name|link_for(
+                '.person_detail',
+                person_slug=person.slug,
+              ) }}
+            ({{ person.count }})
+          </li>
+        {%- endfor %}
+      </ul>
     </div>
   </div>
 </div>
