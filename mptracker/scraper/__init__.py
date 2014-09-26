@@ -636,6 +636,7 @@ def get_proposals(
             index['pk_senate'][p.cdeppk_senate] = p
 
     dirty_proposal_set = set()
+    models.db.session.flush()
 
     for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
         result = pickle.loads(page.result)
@@ -644,6 +645,15 @@ def get_proposals(
 
         if pk_cdep and pk_cdep in index['pk_cdep']:
             p = index['pk_cdep'][pk_cdep]
+
+            if pk_senate and pk_senate in index['pk_senate']:
+                senate_proposal = index['pk_senate'][pk_senate]
+                if senate_proposal != p:
+                    logger.warn("Deleting stale senate proposal %r",
+                                senate_proposal.id)
+                    senate_proposal.sponsorships.delete()
+                    models.db.session.delete(senate_proposal)
+                    models.db.session.flush()
 
         elif pk_senate and pk_senate in index['pk_senate']:
             p = index['pk_senate'][pk_senate]
@@ -684,6 +694,8 @@ def get_proposals(
 
         if limit and len(dirty_proposal_set) >= int(limit):
             break
+
+    models.db.session.flush()
 
 
     def cdep_id(mandate):
