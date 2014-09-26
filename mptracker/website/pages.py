@@ -88,7 +88,7 @@ def inject_nav_links():
             dict(
                 url=flask.url_for('.policy_index'),
                 section='policy',
-                label="Domenii de politici publice",
+                label="Politici publice",
             ),
             dict(
                 url=flask.url_for('.export_index'),
@@ -520,7 +520,7 @@ def party_members(party_short_name):
 def policy_index():
     return flask.render_template('policy_index.html', **{
         'policy_list': dal.get_policy_list(),
-        'breadcrumb': ['Domenii de politici publice'],
+        'breadcrumb': ['Politici publice'],
     })
 
 
@@ -556,7 +556,7 @@ def policy_detail(policy_slug=None):
         'proposal_list': dal.get_policy_proposal_list(policy_slug),
         'question_list': dal.get_policy_question_list(policy_slug),
         'active_parties': dal.get_policy_top_parties(policy_slug),
-        'breadcrumb': ['Domenii de politici publice', policy_name],
+        'breadcrumb': ['Politici publice', policy_name],
         'active_people': dal.search_person_by_policy(policy_slug),
         'committee_list': dal.get_policy_committees(policy_slug),
     }
@@ -568,7 +568,7 @@ def policy_detail(policy_slug=None):
 def policy_proposal_index():
     ctx = {
         'proposal_list': dal.get_policy_proposal_list(),
-        'breadcrumb': ['Domenii de politici publice'],
+        'breadcrumb': ['Politici publice'],
     }
     return flask.render_template('policy_proposal_index.html', **ctx)
 
