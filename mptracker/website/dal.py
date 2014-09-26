@@ -143,33 +143,31 @@ class DataAccess:
             .cte()
         )
 
-        activity_count = (
-            proposals_cte.c.proposal_count +
-            questions_cte.c.question_count
-        )
-
         activity_query = (
             db.session.query(
                 Person,
-                activity_count,
+                proposals_cte.c.proposal_count,
+                questions_cte.c.question_count,
             )
             .join(Mandate.person)
             .filter(Mandate.year == 2012)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
-            .join(proposals_cte, proposals_cte.c.mandate_id == Mandate.id)
-            .join(questions_cte, questions_cte.c.mandate_id == Mandate.id)
-            .order_by(activity_count.desc())
+            .outerjoin(proposals_cte, proposals_cte.c.mandate_id == Mandate.id)
+            .outerjoin(questions_cte, questions_cte.c.mandate_id == Mandate.id)
         )
 
-        return [
+        rv = [
             {
                 'name': person.name_first_last,
                 'slug': person.slug,
-                'count': count,
+                'count': (proposal_count or 0) + (question_count or 0),
             }
-            for person, count in activity_query
+            for person, proposal_count, question_count in activity_query
         ]
+        rv.sort(key=lambda r: r['count'], reverse=True)
+
+        return [r for r in rv if r['count'] > 0]
 
     def search_person_by_contracts(self, contracts_query):
         person_query = (
