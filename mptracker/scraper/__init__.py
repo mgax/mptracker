@@ -573,7 +573,6 @@ def get_proposal_pages(
         cache_name=None,
         year=None,
         ):
-    import pickle
     from itertools import chain
     from mptracker.scraper.proposals import ProposalScraper
 
@@ -594,24 +593,47 @@ def get_proposal_pages(
 
     for record in chain(scraper.list_proposals(2, year),
                         scraper.list_proposals(1, year)):
-        pk = record['pk']
-        chamber = record['chamber']
+
         old_date = db_page_date.get((chamber, pk))
-        if old_date and old_date == record['date']:
+        if old_date and old_date >= record['date']:
             continue
 
-        old_rows = (
-            models.ScrapedProposalPage.query
-            .filter_by(chamber=chamber, pk=pk)
-        )
-        old_rows.delete()
+        get_proposal_single_page(record['chamber'], record['pk'], cache_name)
 
-        logger.info("scraping %d %d", chamber, pk)
-        result = scraper.scrape_proposal_page(chamber, pk)
 
-        scraped_page = models.ScrapedProposalPage(**record)
-        scraped_page.result = pickle.dumps(result)
-        models.db.session.add(scraped_page)
+@scraper_manager.command
+def get_proposal_single_page(
+        chamber,
+        pk,
+        cache_name=None,
+    ):
+    import pickle
+    from mptracker.scraper.proposals import ProposalScraper
+
+    session = create_session(cache_name=cache_name or _get_config_cache_name())
+    scraper = ProposalScraper(session)
+
+    pk = int(pk)
+    chamber = int(chamber)
+
+    record = {
+        'pk': pk,
+        'chamber': chamber,
+        'date': date.today(),
+    }
+
+    old_rows = (
+        models.ScrapedProposalPage.query
+        .filter_by(chamber=chamber, pk=pk)
+    )
+    old_rows.delete()
+
+    logger.info("scraping %d %d", chamber, pk)
+    result = scraper.scrape_proposal_page(chamber, pk)
+
+    scraped_page = models.ScrapedProposalPage(**record)
+    scraped_page.result = pickle.dumps(result)
+    models.db.session.add(scraped_page)
 
     models.db.session.commit()
 
