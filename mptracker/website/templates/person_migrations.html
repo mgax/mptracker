@@ -2,6 +2,14 @@
 
 
 {% block content %}
+<div class="container-content container-general no-breadcrumb">
+    <div class="row">
+        <div class="col-sm-12">
+            {{ text('migrations') }}
+        </div>
+    </div>
+</div>
+
 <div class="container-content container-general">
     <div class="row">
         <div class="col-sm-12">
@@ -42,12 +50,4 @@
         </div>
     </div>
 </div>
-<div class="container-content container-general no-breadcrumb">
-    <div class="row">
-        <div class="col-sm-12">
-            {{ text('migrations') }}
-        </div>
-    </div>
-</div>
-
 {% endblock %}
