@@ -85,6 +85,20 @@
     </div>
     <div class="row home-section">
         <div class="col-sm-8">
+            <div class="row sub-section">
+                <h3>
+                    Legi controversate
+                    <span class="number">{{ controversy_proposal_count }}</span>
+                </h3>
+
+                {{ proposals_table(controversy_proposal_list) }}
+
+                <p class="full-list">
+                    {%- set url = url_for('.policy_controversy') %}
+                    <a href="{{ url }}">lista completă &raquo;</a>
+                </p>
+            </div>
+
             <!-- A list of all the laws -->
             <div class="row sub-section">
                 <h3>
@@ -96,19 +110,6 @@
 
                 <p class="full-list">
                     {%- set url = url_for('.policy_tacit') %}
-                    <a href="{{ url }}">lista completă &raquo;</a>
-                </p>
-            </div>
-            <div class="row sub-section">
-                <h3>
-                    Legi controversate
-                    <span class="number">{{ controversy_proposal_count }}</span>
-                </h3>
-
-                {{ proposals_table(controversy_proposal_list) }}
-
-                <p class="full-list">
-                    {%- set url = url_for('.policy_controversy') %}
                     <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
