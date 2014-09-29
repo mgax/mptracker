@@ -4,20 +4,30 @@
 
 {% block content %}
 <div class="container-content container-general container-policies">
-  <h2>{{ name }} ({{ CHAMBER_NAME[chamber] }})</h2>
+  <h2>{{ name }} ({{ CHAMBER_NAME[chamber_id] }})</h2>
 
-  <h3>Membri</h3>
+  <p>
+    {% set url = (
+      "http://www.cdep.ro/pls/parlam/structura.co"
+      "?leg=2012&cam={}&idc={}"
+      ).format(chamber_id, cdep_id) %}
+    <a href="{{ url }}">Comisia</a> pe pagina Camerei Deputaților
+  </p>
 
-  <ul class="list-unstyled">
-    {%- for member in member_list %}
-      <li>
-        {%- set url = url_for('.person_detail', person_slug=member.slug) %}
-        <a href="{{ url }}">{{ member.name }}</a>
-        {%- if member.role != "Membru" %}
-          ({{ member.role }})
-        {%- endif %}
-      </li>
-    {%- endfor %}
-  </ul>
+  {% if member_list %}
+    <h3>Deputați</h3>
+
+    <ul class="list-unstyled">
+      {%- for member in member_list %}
+        <li>
+          {%- set url = url_for('.person_detail', person_slug=member.slug) %}
+          <a href="{{ url }}">{{ member.name }}</a>
+          {%- if member.role != "Membru" %}
+            ({{ member.role }})
+          {%- endif %}
+        </li>
+      {%- endfor %}
+    </ul>
+  {% endif %}
 </div>
 {% endblock %}

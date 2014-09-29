@@ -908,6 +908,7 @@ class DataAccess:
 
         return {
             'name': committee.name,
-            'chamber': committee.chamber_id,
+            'chamber_id': committee.chamber_id,
+            'cdep_id': committee.cdep_id,
             'member_list': member_list,
         }
