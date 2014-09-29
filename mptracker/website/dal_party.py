@@ -50,7 +50,7 @@ class DalParty:
 
     @property
     def logo_filename(self):
-        return self.party.short_name + '.jpg'
+        return self.party.short_name.lower() + '.jpg'
 
     def get_details(self):
         rv = self.get_main_details()
