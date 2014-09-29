@@ -9,4 +9,10 @@
     </div>
   </div>
 </div>
+
+{% if comments %}
+  <div class="container-content container-general">
+    {% include '_comments.html' %}
+  </div>
+{% endif %}
 {% endblock %}

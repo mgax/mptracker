@@ -593,19 +593,20 @@ def committee_detail(committee_id):
     return flask.render_template('committee_detail.html', **ctx)
 
 
-@pages.route('/info/reprezentare_locala', defaults={'name': 'local'})
-@pages.route('/info/editorial', defaults={'name': 'editorial'})
+@pages.route('/info/reprezentare_locala', defaults={'name': 'local', 'comments': True})
+@pages.route('/info/editorial', defaults={'name': 'editorial', 'comments': True})
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
-@pages.route('/info/controverse', defaults={'name': 'voting_controversy'})
-@pages.route('/info/despre', defaults={'name': 'about'})
+@pages.route('/info/controverse', defaults={'name': 'voting_controversy', 'comments': True})
+@pages.route('/info/despre', defaults={'name': 'about', 'comments': True})
 @pages.route('/info/echipa', defaults={'name': 'team'})
-@pages.route('/info/contact', defaults={'name': 'contact'})
+@pages.route('/info/contact', defaults={'name': 'contact', 'comments': True})
 @pages.route('/info/termeni', defaults={'name': 'terms_of_use'})
-def text_page(name):
+def text_page(name, comments=False):
     text = get_text('general', name)
     return flask.render_template(
         'text.html',
         text=text['content'] + text['more_content'],
+        comments=comments,
     )
 
 
