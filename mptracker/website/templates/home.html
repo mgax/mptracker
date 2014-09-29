@@ -86,39 +86,46 @@
     <div class="row home-section">
         <div class="col-sm-8">
             <div class="row sub-section">
+                {%- set more_url = url_for('.policy_controversy') %}
                 <h3>
+                  <a href="{{ more_url }}">
                     Legi controversate
                     <span class="number">{{ controversy_proposal_count }}</span>
+                  </a>
                 </h3>
 
                 {{ proposals_table(controversy_proposal_list) }}
 
                 <p class="full-list">
-                    {%- set url = url_for('.policy_controversy') %}
-                    <a href="{{ url }}">lista completă &raquo;</a>
+                    <a href="{{ more_url }}">lista completă &raquo;</a>
                 </p>
             </div>
 
             <!-- A list of all the laws -->
             <div class="row sub-section">
+                {%- set more_url = url_for('.policy_tacit') %}
                 <h3>
+                  <a href="{{ more_url }}">
                     Legi adoptate tacit
                     <span class="number">{{ tacit_proposal_count }}</span>
+                  </h3>
                 </h3>
 
                 {{ proposals_table(tacit_proposal_list) }}
 
                 <p class="full-list">
-                    {%- set url = url_for('.policy_tacit') %}
-                    <a href="{{ url }}">lista completă &raquo;</a>
+                    <a href="{{ more_url }}">lista completă &raquo;</a>
                 </p>
             </div>
 
             <!-- Persons List -->
             <div class="row sub-section persons-list">
+                {%- set more_url = url_for('.person_migrations') %}
                 <h3>
+                  <a href="{{ more_url }}">
                     Migrări recente
                     <span class="number">{{ migration_count }}</span>
+                  </a>
                 </h3>
 
                 {%- for migration in migration_list %}
@@ -164,14 +171,18 @@
                 {%- endfor %}
 
                 <p class="full-list">
-                    {%- set url = url_for('.person_migrations') %}
                     <a href="{{ url }}">lista completă &raquo;</a>
                 </p>
             </div>
 
             <!-- Propuneri Legislative -->
             <div class="row sub-section proposals">
-                <h3>Propuneri legislative și proiecte de lege</h3>
+                {% set more_url = url_for('.policy_proposal_index') %}
+                <h3>
+                  <a href="{{ more_url }}">
+                    Propuneri legislative și proiecte de lege
+                  </a>
+                </h3>
                 {% for item in recent_proposals %}
                   {% set url = url_for(
                       '.policy_proposal',
@@ -185,13 +196,17 @@
                     </p>
                 {% endfor %}
                 <p class="full-list">
-                    {% set url = url_for('.policy_proposal_index') %}
-                    <a href="{{ url }}">lista completă &raquo;</a>
+                    <a href="{{ more_url }}">lista completă &raquo;</a>
                 </p>
             </div>
             <!-- Întrebări și interpelări -->
             <div class="row sub-section proposals">
-                <h3>Întrebări și interpelări</h3>
+                {% set more_url = url_for('.person_question_index') %}
+                <h3>
+                  <a href="{{ more_url }}">
+                    Întrebări și interpelări
+                  </a>
+                </h3>
                 {% for item in recent_questions %}
                   {% set url = url_for(
                       '.person_question',
@@ -205,8 +220,7 @@
                   </p>
                 {% endfor %}
                 <p class="full-list">
-                    {% set url = url_for('.person_question_index') %}
-                    <a href="{{ url }}">lista completă &raquo;</a>
+                    <a href="{{ more_url }}">lista completă &raquo;</a>
                 </p>
             </div>
         </div>
