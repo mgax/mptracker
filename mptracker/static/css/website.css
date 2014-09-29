@@ -90,6 +90,13 @@ a:hover {
   background: #549ACD;
   color: white;
 }
+.topbar .navbar .navbar-openpolitics {
+  float: right;
+  padding: 12px 0 15px 0;
+}
+.topbar .navbar .navbar-openpolitics img {
+  height: 55px;
+}
 .home-header-search {
   margin: 80px 0 20px 0;
   background: url(../img/home-header-search-bg.png) repeat;

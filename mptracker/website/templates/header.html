@@ -4,6 +4,9 @@
             <a class="navbar-brand" href="{{ url_for('pages.home') }}">
                 <img src="{{ url_for('static', filename='img/open-parlament.png') }}" alt="Parlament Transparent" title="Parlament Transparent" />
             </a>
+            <a class="navbar-openpolitics" href="http://www.openpolitics.ro/" target="_blank">
+              <img src="{{ url_for('static', filename='img/openpolitics-logo.png') }}" alt="OpenPolitics" title="OpenPolitics">
+            </a>
             <ul class="nav navbar-nav navbar-collapse">
             {%- for link in nav_link_list %}
                 <li {%- if g.section == link['section'] %} class="active"{% endif %}>
