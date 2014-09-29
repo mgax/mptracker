@@ -709,6 +709,9 @@ span.number {
 .container-content.parties-content .social h3 {
   margin-top: 0;
 }
+.container-content.container-policies .policy_details_sidebar {
+  padding-top: 15px;
+}
 .container-general {
   padding: 25px 20px;
 }
