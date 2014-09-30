@@ -610,7 +610,7 @@ def text_page(name, comments=False):
     )
 
 
-@pages.route('/export')
+@pages.route('/export/')
 @section('export')
 def export_index():
     ctx = {
