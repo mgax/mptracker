@@ -7,6 +7,7 @@ import jinja2
 from babel.numbers import format_currency
 from mptracker import models
 from mptracker.common import csv_lines, csv_response, buffer_on_disk
+from mptracker.common import parse_date
 from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
 from mptracker.website.texts import get_text
@@ -622,34 +623,9 @@ def export_index():
 @pages.route('/export/membri_grupuri.csv')
 @section('export')
 def export_group_membership():
-    migration = flask.request.args.get('migrare')
-    initial = date(2012, 12, 19)
-    one_day = timedelta(days=1)
-    today = date.today()
-    end = False
-
-    if migration is None:
-        interval = (initial, today + one_day)
-
-    elif migration == 'initial':
-        interval = (initial, initial + one_day)
-
-    elif migration == 'curent':
-        interval = (today, None)
-
-    elif migration == 'incheiat':
-        interval = (initial, today + one_day)
-        end = True
-
-    else:
-        if migration not in ['2012', '2013', '2014', '2015', '2016']:
-            flask.abort(404)
-
-        year = int(migration)
-        if year == 2012:
-            interval = (initial + one_day, date(year + 1, 1, 1))
-        else:
-            interval = (date(year, 1, 1), date(year + 1, 1, 1))
+    results = dal.get_group_membership(
+        day=parse_date(flask.request.args.get('date')) or date.today()
+    )
 
     membership_list = [
         {
@@ -658,12 +634,51 @@ def export_group_membership():
             'sfarsit': '' if row['end'] is None else row['end'].isoformat(),
             'partid': row['group'],
         }
-        for row in dal.get_group_membership(interval=interval, end=end)
+        for row in results
     ]
 
     return csv_response(
         csv_lines(['nume', 'inceput', 'sfarsit', 'partid'], membership_list),
     )
+
+
+@pages.route('/export/migrari.csv')
+@section('export')
+def export_migrations():
+    results = dal.get_group_migrations(
+        start=parse_date(flask.request.args['start']),
+        end=parse_date(flask.request.args.get('end', '9999-12-31')),
+    )
+
+    membership_list = [
+        {
+            'nume': row['name'],
+            'data': row['date'].isoformat(),
+            'partid_vechi': row['group_old'],
+            'partid_nou': row['group_new'],
+        }
+        for row in results
+    ]
+
+    cols = ['nume', 'data', 'partid_vechi', 'partid_nou']
+    return csv_response(csv_lines(cols, membership_list))
+
+
+@pages.route('/export/mandate_incepute_tarziu.csv', defaults={'rq': 'late_start'})
+@pages.route('/export/mandate_incheiate_devreme.csv', defaults={'rq': 'early_end'})
+@section('export')
+def export_bounded_mandates(rq):
+    out_list = [
+        {
+            'nume': row['name'],
+            'partid': row['group'],
+            'inceput': row['start'].isoformat(),
+            'sfarsit': row['end'].isoformat(),
+        }
+        for row in dal.get_bounded_mandates(rq)
+    ]
+    cols = ['nume', 'partid', 'inceput', 'sfarsit']
+    return csv_response(csv_lines(cols, out_list))
 
 
 @pages.route('/export/voturi.csv')

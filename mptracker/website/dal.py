@@ -1,5 +1,6 @@
 from datetime import date
 from collections import defaultdict
+from itertools import groupby
 from sqlalchemy import func, distinct, and_
 from sqlalchemy.orm import joinedload, aliased
 from flask import json
@@ -256,64 +257,115 @@ class DataAccess:
     def get_party(self, party_short_name):
         return DalParty(self, party_short_name, missing=self.missing)
 
-    def get_group_membership(self, interval, end):
-        null_end = lambda d: None if d.year == 9999 else d
-        (q_lower, q_upper) = interval
-        membership_lower = func.lower(MpGroupMembership.interval)
-        membership_upper = func.upper(MpGroupMembership.interval)
-
-        membership_query = (
-            MpGroupMembership.query
+    def get_group_membership(self, day):
+        query = (
+            db.session.query(
+                MpGroupMembership,
+                MpGroup,
+                Person,
+            )
             .join(MpGroupMembership.mp_group)
             .join(MpGroupMembership.mandate)
-            .filter_by(year=2012)
-            .filter((
-                (q_lower <= membership_lower) &
-                ((membership_lower < q_upper) if q_upper else True)
-            ) | (
-                (q_lower < membership_upper) &
-                ((membership_upper <= q_upper) if q_upper else True)
-            ))
-            .options(
-                joinedload('mp_group'),
-                joinedload('mandate'),
-                joinedload('mandate.person'),
-            )
+            .join(Mandate.person)
+            .filter(MpGroupMembership.interval.contains(day))
             .order_by(
-                MpGroupMembership.mandate_id,
-                MpGroupMembership.interval,
+                func.lower(MpGroupMembership.interval),
+                Person.first_name,
+                Person.last_name,
+            )
+        )
+        null_end = lambda d: None if d.year == 9999 else d
+        for (membership, group, person) in query:
+            yield {
+                'name': person.name_first_last,
+                'group': group.name,
+                'start': membership.interval.lower,
+                'end': null_end(membership.interval.upper),
+            }
+
+    def get_group_migrations(self, start, end):
+        query = (
+            db.session.query(
+                MpGroupMembership,
+                Mandate,
+                Person,
+            )
+            .join(MpGroupMembership.mandate)
+            .join(Mandate.person)
+            .filter(Mandate.year == 2012)
+            .order_by(
+                Person.last_name,
+                Person.first_name,
+                Mandate.id,
+                func.lower(MpGroupMembership.interval),
             )
         )
 
-        if end:
-            membership_query = (
-                membership_query
-                .filter(membership_upper == func.upper(Mandate.interval))
+        for mandate, membership_iter in groupby(query, lambda r: r.Mandate):
+            prev = None
+            for (membership, _, person) in membership_iter:
+                if prev:
+                    day = prev.interval.upper
+                    assert membership.interval.lower == day
+                    yield {
+                        'name': person.name_first_last,
+                        'date': day,
+                        'group_old': prev.mp_group.name,
+                        'group_new': membership.mp_group.name,
+                    }
+
+                if start <= membership.interval.upper < end:
+                    prev = membership
+                else:
+                    prev = None
+
+    def get_bounded_mandates(self, request):
+        query = (
+            db.session.query(
+                MpGroupMembership,
+                MpGroup,
+                Person,
+            )
+            .join(MpGroupMembership.mp_group)
+            .join(MpGroupMembership.mandate)
+            .join(Mandate.person)
+            .filter(Mandate.year == 2012)
+            .order_by(
+                func.lower(MpGroupMembership.interval),
+                Person.first_name,
+                Person.last_name,
+            )
+        )
+
+        if request == 'late_start':
+            query = (
+                query
+                .filter(func.lower(MpGroupMembership.interval) ==
+                        func.lower(Mandate.interval))
+                .filter(func.lower(Mandate.interval) > date(2012, 12, 19))
+            )
+
+        elif request == 'early_end':
+            query = (
+                query
+                .filter(func.upper(MpGroupMembership.interval) ==
+                        func.upper(Mandate.interval)
+                )
+                .filter(func.upper(Mandate.interval) < date.today())
             )
 
         else:
-            membership_query = (
-                membership_query
-                .filter(func.upper(Mandate.interval) >= q_upper)
-            )
+            raise RuntimeError("Unknown request %r" % request)
 
-        by_mandate = defaultdict(list)
+        for (membership, group, person) in query:
+            yv = {
+                'name': person.name_first_last,
+                'group': group.name,
+                'start': membership.interval.lower,
+                'end': membership.interval.upper,
+            }
 
-        for membership in membership_query:
-            by_mandate[membership.mandate].append(membership)
-
-        for mandate in sorted(by_mandate, key=lambda m: m.id):
-            membership_list = by_mandate[mandate]
-            if len(membership_list) < 2:
-                continue
-
-            for membership in membership_list:
-                yield {
-                    'name': mandate.person.name_first_last,
-                    'group': membership.mp_group.name,
-                    'start': membership.interval.lower,
-                    'end': null_end(membership.interval.upper),
-                }
+            yield yv
 
     def get_party_list(self):
         mp_group_query = self.get_party_qs()
