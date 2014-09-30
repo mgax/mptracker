@@ -22,12 +22,12 @@
 
             {% set url = url_for('.export_bounded_mandates', rq='late_start') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> mandate începute târziu
+              <i class="icon-download"></i> mandate alegeri parțiale
             </a>
 
             {% set url = url_for('.export_bounded_mandates', rq='early_end') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> mandate încheiate devreme
+              <i class="icon-download"></i> mandate încheiate
             </a>
 
             {% set url = url_for('.export_group_membership') %}
