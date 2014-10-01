@@ -1455,7 +1455,6 @@ def assets(file_path, no_commit=False):
 @scraper_manager.command
 def daily():
     with log_to_sentry():
-        raise RuntimeError('testing')
         get_transcripts(n_sessions=20)
         get_questions(autoanalyze=True)
         get_votes(days=20, autoanalyze=True)
