@@ -3,6 +3,7 @@ from datetime import timedelta, date, datetime
 from collections import defaultdict
 import re
 import tempfile
+from contextlib import contextmanager
 import flask
 from flask.ext.script import Manager
 from psycopg2.extras import DateRange
@@ -47,6 +48,17 @@ PROPOSAL_CONTROVERSY_CSV_KEY = '1gsEHB8PhMMgEVJEv-yCBopFl2aMfnXg_JVaJ1aUgLpI'
 MEMBER_COUNT_CSV_KEY = '13FcF2cCqM7OL0ML9UFchyOnn9uUjYTs7RFIIvLFztFs'
 PICTURES_FOLDER_KEY = '0B1BmcLkxpBOXVGZyNHhqc0tWZkk'
 COMMITTEE_POLICY_CSV_KEY = '0AlBmcLkxpBOXdHQ5clB4a1hyUUxlTE5pTmNKa0ZzYmc'
+
+
+@contextmanager
+def log_to_sentry():
+    try:
+        yield
+    except:
+        sentry = flask.current_app.extensions.get('sentry')
+        if sentry:
+            sentry.client.captureException()
+        raise
 
 
 def _get_config_cache_name():
@@ -1442,31 +1454,35 @@ def assets(file_path, no_commit=False):
 
 @scraper_manager.command
 def daily():
-    get_transcripts(n_sessions=20)
-    get_questions(autoanalyze=True)
-    get_votes(days=20, autoanalyze=True)
-    get_groups()
-    get_proposal_pages()
-    get_proposals(autoanalyze=True)
+    with log_to_sentry():
+        raise RuntimeError('testing')
+        get_transcripts(n_sessions=20)
+        get_questions(autoanalyze=True)
+        get_votes(days=20, autoanalyze=True)
+        get_groups()
+        get_proposal_pages()
+        get_proposals(autoanalyze=True)
 
 
 @scraper_manager.command
 def daily_long():
-    get_people()
-    get_committees()
+    with log_to_sentry():
+        get_people()
+        get_committees()
 
 
 @scraper_manager.command
 def daily_gdrive():
-    get_vote_controversy()
-    get_position()
-    get_cabinet_party()
-    get_policy_domain()
-    get_stop_words()
-    #get_committee_attendance()
-    get_proposal_controversy()
-    get_member_count()
-    get_committee_policy()
+    with log_to_sentry():
+        get_vote_controversy()
+        get_position()
+        get_cabinet_party()
+        get_policy_domain()
+        get_stop_words()
+        #get_committee_attendance()
+        get_proposal_controversy()
+        get_member_count()
+        get_committee_policy()
 
 
 @scraper_manager.command
