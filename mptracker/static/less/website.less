@@ -41,7 +41,6 @@ a {
     background: url(../img/semi-opaque-bg.png) repeat;
     border-bottom: 3px solid #ffad00;
     width: 100%;
-    max-height: 80px;
     .navbar {
         background: none;
         border: none;
@@ -379,7 +378,7 @@ span {
         position: relative;
         .law-status-color {
             float: left;
-            width: 1.5%;
+            width: 7px;
             padding: 7px 0;
             position: absolute;
             top: 0;
@@ -420,12 +419,14 @@ span {
         border-left: none;
         margin-bottom: 7px;
         background: #fbfbfb;
-        height: 50px;
+        position: relative;
         .vote-for {
-            float: left;
-            width: 1.5%;
+            width: 8px;
             padding: 7px 0;
-            height: 50px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
             &.da {
                 background: #6abb2d;
             }
@@ -455,11 +456,15 @@ span {
         border-left: none;
         margin-bottom: 7px;
         background: #fbfbfb;
+        position: relative;
+        padding-left: 7px;
         .person-status-color {
             background: #c1c1c1;
-            float: left;
-            width: 1.5%;
-            height: 60px;
+            width: 7px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
         }
         .person-image {
             float: left;
@@ -477,7 +482,7 @@ span {
             padding: 20px 5px;
             span {
                 &.date {
-                    margin-right: 25px;
+                    margin-right: 15px;
                 }
                 &.name {
                     font-weight: bold;
@@ -1093,7 +1098,6 @@ figure {
 
 @media screen and (max-width: 1000px) and (min-width: 601px) {
     .topbar {
-        max-height: 140px;
         .navbar {
             a.navbar-brand {
                 padding-top: 30px;
@@ -1116,15 +1120,11 @@ figure {
 
 @media screen and (max-width: 600px) {
     .topbar {
-        max-height: 207px;
         .navbar {
             a.navbar-brand {
                 width: 100%;
                 text-align: center;
                 padding-bottom: 0;
-                img {
-                    width: 70%;
-                }
             }
             ul.nav.navbar-nav {
                 width: 100%;

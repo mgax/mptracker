@@ -39,7 +39,6 @@ a:hover {
   background: url(../img/semi-opaque-bg.png) repeat;
   border-bottom: 3px solid #ffad00;
   width: 100%;
-  max-height: 80px;
 }
 .topbar .navbar {
   background: none;
@@ -379,7 +378,7 @@ span.number {
 }
 .laws-list .law .law-status-color {
   float: left;
-  width: 1.5%;
+  width: 7px;
   padding: 7px 0;
   position: absolute;
   top: 0;
@@ -418,13 +417,15 @@ span.number {
   border-left: none;
   margin-bottom: 7px;
   background: #fbfbfb;
-  height: 50px;
+  position: relative;
 }
 .votes-list .vote .vote-for {
-  float: left;
-  width: 1.5%;
+  width: 8px;
   padding: 7px 0;
-  height: 50px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
 .votes-list .vote .vote-for.da {
   background: #6abb2d;
@@ -452,12 +453,16 @@ span.number {
   border-left: none;
   margin-bottom: 7px;
   background: #fbfbfb;
+  position: relative;
+  padding-left: 7px;
 }
 .persons-list .person .person-status-color {
   background: #c1c1c1;
-  float: left;
-  width: 1.5%;
-  height: 60px;
+  width: 7px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
 }
 .persons-list .person .person-image {
   float: left;
@@ -474,7 +479,7 @@ span.number {
   padding: 20px 5px;
 }
 .persons-list .person .person-details span.date {
-  margin-right: 25px;
+  margin-right: 15px;
 }
 .persons-list .person .person-details span.name {
   font-weight: bold;
@@ -971,9 +976,6 @@ figure {
   }
 }
 @media screen and (max-width: 1000px) and (min-width: 601px) {
-  .topbar {
-    max-height: 140px;
-  }
   .topbar .navbar a.navbar-brand {
     padding-top: 30px;
   }
@@ -991,16 +993,10 @@ figure {
   }
 }
 @media screen and (max-width: 600px) {
-  .topbar {
-    max-height: 207px;
-  }
   .topbar .navbar a.navbar-brand {
     width: 100%;
     text-align: center;
     padding-bottom: 0;
-  }
-  .topbar .navbar a.navbar-brand img {
-    width: 70%;
   }
   .topbar .navbar ul.nav.navbar-nav {
     width: 100%;
