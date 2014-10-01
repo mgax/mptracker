@@ -10,6 +10,8 @@ app.render_votesimilaritychart = function(options) {
 
   var data = options.vote_similarity_list;
 
+  width = d3.max([width, data.length + 1]);
+
   var x = d3.scale.ordinal()
       .rangeRoundBands([0, width], .1);
 
