@@ -1014,3 +1014,12 @@ figure {
 .dl-horizontal dt {
   white-space: normal;
 }
+#compare-votes .bar {
+  opacity: 0.5;
+}
+#compare-votes .axis path,
+#compare-votes .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}

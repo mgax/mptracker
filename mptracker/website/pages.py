@@ -148,6 +148,8 @@ def home():
         item['person']['picture_url'] = picture_url(person)
         migration_list.append(item)
 
+    similarity_person = dal.get_person('ponta-victor-viorel')
+
     return flask.render_template('home.html', **{
         'policy_list': dal.get_policy_list(),
         'tacit_approvals_count': dal.get_tacit_approvals_count(),
@@ -162,6 +164,9 @@ def home():
         'controversy_proposal_count': dal.get_policy_controversy_count(),
         'migration_list': migration_list,
         'migration_count': dal.get_migration_count(),
+        'vote_similarity_list': similarity_person.get_voting_similarity_list(),
+        'similarity_person': similarity_person.get_main_details(),
+        'person_list': dal.search_person_by_name(''),
     })
 
 

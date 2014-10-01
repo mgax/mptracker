@@ -177,6 +177,33 @@
 
             <!-- Propuneri Legislative -->
             <div class="row sub-section proposals">
+                <h3>
+                    Verifică similaritatea la vot a deputatului tău
+                    cu toți ceilalți deputați
+                </h3>
+
+                <h4>{{ similarity_person.name }}</h4>
+
+                <div id="compare-votes"></div>
+
+                <p>
+                  <select id="compare-votes-person-list">
+                    {% for person in person_list %}
+                      {% set url = url_for(
+                          '.person_compare_index',
+                          person_slug=person.slug,
+                        ) %}
+                      {% set selected = (person.slug == similarity_person.person_slug) %}
+                      <option value="{{ url }}" {% if selected %}selected{% endif %}>
+                        {{- person.name -}}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </p>
+            </div>
+
+            <!-- Propuneri Legislative -->
+            <div class="row sub-section proposals">
                 {% set more_url = url_for('.policy_proposal_index') %}
                 <h3>
                   <a href="{{ more_url }}">
@@ -264,6 +291,7 @@
 <script src="{{ url_for('static',
     filename='lib/d3-3.3.13/d3.v3.js') }}"></script>
 <script src="{{ url_for('static', filename='policychart.js') }}"></script>
+<script src="{{ url_for('static', filename='votesimilaritychart.js') }}"></script>
 <script>
 (function() {
   "use strict";
@@ -277,6 +305,11 @@
       data: {{ policy_domains|tojson }},
       cutoff: 0.02
     });
+
+    app.render_votesimilaritychart({
+      container: $('#compare-votes').empty(),
+      vote_similarity_list: {{ vote_similarity_list|tojson }}
+    });
   }
 
   app.person_search = new app.PersonSearch({
@@ -288,6 +321,10 @@
   policy_select.change(function() {
     var url = {{ url_for('.policy_detail', policy_slug='') }} + policy_select.val();
     window.location.href = url;
+  });
+
+  $('#compare-votes-person-list').change(function() {
+    window.location.href = $(this).val();
   });
 
 })();

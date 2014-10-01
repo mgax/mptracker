@@ -4,22 +4,6 @@
 {% block title %}{{ super() }} – {{ name }} – comparație{% endblock %}
 
 
-{% block styles %}
-<style>
-  #compare-votes .bar {
-    opacity: 0.5;
-  }
-
-  .axis path,
-  .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-  }
-</style>
-{% endblock %}
-
-
 {%- macro comparison_link(person_slug, other_person) %}
   {{ other_person.name|link_for(
     '.person_compare',
