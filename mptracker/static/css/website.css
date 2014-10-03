@@ -1023,3 +1023,42 @@ figure {
   stroke: #000;
   shape-rendering: crispEdges;
 }
+.divider-right {
+  border-right: 1px solid #dce0e0;
+}
+.rightmenu > li {
+  position: relative;
+  border-bottom: 1px solid #dce0e0;
+  font-size: 16px;
+}
+.rightmenu > li a:before {
+  content: " ";
+  width: 35px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-bottom: 2px solid;
+}
+.rightmenu > li a {
+  display: block;
+  padding: 10px 0;
+}
+.rightmenu > li a:hover {
+  text-decoration: underline;
+}
+.rightmenu > li.rightmenu-controversy a {
+  color: #3e99ff;
+}
+.rightmenu > li.rightmenu-migrations a {
+  color: red;
+}
+.rightmenu > li.rightmenu-tacit a {
+  color: #FF962D;
+}
+.rightmenu > li.rightmenu-proposals a {
+  color: #005900;
+}
+.rightmenu > li.rightmenu-questions a {
+  color: #5A167B;
+}

@@ -4,8 +4,12 @@
 {%- block content %}
 <div class="container-content container-general no-breadcrumb">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-8 divider-right">
       {{ text|safe }}
+    </div>
+
+    <div class="col-sm-4">
+      {% include 'sidebar.html' %}
     </div>
   </div>
 </div>

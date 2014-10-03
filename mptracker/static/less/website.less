@@ -1157,3 +1157,44 @@ figure {
         shape-rendering: crispEdges;
     }
 }
+
+.divider-right {
+    border-right: 1px solid @colorBorder;
+}
+
+.rightmenu {
+    > li {
+        position: relative;
+        border-bottom: 1px solid @colorBorder;
+        font-size: 16px;
+        a:before {
+            content: " ";
+            width: 35px;
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            border-bottom: 2px solid;
+        }
+        a {
+            display: block;
+            padding: 10px 0;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        &.rightmenu-controversy a {
+            color: #3E99FF
+        }
+        &.rightmenu-migrations a {
+            color: red;
+        }
+        &.rightmenu-tacit a {
+            color: #FF962D;
+        }
+        &.rightmenu-proposals a {
+            color: #005900;
+        }
+        &.rightmenu-questions a {
+            color: #5A167B;
+        }
+    }
+}
