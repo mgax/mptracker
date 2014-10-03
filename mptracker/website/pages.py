@@ -601,6 +601,11 @@ def committee_detail(committee_id):
 
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local', 'comments': True})
 @pages.route('/info/editorial', defaults={'name': 'editorial', 'comments': True})
+@pages.route('/info/cum_functioneaza', defaults={'name': 'cum_functioneaza'})
+@pages.route('/info/evolutii_legislative', defaults={'name': 'evolutii_legislative'})
+@pages.route('/info/monitorizeaza_deputatul', defaults={'name': 'monitorizeaza_deputatul'})
+@pages.route('/info/grupuri_parlamentare', defaults={'name': 'grupuri_parlamentare'})
+@pages.route('/info/descarca_datele', defaults={'name': 'descarca_datele'})
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
 @pages.route('/info/controverse', defaults={'name': 'voting_controversy', 'comments': True})
 @pages.route('/info/despre', defaults={'name': 'about', 'comments': True})
