@@ -947,6 +947,9 @@ figure {
   widht: 100%;
   display: block;
   padding: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .policy-index-page .policy-list > li a:hover {
   color: #ddd;
