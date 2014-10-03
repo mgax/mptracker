@@ -1029,6 +1029,9 @@ figure {
 .divider-right {
   border-right: 1px solid #dce0e0;
 }
+.rightmenu {
+  margin-bottom: 45px;
+}
 .rightmenu > li {
   position: relative;
   border-bottom: 1px solid #dce0e0;

@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container-content container-general">
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-8 divider-right">
             {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
             <h1><a href="{{ url }}">{{ party['name'] }}</a></h1>
             <h2>Listă membri: <small>({{ members|count }})</small></h2>
@@ -17,6 +17,10 @@
                     </li>
                 {%- endfor %}
             </ul>
+        </div>
+
+        <div class="col-sm-4">
+          {% include 'sidebar.html' %}
         </div>
     </div>
 </div>

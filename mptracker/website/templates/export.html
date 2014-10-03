@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="container-content container-general export-page">
-    <div class="col-sm-12">
+<div class="row container-content container-general export-page">
+    <div class="col-sm-8 divider-right">
 
       {{ text('export', fold=True) }}
 
@@ -97,6 +97,10 @@
           </td>
         </tr>
       </table>
+    </div>
+
+    <div class="col-sm-4">
+      {% include 'sidebar.html' %}
     </div>
 </div>
 

@@ -9,8 +9,8 @@
 
 
 {% block content %}
-<div class="container-content container-general policy-index-page">
-    <div class="col-sm-12">
+<div class="row container-content container-general policy-index-page">
+    <div class="col-sm-8 divider-right">
       {{ text('policy', fold=True) }}
 
       <ul class="list-unstyled policy-list">
@@ -28,6 +28,10 @@
       </ul>
 
       {{ text('policy', below_fold=True) }}
-  </div>
+    </div>
+
+    <div class="col-sm-4">
+      {% include 'sidebar.html' %}
+    </div>
 </div>
 {% endblock %}

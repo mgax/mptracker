@@ -8,7 +8,7 @@
     {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
     <div class="container-content container-general">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-8 divider-right">
                 <h1><a href="{{ url }}">{{ party.name }} – {{ policy.name }}</a></h1>
 
                 <h2>Membri activi</h2>
@@ -28,6 +28,10 @@
                 <h2>Întrebări și interpelări</h2>
 
                 {{ questions_table(policy.question_list) }}
+            </div>
+
+            <div class="col-sm-4">
+              {% include 'sidebar.html' %}
             </div>
         </div>
     </div>

@@ -2,28 +2,36 @@
 
 
 {% block content %}
-<div class="container-content parties-content">
-  {{ text('party_intro') }}
+<div class="container-content row">
+  <div class="col-sm-8 divider-right">
+    <div class="parties-content">
+      {{ text('party_intro') }}
 
-  <div class="seatchart"></div>
+      <div class="seatchart"></div>
 
-  <ul class="parties-list">
-    {% for party in party_list %}
-      <li>
-        {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
-        <a href="{{ url }}">
-          <div class="party-logo">
-            {%- if party.logo_url %}
-              <img src="{{ party.logo_url }}">
-            {%- endif %}
-          </div>
+      <ul class="parties-list">
+        {% for party in party_list %}
+          <li>
+            {%- set url = url_for('.party_detail', party_short_name=party.short_name) %}
+            <a href="{{ url }}">
+              <div class="party-logo">
+                {%- if party.logo_url %}
+                  <img src="{{ party.logo_url }}">
+                {%- endif %}
+              </div>
 
-          <p>{{ party.name }}</p>
+              <p>{{ party.name }}</p>
 
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    {% include 'sidebar.html' %}
+  </div>
 </div>
 {% endblock %}
 
