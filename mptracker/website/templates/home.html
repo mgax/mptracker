@@ -184,7 +184,9 @@
 
                 <h4>{{ similarity_person.name }}</h4>
 
-                <div id="compare-votes"></div>
+                <div id="compare-votes">
+                  ... se încarcă ...
+                </div>
 
                 <p>
                   Graficul ia în calcul toate sesiunile de vot în care a votat
@@ -312,6 +314,14 @@
   $(document).ready(render);
   $(window).resize(render);
 
+  var vote_similarity_list = null;
+
+  $.get({{ url_for('.home_votesimilarity')|tojson }}).then(function(data) {
+    console.log(data);
+    vote_similarity_list = data.vote_similarity_list;
+    render();
+  });
+
   function render() {
     app.render_policy_chart({
       container: $('.policychart').empty()[0],
@@ -319,10 +329,12 @@
       cutoff: 0.02
     });
 
-    app.render_votesimilaritychart({
-      container: $('#compare-votes').empty(),
-      vote_similarity_list: {{ vote_similarity_list|tojson }}
-    });
+    if(vote_similarity_list) {
+      app.render_votesimilaritychart({
+        container: $('#compare-votes').empty(),
+        vote_similarity_list: vote_similarity_list
+      });
+    }
   }
 
   app.person_search = new app.PersonSearch({

@@ -164,9 +164,17 @@ def home():
         'controversy_proposal_count': dal.get_policy_controversy_count(),
         'migration_list': migration_list,
         'migration_count': dal.get_migration_count(),
-        'vote_similarity_list': similarity_person.get_voting_similarity_list(),
         'similarity_person': similarity_person.get_main_details(),
         'person_list': dal.search_person_by_name(''),
+    })
+
+
+@pages.route('/_votesimilarity')
+def home_votesimilarity():
+    similarity_person = dal.get_person('ponta-victor-viorel')
+
+    return flask.jsonify({
+        'vote_similarity_list': similarity_person.get_voting_similarity_list(),
     })
 
 
