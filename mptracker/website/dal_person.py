@@ -105,7 +105,7 @@ class DalPerson:
         })
 
         if date.today() not in self.mandate.interval:
-            rv['mandate_finished'] = self.mandate.interval.lower
+            rv['mandate_finished'] = self.mandate.interval.upper
 
         committee_membership_query = (
             self.mandate.committee_memberships
