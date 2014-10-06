@@ -104,6 +104,9 @@ class DalPerson:
             'mandate_count': self.person.mandates.count(),
         })
 
+        if date.today() not in self.mandate.interval:
+            rv['mandate_finished'] = self.mandate.interval.lower
+
         committee_membership_query = (
             self.mandate.committee_memberships
             .options(joinedload('mp_committee'))

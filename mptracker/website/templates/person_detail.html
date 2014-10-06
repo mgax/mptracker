@@ -40,6 +40,12 @@
                         <h1>{{ name }}</h1>
 
                         <ul class="list-unstyled">
+                        {% if mandate_finished %}
+                            <li>
+                                Mandat încheiat în data de
+                                <strong>{{ mandate_finished|datefmt }}</strong>
+                            </li>
+                        {% endif %}
                         {% if college %}
                             <li>
                                 Deputat de
