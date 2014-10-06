@@ -643,75 +643,79 @@ span.number {
 .container-content.person-details .wordcloud {
   margin-top: 15px;
 }
-.parties-list li a {
-  display: block;
-  height: 64px;
-}
-.parties-list li a .party-logo {
-  float: left;
-  width: 64px;
-  height: 64px;
-}
-.parties-list li a .party-logo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.parties-list li a p {
-  float: left;
-  padding: 20px 10px;
-}
-.container-content.parties-content {
+.container-content .parties-content {
   padding: 15px 25px;
 }
-.container-content.parties-content h1 {
+.container-content .parties-content h1 {
   margin-bottom: 35px;
 }
-.container-content.parties-content h4 {
+.container-content .parties-content h4 {
   color: #b0b0b0;
   font-weight: bold;
   padding-bottom: 15px;
 }
-.container-content.parties-content h4.members {
+.container-content .parties-content h4.members {
   padding: 25px 0 0 15px;
   height: 125px;
   border-right: 1px solid #dce0e0;
 }
-.container-content.parties-content h4.stats {
+.container-content .parties-content h4.stats {
   padding: 25px 0 0 0;
 }
-.container-content.parties-content .parties-list {
+.container-content .parties-content .parties-list {
   padding-left: 0;
   list-style-type: none;
 }
-.container-content.parties-content .parties-list li {
+.container-content .parties-content .parties-list li {
   margin-bottom: 7px;
 }
-.container-content.parties-content .party-meta {
+.container-content .parties-content .parties-list li a {
+  display: block;
+  height: 64px;
+}
+.container-content .parties-content .parties-list li a .party-logo {
+  float: left;
+  width: 64px;
+  height: 64px;
+}
+.container-content .parties-content .parties-list li a .party-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.container-content .parties-content .parties-list li a p {
+  float: left;
+  padding: 20px 10px;
+}
+.container-content .parties-content .party-meta {
   margin-bottom: 30px;
 }
-.container-content.parties-content .party-meta .party-logo {
+.container-content .parties-content .party-meta .party-logo {
   text-align: center;
 }
-.container-content.parties-content .public-politics {
+.container-content .parties-content .party-meta .party-logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.container-content .parties-content .public-politics {
   border-right: 1px solid #dce0e0;
   border-bottom: none;
 }
-.container-content.parties-content .stat {
+.container-content .parties-content .stat {
   border-bottom: 1px solid #dce0e0;
   padding: 20px 0;
 }
-.container-content.parties-content .stat .number {
+.container-content .parties-content .stat .number {
   float: right;
   font-weight: 700;
   font-size: 36px;
 }
-.container-content.parties-content .stat .description {
+.container-content .parties-content .stat .description {
   text-transform: uppercase;
   font-size: 13px;
   font-weight: 700;
 }
-.container-content.parties-content .social h3 {
+.container-content .parties-content .social h3 {
   margin-top: 0;
 }
 .container-content.container-policies .policy_details_sidebar {
