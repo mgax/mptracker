@@ -140,6 +140,8 @@ class DalPerson:
             )
             .join(VotingSessionControversy.voting_session)
             .outerjoin(vote_subquery)
+            .filter(VotingSession.date >= self.mandate.interval.lower)
+            .filter(VotingSession.date < self.mandate.interval.upper)
             .order_by(VotingSession.date.desc())
         )
 
