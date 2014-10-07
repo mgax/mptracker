@@ -231,7 +231,7 @@ a:hover {
   font-style: normal;
 }
 .content-home .articles-list {
-  padding: 15px;
+  padding: 5px 15px;
 }
 .content-home .articles-list h3 {
   font-weight: 300;
@@ -240,7 +240,7 @@ a:hover {
   padding-left: 10px;
 }
 .content-home .articles-list .article-single {
-  padding: 23px 25px;
+  padding: 10px 25px;
   border-bottom: 1px solid #dce0e0;
 }
 .content-home .articles-list .article-single:last-child {
