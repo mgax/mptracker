@@ -101,7 +101,7 @@ def inject_nav_links():
     }
 
 
-def template_text(name, fold=False, below_fold=False, ns='general'):
+def text_content(name, fold=False, below_fold=False, ns='general'):
     text = get_text(ns, name)
 
     if fold:
@@ -116,9 +116,17 @@ def template_text(name, fold=False, below_fold=False, ns='general'):
     return jinja2.Markup(html)
 
 
+def text_title(name, ns='general'):
+    text = get_text(ns, name)
+    return text['title']
+
+
 @pages.record
 def register_text(state):
-    state.app.jinja_env.globals.update({'text': template_text})
+    state.app.jinja_env.globals.update({
+        'text': text_content,
+        'text_title': text_title,
+    })
 
 
 @pages.route('/_crashme', methods=['GET', 'POST'])
@@ -620,8 +628,10 @@ def committee_detail(committee_id):
 @pages.route('/info/echipa', defaults={'name': 'team'})
 @pages.route('/info/contact', defaults={'name': 'contact', 'comments': True})
 @pages.route('/info/termeni', defaults={'name': 'terms_of_use'})
-def text_page(name, comments=False):
-    text = get_text('general', name)
+@pages.route('/articole/parlamentari-la-urne', defaults={'name': 'parlamentari-la-urne', 'ns': 'article'})
+@pages.route('/articole/comunicare-parlamente', defaults={'name': 'comunicare-parlamente', 'ns': 'article'})
+def text_page(name, ns='general', comments=False):
+    text = get_text(ns, name)
     return flask.render_template(
         'text.html',
         text=text['content'] + text['more_content'],

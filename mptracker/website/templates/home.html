@@ -82,6 +82,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-sm-4 articles-list">
+          <h3>Articole recente:</h3>
+
+          {% for name in ['parlamentari-la-urne', 'comunicare-parlamente'] %}
+            <div class="row article-single">
+              {% set more_url = url_for('.text_page', name=name, ns='article') %}
+              <div class="article-content">
+                <a href="{{ more_url }}" class="article-title">
+                  {{ text_title(name, ns='article') }}
+                </a>
+                {{ text(name, ns='article', fold=True) }}
+              </div>
+              <p><a href="{{ more_url }}">continuare &raquo;</a></p>
+            </div>
+          {% endfor %}
+        </div>
     </div>
     <div class="row home-section">
         <div class="col-sm-8">
