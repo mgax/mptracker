@@ -708,7 +708,7 @@ span {
         padding-left: 0;
         list-style-type: none;
         li {
-            padding: 8px;
+            padding: 12px;
             border-bottom: 1px solid @colorBorder;
             &:first-child {
               border-top: 1px solid @colorBorder;
@@ -725,12 +725,15 @@ span {
                         display: block;
                         width: 100%;
                         height: 100%;
+                        border: 1px solid #999;
                     }
                 }
 
                 p {
-                    float: left;
-                    padding: 20px 10px;
+                    padding-left: 15px;
+                    height: 64px;
+                    vertical-align: middle;
+                    display: table-cell;
                 }
             }
         }
