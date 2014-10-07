@@ -112,7 +112,10 @@ def edit():
 
     if flask.request.method == 'POST':
         form = flask.request.form
-        save_text(ns, name, form['content'], form['more_content'])
+        save_text(
+            ns, name,
+            form['title'], form['content'], form['more_content'],
+        )
         flask.flash("Text saved", 'success')
         return flask.redirect(flask.url_for('.edit', ns=ns, name=name))
 
@@ -120,6 +123,7 @@ def edit():
         'admin_edit.html',
         ns=ns,
         name=name,
+        title=text['title'],
         content=text['content'],
         more_content=text['more_content'],
     )

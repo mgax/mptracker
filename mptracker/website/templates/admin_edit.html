@@ -6,6 +6,11 @@
 
   <form method="post">
     <div class="form-group">
+      <label for="edit-title">Title</label>
+      <input name="title" id="edit-title" class="form-control" value="{{ title }}">
+    </div>
+
+    <div class="form-group">
       <label for="edit-content">Content</label>
       <textarea name="content"
         id="edit-content" class="form-control" rows="6">
