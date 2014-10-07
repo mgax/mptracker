@@ -613,8 +613,9 @@ class TextVersion(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)
     text_id = db.Column(db.ForeignKey('text.id'), nullable=False)
     time = db.Column(db.DateTime, default=lambda: datetime.utcnow())
-    content = db.Column(db.Text)
-    more_content = db.Column(db.Text)
+    title = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    more_content = db.Column(db.Text, nullable=False)
 
     text = db.relationship('Text',
         backref=db.backref('versions', lazy='dynamic'))
