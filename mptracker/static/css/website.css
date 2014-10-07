@@ -672,7 +672,11 @@ span.number {
   list-style-type: none;
 }
 .container-content .parties-content .parties-list li {
-  margin-bottom: 7px;
+  padding: 8px;
+  border-bottom: 1px solid #dce0e0;
+}
+.container-content .parties-content .parties-list li:first-child {
+  border-top: 1px solid #dce0e0;
 }
 .container-content .parties-content .parties-list li a {
   display: block;

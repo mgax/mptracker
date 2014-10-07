@@ -708,7 +708,11 @@ span {
         padding-left: 0;
         list-style-type: none;
         li {
-            margin-bottom: 7px;
+            padding: 8px;
+            border-bottom: 1px solid @colorBorder;
+            &:first-child {
+              border-top: 1px solid @colorBorder;
+            }
             a {
                 display: block;
                 height: 64px;
