@@ -634,6 +634,7 @@ def text_page(name, ns='general', comments=False):
     text = get_text(ns, name)
     return flask.render_template(
         'text.html',
+        title=text['title'],
         text=text['content'] + text['more_content'],
         comments=comments,
     )
