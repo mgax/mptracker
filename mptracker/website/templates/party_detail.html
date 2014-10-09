@@ -57,25 +57,25 @@
             <div class="col-sm-1"></div>
             <div class="col-sm-5">
                 <div class="row stat">
-                    <div class="col-sm-7">
+                    <div class="col-sm-5">
                         {% set url = url_for('.party_members', party_short_name=party.short_name) %}
                         <a href="{{ url }}" class="number">
                             {% set current_member_count = party['member_list']|count %}
                             {{ current_member_count }}
                         </a>
                     </div>
-                    <div class="col-sm-5 description">
+                    <div class="col-sm-7 description">
                         Membri în mandatul curent
                     </div>
                 </div>
                 <div class="row stat">
-                    <div class="col-sm-7">
+                    <div class="col-sm-5">
                         <a href="#" class="number">
                             {{ total_members or current_member_count }}
                         </a>
                     </div>
-                    <div class="col-sm-5 description">
-                        Membri<br /> în total
+                    <div class="col-sm-7 description">
+                        Deputați aleși din 1990
                     </div>
                 </div>
                 <div class="row">
