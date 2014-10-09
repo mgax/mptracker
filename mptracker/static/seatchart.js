@@ -74,17 +74,21 @@ app.render_seatchart = function(options) {
         .domain([0, dots.length - 1])
         .range(['red', 'blue']);
 
-    svg.selectAll('circle')
+    var circle = svg.selectAll('circle')
         .data(dots)
       .enter().append('circle')
         .style('fill', function(d) { return d.color; })
-        .style('cursor', 'pointer')
         .attr('r', dotSize / 2)
         .attr('cx', function(d) { return r(d.row) * Math.cos(φ(d)); })
-        .attr('cy', function(d) { return - r(d.row) * Math.sin(φ(d)); })
+        .attr('cy', function(d) { return - r(d.row) * Math.sin(φ(d)); });
+
+    if(options.clickable) {
+      circle
+        .style('cursor', 'pointer')
         .on('click', on_click_dot)
         .append('title')
           .text(function(d) { return d.party; });
+    }
 
     function on_click_dot(d) {
         window.location.href = '/partide/' + d.party;

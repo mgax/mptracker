@@ -51,7 +51,8 @@
     app.render_seatchart({
       container: $('.seatchart').empty()[0],
       total: {{ seats_total }},
-      highlight: {{ seats|tojson }}
+      highlight: {{ seats|tojson }},
+      clickable: true
     });
   }
 
