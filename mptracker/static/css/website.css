@@ -312,6 +312,11 @@ a:hover {
   color: #fff;
   text-shadow: -3px -1px 2px #969696;
 }
+.content-home .sub-section.statistic .statistic-content {
+  max-height: 118px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .content-home .sub-section.statistic p {
   margin-top: 15px;
 }

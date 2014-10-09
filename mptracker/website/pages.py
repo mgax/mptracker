@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import functools
 import re
 import flask
@@ -10,7 +10,7 @@ from mptracker.common import csv_lines, csv_response, buffer_on_disk
 from mptracker.common import parse_date
 from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
-from mptracker.website.texts import get_text
+from mptracker.website.texts import get_text, get_text_list
 from path import path
 
 dal = DataAccess(missing=NotFound)
@@ -150,6 +150,8 @@ def debug():
 
 @pages.route('/')
 def home():
+    STATS_SLIDE_COLOR = ['blue', 'green', 'orange']
+
     migration_list = []
     for item in dal.get_migrations(limit=2):
         person = dal.get_person(item['person']['slug'])
@@ -157,6 +159,14 @@ def home():
         migration_list.append(item)
 
     similarity_person = dal.get_person('ponta-victor-viorel')
+
+    slide_list = [name for ns, name in get_text_list() if ns == 'stats']
+    slide_list.sort()
+    stats_count = min([len(STATS_SLIDE_COLOR), len(slide_list)])
+    stats_idx = (datetime.utcnow().minute % stats_count)
+    stats_color = STATS_SLIDE_COLOR[stats_idx]
+    stats_name = slide_list[stats_idx]
+    stats_text = get_text('stats', stats_name)
 
     return flask.render_template('home.html', **{
         'policy_list': dal.get_policy_list(),
@@ -174,6 +184,15 @@ def home():
         'migration_count': dal.get_migration_count(),
         'similarity_person': similarity_person.get_main_details(),
         'person_list': dal.search_person_by_name(''),
+        'stats': {
+            'background_img': flask.url_for(
+                'static',
+                filename='img/stats/%s.jpg' % stats_color,
+            ),
+            'title': stats_text['title'],
+            'content': stats_text['content'] + stats_text['more_content'],
+            'url': flask.url_for('.stats_page', name=stats_name)
+        },
     })
 
 
@@ -637,6 +656,19 @@ def text_page(name, ns='general', comments=False):
         title=text['title'],
         text=text['content'] + text['more_content'],
         comments=comments,
+    )
+
+
+@pages.route('/statistici/<name>')
+def stats_page(name):
+    text = get_text('stats', name)
+    if not text['title']:
+        flask.abort(404)
+    return flask.render_template(
+        'text.html',
+        title=text['title'],
+        text=text['content'] + text['more_content'],
+        comments=False,
     )
 
 

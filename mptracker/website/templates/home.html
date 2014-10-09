@@ -284,6 +284,22 @@
             </div>
         </div>
         <div class="col-sm-4">
+            <div class="row sub-section statistic">
+                <h3>Statistica Lunii</h3>
+                <div class="statistic-title">
+                    <div class="statistic-title-image">
+                        <img src="{{ stats.background_img }}" />
+                    </div>
+                    <div class="statistic-title-text">
+                        <a href="{{ stats.url }}">{{ stats.title }}</a>
+                    </div>
+                </div>
+                <div class="statistic-content">
+                  {{ stats.content|safe }}
+                </div>
+                <p><a href="{{ stats.url }}">continuare &raquo;</a></p>
+            </div>
+
             <div class="sub-section public-politics">
                 <h3>Top domenii de politici publice</h3>
                 <div class="row piechart">
