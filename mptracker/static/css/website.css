@@ -306,8 +306,7 @@ a:hover {
   padding: 10px;
 }
 .content-home .sub-section.statistic .statistic-title .statistic-title-text a {
-  color: #fff;
-  text-shadow: -3px -1px 2px #969696;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 .content-home .sub-section.statistic .statistic-content {
   max-height: 118px;
