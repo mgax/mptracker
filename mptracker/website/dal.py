@@ -922,6 +922,8 @@ class DataAccess:
         return rv
 
     def get_policy_committees(self, slug):
+        if slug is None:
+            return []
         policy = PolicyDomain.query.filter_by(slug=slug).one()
         return [
             {
