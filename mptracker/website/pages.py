@@ -160,13 +160,19 @@ def home():
 
     similarity_person = dal.get_person('ponta-victor-viorel')
 
-    slide_list = [name for ns, name in get_text_list() if ns == 'stats']
-    slide_list.sort()
-    stats_count = min([len(STATS_SLIDE_COLOR), len(slide_list)])
-    stats_idx = (datetime.utcnow().minute % stats_count)
-    stats_color = STATS_SLIDE_COLOR[stats_idx]
-    stats_name = slide_list[stats_idx]
-    stats_text = get_text('stats', stats_name)
+    stats_name_list = [name for ns, name in get_text_list() if ns == 'stats']
+
+    def stats_detail(name, color):
+        stats_text = get_text('stats', name)
+        return {
+            'background_img': flask.url_for(
+                'static',
+                filename='img/stats/%s.jpg' % color,
+            ),
+            'title': stats_text['title'],
+            'content': stats_text['content'] + stats_text['more_content'],
+            'url': flask.url_for('.stats_page', name=name)
+        }
 
     return flask.render_template('home.html', **{
         'policy_list': dal.get_policy_list(),
@@ -184,15 +190,10 @@ def home():
         'migration_count': dal.get_migration_count(),
         'similarity_person': similarity_person.get_main_details(),
         'person_list': dal.search_person_by_name(''),
-        'stats': {
-            'background_img': flask.url_for(
-                'static',
-                filename='img/stats/%s.jpg' % stats_color,
-            ),
-            'title': stats_text['title'],
-            'content': stats_text['content'] + stats_text['more_content'],
-            'url': flask.url_for('.stats_page', name=stats_name)
-        },
+        'stats_list': [
+            stats_detail(name, STATS_SLIDE_COLOR[i])
+            for i, name in enumerate(sorted(stats_name_list))
+        ],
     })
 
 

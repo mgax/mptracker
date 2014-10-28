@@ -1086,3 +1086,15 @@ figure {
 .rightmenu > li.rightmenu-questions a {
   color: #5A167B;
 }
+.stats-slider-frame {
+  position: relative;
+  height: 333px;
+  overflow: hidden;
+}
+.stats-slider-frame .stats-slider-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  background: white;
+}
