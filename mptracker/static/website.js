@@ -71,7 +71,6 @@ app.PersonPolicySearch = app.PersonSearch.extend({
     },
 
     update: function(query) {
-        console.log(query);
         this.policy_slug = query.policy_slug;
         return app.PersonSearch.prototype.update.apply(this, arguments);
     }

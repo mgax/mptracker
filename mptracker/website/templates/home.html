@@ -350,7 +350,6 @@
   var vote_similarity_list = null;
 
   $.get({{ url_for('.home_votesimilarity')|tojson }}).then(function(data) {
-    console.log(data);
     vote_similarity_list = data.vote_similarity_list;
     render();
   });

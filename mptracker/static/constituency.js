@@ -66,7 +66,6 @@ app.create_map = function(options) {
       content.append($('<div>').append($('<b>').text(county_name)));
 
       var mandate_list = options.mandate_data[deputati_key];
-      console.log(mandate_list);
       if(mandate_list) {
         content.append("deputat D" + props['COLDEP'] + " ");
         for(var c = 0; c < mandate_list.length; c ++) {
