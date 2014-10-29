@@ -84,7 +84,8 @@ app.render_similarity_barchart = function(options) {
         bar_margin = 2,
         bar_delta = bar_height + bar_margin,
         width = $(options.container).width(),
-        height = margin.top + margin.bottom + bar_margin + 2*bar_height;
+        height = margin.top + margin.bottom + bar_margin +
+                 bar_height * d3.max([2, options.data.length]);
 
     var x = d3.scale.linear()
         .domain([0, options.percent ? 1 : options.max * 1.2])
