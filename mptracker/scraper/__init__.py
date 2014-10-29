@@ -1309,7 +1309,12 @@ def get_committee_attendance(no_commit=False):
 
     for row in get_gdrive_csv(COMMITTEE_ROLL_CALL_CSV_KEY):
         person = person_map[row['Nume'].strip()]
-        mandate = person.mandates.filter_by(year=2012).one()
+        mandate = (
+            person.mandates
+            .filter_by(year=2012)
+            .order_by('interval')
+            .first()
+        )
 
         for n in [1, 2]:
             _data = parse_committee_data(row, n)
@@ -1317,7 +1322,12 @@ def get_committee_attendance(no_commit=False):
                 continue
 
             (committee, attendance_2013) = _data
-            membership = committee.memberships.filter_by(mandate=mandate).one()
+            membership = (
+                committee.memberships
+                .filter_by(mandate=mandate)
+                .order_by('interval')
+                .first()
+            )
 
             if membership.attendance_2013 is not None:
                 if not almost_eq(membership.attendance_2013, attendance_2013):
