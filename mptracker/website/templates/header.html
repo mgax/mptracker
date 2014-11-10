@@ -30,6 +30,14 @@
                     <i class="fa fa-youtube"></i>
                   </span>
                 </a>
+
+                {%- if feed_url %}
+                  <a href="{{ feed_url }}">
+                    <span class="social-button">
+                      <i class="fa fa-rss"></i>
+                    </span>
+                  </a>
+                {%- endif %}
               </li>
             </ul>
         </nav>

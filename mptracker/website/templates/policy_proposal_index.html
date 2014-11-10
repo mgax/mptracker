@@ -4,13 +4,15 @@
 
 
 {% block head %}
-  {%- set url = url_for('.policy_proposal_feed') %}
-  <link rel="alternate" type="application/atom+xml" href="{{ url }}"/>
+  <link rel="alternate" type="application/atom+xml" href="{{ feed_url }}"/>
 {% endblock %}
 
 {% block content %}
 <div class="container-content container-general container-policies">
-    <h2>Propuneri legislative și proiecte de lege</h2>
+    <h2>
+      Propuneri legislative și proiecte de lege
+      <a href="{{ feed_url }}"><i class="fa fa-rss-square"></i></a>
+    </h2>
 
     {{ proposals_table(proposal_list) }}
 </div>

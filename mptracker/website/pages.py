@@ -590,11 +590,17 @@ def policy_controversy():
 def policy_detail(policy_slug=None):
     if policy_slug is None:
         policy_name = "Altele"
+        feed_url = None
     else:
         policy_name = dal.get_policy(policy_slug)['name']
+        feed_url = flask.url_for(
+            '.policy_proposal_feed',
+            policy_slug=policy_slug,
+        )
     ctx = {
         'policy_slug': policy_slug,
         'policy_name': policy_name,
+        'feed_url': feed_url,
         'proposal_list': dal.get_policy_proposal_list(policy_slug),
         'question_list': dal.get_policy_question_list(policy_slug),
         'active_parties': dal.get_policy_top_parties(policy_slug),
@@ -634,6 +640,7 @@ def policy_proposal_index():
     ctx = {
         'proposal_list': dal.get_policy_proposal_list(),
         'breadcrumb': ['Politici publice'],
+        'feed_url': flask.url_for('.policy_proposal_feed'),
     }
     return flask.render_template('policy_proposal_index.html', **ctx)
 
