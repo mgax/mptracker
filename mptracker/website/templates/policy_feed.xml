@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Propuneri legislative – {{ policy_name }}</title>
+  <title>Propuneri legislative
+    {%- if policy_slug %} – {{ policy_name }}{% endif -%}
+  </title>
   <link href="{{ request.url }}" rel="self" />
   <link href="{{ url_for('.home', _external=True) }}" />
   <id>{{ request.url }}</id>
