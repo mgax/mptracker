@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Propuneri legislative – {{ policy_name }}</title>
+  <link href="{{ request.url }}" rel="self" />
+  <link href="{{ url_for('.home', _external=True) }}" />
+  <id>{{ request.url }}</id>
+  <updated>2003-12-13T18:30:02Z</updated>
+  <author>
+    <name>Parlament Transparent</name>
+  </author>
+  {%- for proposal in proposal_list %}
+
+  <entry>
+    {%- set url = url_for(
+        '.policy_proposal',
+        proposal_id=proposal.id,
+        _external=True,
+      ) %}
+    <link href="{{ url }}" />
+    <id>{{ url }}</id>
+    <published>{{ proposal.date }}T00:00:00Z</published>
+    <updated>{{ proposal.modification_date }}T00:00:00Z</updated>
+    <title>{{ proposal.title|truncate(60) }}</title>
+    <content type="html">{{ proposal.html }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

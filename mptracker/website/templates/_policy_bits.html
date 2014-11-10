@@ -1,8 +1,3 @@
-{% set STATUS_LABEL = {
-    'inprogress': "În lucru",
-    'approved': "Aprobat",
-    'rejected': "Respins",
-  } %}
 
 
 {% macro proposals_table(proposal_list) %}
@@ -32,7 +27,7 @@
                             <i class="fa fa-exclamation-circle"></i>
                         </span>
                     {%- endif %}
-                    {{- STATUS_LABEL[proposal.status] -}}
+                    {{- PROPOSAL_STATUS_LABEL[proposal.status] -}}
                 </div>
                 <div class="clear"></div>
             </div>

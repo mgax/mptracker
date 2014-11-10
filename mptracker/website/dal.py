@@ -428,10 +428,14 @@ class DataAccess:
         return [
             {
                 'title': proposal.title,
+                'date': proposal.date,
+                'modification_date': proposal.modification_date,
                 'id': proposal.id,
                 'status': proposal.status,
                 'tacit_approval': pluck_tacit_approval(proposal),
                 'controversy': proposal.controversy.all(),
+                'cdeppk_cdep': proposal.cdeppk_cdep,
+                'cdeppk_senate': proposal.cdeppk_senate,
             }
             for proposal in (
                 Proposal.query

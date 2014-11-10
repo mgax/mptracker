@@ -605,6 +605,28 @@ def policy_detail(policy_slug=None):
     return flask.render_template('policy_detail.html', **ctx)
 
 
+@pages.route('/politici/<policy_slug>/feed')
+@section('policy')
+def policy_proposal_feed(policy_slug):
+    proposal_list = dal.get_policy_proposal_list(policy_slug)
+    proposal_list.reverse()
+    def html(p):
+        return flask.render_template('policy_feed_item.html', proposal=p)
+    atom = flask.render_template(
+        'policy_feed.xml',
+        policy_name=dal.get_policy(policy_slug)['name'],
+        updated=max(
+            p['modification_date'] for p in
+            proposal_list or [{'modification_date': date.today()}]
+        ),
+        proposal_list=[
+            dict(p, html=html(p))
+            for p in proposal_list[:20]
+        ],
+    )
+    return flask.Response(atom, mimetype='application/atom+xml')
+
+
 @pages.route('/politici/propuneri/')
 @section('policy')
 def policy_proposal_index():

@@ -86,6 +86,12 @@ CHAMBER_NAME = {
     2: "camera deputaților",
 }
 
+PROPOSAL_STATUS_LABEL = {
+    'inprogress': "În lucru",
+    'approved': "Aprobat",
+    'rejected': "Respins",
+}
+
 
 class UuidConverter(BaseConverter):
 
@@ -133,6 +139,7 @@ def inject_constants(state):
           'permanent-bureau': "membru al biroului permanent",
           'committee-president': "președinte de comisie parlamentară",
         },
+        'PROPOSAL_STATUS_LABEL': PROPOSAL_STATUS_LABEL,
     })
 
 

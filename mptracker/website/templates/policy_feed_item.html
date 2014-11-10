@@ -1,0 +1,12 @@
+<h1>{{ proposal.title }}</h1>
+<ul>
+  <li>Stadiu: {{ PROPOSAL_STATUS_LABEL[proposal.status] }}</li>
+  {%- if proposal.cdeppk_cdep %}
+    {%- set url = 'http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=2&idp=' + proposal.cdeppk_cdep|string %}
+    <li>Camera Deputaților: <a href="{{ url }}">{{ url }}</a></li>
+  {%- endif %}
+  {%- if proposal.cdeppk_senate %}
+    {%- set url = 'http://www.cdep.ro/pls/proiecte/upl_pck.proiect?cam=1&idp=' + proposal.cdeppk_senate|string %}
+    <li>Senat: <a href="{{ url }}">{{ url }}</a></li>
+  {%- endif %}
+</ul>
