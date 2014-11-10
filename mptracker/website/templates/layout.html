@@ -15,6 +15,7 @@
             PARTY_COLOR: {{ PARTY_COLOR|tojson }}
         };
     </script>
+    {% block head %}{% endblock %}
   </head>
 
   <body {% if body_class %}class="{{ body_class }}"{% endif %}>

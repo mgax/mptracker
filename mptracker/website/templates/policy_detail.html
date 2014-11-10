@@ -2,6 +2,15 @@
 
 {% from '_policy_bits.html' import proposals_table, questions_table %}
 
+
+{% block head %}
+  {%- if policy_slug %}
+    {%- set url = url_for('.policy_proposal_feed', policy_slug=policy_slug) %}
+    <link rel="alternate" type="application/atom+xml" href="{{ url }}"/>
+  {%- endif %}
+{% endblock %}
+
+
 {% block content %}
 <div class="container-content container-general container-policies">
   {{ text(policy_slug, ns='policy') }}
