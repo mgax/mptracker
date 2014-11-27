@@ -7,6 +7,7 @@ from flask import json
 from mptracker.common import PARTY_ORDER
 from mptracker.models import (
     Ask,
+    Chamber,
     County,
     GroupVote,
     Mandate,
@@ -972,13 +973,39 @@ class DataAccess:
         }
 
     def get_all_proposals(self, year):
-        query = (
-            Proposal.query
-            .filter(Proposal.date >= date(year, 1, 1))
-            .filter(Proposal.date <= date(year, 12, 31))
+        sponsors_cte = lambda chamber_slug: (
+            db.session.query(
+                Sponsorship.proposal_id.label('id'),
+                func.string_agg(
+                    Person.first_name + " " + Person.last_name,
+                    ', '
+                ).label('namelist'),
+            )
+            .join(Sponsorship.mandate)
+            .join(Mandate.person)
+            .join(Mandate.chamber)
+            .filter(Chamber.slug == chamber_slug)
+            .group_by(Sponsorship.proposal_id)
+            .cte()
         )
 
-        for proposal in query:
+        cdep_cte = sponsors_cte('cdep')
+        senate_cte = sponsors_cte('senat')
+
+        query = (
+            db.session.query(
+                Proposal,
+                cdep_cte.c.namelist,
+                senate_cte.c.namelist,
+            )
+            .outerjoin(cdep_cte, cdep_cte.c.id == Proposal.id)
+            .outerjoin(senate_cte, senate_cte.c.id == Proposal.id)
+            .filter(Proposal.date >= date(year, 1, 1))
+            .filter(Proposal.date <= date(year, 12, 31))
+            .order_by(Proposal.date, Proposal.id)
+        )
+
+        for (proposal, namelist_cdep, namelist_senate) in query:
             yield {
                 'title': proposal.title,
                 'url_cdep': proposal.url_cdep,
@@ -989,4 +1016,6 @@ class DataAccess:
                 'date': proposal.date,
                 'modification_date': proposal.modification_date,
                 'status': proposal.status,
+                'namelist_cdep': namelist_cdep or "",
+                'namelist_senate': namelist_senate or "",
             }

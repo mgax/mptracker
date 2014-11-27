@@ -827,6 +827,8 @@ def export_proposals():
         'titlu',
         'url-cdep',
         'url-senat',
+        'initiatori-cdep',
+        'initiatori-senat',
     ]
     year = flask.request.args.get('an', type=int)
     rows = (
@@ -840,6 +842,8 @@ def export_proposals():
             'titlu': row['title'],
             'url-cdep': row['url_cdep'],
             'url-senat': row['url_senate'],
+            'initiatori-cdep': row['namelist_cdep'],
+            'initiatori-senat': row['namelist_senate'],
         }
         for row in dal.get_all_proposals(year=year)
     )
