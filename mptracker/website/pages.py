@@ -8,7 +8,8 @@ from babel.numbers import format_currency
 from mptracker import models
 from mptracker.common import csv_lines, csv_response, buffer_on_disk
 from mptracker.common import parse_date
-from mptracker.common import VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR
+from mptracker.common import (VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR,
+                              PROPOSAL_STATUS_LABEL)
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
 from mptracker.website.texts import get_text, get_text_list
 from path import path
@@ -808,6 +809,39 @@ def export_questions():
             'scor': int(row['local_score']),
         }
         for row in dal.get_all_questions(year=year)
+    )
+    data = buffer_on_disk(csv_lines(cols, rows))
+    return csv_response(data)
+
+
+@pages.route('/export/propuneri-legislative.csv')
+@section('export')
+def export_proposals():
+    cols = [
+        'nr-cdep',
+        'nr-senat',
+        'nr-bpi',
+        'data-propunere',
+        'data-actualizare',
+        'status',
+        'titlu',
+        'url-cdep',
+        'url-senat',
+    ]
+    year = flask.request.args.get('an', type=int)
+    rows = (
+        {
+            'nr-cdep': row['number_cdep'],
+            'nr-senat': row['number_senate'],
+            'nr-bpi': row['number_bpi'],
+            'data-propunere': row['date'].isoformat(),
+            'data-actualizare': row['modification_date'].isoformat(),
+            'status': PROPOSAL_STATUS_LABEL[row['status']],
+            'titlu': row['title'],
+            'url-cdep': row['url_cdep'],
+            'url-senat': row['url_senate'],
+        }
+        for row in dal.get_all_proposals(year=year)
     )
     data = buffer_on_disk(csv_lines(cols, rows))
     return csv_response(data)

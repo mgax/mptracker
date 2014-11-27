@@ -449,6 +449,20 @@ class Proposal(db.Model):
     def text(self, value):
         self._get_text_row().text = value
 
+    @property
+    def url_cdep(self):
+        if not self.cdeppk_cdep:
+            return None
+        path = 'http://www.cdep.ro/pls/proiecte/upl_pck.proiect'
+        return '{p}?cam=2&idp={s.cdeppk_cdep}'.format(p=path, s=self)
+
+    @property
+    def url_senate(self):
+        if not self.cdeppk_senate:
+            return None
+        path = 'http://www.cdep.ro/pls/proiecte/upl_pck.proiect'
+        return '{p}?cam=2&idp={s.cdeppk_senate}'.format(p=path, s=self)
+
 
 class ProposalControversy(db.Model):
     id = db.Column(UUID, primary_key=True, default=random_uuid)

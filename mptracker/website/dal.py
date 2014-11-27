@@ -970,3 +970,23 @@ class DataAccess:
             'cdep_id': committee.cdep_id,
             'member_list': member_list,
         }
+
+    def get_all_proposals(self, year):
+        query = (
+            Proposal.query
+            .filter(Proposal.date >= date(year, 1, 1))
+            .filter(Proposal.date <= date(year, 12, 31))
+        )
+
+        for proposal in query:
+            yield {
+                'title': proposal.title,
+                'url_cdep': proposal.url_cdep,
+                'url_senate': proposal.url_senate,
+                'number_cdep': proposal.number_cdep,
+                'number_senate': proposal.number_senate,
+                'number_bpi': proposal.number_bpi,
+                'date': proposal.date,
+                'modification_date': proposal.modification_date,
+                'status': proposal.status,
+            }
