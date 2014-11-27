@@ -774,6 +774,7 @@ def export_bounded_mandates(rq):
     return csv_response(csv_lines(cols, out_list))
 
 
+@pages.route('/export/voturi.csv', defaults={'year': None})
 @pages.route('/export/voturi-<int:year>.csv')
 @section('export')
 def export_votes(year):
@@ -792,6 +793,7 @@ def export_votes(year):
     return csv_response(data)
 
 
+@pages.route('/export/intrebari.csv', defaults={'year': None})
 @pages.route('/export/intrebari-<int:year>.csv')
 @section('export')
 def export_questions(year):
@@ -843,6 +845,30 @@ def export_proposals(year):
             'initiatori-senat': row['namelist_senate'],
         }
         for row in dal.get_all_proposals(year=year)
+    )
+    data = buffer_on_disk(csv_lines(cols, rows))
+    return csv_response(data)
+
+
+@pages.route('/export/activitate-deputati-<int:year>.csv')
+@section('export')
+def export_activity(year):
+    cols = [
+        'nume',
+        'propuneri-total',
+        'propuneri-inlucru',
+        'propuneri-acceptate',
+        'propuneri-respinse',
+    ]
+    rows = (
+        {
+            'nume': row['name'],
+            'propuneri-total': row['proposals_total'],
+            'propuneri-inlucru': row['proposals_inprogress'],
+            'propuneri-acceptate': row['proposals_approved'],
+            'propuneri-respinse': row['proposals_rejected'],
+        }
+        for row in dal.get_mandate_activity(year=year)
     )
     data = buffer_on_disk(csv_lines(cols, rows))
     return csv_response(data)

@@ -1019,3 +1019,47 @@ class DataAccess:
                 'namelist_cdep': namelist_cdep or "",
                 'namelist_senate': namelist_senate or "",
             }
+
+    def get_mandate_activity(self, year):
+        proposal_cte = (
+            db.session.query(
+                Mandate.id,
+                func.count(Proposal.id)
+                    .label('total'),
+                func.count(func.nullif(Proposal.status, 'inprogress'))
+                    .label('_inprogress'),
+                func.count(func.nullif(Proposal.status, 'approved'))
+                    .label('_approved'),
+                func.count(func.nullif(Proposal.status, 'rejected'))
+                    .label('_rejected'),
+            )
+            .join(Sponsorship.mandate)
+            .join(Sponsorship.proposal)
+            .filter(Proposal.date >= date(year, 1, 1))
+            .filter(Proposal.date <= date(year, 12, 31))
+            .group_by(Mandate.id)
+            .cte()
+        )
+
+        query = (
+            db.session.query(
+                Person,
+                proposal_cte.c.total,
+                proposal_cte.c._inprogress,
+                proposal_cte.c._approved,
+                proposal_cte.c._rejected,
+            )
+            .join(Mandate.person)
+            .filter(Mandate.year == 2012)
+            .outerjoin(proposal_cte, Mandate.id == proposal_cte.c.id)
+            .order_by(Person.first_name, Person.last_name, Person.id)
+        )
+
+        for (person, total, _inprogress, _approved, _rejected) in query:
+            yield {
+                'name': person.name_first_last,
+                'proposals_total': (total or 0),
+                'proposals_inprogress': (total or 0) - (_inprogress or 0),
+                'proposals_approved': (total or 0) - (_approved or 0),
+                'proposals_rejected': (total or 0) - (_rejected or 0),
+            }
