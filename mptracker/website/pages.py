@@ -774,11 +774,10 @@ def export_bounded_mandates(rq):
     return csv_response(csv_lines(cols, out_list))
 
 
-@pages.route('/export/voturi.csv')
+@pages.route('/export/voturi-<int:year>.csv')
 @section('export')
-def export_votes():
+def export_votes(year):
     cols = ['data', 'cod cdep', 'nume', 'vot', 'vot grup']
-    year = flask.request.args.get('an', type=int)
     rows = (
         {
             'data': row['date'].isoformat(),
@@ -793,11 +792,10 @@ def export_votes():
     return csv_response(data)
 
 
-@pages.route('/export/intrebari.csv')
+@pages.route('/export/intrebari-<int:year>.csv')
 @section('export')
-def export_questions():
+def export_questions(year):
     cols = ['data', 'numar', 'tip', 'titlu', 'nume', 'destinatar', 'scor']
-    year = flask.request.args.get('an', type=int)
     rows = (
         {
             'data': row['date'].isoformat(),
@@ -814,9 +812,9 @@ def export_questions():
     return csv_response(data)
 
 
-@pages.route('/export/propuneri-legislative.csv')
+@pages.route('/export/propuneri-legislative-<int:year>.csv')
 @section('export')
-def export_proposals():
+def export_proposals(year):
     cols = [
         'nr-cdep',
         'nr-senat',
@@ -830,7 +828,6 @@ def export_proposals():
         'initiatori-cdep',
         'initiatori-senat',
     ]
-    year = flask.request.args.get('an', type=int)
     rows = (
         {
             'nr-cdep': row['number_cdep'],
