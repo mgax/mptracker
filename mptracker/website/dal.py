@@ -1041,6 +1041,19 @@ class DataAccess:
             .cte()
         )
 
+        transcript_cte = (
+            db.session.query(
+                Mandate.id,
+                func.count(Transcript.id).label('transcripts'),
+            )
+            .join(Mandate.transcripts)
+            .join(Transcript.chapter)
+            .filter(TranscriptChapter.date >= date(year, 1, 1))
+            .filter(TranscriptChapter.date <= date(year, 12, 31))
+            .group_by(Mandate.id)
+            .cte()
+        )
+
         query = (
             db.session.query(
                 Person,
@@ -1048,18 +1061,22 @@ class DataAccess:
                 proposal_cte.c._inprogress,
                 proposal_cte.c._approved,
                 proposal_cte.c._rejected,
+                transcript_cte.c.transcripts,
             )
             .join(Mandate.person)
             .filter(Mandate.year == 2012)
             .outerjoin(proposal_cte, Mandate.id == proposal_cte.c.id)
+            .outerjoin(transcript_cte, Mandate.id == transcript_cte.c.id)
             .order_by(Person.first_name, Person.last_name, Person.id)
         )
 
-        for (person, total, _inprogress, _approved, _rejected) in query:
+        for (person, total, _inprogress, _approved, _rejected,
+             transcripts) in query:
             yield {
                 'name': person.name_first_last,
                 'proposals_total': (total or 0),
                 'proposals_inprogress': (total or 0) - (_inprogress or 0),
                 'proposals_approved': (total or 0) - (_approved or 0),
                 'proposals_rejected': (total or 0) - (_rejected or 0),
+                'transcripts': transcripts or 0,
             }
