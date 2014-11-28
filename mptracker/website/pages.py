@@ -12,6 +12,7 @@ from mptracker.common import (VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR,
                               PROPOSAL_STATUS_LABEL)
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
 from mptracker.website.texts import get_text, get_text_list
+from mptracker.website.admin import perm
 from path import path
 
 dal = DataAccess(missing=NotFound)
@@ -74,7 +75,7 @@ def money(value, currency):
 
 
 @pages.context_processor
-def inject_nav_links():
+def inject_into_context():
     return {
         'nav_link_list': [
             dict(
@@ -99,6 +100,7 @@ def inject_nav_links():
             ),
         ],
         'MP_HA': 10000,
+        'perm': perm,
     }
 
 
@@ -817,6 +819,9 @@ def export_questions(year):
 @pages.route('/export/propuneri-legislative-<int:year>.csv')
 @section('export')
 def export_proposals(year):
+    if not perm.admin.can():
+        flask.abort(403)
+
     cols = [
         'nr-cdep',
         'nr-senat',
@@ -853,6 +858,9 @@ def export_proposals(year):
 @pages.route('/export/activitate-deputati-<int:year>.csv')
 @section('export')
 def export_activity(year):
+    if not perm.admin.can():
+        flask.abort(403)
+
     cols = [
         'nume',
         'propuneri-total',
