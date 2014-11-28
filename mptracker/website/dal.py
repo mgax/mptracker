@@ -1054,6 +1054,21 @@ class DataAccess:
             .cte()
         )
 
+        questions_cte = (
+            db.session.query(
+                Mandate.id,
+                func.count('*').label('questions'),
+                func.count(func.nullif(Match.score, 0)).label('qlocal'),
+            )
+            .join(Mandate.asked)
+            .join(Ask.question)
+            .filter(Question.date >= date(year, 1, 1))
+            .filter(Question.date <= date(year, 12, 31))
+            .join(Ask.match_row)
+            .group_by(Mandate.id)
+            .cte()
+        )
+
         query = (
             db.session.query(
                 Person,
@@ -1062,16 +1077,19 @@ class DataAccess:
                 proposal_cte.c._approved,
                 proposal_cte.c._rejected,
                 transcript_cte.c.transcripts,
+                questions_cte.c.questions,
+                questions_cte.c.qlocal,
             )
             .join(Mandate.person)
             .filter(Mandate.year == 2012)
             .outerjoin(proposal_cte, Mandate.id == proposal_cte.c.id)
             .outerjoin(transcript_cte, Mandate.id == transcript_cte.c.id)
+            .outerjoin(questions_cte, Mandate.id == questions_cte.c.id)
             .order_by(Person.first_name, Person.last_name, Person.id)
         )
 
         for (person, total, _inprogress, _approved, _rejected,
-             transcripts) in query:
+             transcripts, questions, qlocal) in query:
             yield {
                 'name': person.name_first_last,
                 'proposals_total': (total or 0),
@@ -1079,4 +1097,6 @@ class DataAccess:
                 'proposals_approved': (total or 0) - (_approved or 0),
                 'proposals_rejected': (total or 0) - (_rejected or 0),
                 'transcripts': transcripts or 0,
+                'questions': questions or 0,
+                'questions-local': qlocal or 0,
             }

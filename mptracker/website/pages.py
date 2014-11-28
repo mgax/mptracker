@@ -868,6 +868,8 @@ def export_activity(year):
         'propuneri-acceptate',
         'propuneri-respinse',
         'luari-de-cuvant',
+        'intrebari',
+        'intrebari-locale',
     ]
     rows = (
         {
@@ -877,6 +879,8 @@ def export_activity(year):
             'propuneri-acceptate': row['proposals_approved'],
             'propuneri-respinse': row['proposals_rejected'],
             'luari-de-cuvant': row['transcripts'],
+            'intrebari': row['questions'],
+            'intrebari-locale': row['questions-local'],
         }
         for row in dal.get_mandate_activity(year=year)
     )
