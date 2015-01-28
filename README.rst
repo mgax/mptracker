@@ -2,7 +2,7 @@
 MP Tracker, Openpolitics.ro
 ===========================
 
-http://firenze.grep.ro/
+http://parlament.openpolitics.ro/
 
 A database of Romanian MPs and their activity. It crawls the `Chamber of
 Deputies website`_ and extracts questions submitted by MPs.
