@@ -32,9 +32,9 @@ class GroupScraper(Scraper):
 
     def fetch(self, year):
         index_page = self.fetch_url(self.index_url.format(year))
-        headline = index_page.find('td.headline')
+        headline = index_page.find('td.headline').eq(0)
         parent_table = pq(headline.parents('table')[-2])
-        table = list(parent_table.items('table'))[-1]
+        table = list(parent_table.items('table'))[-3]
 
         url_set = set()
         for link in table.items('tr > td > b > a'):
