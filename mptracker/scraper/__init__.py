@@ -706,8 +706,8 @@ def get_proposals(
                         .filter_by(chamber=1, pk=pk_senate)
                         .one()
                     )
-                    pk_cdep = pickle.loads(senate_page.result)['pk_cdep']
-                    if pk_cdep != page.pk:
+                    pk_cdep = pickle.loads(senate_page.result).get('pk_cdep')
+                    if pk_cdep and pk_cdep != page.pk:
                         page.parsed = True
                     p.cdeppk_cdep = pk_cdep
 
