@@ -916,7 +916,7 @@ class DataAccess:
         rv = []
 
         for short_name in PARTY_ORDER:
-            count = by_party.get(short_name)
+            count = by_party.get(short_name, 0)
             rv.append({
                 'party': short_name,
                 'count': count,
