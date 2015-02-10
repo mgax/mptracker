@@ -519,6 +519,10 @@ def party_index():
 @pages.route('/partide/<party_short_name>')
 @section('party')
 def party_detail(party_short_name):
+    if party_short_name == 'PDL':
+        pnl_url = flask.url_for('.party_detail', party_short_name='PNL')
+        return flask.redirect(pnl_url)
+
     party = dal.get_party(party_short_name)
     member_count = party.get_member_count()
     seats = {r['party']: r for r in dal.get_seats()}
