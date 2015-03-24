@@ -67,7 +67,7 @@ def _get_config_cache_name():
 
 @scraper_manager.command
 def get_questions(
-        year='2014',
+        year='2015',
         reimport_existing=False,
         cache_name=None,
         throttle=None,
@@ -563,7 +563,7 @@ def get_committees(
 
 
 @scraper_manager.command
-def committee_summaries(year=2014):
+def committee_summaries(year=2015):
     from mptracker.scraper.committee_summaries import SummaryScraper
 
     patcher = TablePatcher(models.CommitteeSummary,
