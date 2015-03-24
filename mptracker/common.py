@@ -145,6 +145,8 @@ def inject_constants(state):
 
 @common.app_template_filter('percent')
 def percent(value):
+    if value is None:
+        return '-'
     fmt = "%.0f%%" if (.1 < value < .9) else "%.1f%%"
     return fmt % (value * 100)
 
