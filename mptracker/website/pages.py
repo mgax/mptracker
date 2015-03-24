@@ -519,6 +519,10 @@ def party_index():
 @pages.route('/partide/<party_short_name>')
 @section('party')
 def party_detail(party_short_name):
+    if party_short_name == 'Minoritati':
+        pnl_url = flask.url_for('.party_detail', party_short_name='Mino.')
+        return flask.redirect(pnl_url)
+
     if party_short_name == 'PDL':
         pnl_url = flask.url_for('.party_detail', party_short_name='PNL')
         return flask.redirect(pnl_url)
