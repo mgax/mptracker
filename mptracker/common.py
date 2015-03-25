@@ -43,14 +43,14 @@ PARTY_COLOR = {
     "PC-PLR": "#3e99ff",
     "PDL": "#ff962d",
     "PNL": "#e9e900",
-    "PP-DD": "#5a167b",
+    "DP": "#5a167b",
     "PSD": "#f00",
     "UDMR": "#005900",
 }
 
 
 PARTY_ORDER = [
-    'PP-DD',
+    'DP',
     'PSD',
     'PC-PLR',
     'Mino.',
