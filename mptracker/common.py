@@ -188,6 +188,10 @@ def ocr_url(url, max_pages=MAX_OCR_PAGES):
 
     with temp_dir() as tmp:
         resp = http_session.get(url)
+        if resp.status_code == 404:
+            # cdep.ro doesn't have the PDF; skip it
+            return []
+
         if resp.status_code != 200:
             raise RuntimeError("PDF download failure (%d) at %r"
                                % (resp.status_code, url))
