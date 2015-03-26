@@ -108,13 +108,15 @@ def calculate_voting_session_loyalty(voting_session_id):
     }
 
     def get_top_choice(votes_by_choice):
-        top = max(
+        votelist = [
             (len(votes), choice)
             for choice, votes
             in votes_by_choice.items()
             if choice != 'novote'
-        )
-        return top[1]
+        ]
+        if not votelist:
+            return None
+        return max(votelist)[1]
 
     cabinet_top_choice = get_top_choice(vote_map.pop('_cabinet'))
     voting_session.cabinet_choice = cabinet_top_choice
