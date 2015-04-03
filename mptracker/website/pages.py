@@ -568,6 +568,24 @@ def party_members(party_short_name):
     })
 
 
+def policy_feed(title, proposal_list):
+    def html(p):
+        return flask.render_template('policy_feed_item.html', proposal=p)
+    atom = flask.render_template(
+        'policy_feed.xml',
+        title=title,
+        updated=max(
+            p['modification_date'] for p in
+            proposal_list or [{'modification_date': date.today()}]
+        ),
+        proposal_list=[
+            dict(p, html=html(p))
+            for p in proposal_list[:20]
+        ],
+    )
+    return flask.Response(atom, mimetype='application/atom+xml')
+
+
 @pages.route('/politici/')
 @section('policy')
 def policy_index():
@@ -593,6 +611,14 @@ def policy_controversy():
         'policy_controversy.html',
         proposal_list=dal.get_policy_controversy_list(),
     )
+
+
+@pages.route('/politici/controversate/feed')
+@section('policy')
+def policy_controversy_feed():
+    proposal_list = dal.get_policy_controversy_list()
+    proposal_list.reverse()
+    return policy_feed("Propuneri legislative controversate", proposal_list)
 
 
 @pages.route('/politici/<policy_slug>')
@@ -628,21 +654,11 @@ def policy_detail(policy_slug=None):
 def policy_proposal_feed(policy_slug=None):
     proposal_list = dal.get_policy_proposal_list(policy_slug)
     proposal_list.reverse()
-    def html(p):
-        return flask.render_template('policy_feed_item.html', proposal=p)
-    atom = flask.render_template(
-        'policy_feed.xml',
-        policy_name=dal.get_policy(policy_slug)['name'] if policy_slug else None,
-        updated=max(
-            p['modification_date'] for p in
-            proposal_list or [{'modification_date': date.today()}]
-        ),
-        proposal_list=[
-            dict(p, html=html(p))
-            for p in proposal_list[:20]
-        ],
-    )
-    return flask.Response(atom, mimetype='application/atom+xml')
+    if policy_slug is None:
+        title = "Propuneri legislative"
+    else:
+        title = "Propuneri legislative – " + dal.get_policy(policy_slug)['name']
+    return policy_feed(title, proposal_list)
 
 
 @pages.route('/politici/propuneri/')

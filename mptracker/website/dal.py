@@ -487,6 +487,8 @@ class DataAccess:
                 'status': proposal.status,
                 'tacit_approval': pluck_tacit_approval(proposal),
                 'controversy': proposal.controversy.all(),
+                'date': proposal.date,
+                'modification_date': proposal.modification_date,
             }
             for (controversy, proposal) in qs
         ]
