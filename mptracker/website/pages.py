@@ -604,6 +604,14 @@ def policy_tacit():
     )
 
 
+@pages.route('/politici/aprobate-tacit/feed')
+@section('policy')
+def policy_tacit_feed():
+    proposal_list = dal.get_policy_tacit_approval_list()
+    proposal_list.reverse()
+    return policy_feed("Propuneri legislative aprobate tacit", proposal_list)
+
+
 @pages.route('/politici/controversate')
 @section('policy')
 def policy_controversy():
