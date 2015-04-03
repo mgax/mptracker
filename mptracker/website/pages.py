@@ -600,6 +600,7 @@ def policy_index():
 def policy_tacit():
     return flask.render_template(
         'policy_tacit.html',
+        feed_url = flask.url_for('.policy_tacit_feed'),
         proposal_list=dal.get_policy_tacit_approval_list(),
     )
 
@@ -617,6 +618,7 @@ def policy_tacit_feed():
 def policy_controversy():
     return flask.render_template(
         'policy_controversy.html',
+        feed_url = flask.url_for('.policy_controversy_feed'),
         proposal_list=dal.get_policy_controversy_list(),
     )
 

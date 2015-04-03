@@ -2,6 +2,14 @@
 
 {% from '_policy_bits.html' import proposals_table %}
 
+
+{% block head %}
+  {%- if feed_url %}
+    <link rel="alternate" type="application/atom+xml" href="{{ feed_url }}"/>
+  {%- endif %}
+{% endblock %}
+
+
 {% block content %}
 <div class="container-content container-general no-breadcrumb">
     <div class="row">
@@ -10,7 +18,12 @@
 
             {{ text('proposal_controversy') }}
 
-            <h2>Propuneri legislative și proiecte de lege</h2>
+            <h2>
+              Propuneri legislative și proiecte de lege
+              {%- if feed_url %}
+                <a href="{{ feed_url }}"><i class="fa fa-rss-square"></i></a>
+              {%- endif %}
+            </h2>
 
             {{ proposals_table(proposal_list) }}
         </div>
