@@ -34,10 +34,14 @@ class GroupScraper(Scraper):
         index_page = self.fetch_url(self.index_url.format(year))
         headline = index_page.find('td.headline').eq(0)
         parent_table = pq(headline.parents('table')[-2])
-        table = list(parent_table.items('table'))[-3]
+        table_current = list(parent_table.items('table'))[-3]
+        table_ended = list(parent_table.items('table'))[-1]
 
         url_set = set()
-        for link in table.items('tr > td > b > a'):
+        for link in table_current.items('a'):
+            url_set.add(link.attr('href'))
+
+        for link in table_ended.items('a'):
             url_set.add(link.attr('href'))
 
         group_list = [self.fetch_group(url, year) for url in sorted(url_set)]
@@ -68,12 +72,13 @@ class GroupScraper(Scraper):
             group.is_independent = True
             group.short_name = "Indep."
 
-        group.current_members.extend(
-            membership_parser.parse_table(mp_tables[0]))
+        for mp_table in mp_tables:
+            headline = mp_table.prev().prev().text()
+            if headline == "":
+                group.current_members.extend(
+                    membership_parser.parse_table(mp_tables[0]))
 
-        if len(mp_tables) > 1:
-            headline = mp_tables[-1].prev().prev()
-            if "Foşti membri ai grupului" in headline.text():
+            if "Foşti membri ai grupului" in headline:
                 group.former_members.extend(
                     membership_parser.parse_table(mp_tables[-1]))
 
@@ -105,6 +110,9 @@ class GroupScraper(Scraper):
             if year == 2008 and member.mp_name == "Balcan Viorel":
                 if group.idg == 3:
                     member.start_date = date(2012, 9, 3)
+
+            if year == 2012 and member.mp_ident.number == 253:
+                member.mp_name = "Nicoară Romeo Florin"
 
         for member in to_remove:
             group.current_members.remove(member)
