@@ -31,6 +31,14 @@ from mptracker.website.dal_common import (
     _get_recent_proposals,
 )
 
+VACATIONS = [
+    (date(2012, 12, 24), date(2013, 1, 21)),
+    (date(2013, 7, 1), date(2013, 9, 2)),
+    (date(2013, 12, 30), date(2014, 2, 3)),
+    (date(2014, 7, 1), date(2014, 8, 31)),
+    (date(2014, 12, 20), date(2015, 2, 1)),
+]
+
 
 def group_by_week(data_iter):
     rv = defaultdict(int)
@@ -367,12 +375,6 @@ class DalPerson:
     def get_activitychart_data(self):
         days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
 
-        vacations = [
-            (date(2012, 12, 24), date(2013, 1, 21)),
-            (date(2013, 7, 1), date(2013, 9, 2)),
-            (date(2013, 12, 30), date(2014, 2, 3)),
-        ]
-
         proposals_by_day = group_by_week(
             db.session.query(
                 Proposal.date,
@@ -401,7 +403,7 @@ class DalPerson:
                 'date': day,
                 'proposals': proposals_by_day.get(day, 0),
                 'questions': questions_by_day.get(day, 0),
-                'vacation': any(d0 <= day < d1 for d0, d1 in vacations),
+                'vacation': any(d0 <= day < d1 for d0, d1 in VACATIONS),
             })
 
         return series
