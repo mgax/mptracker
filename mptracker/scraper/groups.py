@@ -72,6 +72,9 @@ class GroupScraper(Scraper):
             group.is_independent = True
             group.short_name = "Indep."
 
+        if year == 2012 and group.short_name == "Minoritati":
+            group.short_name = "Mino."
+
         for mp_table in mp_tables:
             headline = mp_table.prev().prev().text()
             if headline == "":
