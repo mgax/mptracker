@@ -114,9 +114,6 @@ class GroupScraper(Scraper):
                 if group.idg == 3:
                     member.start_date = date(2012, 9, 3)
 
-            if year == 2012 and member.mp_ident.number == 253:
-                member.mp_name = "Nicoară Romeo Florin"
-
         for member in to_remove:
             group.current_members.remove(member)
 
