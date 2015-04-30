@@ -397,7 +397,8 @@ class DataAccess:
             )
         )
 
-    def get_policy_proposal_list(self, policy_slug=None, mandate=None, party=None):
+    def get_policy_proposal_list(self,
+            policy_slug=None, mandate=None, party=None, limit=None):
         proposal_query = (
             db.session.query(
                 distinct(Proposal.id)
@@ -426,6 +427,13 @@ class DataAccess:
                 .filter(MpGroupMembership.interval.contains(Proposal.date))
             )
 
+        query = (
+            Proposal.query
+            .filter(Proposal.id.in_([r[0] for r in proposal_query]))
+            .order_by(Proposal.modification_date)
+        )
+        if limit is not None:
+            query = query.limit(limit)
         return [
             {
                 'title': proposal.title,
@@ -438,21 +446,17 @@ class DataAccess:
                 'cdeppk_cdep': proposal.cdeppk_cdep,
                 'cdeppk_senate': proposal.cdeppk_senate,
             }
-            for proposal in (
-                Proposal.query
-                .filter(Proposal.id.in_([r[0] for r in proposal_query]))
-                .order_by(Proposal.date)
-            )
+            for proposal in query
         ]
 
     def get_policy_tacit_approval_list(self, limit=None):
         qs = (
             self.get_policy_tacit_approval_qs()
-            .order_by(Proposal.date.desc())
+            .order_by(Proposal.modification_date.desc())
         )
         if limit:
             qs = qs.limit(limit)
-        rv = [
+        return [
             {
                 'title': proposal.title,
                 'id': proposal.id,
@@ -464,8 +468,6 @@ class DataAccess:
             }
             for proposal in qs
         ]
-        rv.sort(key=lambda r: r['tacit_approval']['date'], reverse=True)
-        return rv
 
     def get_policy_tacit_approval_count(self):
         return self.get_policy_tacit_approval_qs().count()
@@ -477,7 +479,7 @@ class DataAccess:
                 Proposal,
             )
             .join(ProposalControversy.proposal)
-            .order_by(Proposal.date.desc())
+            .order_by(Proposal.modification_date.desc())
         )
         if limit:
             qs = qs.limit(limit)

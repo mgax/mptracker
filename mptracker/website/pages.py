@@ -608,8 +608,7 @@ def policy_tacit():
 @pages.route('/politici/aprobate-tacit/feed')
 @section('policy')
 def policy_tacit_feed():
-    proposal_list = dal.get_policy_tacit_approval_list()
-    proposal_list.reverse()
+    proposal_list = dal.get_policy_tacit_approval_list(20)
     return policy_feed("Propuneri legislative aprobate tacit", proposal_list)
 
 
@@ -626,8 +625,7 @@ def policy_controversy():
 @pages.route('/politici/controversate/feed')
 @section('policy')
 def policy_controversy_feed():
-    proposal_list = dal.get_policy_controversy_list()
-    proposal_list.reverse()
+    proposal_list = dal.get_policy_controversy_list(20)
     return policy_feed("Propuneri legislative controversate", proposal_list)
 
 
@@ -662,8 +660,7 @@ def policy_detail(policy_slug=None):
 @pages.route('/politici/<policy_slug>/feed')
 @section('policy')
 def policy_proposal_feed(policy_slug=None):
-    proposal_list = dal.get_policy_proposal_list(policy_slug)
-    proposal_list.reverse()
+    proposal_list = dal.get_policy_proposal_list(policy_slug, limit=20)
     if policy_slug is None:
         title = "Propuneri legislative"
     else:
