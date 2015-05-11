@@ -430,7 +430,7 @@ class DataAccess:
         query = (
             Proposal.query
             .filter(Proposal.id.in_([r[0] for r in proposal_query]))
-            .order_by(Proposal.modification_date)
+            .order_by(Proposal.modification_date.desc())
         )
         if limit is not None:
             query = query.limit(limit)
