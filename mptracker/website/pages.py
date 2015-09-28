@@ -505,9 +505,11 @@ def party_index():
         dict(r, color=PARTY_COLOR.get(r['party']))
         for r in dal.get_seats()
     ]
-    party_list = dal.get_party_list()
-    for party in party_list:
-        party['logo_url'] = logo_url(dal.get_party(party['short_name']))
+    party_list = [
+        dict(p, logo_url=logo_url(dal.get_party(p['short_name'])))
+        for p in dal.get_party_list()
+        if p['short_name'] in PARTY_COLOR
+    ]
     return flask.render_template('party_index.html', **{
         'party_list': party_list,
         'breadcrumb': ['Partide'],
@@ -526,6 +528,9 @@ def party_detail(party_short_name):
     if party_short_name == 'PDL':
         pnl_url = flask.url_for('.party_detail', party_short_name='PNL')
         return flask.redirect(pnl_url)
+
+    if party_short_name not in PARTY_COLOR:
+        flask.abort(404)
 
     party = dal.get_party(party_short_name)
     member_count = party.get_member_count()
