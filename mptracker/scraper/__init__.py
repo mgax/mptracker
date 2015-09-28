@@ -719,7 +719,7 @@ def get_proposals(
 
         if p.cdeppk_senate:
             assert pk_senate == p.cdeppk_senate, \
-                repr((pk_senate, p.cdeppk_senate, p.id))
+                repr((page.id, pk_senate, p.cdeppk_senate, p.id))
         elif pk_senate:
             p.cdeppk_senate = pk_senate
             index['pk_senate'][pk_senate] = p
