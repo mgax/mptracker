@@ -14,6 +14,15 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+def classify_status(text):
+    if 'lege' in text.lower():
+        return 'approved'
+    elif u'procedură legislativă încetată' in text.lower():
+        return 'rejected'
+    else:
+        return 'inprogress'
+
+
 class Proposal(GenericModel):
     pass
 
@@ -254,14 +263,6 @@ class SingleProposalScraper:
         self.activity = {'cdep': [], 'senate': []}
         self.sponsorship_bucket = set()
 
-    def classify_status(self, text):
-        if 'LEGE' in text:
-            return 'approved'
-        elif u'procedură legislativă încetată' in text:
-            return 'rejected'
-        else:
-            return 'inprogress'
-
     def scrape_page(self, name, result):
         prop = self.prop
 
@@ -272,7 +273,7 @@ class SingleProposalScraper:
         prop.decision_chamber = result.get('decision_chamber')
         prop.pdf_url = result.get('pdf_url')
         prop.status_text = result.get('status_text')
-        prop.status = self.classify_status(result['status_text'])
+        prop.status = classify_status(result['status_text'])
         prop.date = result['date']
         prop.proposal_type = result.get('proposal_type')
 
