@@ -6,7 +6,6 @@ import tempfile
 from contextlib import contextmanager
 import flask
 from flask.ext.script import Manager
-from psycopg2.extras import DateRange
 from path import path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
@@ -23,17 +22,6 @@ scraper_manager = Manager()
 
 ONE_DAY = timedelta(days=1)
 
-TERM_INTERVAL = {
-    1990: DateRange(date(1990,  6, 18), date(1992, 10, 21)),
-    1992: DateRange(date(1992, 10, 21), date(1996, 11, 22)),
-    1996: DateRange(date(1996, 11, 22), date(2000, 12, 11)),
-    2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
-    2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
-    2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
-    2012: DateRange(date(2012, 12, 19), None),
-}
-
-TERM_2012_START = TERM_INTERVAL[2012].lower
 
 CONTROVERSY_CSV_KEY = '1oCBeyNZc6OxIDJTI25wCeEkIEzkxf6qAwhcE69eDKWY'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
@@ -408,7 +396,6 @@ def get_groups(
             interval_list.sort(key=lambda i: i[0])
 
     for mandate, interval_list in mandate_intervals.items():
-        # make sure interval_list are continuous
         new_intervals = []
         for interval_one, interval_two in \
             zip(interval_list[:-1], interval_list[1:]):
@@ -594,21 +581,10 @@ def get_proposal_pages(
     )
     scraper = ProposalScraper(session)
 
-    db_page_date = {
-        (chamber, pk): date
-        for (chamber, pk, date) in models.db.session.query(
-            models.ScrapedProposalPage.chamber,
-            models.ScrapedProposalPage.pk,
-            models.ScrapedProposalPage.date,
-        )
-    }
 
     for record in chain(scraper.list_proposals(2, year),
                         scraper.list_proposals(1, year)):
 
-        old_date = db_page_date.get((record['chamber'], record['pk']))
-        if old_date and old_date >= record['date']:
-            continue
 
         get_proposal_single_page(record['chamber'], record['pk'], cache_name)
 
@@ -620,7 +596,12 @@ def get_proposal_single_page(
         cache_name=None,
     ):
     import pickle
+    import yaml
+    import os
     from mptracker.scraper.proposals import ProposalScraper
+
+    SCRAPER_PACKAGE = path(__file__).abspath().parent
+    PROJECT_ROOT = SCRAPER_PACKAGE.parent.parent
 
     session = create_session(cache_name=cache_name or _get_config_cache_name())
     scraper = ProposalScraper(session)
@@ -634,20 +615,29 @@ def get_proposal_single_page(
         'date': date.today(),
     }
 
-    old_rows = (
-        models.ScrapedProposalPage.query
-        .filter_by(chamber=chamber, pk=pk)
-    )
-    old_rows.delete()
 
     logger.info("scraping %d %d", chamber, pk)
     result = scraper.scrape_proposal_page(chamber, pk)
 
-    scraped_page = models.ScrapedProposalPage(**record)
-    scraped_page.result = pickle.dumps(result)
-    models.db.session.add(scraped_page)
+    keylist = ["date", "html", "location"]
+    filename = PROJECT_ROOT / "proposals" / "proposal_{pk_p}_{chamber_p}.yml".format(
+            pk_p = pk, chamber_p = chamber)
 
-    models.db.session.commit()
+    # ref or not
+    activity_list = result['activity'].copy()
+    if 'activity' in result:
+        del result['activity']
+
+    dict_list = [k.as_dict(keylist) for k in activity_list]
+
+    result['activity'] = dict_list
+
+    if not os.path.exists(PROJECT_ROOT / "proposals"):
+        os.makedirs(PROJECT_ROOT / "proposals")
+
+    outfile = open(filename, "w")
+    outfile.write(yaml.dump(result, default_flow_style=True))
+
 
 
 @scraper_manager.command
@@ -663,85 +653,13 @@ def get_proposals(
 
     index = {'pk_cdep': {}, 'pk_senate': {}}
 
-    for p in models.Proposal.query:
-        if p.cdeppk_cdep:
-            index['pk_cdep'][p.cdeppk_cdep] = p
-        if p.cdeppk_senate:
-            index['pk_senate'][p.cdeppk_senate] = p
 
     dirty_proposal_set = set()
-    models.db.session.flush()
-
-    for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
-        result = pickle.loads(page.result)
-        pk_cdep = result.get('pk_cdep')
-        pk_senate = result.get('pk_senate')
-
-        if pk_cdep and pk_cdep in index['pk_cdep']:
-            p = index['pk_cdep'][pk_cdep]
-
-            if pk_senate and pk_senate in index['pk_senate']:
-                senate_proposal = index['pk_senate'][pk_senate]
-                if senate_proposal != p:
-                    logger.warn("Deleting stale senate proposal %r",
-                                senate_proposal.id)
-                    senate_proposal.sponsorships.delete()
-                    models.db.session.delete(senate_proposal)
-                    models.db.session.flush()
-
-        elif pk_senate and pk_senate in index['pk_senate']:
-            p = index['pk_senate'][pk_senate]
-
-        else:
-            p = models.Proposal()
-
-        if p.cdeppk_cdep:
-            if pk_cdep != p.cdeppk_cdep:
-                if page.chamber == 1:
-                    p.cdeppk_cdep = pk_cdep
-
-                elif page.chamber == 2 and pk_senate:
-                    senate_page = (
-                        models.ScrapedProposalPage.query
-                        .filter_by(chamber=1, pk=pk_senate)
-                        .one()
-                    )
-                    pk_cdep = pickle.loads(senate_page.result).get('pk_cdep')
-                    if pk_cdep and pk_cdep != page.pk:
-                        page.parsed = True
-                    p.cdeppk_cdep = pk_cdep
-
-                else:
-                    raise RuntimeError(repr((pk_cdep, p.cdeppk_cdep, p.id)))
-        elif pk_cdep:
-            p.cdeppk_cdep = pk_cdep
-            index['pk_cdep'][pk_cdep] = p
-
-        if p.cdeppk_senate:
-            assert pk_senate == p.cdeppk_senate, \
-                repr((page.id, pk_senate, p.cdeppk_senate, p.id))
-        elif pk_senate:
-            p.cdeppk_senate = pk_senate
-            index['pk_senate'][pk_senate] = p
-
-        dirty_proposal_set.add(p)
-
-        if limit and len(dirty_proposal_set) >= int(limit):
-            break
-
-    models.db.session.flush()
 
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
 
-    by_cdep_id = {cdep_id(m): m for m in models.Mandate.query}
-
-    chamber_by_slug = {c.slug: c for c in models.Chamber.query}
-
-    proposal_patcher = TablePatcher(models.Proposal,
-                                    models.db.session,
-                                    key_columns=['id'])
 
     sp_updates = sp_added = sp_removed = 0
 

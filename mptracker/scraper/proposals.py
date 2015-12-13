@@ -200,7 +200,6 @@ class ProposalScraper(Scraper):
         rv['date'] = get_date_from_numbers(date_texts)
         if rv['date'] is None:
             rv['date'] = rv['activity'][0].date
-
         return rv
 
     def get_activity(self, page):
