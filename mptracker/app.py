@@ -6,12 +6,12 @@ logger = logging.getLogger(__name__)
 
 
 def create_app():
-    from mptracker import models
+#    from mptracker import models
     from mptracker.common import common
     from mptracker.questions import questions
     from mptracker.pages import pages
     from mptracker.auth import auth
-    from mptracker.admin import admin
+    #from mptracker.admin import admin
     from mptracker.proposals import proposals
     from mptracker.votes import votes
 
@@ -19,14 +19,14 @@ def create_app():
     app.config.from_pyfile('../settings.py', silent=True)
     app._logger = logger
 
-    models.init_app(app)
-    app.register_blueprint(common)
-    app.register_blueprint(auth)
-    app.register_blueprint(pages)
-    app.register_blueprint(questions)
-    app.register_blueprint(proposals)
-    app.register_blueprint(votes)
-    admin.init_app(app)
+    #models.init_app(app)
+    #app.register_blueprint(common)
+    #app.register_blueprint(auth)
+    #app.register_blueprint(pages)
+    #app.register_blueprint(questions)
+    #app.register_blueprint(proposals)
+    #app.register_blueprint(votes)
+    #admin.init_app(app)
 
     if app.debug:
         from werkzeug.debug import DebuggedApplication

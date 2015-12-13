@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
-from mptracker import models
+#from mptracker import models
 from mptracker.common import ocr_url, csv_lines, buffer_on_disk
 from mptracker.nlp import match_text_for_mandate
 from mptracker.auth import require_privilege

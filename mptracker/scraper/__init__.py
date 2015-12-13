@@ -6,7 +6,7 @@ import tempfile
 from contextlib import contextmanager
 import flask
 from flask.ext.script import Manager
-from psycopg2.extras import DateRange
+#from psycopg2.extras import DateRange
 from path import path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
@@ -15,6 +15,7 @@ from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args, almost_eq, \
                              generate_slug, iter_file, calculate_md5, temp_dir
 from mptracker.patcher import TablePatcher
+import yaml
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -23,17 +24,17 @@ scraper_manager = Manager()
 
 ONE_DAY = timedelta(days=1)
 
-TERM_INTERVAL = {
-    1990: DateRange(date(1990,  6, 18), date(1992, 10, 21)),
-    1992: DateRange(date(1992, 10, 21), date(1996, 11, 22)),
-    1996: DateRange(date(1996, 11, 22), date(2000, 12, 11)),
-    2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
-    2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
-    2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
-    2012: DateRange(date(2012, 12, 19), None),
-}
+#TERM_INTERVAL = {
+#    1990: DateRange(date(1990,  6, 18), date(1992, 10, 21)),
+#    1992: DateRange(date(1992, 10, 21), date(1996, 11, 22)),
+#    1996: DateRange(date(1996, 11, 22), date(2000, 12, 11)),
+#    2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
+#    2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
+#    2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
+#    2012: DateRange(date(2012, 12, 19), None),
+#}
 
-TERM_2012_START = TERM_INTERVAL[2012].lower
+#TERM_2012_START = TERM_INTERVAL[2012].lower
 
 CONTROVERSY_CSV_KEY = '1oCBeyNZc6OxIDJTI25wCeEkIEzkxf6qAwhcE69eDKWY'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
@@ -378,117 +379,126 @@ def get_groups(
                                   throttle=throttle and float(throttle))
     group_scraper = GroupScraper(http_session)
 
-    mandate_lookup = models.MandateLookup()
+    #mandate_lookup = models.MandateLookup()
     mandate_intervals = defaultdict(list)
-    term_interval = TERM_INTERVAL[year]
+    #term_interval = TERM_INTERVAL[year]
 
     groups = list(group_scraper.fetch(year))
-    independents = groups[0]
-    assert independents.is_independent
-    for group in groups[1:] + [independents]:
-        for member in group.current_members + group.former_members:
-            (myear, chamber, number) = member.mp_ident
-            assert chamber == 2
-            mandate = mandate_lookup.find(member.mp_name, myear, number)
-            interval_list = mandate_intervals[mandate]
+    group_info = dict()
 
-            interval = member.get_interval()
-            if interval.start is None:
-                interval = interval._replace(start=term_interval.lower)
+    for i in range(0, len(groups)) :
+        with open('result'+str(i)+'.yml','w') as yaml_file:
+            yaml_file.write(yaml.dump(groups[i], default_flow_style=False))
 
-            if interval.end is None:
-                interval = interval._replace(end=term_interval.upper)
 
-            if group.is_independent:
-                if interval_list:
-                    start = interval_list[-1].end
-                    interval = interval._replace(start=start)
 
-            interval_list.append(interval)
-            interval_list.sort(key=lambda i: i[0])
 
-    for mandate, interval_list in mandate_intervals.items():
-        # make sure interval_list are continuous
-        new_intervals = []
-        for interval_one, interval_two in \
-            zip(interval_list[:-1], interval_list[1:]):
+    # assert independents.is_independent
+    # for group in groups[1:] + [independents]:
+    #     for member in group.current_members + group.former_members:
+    #         #continue
+    #         (myear, chamber, number) = member.mp_ident
+    #         assert chamber == 2
+    #         #mandate = mandate_lookup.find(member.mp_name, myear, number)
+    #         interval_list = mandate_intervals[mandate]
 
-            assert interval_one.start < interval_one.end
-            if interval_one.end < interval_two.start:
-                interval = Interval(
-                    start=interval_one.end,
-                    end=interval_two.start,
-                    group=independents,
-                )
-                new_intervals.append(interval)
-            elif interval_one.end > interval_two.start:
-                raise RuntimeError("Overlapping intervals")
+    #         interval = member.get_interval()
+    #         if interval.start is None:
+    #             interval = interval._replace(start=term_interval.lower)
 
-        interval_list.extend(new_intervals)
-        interval_list.sort()
+    #         if interval.end is None:
+    #             interval = interval._replace(end=term_interval.upper)
 
-        mandate_end = mandate.interval.upper
-        if mandate_end == date.max:
-            mandate_end = None
-        if interval_list[-1].end != mandate_end:
-            logger.warn("Mandate %s ends at %s",
-                        mandate, interval_list[-1].end)
+    #         if group.is_independent:
+    #             if interval_list:
+    #                 start = interval_list[-1].end
+    #                 interval = interval._replace(start=start)
 
-    group_patcher = TablePatcher(
-        models.MpGroup,
-        models.db.session,
-        key_columns=['short_name', 'year'],
-        filter={'year': year},
-    )
+    #         interval_list.append(interval)
+    #         interval_list.sort(key=lambda i: i[0])
 
-    with group_patcher.process() as add_group:
-        for group in groups:
-            record = group.as_dict(['name', 'short_name', 'year'])
-            group.row = add_group(record).row
+    # for mandate, interval_list in mandate_intervals.items():
+    #     # make sure interval_list are continuous
+    #     new_intervals = []
+    #     for interval_one, interval_two in \
+    #         zip(interval_list[:-1], interval_list[1:]):
 
-        models.db.session.flush()
+    #         assert interval_one.start < interval_one.end
+    #         if interval_one.end < interval_two.start:
+    #             interval = Interval(
+    #                 start=interval_one.end,
+    #                 end=interval_two.start,
+    #                 group=independents,
+    #             )
+    #             new_intervals.append(interval)
+    #         elif interval_one.end > interval_two.start:
+    #             raise RuntimeError("Overlapping intervals")
 
-    membership_patcher = TablePatcher(
-        models.MpGroupMembership,
-        models.db.session,
-        key_columns=['mandate_id', 'mp_group_id', 'interval'],
-    )
+    #     interval_list.extend(new_intervals)
+    #     interval_list.sort()
 
-    current_membership_query = (
-        models.db.session.query(models.MpGroupMembership.id)
-        .join(models.MpGroupMembership.mandate)
-        .filter_by(year=year)
-    )
+    #     mandate_end = mandate.interval.upper
+    #     if mandate_end == date.max:
+    #         mandate_end = None
+    #     if interval_list[-1].end != mandate_end:
+    #         logger.warn("Mandate %s ends at %s",
+    #                     mandate, interval_list[-1].end)
 
-    remove_membership_ids = set(row.id for row in current_membership_query)
-    with membership_patcher.process(autoflush=1000) as add_membership:
-        for mandate, interval_list in mandate_intervals.items():
-            for interval in interval_list:
-                res = add_membership({
-                    'mandate_id': mandate.id,
-                    'mp_group_id': interval.group.row.id,
-                    'interval': DateRange(
-                        interval.start or date.min,
-                        interval.end or date.max,
-                    ),
-                })
-                if not res.is_new:
-                    remove_membership_ids.remove(res.row.id)
+    # group_patcher = TablePatcher(
+    #     models.MpGroup,
+    #     models.db.session,
+    #     key_columns=['short_name', 'year'],
+    #     filter={'year': year},
+    # )
 
-    if remove_membership_ids:
-        unseen_items = (
-            models.MpGroupMembership.query
-            .filter(models.MpGroupMembership.id.in_(remove_membership_ids))
-        )
-        unseen_items.delete(synchronize_session=False)
-        logger.info("Deleted %d stale memberships", len(remove_membership_ids))
+    # with group_patcher.process() as add_group:
+    #     for group in groups:
+    #         record = group.as_dict(['name', 'short_name', 'year'])
+    #         group.row = add_group(record).row
 
-    if no_commit:
-        logger.warn("Rolling back the transaction")
-        models.db.session.rollback()
+    #     models.db.session.flush()
 
-    else:
-        models.db.session.commit()
+    # membership_patcher = TablePatcher(
+    #     models.MpGroupMembership,
+    #     models.db.session,
+    #     key_columns=['mandate_id', 'mp_group_id', 'interval'],
+    # )
+
+    # current_membership_query = (
+    #     models.db.session.query(models.MpGroupMembership.id)
+    #     .join(models.MpGroupMembership.mandate)
+    #     .filter_by(year=year)
+    # )
+
+    # remove_membership_ids = set(row.id for row in current_membership_query)
+    # with membership_patcher.process(autoflush=1000) as add_membership:
+    #     for mandate, interval_list in mandate_intervals.items():
+    #         for interval in interval_list:
+    #             res = add_membership({
+    #                 'mandate_id': mandate.id,
+    #                 'mp_group_id': interval.group.row.id,
+    #                 'interval': DateRange(
+    #                     interval.start or date.min,
+    #                     interval.end or date.max,
+    #                 ),
+    #             })
+    #             if not res.is_new:
+    #                 remove_membership_ids.remove(res.row.id)
+
+    # if remove_membership_ids:
+    #     unseen_items = (
+    #         models.MpGroupMembership.query
+    #         .filter(models.MpGroupMembership.id.in_(remove_membership_ids))
+    #     )
+    #     unseen_items.delete(synchronize_session=False)
+    #     logger.info("Deleted %d stale memberships", len(remove_membership_ids))
+
+    # if no_commit:
+    #     logger.warn("Rolling back the transaction")
+    #     models.db.session.rollback()
+
+    # else:
+    #     models.db.session.commit()
 
 
 @scraper_manager.command
@@ -663,85 +673,85 @@ def get_proposals(
 
     index = {'pk_cdep': {}, 'pk_senate': {}}
 
-    for p in models.Proposal.query:
-        if p.cdeppk_cdep:
-            index['pk_cdep'][p.cdeppk_cdep] = p
-        if p.cdeppk_senate:
-            index['pk_senate'][p.cdeppk_senate] = p
+    #for p in models.Proposal.query:
+    #    if p.cdeppk_cdep:
+    #        index['pk_cdep'][p.cdeppk_cdep] = p
+    #    if p.cdeppk_senate:
+    #        index['pk_senate'][p.cdeppk_senate] = p
 
     dirty_proposal_set = set()
-    models.db.session.flush()
+    #models.db.session.flush()
 
-    for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
-        result = pickle.loads(page.result)
-        pk_cdep = result.get('pk_cdep')
-        pk_senate = result.get('pk_senate')
+    #for page in models.ScrapedProposalPage.query.filter_by(parsed=False):
+    #    result = pickle.loads(page.result)
+    #    pk_cdep = result.get('pk_cdep')
+    #    pk_senate = result.get('pk_senate')
 
-        if pk_cdep and pk_cdep in index['pk_cdep']:
-            p = index['pk_cdep'][pk_cdep]
+    #    if pk_cdep and pk_cdep in index['pk_cdep']:
+    #        p = index['pk_cdep'][pk_cdep]
 
-            if pk_senate and pk_senate in index['pk_senate']:
-                senate_proposal = index['pk_senate'][pk_senate]
-                if senate_proposal != p:
-                    logger.warn("Deleting stale senate proposal %r",
-                                senate_proposal.id)
-                    senate_proposal.sponsorships.delete()
-                    models.db.session.delete(senate_proposal)
-                    models.db.session.flush()
+    #        if pk_senate and pk_senate in index['pk_senate']:
+    #            senate_proposal = index['pk_senate'][pk_senate]
+    #            if senate_proposal != p:
+    #                logger.warn("Deleting stale senate proposal %r",
+    #                            senate_proposal.id)
+    #                senate_proposal.sponsorships.delete()
+    #                models.db.session.delete(senate_proposal)
+    #                models.db.session.flush()
 
-        elif pk_senate and pk_senate in index['pk_senate']:
-            p = index['pk_senate'][pk_senate]
+    #    elif pk_senate and pk_senate in index['pk_senate']:
+    #        p = index['pk_senate'][pk_senate]
 
-        else:
-            p = models.Proposal()
+    #    else:
+    #        p = models.Proposal()
 
-        if p.cdeppk_cdep:
-            if pk_cdep != p.cdeppk_cdep:
-                if page.chamber == 1:
-                    p.cdeppk_cdep = pk_cdep
+    #    if p.cdeppk_cdep:
+    #        if pk_cdep != p.cdeppk_cdep:
+    #            if page.chamber == 1:
+    #                p.cdeppk_cdep = pk_cdep
 
-                elif page.chamber == 2 and pk_senate:
-                    senate_page = (
-                        models.ScrapedProposalPage.query
-                        .filter_by(chamber=1, pk=pk_senate)
-                        .one()
-                    )
-                    pk_cdep = pickle.loads(senate_page.result).get('pk_cdep')
-                    if pk_cdep and pk_cdep != page.pk:
-                        page.parsed = True
-                    p.cdeppk_cdep = pk_cdep
+    #            elif page.chamber == 2 and pk_senate:
+    #                senate_page = (
+    #                    models.ScrapedProposalPage.query
+    #                    .filter_by(chamber=1, pk=pk_senate)
+    #                    .one()
+    #                )
+    #                pk_cdep = pickle.loads(senate_page.result).get('pk_cdep')
+    #                if pk_cdep and pk_cdep != page.pk:
+    #                    page.parsed = True
+    #                p.cdeppk_cdep = pk_cdep
 
-                else:
-                    raise RuntimeError(repr((pk_cdep, p.cdeppk_cdep, p.id)))
-        elif pk_cdep:
-            p.cdeppk_cdep = pk_cdep
-            index['pk_cdep'][pk_cdep] = p
+    #            else:
+    #                raise RuntimeError(repr((pk_cdep, p.cdeppk_cdep, p.id)))
+    #    elif pk_cdep:
+    #        p.cdeppk_cdep = pk_cdep
+    #        index['pk_cdep'][pk_cdep] = p
 
-        if p.cdeppk_senate:
-            assert pk_senate == p.cdeppk_senate, \
-                repr((page.id, pk_senate, p.cdeppk_senate, p.id))
-        elif pk_senate:
-            p.cdeppk_senate = pk_senate
-            index['pk_senate'][pk_senate] = p
+    #    if p.cdeppk_senate:
+    #        assert pk_senate == p.cdeppk_senate, \
+    #            repr((page.id, pk_senate, p.cdeppk_senate, p.id))
+    #    elif pk_senate:
+    #        p.cdeppk_senate = pk_senate
+    #        index['pk_senate'][pk_senate] = p
 
-        dirty_proposal_set.add(p)
+    #    dirty_proposal_set.add(p)
 
-        if limit and len(dirty_proposal_set) >= int(limit):
-            break
+    #    if limit and len(dirty_proposal_set) >= int(limit):
+    #        break
 
-    models.db.session.flush()
+    #models.db.session.flush()
 
 
     def cdep_id(mandate):
         return (mandate.year, mandate.cdep_number)
 
-    by_cdep_id = {cdep_id(m): m for m in models.Mandate.query}
+    #by_cdep_id = {cdep_id(m): m for m in models.Mandate.query}
 
-    chamber_by_slug = {c.slug: c for c in models.Chamber.query}
+    #chamber_by_slug = {c.slug: c for c in models.Chamber.query}
 
-    proposal_patcher = TablePatcher(models.Proposal,
-                                    models.db.session,
-                                    key_columns=['id'])
+    #proposal_patcher = TablePatcher(models.Proposal,
+    #                                models.db.session,
+    #                                key_columns=['id'])
 
     sp_updates = sp_added = sp_removed = 0
 
