@@ -13,7 +13,7 @@ from pyquery import PyQuery as pq
 from lxml.html.clean import clean_html
 from lxml.html import fromstring, HTMLParser
 from lxml import etree
-from psycopg2.extras import DateRange
+#from psycopg2.extras import DateRange
 from mptracker.common import parse_date as parse_iso_date
 
 logger = logging.getLogger(__name__)

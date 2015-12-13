@@ -1,7 +1,7 @@
 import flask
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView as ModelView_base
-from mptracker import models
+#from mptracker import models
 from mptracker.auth import is_privileged
 
 admin = Admin(name="MP Tracker")

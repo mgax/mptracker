@@ -1,4 +1,4 @@
-import psycopg2.extensions
+#import psycopg2.extensions
 from datetime import date
 import sqlalchemy.types
 from flask import json

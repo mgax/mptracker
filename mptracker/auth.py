@@ -1,7 +1,7 @@
 from functools import wraps
 import flask
 from flask.ext.login import LoginManager, current_user
-from mptracker import models
+#from mptracker import models
 
 login_manager = LoginManager()
 

@@ -6,7 +6,7 @@ import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
 from sqlalchemy import or_
-from mptracker import models
+#from mptracker import models
 
 
 logger = logging.getLogger(__name__)
