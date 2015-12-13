@@ -30,7 +30,6 @@ class TablePatcher:
         return tuple(record.get(k) for k in self.key_columns)
 
     def _get_row_for_key(self, key):
-        self.session.flush()
         return (
             self.model.query
             .filter_by(**dict(zip(self.key_columns, key)))
