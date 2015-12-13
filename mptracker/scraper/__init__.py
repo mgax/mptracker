@@ -6,7 +6,7 @@ import tempfile
 from contextlib import contextmanager
 import flask
 from flask.ext.script import Manager
-from psycopg2.extras import DateRange
+from flask import json
 from path import path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
@@ -15,7 +15,7 @@ from mptracker import models
 from mptracker.common import parse_date, model_to_dict, url_args, almost_eq, \
                              generate_slug, iter_file, calculate_md5, temp_dir
 from mptracker.patcher import TablePatcher
-
+import os
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -23,17 +23,6 @@ scraper_manager = Manager()
 
 ONE_DAY = timedelta(days=1)
 
-TERM_INTERVAL = {
-    1990: DateRange(date(1990,  6, 18), date(1992, 10, 21)),
-    1992: DateRange(date(1992, 10, 21), date(1996, 11, 22)),
-    1996: DateRange(date(1996, 11, 22), date(2000, 12, 11)),
-    2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
-    2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
-    2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
-    2012: DateRange(date(2012, 12, 19), None),
-}
-
-TERM_2012_START = TERM_INTERVAL[2012].lower
 
 CONTROVERSY_CSV_KEY = '1oCBeyNZc6OxIDJTI25wCeEkIEzkxf6qAwhcE69eDKWY'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
@@ -77,11 +66,8 @@ def get_questions(
     from mptracker.questions import ocr_question, ocr_answer
     from mptracker.policy import calculate_question
 
-    if reimport_existing:
-        known_urls = set()
-    else:
-        url_query = models.db.session.query(models.Question.url)
-        known_urls = set(row[0] for row in url_query)
+    known_urls = set()
+
 
     def skip_question(url):
         return url in known_urls
@@ -93,57 +79,21 @@ def get_questions(
     questions_scraper = QuestionScraper(session=http_session,
                                         skip=skip_question)
 
-    mandate_lookup = models.MandateLookup()
-
-    question_patcher = TablePatcher(models.Question,
-                                    models.db.session,
-                                    key_columns=['number', 'date'])
-
-    answer_patcher = TablePatcher(models.Answer,
-                                  models.db.session,
-                                  key_columns=['question_id'])
 
     new_ask_rows = 0
 
     changed_questions = []
     changed_answers = []
 
-    with question_patcher.process() as add, \
-         answer_patcher.process() as add_answer:
-        for question in questions_scraper.run(int(year)):
-            person_list = question.pop('person')
-            question['addressee'] = '; '.join(question['addressee'])
-            answer_data = question.pop('answer', None)
-            result = add(question)
-            q = result.row
 
-            old_asked = {ask.mandate_id: ask for ask in q.asked}
-            for name, person_year, person_number in person_list:
-                mandate = mandate_lookup.find(name, person_year, person_number)
-                if mandate.id in old_asked:
-                    old_asked.pop(mandate.id)
-
-                else:
-                    ask = models.Ask(mandate=mandate)
-                    q.asked.append(ask)
-                    ask.set_meta('new', True)
-                    logger.info("Adding ask for %s: %s", q, mandate)
-                    new_ask_rows += 1
-
-            if result.is_changed:
-                changed_questions.append(q)
-
-            if old_asked:
-                logger.warn("Removing %d old 'ask' records", len(old_asked))
-                for ask in old_asked.values():
-                    models.db.session.delete(ask)
-
-            if answer_data:
-                assert q.id is not None
-                answer_data['question_id'] = q.id
-                answer_result = add_answer(answer_data)
-                if answer_result.is_changed:
-                    changed_answers.append(answer_result.row)
+    for question in questions_scraper.run(int(year)):
+        person_list = question.pop('person')
+        question['addressee'] = '; '.join(question['addressee'])
+        answer_data = question.pop('answer', None)
+        if not os.path.exists('questions/' + year):
+            os.makedirs('quesitons/' + year)
+        with open('questions/' + year + '/' + question['number'] + '.yaml', 'w+') as f1:
+            f1.write(flask.json.dumps(question, indent=4, sort_keys=True))
 
     models.db.session.commit()
 

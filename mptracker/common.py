@@ -15,7 +15,6 @@ from werkzeug.urls import url_decode, url_parse
 from werkzeug.wsgi import FileWrapper
 from flask.ext.rq import job
 from babel.dates import format_date
-from psycopg2.extras import DateRange
 from path import path
 
 MAX_OCR_PAGES = 3

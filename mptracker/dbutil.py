@@ -1,4 +1,3 @@
-import psycopg2.extensions
 from datetime import date
 import sqlalchemy.types
 from flask import json
@@ -31,5 +30,4 @@ class InfDateAdapter:
 
 
 def register_infinity_adapter():
-    psycopg2.extensions.register_adapter(date, InfDateAdapter)
     InfDateAdapter._adapter_registered = True
