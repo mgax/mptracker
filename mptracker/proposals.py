@@ -3,7 +3,6 @@ import logging
 import flask
 from flask.ext.script import Manager
 from flask.ext.rq import job
-from mptracker import models
 from mptracker.common import ocr_url, parse_date
 from mptracker.nlp import match_text_for_mandate
 

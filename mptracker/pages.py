@@ -4,7 +4,6 @@ from datetime import date, datetime
 import flask
 from sqlalchemy.orm import joinedload
 from path import path
-from mptracker import models
 from mptracker.common import parse_date
 
 
