@@ -14,7 +14,7 @@ Flask-SQLAlchemy==1.0
 Flask-WTF==0.8.4
 itsdangerous==0.23
 Jinja2==2.7.1
-lxml==3.2.3
+lxml==3.5.0
 Mako==0.8.1
 MarkupSafe==0.18
 oauthlib==0.6.3
