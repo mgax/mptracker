@@ -121,7 +121,7 @@ def bust_cache(endpoint, values):
         filename = values['filename']
         file_path = path(flask.current_app.static_folder) / filename
         if file_path.exists():
-            mtime = file_path.stat().st_mtime
+            mtime = int(file_path.stat().st_mtime)
             key = ('%x' % mtime)[-6:]
             values['t'] = key
 
