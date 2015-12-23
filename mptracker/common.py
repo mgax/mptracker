@@ -40,10 +40,7 @@ QUESTION_TYPE_LABEL = {
 PARTY_COLOR = {
     "Indep.": "#eee",
     "Mino.": "#888",
-    "PC-PLR": "#3e99ff",
-    "PDL": "#ff962d",
     "PNL": "#e9e900",
-    "DP": "#5a167b",
     "PSD": "#f00",
     "UDMR": "#005900",
     "ALDE": "#0f7bc4",
