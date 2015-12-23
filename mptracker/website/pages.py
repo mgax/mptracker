@@ -522,12 +522,16 @@ def party_index():
 @section('party')
 def party_detail(party_short_name):
     if party_short_name == 'Minoritati':
-        pnl_url = flask.url_for('.party_detail', party_short_name='Mino.')
-        return flask.redirect(pnl_url)
+        url = flask.url_for('.party_detail', party_short_name='Mino.')
+        return flask.redirect(url)
 
     if party_short_name == 'PDL':
-        pnl_url = flask.url_for('.party_detail', party_short_name='PNL')
-        return flask.redirect(pnl_url)
+        url= flask.url_for('.party_detail', party_short_name='PNL')
+        return flask.redirect(url)
+
+    if party_short_name == 'PC-PLR':
+        url = flask.url_for('.party_detail', party_short_name='ALDE')
+        return flask.redirect(url)
 
     if party_short_name not in PARTY_COLOR:
         flask.abort(404)
