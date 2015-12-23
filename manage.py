@@ -6,7 +6,7 @@ from mptracker.app import create_app, create_manager
 def main():
     import os
     import logging
-    logging.basicConfig(loglevel=logging.DEBUG)
+    logging.basicConfig()
     app = create_app()
 
     logging.getLogger('werkzeug').setLevel(logging.INFO)
