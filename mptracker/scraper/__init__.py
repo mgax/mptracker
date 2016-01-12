@@ -610,6 +610,9 @@ def get_proposal_pages(
         if old_date and old_date >= record['date']:
             continue
 
+        if record['chamber'] == 1 and record['pk'] == 18541:
+            continue
+
         get_proposal_single_page(record['chamber'], record['pk'], cache_name)
 
 
