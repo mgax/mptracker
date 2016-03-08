@@ -44,6 +44,7 @@ PARTY_COLOR = {
     "PSD": "#f00",
     "UDMR": "#005900",
     "ALDE": "#0f7bc4",
+    "UNPR": "#b9292c",
 }
 
 
@@ -57,6 +58,7 @@ PARTY_ORDER = [
     'PNL',
     'ALDE',
     'PDL',
+    'UNPR',
 ]
 
 
