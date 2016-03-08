@@ -721,7 +721,7 @@ def get_proposals(
             index['pk_cdep'][pk_cdep] = p
 
         if p.cdeppk_senate:
-            assert pk_senate == p.cdeppk_senate, \
+            assert pk_senate is None or pk_senate == p.cdeppk_senate, \
                 repr((page.id, pk_senate, p.cdeppk_senate, p.id))
         elif pk_senate:
             p.cdeppk_senate = pk_senate
@@ -797,6 +797,8 @@ def get_proposals(
             if slug:
                 record['decision_chamber'] = chamber_by_slug[slug]
 
+            if record['cdeppk_cdep'] == 15484 and record['cdeppk_senate'] == 19552:
+                record['cdeppk_senate'] = None
             result = add_proposal(record)
             row = result.row
             if result.is_changed:
