@@ -114,6 +114,10 @@ class GroupScraper(Scraper):
                 if group.idg == 3:
                     member.start_date = date(2012, 9, 3)
 
+            if year == 2012 and group.idg == 8:
+                if member.start_date is None:
+                    member.start_date = date(2016, 2, 1)
+
         for member in to_remove:
             group.current_members.remove(member)
 
