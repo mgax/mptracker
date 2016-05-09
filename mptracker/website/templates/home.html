@@ -98,6 +98,9 @@
               <p><a href="{{ more_url }}">continuare &raquo;</a></p>
             </div>
           {% endfor %}
+
+          {% set articole_url = url_for('.articles_index') %}
+          <p><a href="{{ articole_url }}">toate articolele &raquo;</a></p>
         </div>
     </div>
     <div class="row home-section">

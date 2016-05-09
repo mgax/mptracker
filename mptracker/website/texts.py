@@ -30,6 +30,14 @@ def save_text(ns, name, title, content, more_content):
     db.session.commit()
 
 
+def get_article_list():
+    query = (
+        Text.query
+        .filter_by(ns='article')
+    )
+    return [text.name for text in query]
+
+
 def get_text_list():
     from mptracker.website.pages import dal
 

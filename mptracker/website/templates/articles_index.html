@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+
+{%- block content %}
+<div class="container-content container-general no-breadcrumb">
+  <div class="row">
+    <div class="col-sm-8 divider-right">
+      <h1>Articole</h1>
+
+      <ul>
+      {% for name in article_list %}
+        {% set more_url = url_for('.text_page', name=name, ns='article') %}
+        <li>
+          <a href="{{ more_url }}" class="article-title">
+            {{ text_title(name, ns='article') }}
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+
+    <div class="col-sm-4">
+      {% include 'sidebar.html' %}
+    </div>
+  </div>
+</div>
+
+{% if comments %}
+  <div class="container-content container-general">
+    {% include '_comments.html' %}
+  </div>
+{% endif %}
+{% endblock %}

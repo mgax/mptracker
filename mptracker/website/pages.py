@@ -11,7 +11,7 @@ from mptracker.common import parse_date
 from mptracker.common import (VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR,
                               PROPOSAL_STATUS_LABEL)
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
-from mptracker.website.texts import get_text, get_text_list
+from mptracker.website.texts import get_text, get_text_list, get_article_list
 from mptracker.website.admin import perm
 from path import path
 
@@ -706,6 +706,13 @@ def vote_controversy(controversy_id):
 def committee_detail(committee_id):
     ctx = dal.get_committee_details(committee_id)
     return flask.render_template('committee_detail.html', **ctx)
+
+
+@pages.route('/articole/')
+def articles_index():
+    return flask.render_template('articles_index.html', **{
+        'article_list': get_article_list(),
+    })
 
 
 @pages.route('/info/reprezentare_locala', defaults={'name': 'local', 'comments': True})
