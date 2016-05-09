@@ -174,7 +174,7 @@ def home():
             ),
             'title': stats_text['title'],
             'content': stats_text['content'] + stats_text['more_content'],
-            'url': flask.url_for('.stats_page', name=name)
+            'url': flask.url_for('.text_page', ns='stats', name=name)
         }
 
     return flask.render_template('home.html', **{
@@ -721,28 +721,17 @@ def committee_detail(committee_id):
 @pages.route('/info/echipa', defaults={'name': 'team'})
 @pages.route('/info/contact', defaults={'name': 'contact', 'comments': True})
 @pages.route('/info/termeni', defaults={'name': 'terms_of_use'})
-@pages.route('/articole/parlamentari-la-urne', defaults={'name': 'parlamentari-la-urne', 'ns': 'article'})
-@pages.route('/articole/comunicare-parlamente', defaults={'name': 'comunicare-parlamente', 'ns': 'article'})
+@pages.route('/articole/<name>', defaults={'ns': 'article'})
+@pages.route('/statistici/<name>', defaults={'ns': 'stats'})
 def text_page(name, ns='general', comments=False):
     text = get_text(ns, name)
-    return flask.render_template(
-        'text.html',
-        title=text['title'],
-        text=text['content'] + text['more_content'],
-        comments=comments,
-    )
-
-
-@pages.route('/statistici/<name>')
-def stats_page(name):
-    text = get_text('stats', name)
     if not text['title']:
         flask.abort(404)
     return flask.render_template(
         'text.html',
         title=text['title'],
         text=text['content'] + text['more_content'],
-        comments=False,
+        comments=comments,
     )
 
 
