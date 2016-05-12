@@ -1,5 +1,7 @@
 from mptracker.models import db, Text, TextVersion
 
+BLANK_PAGE = {'title': "", 'content': "", 'more_content': ""}
+
 
 def get_text(ns, name):
     text = Text.query.filter_by(ns=ns, name=name).first()
@@ -11,8 +13,6 @@ def get_text(ns, name):
                 'content': version.content,
                 'more_content': version.more_content,
             }
-
-    return {'title': "", 'content': "", 'more_content': ""}
 
 
 def save_text(ns, name, title, content, more_content):

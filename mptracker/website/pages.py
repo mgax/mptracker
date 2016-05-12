@@ -732,7 +732,7 @@ def articles_index():
 @pages.route('/statistici/<name>', defaults={'ns': 'stats'})
 def text_page(name, ns='general', comments=False):
     text = get_text(ns, name)
-    if not text['title']:
+    if text is None:
         flask.abort(404)
     return flask.render_template(
         'text.html',

@@ -5,7 +5,9 @@ from flask.ext.principal import (
     Identity, identity_changed,
 )
 import requests
-from mptracker.website.texts import get_text_list, get_text, save_text
+from mptracker.website.texts import (
+    get_text_list, get_text, save_text, BLANK_PAGE,
+)
 
 principals = Principal(use_sessions=False)
 
@@ -108,7 +110,7 @@ def home():
 def edit():
     ns = flask.request.args['ns']
     name = flask.request.args['name']
-    text = get_text(ns, name)
+    text = get_text(ns, name) or BLANK_PAGE
 
     if flask.request.method == 'POST':
         form = flask.request.form
