@@ -11,7 +11,9 @@ from mptracker.common import parse_date
 from mptracker.common import (VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR,
                               PROPOSAL_STATUS_LABEL)
 from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
-from mptracker.website.texts import get_text, get_text_list, get_article_list
+from mptracker.website.texts import (
+    get_text, get_text_list, get_article_list, BLANK_PAGE,
+)
 from mptracker.website.admin import perm
 from path import path
 
@@ -105,7 +107,7 @@ def inject_into_context():
 
 
 def text_content(name, fold=False, below_fold=False, ns='general'):
-    text = get_text(ns, name)
+    text = get_text(ns, name) or BLANK_PAGE
 
     if fold:
         html = text['content']
