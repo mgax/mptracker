@@ -81,7 +81,7 @@ def get_questions(
     if existing_reimport:
         known_urls = set()
     else:
-        if reimport_unanswered:
+        if unanswered_reimport:
             url_query = (
                 models.db.session.query(models.Question.url)
                 .outerjoin(models.Answer)
