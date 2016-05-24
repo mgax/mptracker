@@ -68,17 +68,17 @@ def _get_config_cache_name():
 @scraper_manager.command
 def get_questions(
         year='2016',
-        reimport_existing=False,
+        existing_reimport=False,
         cache_name=None,
         throttle=None,
         autoanalyze=False,
-        reimport_unanswered=False
+        unanswered_reimport=False
         ):
     from mptracker.scraper.questions import QuestionScraper
     from mptracker.questions import ocr_question, ocr_answer
     from mptracker.policy import calculate_question
 
-    if reimport_existing:
+    if existing_reimport:
         known_urls = set()
     else:
         if reimport_unanswered:
