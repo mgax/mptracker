@@ -72,6 +72,7 @@ def get_questions(
         cache_name=None,
         throttle=None,
         autoanalyze=False,
+        reimport_unanswered=False
         ):
     from mptracker.scraper.questions import QuestionScraper
     from mptracker.questions import ocr_question, ocr_answer
@@ -80,7 +81,16 @@ def get_questions(
     if reimport_existing:
         known_urls = set()
     else:
-        url_query = models.db.session.query(models.Question.url)
+        if reimport_unanswered:
+            url_query = (
+                models.db.session.query(models.Question.url)
+                .outerjoin(models.Answer)
+                .filter(models.Answer.question_id != None)
+            )
+
+        else:
+            url_query = models.db.session.query(models.Question.url)
+
         known_urls = set(row[0] for row in url_query)
 
     def skip_question(url):
