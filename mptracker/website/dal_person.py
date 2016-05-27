@@ -440,7 +440,8 @@ class DalPerson:
         ]
 
     def get_top_policies(self):
-        count_map = defaultdict(int)
+        question_counts = {}
+        proposal_counts = {}
 
         question_query = (
             db.session.query(
@@ -454,7 +455,7 @@ class DalPerson:
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in question_query:
-            count_map[policy_domain_id] += count
+            question_counts[policy_domain_id] = count
 
         proposal_query = (
             db.session.query(
@@ -469,18 +470,22 @@ class DalPerson:
             .group_by(PolicyDomain.id)
         )
         for policy_domain_id, count in proposal_query:
-            count_map[policy_domain_id] += count
+            proposal_counts[policy_domain_id] = count
 
-        total = sum(count_map.values())
+        total = sum(question_counts.values()) + sum(proposal_counts.values())
 
         policy_list = []
         if total:
             for policy_domain in PolicyDomain.query:
-                interest = count_map.get(policy_domain.id, 0) / total
+                question_count = question_counts.get(policy_domain.id, 0)
+                proposal_count = proposal_counts.get(policy_domain.id, 0)
+                interest = (question_count + proposal_count) / total
                 policy_list.append({
                     'slug': policy_domain.slug,
                     'name': policy_domain.name,
                     'interest': interest,
+                    'question_count': question_count,
+                    'proposal_count': proposal_count,
                 })
 
         return sorted(
