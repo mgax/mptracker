@@ -924,3 +924,42 @@ def export_activity(year):
     )
     data = buffer_on_disk(csv_lines(cols, rows))
     return csv_response(data)
+
+
+@pages.route('/export/politici-publice-deputati.csv')
+@section('export')
+def export_policy():
+    policy_slugs = [p['slug'] for p in dal.get_policy_list()]
+
+    cols = ['nume']
+    for policy_slug in policy_slugs:
+        cols.extend([
+            policy_slug + '-procent',
+            policy_slug + '-propuneri',
+            policy_slug + '-intrebari',
+        ])
+
+    ZERO = {'proposal_count': 0, 'question_count': 0, 'interest': 0}
+
+    def policy_row(mandate_info):
+        rv = {'nume': mandate_info['name']}
+        person = dal.get_person(mandate_info['person_slug'])
+        policy_map = {p['slug']: p for p in person.get_top_policies()}
+        for policy_slug in policy_slugs:
+            p = policy_map.get(policy_slug, ZERO)
+            rv.update({
+                policy_slug + '-procent': p['interest'],
+                policy_slug + '-propuneri': p['proposal_count'],
+                policy_slug + '-intrebari': p['question_count'],
+            })
+        return rv
+
+    def mandates():
+        mandates_by_county = dal.get_2012_mandates_by_county()
+        for county_list in mandates_by_county.values():
+            for mandate_info in county_list:
+                yield mandate_info
+
+    rows = (policy_row(m) for m in mandates())
+    data = buffer_on_disk(csv_lines(cols, rows))
+    return csv_response(data)
