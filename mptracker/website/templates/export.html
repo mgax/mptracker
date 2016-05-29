@@ -175,6 +175,11 @@
               <a href="{{ url }}" class="btn btn-sm btn-primary">
                 <i class="icon-download"></i> 2016
               </a>
+
+              {% set url = url_for('.export_policy') %}
+              <a href="{{ url }}" class="btn btn-sm btn-primary">
+                <i class="icon-download"></i> politici publice
+              </a>
             </td>
           </tr>
         {% endif %}
