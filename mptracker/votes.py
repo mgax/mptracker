@@ -1,3 +1,4 @@
+import sys
 from datetime import date
 from collections import defaultdict
 import logging
@@ -7,6 +8,7 @@ from flask.ext.script import Manager
 from flask.ext.rq import job
 from sqlalchemy import or_
 from mptracker import models
+from mptracker.common import VOTE_LABEL, csv_lines
 
 
 logger = logging.getLogger(__name__)
@@ -198,3 +200,56 @@ def proposals():
         job_count += 1
 
     logger.info("Enqueued %d jobs", job_count)
+
+
+@votes_manager.command
+def dump():
+    voting_sessions = (
+        models.VotingSession.query
+            .order_by(
+                models.VotingSession.date,
+                models.VotingSession.cdeppk,
+            ))
+
+    def iter_rows():
+        for voting_session in voting_sessions:
+            cols_voting_session = {
+                'data': str(voting_session.date),
+                'titlu': voting_session.subject,
+                'cod cdep': voting_session.cdeppk,
+                'link cdep': voting_session.cdep_url,
+            }
+
+            print(voting_session.cdeppk, file= sys.stderr)
+
+            votes = (
+                models.db.session.query(
+                    models.Vote,
+                    models.Person,
+                    models.MpGroup,
+                )
+                .filter(models.Vote.voting_session == voting_session)
+                .join(models.Vote.mandate)
+                .join(models.Mandate.person)
+                .join(models.Mandate.group_memberships)
+                .filter(
+                    models.MpGroupMembership.interval
+                    .contains(voting_session.date)
+                )
+                .join(models.MpGroupMembership.mp_group)
+                .order_by(models.Person.name)
+            )
+
+            for (vote, person, mp_group) in votes:
+                yield dict(cols_voting_session, **{
+                    'nume': str(person),
+                    'grup': mp_group.short_name,
+                    'vot': VOTE_LABEL.get(vote.choice, "??"),
+                })
+
+    csv = csv_lines(
+        ['data', 'titlu', 'cod cdep', 'link cdep', 'nume', 'grup', 'vot'],
+        iter_rows(),
+    )
+    for line in csv:
+        sys.stdout.write(line)
