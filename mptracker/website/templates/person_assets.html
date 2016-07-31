@@ -5,7 +5,9 @@
 
 
 {% block content %}
+{%- set raw_data = assets['raw_data'] %}
 <div class="container-content container-general">
+  {% if raw_data %}
     <div class="row">
         <div class="col-sm-12">
             <h1>
@@ -15,7 +17,6 @@
 
             <h2>Terenuri</h2>
 
-            {%- set raw_data = assets['raw_data'] %}
             {%- set has_city_land = (raw_data['land_city_count'] or
                            raw_data['land_city_area']) %}
             {%- set has_agri_land = (raw_data['land_agri_count'] or
@@ -109,5 +110,8 @@
             </dl>
         </div>
     </div>
+  {% else %}
+    <p>Informațiile despre avere nu sunt disponibile.</p>
+  {% endif %}
 </div>
 {% endblock %}
