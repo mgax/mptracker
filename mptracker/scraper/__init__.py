@@ -734,8 +734,9 @@ def get_proposals(
             index['pk_cdep'][pk_cdep] = p
 
         if p.cdeppk_senate:
-            assert pk_senate is None or pk_senate == p.cdeppk_senate, \
-                repr((page.id, pk_senate, p.cdeppk_senate, p.id))
+            if not (pk_senate is None or pk_senate == p.cdeppk_senate):
+                # warning: page.id, pk_senate, p.cdeppk_senate, p.id
+                continue
         elif pk_senate:
             p.cdeppk_senate = pk_senate
             index['pk_senate'][pk_senate] = p
