@@ -14,8 +14,24 @@
 
 {% block content %}
 <div class="container-content">
+
   <h1>Alegeri 2016</h1>
+
   <div id="map"></div>
+
+  <h2>Candidați</h2>
+  <ul>
+    {%- for candidate in candidates %}
+      <li>
+        {%- set url = url_for('.person_detail',
+              person_slug=candidate['person']['person_slug']) %}
+        <a href="{{ url }}">{{ candidate['person']['name'] }}</a>
+        – {{ candidate['chamber'] }}
+        ({{ candidate['party'] }} #{{ candidate['rank'] }})
+      </li>
+    {%- endfor %}
+  </ul>
+
 </div>
 {% endblock %}
 

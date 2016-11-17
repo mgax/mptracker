@@ -111,4 +111,12 @@ def create_manager(app):
         print('added', new_people, 'people')
         session.commit()
 
+    @manager.command
+    def search_person(name):
+        from mptracker.website.dal import DataAccess
+        dal = DataAccess()
+        slugs = [p['slug'] for p in dal.search_person_by_name(name)]
+        [slug] = slugs if len(slugs) == 1 else ['']
+        print("{},{}".format(slug, name))
+
     return manager

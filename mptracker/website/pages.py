@@ -748,8 +748,35 @@ def text_page(name, ns='general', comments=False):
 @pages.route('/alegeri2016/<judet>')
 @section('alegeri2016')
 def alegeri2016(judet=None):
+    county_code = None
+    candidates = []
+
+    if judet:
+        county = dal.get_county(judet).county
+        county_code = county.code
+
+        import csv
+        from pathlib import Path
+        csv_path = Path(__file__).parent / 'alegeri2016_candidati.csv'
+        with csv_path.open('r', encoding='utf-8') as f:
+            for line in csv.DictReader(f):
+                if line['judet_2016'] == county.code:
+                    slug = line['slug']
+                    try:
+                        person = dal.get_person(slug)
+                    except:
+                        raise RuntimeError("Can't find person %r" % slug)
+                    candidates.append({
+                        'person': person.get_main_details(),
+                        'chamber': {'0': 'cdep', '1': 'senat'}[line['senate']],
+                        'party': line['party'],
+                        'rank': line['rank'],
+                    })
+        candidates.sort(key=lambda p: (p['chamber'], p['party'], p['rank']))
+
     return flask.render_template('alegeri2016_index.html', **{
-        'judet': judet,
+        'judet': county_code,
+        'candidates': candidates,
     })
 
 
