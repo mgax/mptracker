@@ -1,3 +1,4 @@
+{%- if config.get('SENTRY_JS_DSN') %}
 <script src="//cdn.ravenjs.com/1.1.2/jquery,native/raven.min.js"></script>
 <script>
 (function() {
@@ -8,3 +9,4 @@
   }
 })();
 </script>
+{%- endif -%}
