@@ -744,6 +744,15 @@ def text_page(name, ns='general', comments=False):
     )
 
 
+@pages.route('/alegeri2016/')
+@pages.route('/alegeri2016/<judet>')
+@section('alegeri2016')
+def alegeri2016(judet=None):
+    return flask.render_template('alegeri2016_index.html', **{
+        'judet': judet,
+    })
+
+
 @pages.route('/export/')
 @section('export')
 def export_index():

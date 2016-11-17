@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css">
+<!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css"><![endif]-->
+<style>
+  #map {
+    height: 350px;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-content">
+  <h1>Alegeri 2016</h1>
+  <div id="map"></div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+<script src="{{ url_for('static', filename='lib/topojson/topojson.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/leaflet-pip/leaflet-pip.min.js') }}"></script>
+<script src="{{ url_for('static', filename='lib/leaflet.geocoding/leaflet.geocoding.js') }}"></script>
+<script src="{{ url_for('static', filename='constituency.js') }}"></script>
+<script>
+(function() {
+  {%- set judete_url = url_for('static', filename='judete.topojson') %}
+  var judete_url = {{ judete_url|tojson|safe }}
+  var tileUrl = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/'
+              + 'light_all/{z}/{x}/{y}.png'
+  var attribution = '&copy; <a href="https://openstreetmap.org">'
+                  + 'OpenStreetMap</a> contributors'
+  var map = L.map('map').setView([46, 25], 6)
+  var baseUrl = {{ url_for('pages.alegeri2016')|tojson|safe }}
+  var codJudet = {{ judet|tojson|safe }}
+
+  L.tileLayer(tileUrl, {attribution: attribution, maxZoom: 18}).addTo(map)
+
+  var judeteLayer = L.geoJson(null, {
+    style: function() {
+      return {
+        weight: 1,
+        opacity: .4,
+        fillOpacity: .2
+      }
+    }
+  })
+  map.addLayer(judeteLayer)
+
+  function getJudet(layer) {
+    var id = layer.feature.properties.id
+    return JUDETE[id]
+  }
+
+  judeteLayer.on('click', function(e) {
+    var url = baseUrl + getJudet(e.layer).cod
+    window.location.href = url
+  })
+
+  $.getJSON(judete_url, function(data) {
+    judeteLayer.addData(topojson.feature(data, data.objects['judete']))
+    judeteLayer.eachLayer(function(layer) {
+      var judet = getJudet(layer)
+      if(judet.cod == codJudet) {
+        layer.bindPopup(judet.nume, {closeOnClick: false})
+        layer.openPopup(layer.getBounds().getCenter())
+        layer.on('popupclose', function() {
+          window.location.href = baseUrl
+        })
+      }
+    })
+  })
+
+  var JUDETE = {
+    1:  {"siruta": 10,  "cod": "AB", "nume": "Alba"},
+    2:  {"siruta": 29,  "cod": "AR", "nume": "Arad"},
+    3:  {"siruta": 38,  "cod": "AG", "nume": "Argeș"},
+    4:  {"siruta": 47,  "cod": "BC", "nume": "Bacău"},
+    5:  {"siruta": 56,  "cod": "BH", "nume": "Bihor"},
+    6:  {"siruta": 65,  "cod": "BN", "nume": "Bistrița-Năsăud"},
+    7:  {"siruta": 74,  "cod": "BT", "nume": "Botoșani"},
+    8:  {"siruta": 83,  "cod": "BV", "nume": "Brașov"},
+    9:  {"siruta": 92,  "cod": "BR", "nume": "Brăila"},
+    10: {"siruta": 109, "cod": "BZ", "nume": "Buzău"},
+    11: {"siruta": 118, "cod": "CS", "nume": "Caraș-Severin"},
+    12: {"siruta": 127, "cod": "CJ", "nume": "Cluj"},
+    13: {"siruta": 136, "cod": "CT", "nume": "Constanța"},
+    14: {"siruta": 145, "cod": "CV", "nume": "Covasna"},
+    15: {"siruta": 154, "cod": "DB", "nume": "Dâmbovița"},
+    16: {"siruta": 163, "cod": "DJ", "nume": "Dolj"},
+    17: {"siruta": 172, "cod": "GL", "nume": "Galați"},
+    18: {"siruta": 181, "cod": "GJ", "nume": "Gorj"},
+    19: {"siruta": 190, "cod": "HR", "nume": "Harghita"},
+    20: {"siruta": 207, "cod": "HD", "nume": "Hunedoara"},
+    21: {"siruta": 216, "cod": "IL", "nume": "Ialomița"},
+    22: {"siruta": 225, "cod": "IS", "nume": "Iași"},
+    23: {"siruta": 234, "cod": "IF", "nume": "Ilfov"},
+    24: {"siruta": 243, "cod": "MM", "nume": "Maramureș"},
+    25: {"siruta": 252, "cod": "MH", "nume": "Mehedinți"},
+    26: {"siruta": 261, "cod": "MS", "nume": "Mureș"},
+    27: {"siruta": 270, "cod": "NT", "nume": "Neamț"},
+    28: {"siruta": 289, "cod": "OT", "nume": "Olt"},
+    29: {"siruta": 298, "cod": "PH", "nume": "Prahova"},
+    30: {"siruta": 305, "cod": "SM", "nume": "Satu Mare"},
+    31: {"siruta": 314, "cod": "SJ", "nume": "Sălaj"},
+    32: {"siruta": 323, "cod": "SB", "nume": "Sibiu"},
+    33: {"siruta": 332, "cod": "SV", "nume": "Suceava"},
+    34: {"siruta": 341, "cod": "TR", "nume": "Teleorman"},
+    35: {"siruta": 350, "cod": "TM", "nume": "Timiș"},
+    36: {"siruta": 369, "cod": "TL", "nume": "Tulcea"},
+    37: {"siruta": 378, "cod": "VS", "nume": "Vaslui"},
+    38: {"siruta": 387, "cod": "VL", "nume": "Vâlcea"},
+    39: {"siruta": 396, "cod": "VN", "nume": "Vrancea"},
+    40: {"siruta": 403, "cod": "B",  "nume": "București"},
+    51: {"siruta": 519, "cod": "CL", "nume": "Călărași"},
+    52: {"siruta": 528, "cod": "GR", "nume": "Giurgiu"}
+  }
+})()
+</script>
+{% endblock %}
