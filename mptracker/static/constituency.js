@@ -2,19 +2,13 @@
 "use strict";
 
 app.create_map = function(options) {
-  var attribution = 'Tiles Courtesy of <a href="http://www.mapquest.com/">'
-                  + 'MapQuest</a> &mdash; Map data '
-                  + '&copy; <a href="http://osm.org/copyright">'
+  var tileUrl = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/'
+              + 'light_all/{z}/{x}/{y}.png'
+  var attribution = '&copy; <a href="https://openstreetmap.org">'
                   + 'OpenStreetMap</a> contributors';
   var map = L.map('map').setView([46, 25], 6);
 
-  L.tileLayer(
-    'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg',
-    {
-      attribution: attribution,
-      subdomains: '1234'
-    }
-  ).addTo(map);
+  L.tileLayer(tileUrl, {attribution: attribution, maxZoom: 18}).addTo(map)
 
   var deputati_layer = L.geoJson(null, {
     style: function() {
