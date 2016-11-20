@@ -29,20 +29,29 @@
 
   <div id="map"></div>
 
-  {%- if candidates %}
-  <h2>Candidați</h2>
-  <ul>
-    {%- for candidate in candidates %}
-      <li>
-        {%- set url = url_for('.person_detail',
-              person_slug=candidate['person']['person_slug']) %}
-        <a href="{{ url }}">{{ candidate['person']['name'] }}</a>
-        – {{ candidate['chamber'] }}
-        ({{ candidate['party'] }} #{{ candidate['rank'] }})
-      </li>
+  <div class="row">
+    {%- set CHAMBERS = {'cdep': "Camera Deputaților", 'senat': "Senat"} %}
+    {%- for chamber, parties in candidates.items()|sort %}
+      <div class="col-sm-6">
+        <h2>{{ CHAMBERS[chamber] }}</h2>
+        {%- for party, party_list in parties.items() %}
+          <h3>{{ party }}</h3>
+          <ul>
+          {%- for candidate in party_list %}
+            <li>
+              {%- if party != 'IND' %}
+                #{{ candidate['rank'] }}:
+              {%- endif %}
+              {%- set url = url_for('.person_detail',
+                    person_slug=candidate['person']['person_slug']) %}
+              <a href="{{ url }}">{{ candidate['person']['name'] }}</a>
+            </li>
+          {%- endfor %}
+          </ul>
+        {%- endfor %}
+      </div>
     {%- endfor %}
-  </ul>
-  {%- endif %}
+  </div>
 
 </div>
 {% endblock %}

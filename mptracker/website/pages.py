@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 import functools
 import re
+from collections import defaultdict
 import flask
 from werkzeug.exceptions import NotFound
 import jinja2
@@ -749,7 +750,7 @@ def text_page(name, ns='general', comments=False):
 @section('alegeri2016')
 def alegeri2016(judet=None):
     county_code = None
-    candidates = []
+    candidates = defaultdict(lambda: defaultdict(list))
 
     counties = dal.get_county_name_map()
     counties['diaspora'] = counties.pop(None)
@@ -769,13 +770,15 @@ def alegeri2016(judet=None):
                         person = dal.get_person(slug)
                     except:
                         raise RuntimeError("Can't find person %r" % slug)
-                    candidates.append({
+                    chamber = {'0': 'cdep', '1': 'senat'}[line['senate']]
+                    party = line['party']
+                    candidates[chamber][party].append({
                         'person': person.get_main_details(),
-                        'chamber': {'0': 'cdep', '1': 'senat'}[line['senate']],
-                        'party': line['party'],
-                        'rank': line['rank'],
+                        'rank': int(line['rank']),
                     })
-        candidates.sort(key=lambda p: (p['chamber'], p['party'], p['rank']))
+        for candidate_parties in candidates.values():
+            for person_list in candidate_parties.values():
+                person_list.sort(key=lambda p: p['rank'])
 
     return flask.render_template('alegeri2016_index.html', **{
         'breadcrumb': ['Alegeri 2016'],
