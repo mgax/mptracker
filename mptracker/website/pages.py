@@ -778,6 +778,7 @@ def alegeri2016(judet=None):
         candidates.sort(key=lambda p: (p['chamber'], p['party'], p['rank']))
 
     return flask.render_template('alegeri2016_index.html', **{
+        'breadcrumb': ['Alegeri 2016'],
         'judet': judet,
         'candidates': candidates,
         'counties': sorted(counties.items()),
