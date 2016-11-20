@@ -19,7 +19,7 @@ petric-octavian,2,0,PSD,SM,SM
 ciolacu-ion-marcel,1,0,PSD,BZ,BZ
 nosa-iuliu,1,0,PSD,SJ,SJ
 chitoiu-daniel,1,0,ALDE,GR,GR
-marcoci-vlad,5,0,PNL,MT,MT
+marcoci-vlad,5,0,PNL,NT,NT
 diaconu-adrian-nicolae,2,1,PSD,TM,TM
 nistor-laurentiu,1,0,PSD,HD,HD
 niculescu-dumitru,1,0,PMP,OT,OT
@@ -88,7 +88,7 @@ dragnea-nicolae-liviu,1,0,PSD,TR,TR
 soptica-costel,1,1,PNL,BT,BT
 negrut-cornelia,1,0,ALDE,MM,MM
 marin-gheorghe,2,1,PSD,AG,AG
-dragusanu-vasile-catalin,3,0,PNL,MT,MT
+dragusanu-vasile-catalin,3,0,PNL,NT,NT
 szabo-odon,1,0,UDMR,BH,BH
 boghicevici-claudia,3,0,PNL,AR,AR
 nistor-marioara,1,0,PMP,BR,BR
@@ -105,7 +105,7 @@ babus-radu,4,0,PSD,CT,CT
 eparu-ion,1,0,PRU,PH,PH
 varga-lucia-ana,2,0,PNL,BH,BH
 dumbravanu-paul,4,0,PNL,PH,PH
-munteanu-ioan,1,0,PSD,MT,MT
+munteanu-ioan,1,0,PSD,NT,NT
 nicolaescu-gheorghe-eugen,2,0,PNL,B,B
 gerea-andrei-dominic,1,0,ALDE,AG,AG
 talos-gheorghe-mirel,1,0,ALDE,SJ,SJ
@@ -179,7 +179,7 @@ adam-luminita-pachel,1,0,PMP,OT,BV
 sturzu-mihai-razvan,1,0,PRU,B,BV
 marian-ion-cristinel,7,1,PMP,VL,B
 raetchi-ovidiu-alexandru,3,0,PNL,diaspora,B
-udrea-elena-gabriela,1,0,IND,MT,B
+udrea-elena-gabriela,1,0,IND,NT,B
 steriu-valeriu-andrei,1,0,PMP,CL,B
 cernea-remus-florinel,1,0,IND,CT,B
 tomac-eugen,2,0,PMP,diaspora,B
@@ -191,8 +191,8 @@ tanase-razvan-ionut,1,0,PRU,PH,DB
 preda-cezar-florin,1,0,PNL,BZ,DB
 voicu-mihai-alexandru,1,0,PNL,DJ,diaspora
 bucur-constantin-alin,1,0,ALDE,TR,IF
-cozmanciuc-corneliu-mugurel,1,0,PNL,IS,MT
-oajdea-daniel-vasile,1,1,PRU,IS,MT
+cozmanciuc-corneliu-mugurel,1,0,PNL,IS,NT
+oajdea-daniel-vasile,1,1,PRU,IS,NT
 udriste-gheorghe,1,1,PMP,B,PH
 nicoara-romeo-florin,1,0,PNL,B,SM
 gorghiu-alina-stefania,1,1,PNL,B,TM
