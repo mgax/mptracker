@@ -751,16 +751,19 @@ def alegeri2016(judet=None):
     county_code = None
     candidates = []
 
+    counties = dal.get_county_name_map()
+    counties['diaspora'] = counties.pop(None)
+
     if judet:
-        county = dal.get_county(judet).county
-        county_code = county.code
+        if judet not in counties:
+            flask.abort(404)
 
         import csv
         from pathlib import Path
         csv_path = Path(__file__).parent / 'alegeri2016_candidati.csv'
         with csv_path.open('r', encoding='utf-8') as f:
             for line in csv.DictReader(f):
-                if line['judet_2016'] == county.code:
+                if line['judet_2016'] == judet:
                     slug = line['slug']
                     try:
                         person = dal.get_person(slug)
@@ -775,8 +778,9 @@ def alegeri2016(judet=None):
         candidates.sort(key=lambda p: (p['chamber'], p['party'], p['rank']))
 
     return flask.render_template('alegeri2016_index.html', **{
-        'judet': county_code,
+        'judet': judet,
         'candidates': candidates,
+        'counties': sorted(counties.items()),
     })
 
 

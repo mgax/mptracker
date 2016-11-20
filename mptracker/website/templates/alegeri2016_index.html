@@ -8,6 +8,9 @@
   #map {
     height: 350px;
   }
+  .judet-list .selected {
+    font-weight: bold;
+  }
 </style>
 {% endblock %}
 
@@ -17,8 +20,18 @@
 
   <h1>Alegeri 2016</h1>
 
+  <p class="judet-list">
+  {%- for code, name in counties %}
+    <a href="{{ code }}"
+      {%- if code == judet %}class="selected"{% endif %}
+      >{{ name }}</a>
+    {%- if not loop.last %} • {% endif %}
+  {%- endfor %}
+  </p>
+
   <div id="map"></div>
 
+  {%- if candidates %}
   <h2>Candidați</h2>
   <ul>
     {%- for candidate in candidates %}
@@ -31,6 +44,7 @@
       </li>
     {%- endfor %}
   </ul>
+  {%- endif %}
 
 </div>
 {% endblock %}
