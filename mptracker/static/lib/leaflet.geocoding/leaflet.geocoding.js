@@ -84,7 +84,7 @@ L.Geocoding = L.Control.extend({
             , cb = arg.cb;
 
         $.ajax({
-            url : 'http://nominatim.openstreetmap.org/search'
+            url : 'https://nominatim.openstreetmap.org/search'
             , dataType : 'jsonp'
             , jsonp : 'json_callback'
             , data : {
