@@ -782,6 +782,7 @@ def alegeri2016(judet=None):
 
     return flask.render_template('alegeri2016_index.html', **{
         'breadcrumb': ['Alegeri 2016'],
+        'snippet': get_text('snippet', 'alegeri2016'),
         'judet': judet,
         'candidates': candidates,
         'counties': sorted(counties.items()),
