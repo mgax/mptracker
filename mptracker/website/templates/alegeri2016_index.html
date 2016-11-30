@@ -18,8 +18,9 @@
 {% block content %}
 <div class="container-content container-general">
 
+  <h2>{{ snippet.title }}</h2>
+
   {% if not judet %}
-    <h2>{{ snippet.title }}</h2>
     <div>{{ snippet.content|safe }}</div>
   {% endif %}
 
