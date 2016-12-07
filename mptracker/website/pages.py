@@ -749,7 +749,7 @@ def articles_index():
 @pages.route('/info/contribuie', defaults={'name': 'donations'})
 @pages.route('/info/controverse', defaults={'name': 'voting_controversy', 'comments': True})
 @pages.route('/info/despre', defaults={'name': 'about', 'comments': True})
-@pages.route('/info/echipa', defaults={'name': 'team'})
+@pages.route('/info/echipa', defaults={'name': 'team', 'comments': False})
 @pages.route('/info/contact', defaults={'name': 'contact', 'comments': True})
 @pages.route('/info/termeni', defaults={'name': 'terms_of_use'})
 @pages.route('/articole/<name>', defaults={'ns': 'article'})
