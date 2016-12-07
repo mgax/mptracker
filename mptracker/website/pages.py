@@ -288,9 +288,7 @@ def _add_activity_url(person_slug, item):
         ) + '#' + item['serial_id']
 
 
-@pages.route('/persoane/<person_slug>')
-@section('person')
-def person_detail(person_slug):
+def _person_detail_data(person_slug):
     person = dal.get_person(person_slug)
     ctx = person.get_details()
     ctx['person_slug'] = person_slug
@@ -305,7 +303,30 @@ def person_detail(person_slug):
     for item in ctx['recent_activity']:
         _add_activity_url(person_slug, item)
 
+    return ctx
+
+
+@pages.route('/persoane/<person_slug>')
+@section('person')
+def person_detail(person_slug):
+    ctx = _person_detail_data(person_slug)
     return flask.render_template('person_detail.html', **ctx)
+
+
+@pages.route('/persoane/<person_slug>/json')
+def person_detail_json(person_slug):
+    ctx = _person_detail_data(person_slug)
+    return flask.jsonify({
+        'url': flask.url_for('.person_detail', person_slug=person_slug,
+            _external=True),
+        'name': ctx['name'],
+        'group_history': ctx['group_history'],
+        'committee_list': ctx['committee_list'],
+        'college': ctx['college'],
+        'stats': ctx['stats'],
+        'mandate_count': ctx['mandate_count'],
+        'contact': ctx['contact'],
+    })
 
 
 @pages.route('/persoane/<person_slug>/contact')
