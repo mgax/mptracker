@@ -9,7 +9,7 @@ from mptracker.models import (
     Sponsorship,
 )
 
-LEGISLATURE_2012_START = date(2012, 12, 17)
+LEGISLATURE_2016_START = date(2016, 12, 21)
 TACIT_APPROVAL_SUBSTRING = 'art.75'
 
 

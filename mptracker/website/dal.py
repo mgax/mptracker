@@ -36,7 +36,7 @@ from mptracker.website.dal_common import (
     _get_recent_proposals,
     TACIT_APPROVAL_SUBSTRING,
     read_activity_item,
-    LEGISLATURE_2012_START,
+    LEGISLATURE_2016_START,
 )
 from mptracker.website.dal_person import DalPerson
 from mptracker.website.dal_party import DalParty
@@ -57,7 +57,7 @@ class DalCounty:
     def get_mandates_data(self):
         query = (
             Mandate.query
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .filter_by(county=self.county)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
@@ -82,10 +82,10 @@ class DataAccess:
     def get_county_name_map(self):
         return {c.code: c.name for c in County.query}
 
-    def get_2012_mandates_by_county(self):
+    def get_2016_mandates_by_county(self):
         mandates = (
             Mandate.query
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Mandate.person)
             .join(Mandate.county)
             .join(Mandate.chamber)
@@ -106,7 +106,7 @@ class DataAccess:
         name_search = NameSearch(
             Person.query
             .join(Person.mandates)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .order_by(Person.first_name, Person.last_name)
         )
         return [
@@ -152,7 +152,7 @@ class DataAccess:
                 questions_cte.c.question_count,
             )
             .join(Mandate.person)
-            .filter(Mandate.year == 2012)
+            .filter(Mandate.year == 2016)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
             .outerjoin(proposals_cte, proposals_cte.c.mandate_id == Mandate.id)
@@ -175,7 +175,7 @@ class DataAccess:
         person_query = (
             Person.query
             .join(Mandate.person)
-            .filter(Mandate.year == 2012)
+            .filter(Mandate.year == 2016)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
             .filter(Person.romania_curata != '')
@@ -242,7 +242,7 @@ class DataAccess:
 
         return rv
 
-    def get_party_qs(self, year=2012):
+    def get_party_qs(self, year=2016):
         return (
             MpGroup.query
             .filter_by(year=year)
@@ -293,7 +293,7 @@ class DataAccess:
             )
             .join(MpGroupMembership.mandate)
             .join(Mandate.person)
-            .filter(Mandate.year == 2012)
+            .filter(Mandate.year == 2016)
             .order_by(
                 Person.last_name,
                 Person.first_name,
@@ -330,7 +330,7 @@ class DataAccess:
             .join(MpGroupMembership.mp_group)
             .join(MpGroupMembership.mandate)
             .join(Mandate.person)
-            .filter(Mandate.year == 2012)
+            .filter(Mandate.year == 2016)
             .order_by(
                 func.lower(MpGroupMembership.interval),
                 Person.first_name,
@@ -343,7 +343,7 @@ class DataAccess:
                 query
                 .filter(func.lower(MpGroupMembership.interval) ==
                         func.lower(Mandate.interval))
-                .filter(func.lower(Mandate.interval) > date(2012, 12, 19))
+                .filter(func.lower(Mandate.interval) > date(2016, 12, 21))
             )
 
         elif request == 'early_end':
@@ -391,7 +391,7 @@ class DataAccess:
     def get_policy_tacit_approval_qs(self):
         return (
             Proposal.query
-            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(Proposal.date >= LEGISLATURE_2016_START)
             .filter(
                 Proposal.activity.like('%' + TACIT_APPROVAL_SUBSTRING + '%')
             )
@@ -403,7 +403,7 @@ class DataAccess:
             db.session.query(
                 distinct(Proposal.id)
             )
-            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(Proposal.date >= LEGISLATURE_2016_START)
             .outerjoin(Proposal.policy_domain)
         )
 
@@ -506,7 +506,7 @@ class DataAccess:
                 distinct(Question.id),
             )
             .outerjoin(Question.policy_domain)
-            .filter(Question.date >= LEGISLATURE_2012_START)
+            .filter(Question.date >= LEGISLATURE_2016_START)
         )
 
         if policy_slug:
@@ -559,7 +559,7 @@ class DataAccess:
             .join(Question.policy_domain)
             .filter(PolicyDomain.slug == policy_slug)
             .join(MpGroupMembership.mp_group)
-            .filter(MpGroup.year == 2012)
+            .filter(MpGroup.year == 2016)
             .group_by(MpGroupMembership.mp_group_id)
         )
 
@@ -572,7 +572,7 @@ class DataAccess:
                 func.count(distinct(Proposal.id))
             )
             .select_from(Proposal)
-            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(Proposal.date >= LEGISLATURE_2016_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .join(Mandate.group_memberships)
@@ -580,7 +580,7 @@ class DataAccess:
             .join(Proposal.policy_domain)
             .filter(PolicyDomain.slug == policy_slug)
             .join(MpGroupMembership.mp_group)
-            .filter(MpGroup.year == 2012)
+            .filter(MpGroup.year == 2016)
             .group_by(MpGroupMembership.mp_group_id)
         )
 
@@ -707,7 +707,7 @@ class DataAccess:
             .filter_by(final=True)
             .join(VotingSession.group_votes)
             .join(Vote.mandate)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Mandate.person)
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.mp_group_id == GroupVote.mp_group_id)
@@ -740,7 +740,7 @@ class DataAccess:
             )
             .join(Question.asked)
             .join(Ask.mandate)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Mandate.person)
             .join(Ask.match_row)
             .order_by(Question.date, Question.number)
@@ -778,7 +778,7 @@ class DataAccess:
                 Person.id.label('person_id'),
             )
             .join(MpGroupMembership.mandate)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Mandate.person)
             .order_by(MpGroupMembership.interval.desc())
             .limit(limit)
@@ -865,7 +865,7 @@ class DataAccess:
             .select_from(Question)
             .join(Question.asked)
             .join(Ask.mandate)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Question.policy_domain)
             .group_by(PolicyDomain.id)
         )
@@ -878,10 +878,10 @@ class DataAccess:
                 func.count('*'),
             )
             .select_from(Proposal)
-            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(Proposal.date >= LEGISLATURE_2016_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Proposal.policy_domain)
             .group_by(PolicyDomain.id)
         )
@@ -1087,7 +1087,7 @@ class DataAccess:
                 questions_cte.c.qlocal,
             )
             .join(Mandate.person)
-            .filter(Mandate.year == 2012)
+            .filter(Mandate.year == 2016)
             .outerjoin(proposal_cte, Mandate.id == proposal_cte.c.id)
             .outerjoin(transcript_cte, Mandate.id == transcript_cte.c.id)
             .outerjoin(questions_cte, Mandate.id == questions_cte.c.id)

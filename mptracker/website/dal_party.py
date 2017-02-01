@@ -21,13 +21,13 @@ from mptracker.models import (
     db,
 )
 from mptracker.website.dal_common import (
-    LEGISLATURE_2012_START,
+    LEGISLATURE_2016_START,
 )
 
 
 class DalParty:
 
-    def __init__(self, dal, short_name, year=2012, missing=KeyError):
+    def __init__(self, dal, short_name, year=2016, missing=KeyError):
         self.dal = dal
 
         self.party = (
@@ -254,7 +254,7 @@ class DalParty:
                 func.count(distinct(Proposal.id)),
             )
             .select_from(Proposal)
-            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(Proposal.date >= LEGISLATURE_2016_START)
             .join(Proposal.sponsorships)
             .join(Sponsorship.mandate)
             .join(Mandate.group_memberships)

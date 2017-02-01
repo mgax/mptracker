@@ -11,7 +11,7 @@ from mptracker.common import csv_lines, csv_response, buffer_on_disk
 from mptracker.common import parse_date
 from mptracker.common import (VOTE_LABEL, QUESTION_TYPE_LABEL, PARTY_COLOR,
                               PROPOSAL_STATUS_LABEL)
-from mptracker.website.dal import DataAccess, LEGISLATURE_2012_START
+from mptracker.website.dal import DataAccess, LEGISLATURE_2016_START
 from mptracker.website.texts import (
     get_text, get_text_list, get_article_list, BLANK_PAGE,
 )
@@ -34,7 +34,7 @@ def section(name):
 
 
 def picture_url(person):
-    picture_rel_path = path('pictures/2012') / person.picture_filename
+    picture_rel_path = path('pictures/2016') / person.picture_filename
     if (path(flask.current_app.static_folder) / picture_rel_path).isfile():
         return flask.url_for(
             'static',
@@ -215,7 +215,7 @@ def home_votesimilarity():
 @pages.route('/persoane/')
 @section('person')
 def person_index():
-    mandates_by_county = dal.get_2012_mandates_by_county()
+    mandates_by_county = dal.get_2016_mandates_by_county()
     for county_list in mandates_by_county.values():
         for mandate_info in county_list:
             mandate_info['url'] = flask.url_for(
@@ -1021,7 +1021,7 @@ def export_policy():
         return rv
 
     def mandates():
-        mandates_by_county = dal.get_2012_mandates_by_county()
+        mandates_by_county = dal.get_2016_mandates_by_county()
         for county_list in mandates_by_county.values():
             for mandate_info in county_list:
                 yield mandate_info

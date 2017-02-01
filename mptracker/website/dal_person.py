@@ -25,7 +25,7 @@ from mptracker.models import (
     db,
 )
 from mptracker.website.dal_common import (
-    LEGISLATURE_2012_START,
+    LEGISLATURE_2016_START,
     pluck_tacit_approval,
     _get_recent_questions,
     _get_recent_proposals,
@@ -60,7 +60,7 @@ class DalPerson:
         self.mandate = (
             Mandate.query
             .filter_by(person=self.person)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
             .first()
@@ -373,7 +373,7 @@ class DalPerson:
         return group_history
 
     def get_activitychart_data(self):
-        days = [date(2012, 12, 17) + timedelta(weeks=w) for w in range(52 * 4)]
+        days = [LEGISLATURE_2016_START + timedelta(weeks=w) for w in range(52 * 4)]
 
         proposals_by_day = group_by_week(
             db.session.query(
@@ -463,7 +463,7 @@ class DalPerson:
                 func.count('*'),
             )
             .select_from(Proposal)
-            .filter(Proposal.date >= LEGISLATURE_2012_START)
+            .filter(Proposal.date >= LEGISLATURE_2016_START)
             .join(Proposal.sponsorships)
             .filter_by(mandate=self.mandate)
             .join(Proposal.policy_domain)
@@ -518,7 +518,7 @@ class DalPerson:
         same_county_query = (
             Person.query
             .join(Person.mandates)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .filter_by(county=self.mandate.county)
         )
 
@@ -535,7 +535,7 @@ class DalPerson:
                 same_party_query = (
                     Person.query
                     .join(Person.mandates)
-                    .filter_by(year=2012)
+                    .filter_by(year=2016)
                     .join(Mandate.group_memberships)
                     .filter(MpGroupMembership.interval.contains(today))
                     .filter_by(mp_group=mp_group)
@@ -559,7 +559,7 @@ class DalPerson:
             Person.query
             .join(mandate_count_subquery)
             .join(Person.mandates)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
         )
 
         same_position_category = []
@@ -573,7 +573,7 @@ class DalPerson:
                 .join(Person.positions)
                 .filter(Position.category == position.category)
                 .join(Person.mandates)
-                .filter(Mandate.year == 2012)
+                .filter(Mandate.year == 2016)
                 .join(Mandate.chamber)
                 .filter_by(slug='cdep')
             )
@@ -587,7 +587,7 @@ class DalPerson:
         committee_president_query = (
             Person.query
             .join(Person.mandates)
-            .filter(Mandate.year == 2012)
+            .filter(Mandate.year == 2016)
             .join(Mandate.chamber)
             .filter_by(slug='cdep')
             .join(Mandate.committee_memberships)
@@ -688,7 +688,7 @@ class DalPerson:
                 MpGroup.short_name,
             )
             .join(Person.mandates)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .join(similarity_cte, similarity_cte.c.mandate_id == Mandate.id)
             .join(Mandate.group_memberships)
             .filter(MpGroupMembership.interval.contains(date.today()))
