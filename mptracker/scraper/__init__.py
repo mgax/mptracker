@@ -394,9 +394,12 @@ def get_groups(
     term_interval = TERM_INTERVAL[year]
 
     groups = list(group_scraper.fetch(year))
-    independents = groups[0]
-    assert independents.is_independent
-    for group in groups[1:] + [independents]:
+    independents = None
+    if groups[0].is_independent:
+        independents = groups[0]
+        groups = groups[1:] + [independents]
+
+    for group in groups:
         for member in group.current_members + group.former_members:
             (myear, chamber, number) = member.mp_ident
             assert chamber == 2
@@ -426,6 +429,7 @@ def get_groups(
 
             assert interval_one.start < interval_one.end
             if interval_one.end < interval_two.start:
+                assert independents is not None
                 interval = Interval(
                     start=interval_one.end,
                     end=interval_two.start,
