@@ -51,7 +51,7 @@ class CommonCommitteeMembershipParser(CommitteeMembershipParser):
 class CommitteeScraper(Scraper):
 
     listing_page_url = \
-        'http://www.cdep.ro/pls/parlam/structura.co?cam={chamber_id}&leg=2012'
+        'http://www.cdep.ro/pls/parlam/structura.co?cam={chamber_id}&leg=2016'
     committee_url_prefix = \
         'http://www.cdep.ro/pls/parlam/structura.co?'
 
@@ -66,7 +66,7 @@ class CommitteeScraper(Scraper):
                 href = link.attr('href')
                 assert href.startswith(self.committee_url_prefix)
                 args = url_args(href)
-                assert args['leg'] == '2012'
+                assert args['leg'] == '2016'
                 assert args['cam'] == str(chamber_id)
                 committee = Committee(
                     cdep_id=int(args['idc']),

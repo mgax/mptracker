@@ -30,10 +30,11 @@ TERM_INTERVAL = {
     2000: DateRange(date(2000, 12, 11), date(2004, 12, 13)),
     2004: DateRange(date(2004, 12, 13), date(2008, 12, 15)),
     2008: DateRange(date(2008, 12, 15), date(2012, 12, 19)),
-    2012: DateRange(date(2012, 12, 19), None),
+    2012: DateRange(date(2012, 12, 19), date(2016, 12, 21)),
+    2016: DateRange(date(2016, 12, 21), None),
 }
 
-TERM_2012_START = TERM_INTERVAL[2012].lower
+TERM_2016_START = TERM_INTERVAL[2016].lower
 
 CONTROVERSY_CSV_KEY = '1oCBeyNZc6OxIDJTI25wCeEkIEzkxf6qAwhcE69eDKWY'
 POSITION_PONTA2_CSV_KEY = '0AlBmcLkxpBOXdFFfTGZmWklwUl9RSm1keTdNRjFxb1E'
@@ -181,7 +182,7 @@ def get_questions(
 
 @scraper_manager.command
 def get_people(
-    year='2012',
+    year='2016',
     cache_name=None,
     throttle=None,
     no_commit=False,
@@ -279,7 +280,7 @@ def get_people(
 
 
 @scraper_manager.command
-def get_update_pictures(year='2012'):
+def get_update_pictures(year='2016'):
     import subprocess
     from sqlalchemy.orm import joinedload
     from mptracker.scraper.gdrive import PictureFolder
@@ -340,7 +341,7 @@ def get_update_pictures(year='2012'):
 
 
 @scraper_manager.command
-def get_pictures(year='2012'):
+def get_pictures(year='2016'):
     from mptracker.scraper.gdrive import PictureFolder
 
     pictures_dir = path(flask.current_app.static_folder) / 'pictures' / year
@@ -377,7 +378,7 @@ def get_groups(
         cache_name=None,
         throttle=None,
         no_commit=False,
-        year='2012',
+        year='2016',
         ):
     year = int(year)
 
@@ -541,15 +542,15 @@ def get_committees(
             mp_committee = res.row
 
             for member in committee.current_members + committee.former_members:
-                if member.end_date and member.end_date < TERM_2012_START:
+                if member.end_date and member.end_date < TERM_2016_START:
                     logger.warn(
-                        "Membership end date is before the 2012 "
+                        "Membership end date is before the 2016 "
                         "term started, skipping: %r %r %r",
                         member.mp_name, committee.name, member.end_date,
                     )
                     continue
                 interval = DateRange(
-                    member.start_date or TERM_2012_START,
+                    member.start_date or TERM_2016_START,
                     member.end_date or date.max,
                 )
                 mandate = mandate_lookup.find(
@@ -1146,7 +1147,7 @@ def get_position(no_commit=False):
     name_search = models.NameSearch(
         models.Person.query
         .join(models.Mandate)
-        .filter(models.Mandate.year == 2012)
+        .filter(models.Mandate.year == 2016)
         .all()
     )
 
@@ -1220,7 +1221,7 @@ def get_cabinet_party():
 
     with patcher.process(remove=True) as add_membership:
         for row in get_gdrive_csv(CABINET_PARTY_CSV_KEY):
-            assert row['legislature'] == '2012'
+            assert row['legislature'] == '2016'
             group = group_by_code[row['code']]
             add_membership({
                 'mp_group_id': group.id,
@@ -1279,7 +1280,7 @@ def get_committee_attendance(no_commit=False):
         for p in (
             models.Person.query
             .join(models.Person.mandates)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
         )
     }
 
@@ -1330,7 +1331,7 @@ def get_committee_attendance(no_commit=False):
         person = person_map[row['Nume'].strip()]
         mandate = (
             person.mandates
-            .filter_by(year=2012)
+            .filter_by(year=2016)
             .order_by('interval')
             .first()
         )
@@ -1437,7 +1438,7 @@ def assets(file_path, no_commit=False):
         for person in (
             models.Person.query
             .join(models.Person.mandates)
-            .filter_by(year=2012)
+            .filter_by(year=2016)
         )
     }
 
@@ -1449,7 +1450,7 @@ def assets(file_path, no_commit=False):
             del record['county']
             res = add_asset({
                 'person_id': person_id,
-                'date': date(2012, 11, 1),
+                'date': date(2016, 11, 1),
                 'raw_data': record,
                 'net_worth_eur': (
                     record['acct_value']['TOTAL_EUR']

@@ -1,3 +1,4 @@
+import re
 from pyquery import PyQuery as pq
 from mptracker.common import fix_local_chars
 from mptracker.scraper.common import (Scraper, GenericModel, parse_profile_url,
@@ -9,10 +10,11 @@ class Mandate(GenericModel):
 
 
 def match_split_name(last_first, first_last_upper):
+    last_first = re.sub(r'\s+', ' ', last_first)
     bits = first_last_upper.split()
     first_name = ' '.join(b for b in bits if not b.isupper())
     last_name = ' '.join(b.title() for b in bits if b.isupper())
-    assert last_first == "%s %s" % (last_name, first_name)
+    assert last_first == "%s %s" % (last_name, first_name), repr([last_first, first_name, last_name])
     return (first_name, last_name)
 
 
@@ -47,6 +49,7 @@ class MandateScraper(Scraper):
                 .split('\xa0\xa0\xa0\xa0')[0]
             )
             (first_name, last_name) = match_split_name(last_first, first_last)
+            #print(first_name, last_name)
 
             mandate = Mandate(
                 year=year,
@@ -99,7 +102,7 @@ class MandateScraper(Scraper):
 
             yield mandate
 
-    def fetch(self, year=2012):
+    def fetch(self, year=2016):
         mandates_page = self.fetch_url(self.mandates_url.format(year=year))
         headline_current = mandates_page.find('td.headline')
         parent_td = headline_current.parents('td').eq(-2)
