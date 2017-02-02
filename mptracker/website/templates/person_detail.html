@@ -58,11 +58,15 @@
                                 {%- else %}
                                     {{ college.county_name }}
                                 {%- endif %},
+
+                                {#
                                 colegiul D{{ college.number }}
 
                                 {%- if college.election_votes_fraction %}
                                     ({{ college.election_votes_fraction|percent }} din voturi)
                                 {%- endif %},
+                                #}
+
                                 {{ ordinal(mandate_count) }} mandat
                             </li>
                         {% else %}
@@ -137,6 +141,7 @@
     </div>
     <div class="row person-details-affiliation">
         <div class="col-sm-8">
+            {#
             <div class="row">
                 <div class="col-sm-12 person-details-section">
                     <h3 class="section-header">
@@ -166,6 +171,7 @@
                     </div>
                 </div>
             </div>
+            #}
 
             <div class="row">
                 <div class="col-sm-12 person-details-section person-details-recent-activity">
