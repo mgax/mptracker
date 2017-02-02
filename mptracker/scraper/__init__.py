@@ -8,6 +8,7 @@ import flask
 from flask.ext.script import Manager
 from psycopg2.extras import DateRange
 from path import path
+from pathlib import Path
 import requests
 from mptracker.scraper.common import get_cached_session, create_session, \
                                      get_gdrive_csv, parse_interval
@@ -280,13 +281,11 @@ def get_people(
 
 
 @scraper_manager.command
-def get_update_pictures(year='2016'):
+def get_pictures(year='2016'):
     import subprocess
     from sqlalchemy.orm import joinedload
-    from mptracker.scraper.gdrive import PictureFolder
 
-    gdrive = PictureFolder(PICTURES_FOLDER_KEY)
-    existing = set(p.filename for p in gdrive.list())
+    pictures_dir = Path(flask.current_app.static_folder) / 'pictures' / year
 
     query = (
         models.Mandate.query
@@ -297,17 +296,20 @@ def get_update_pictures(year='2016'):
     for mandate in query:
         person = mandate.person
         filename = '%s.jpg' % person.slug
-        if filename in existing:
+        fs_path = pictures_dir / filename
+
+        if fs_path.exists():
             continue
 
         if mandate.picture_url is None:
             logger.warn("No picure available for %r", person.name_first_last)
             continue
-        assert mandate.picture_url.endswith('.jpg')
+        assert mandate.picture_url.lower().endswith('.jpg')
 
         logger.info("Downloading %r" % filename)
 
         with temp_dir() as tmp:
+            tmp = Path(str(tmp))
             orig_path = tmp / 'orig.jpg'
             thumb_path = tmp / 'thumb.jpg'
 
@@ -325,46 +327,16 @@ def get_update_pictures(year='2016'):
             logger.info("Converting to thumbnail")
             subprocess.check_call([
                 'convert',
-                orig_path,
+                str(orig_path),
                 '-geometry', '300x300^',
                 '-quality', '85',
-                thumb_path,
+                str(thumb_path),
             ])
 
             logger.info("Uploading to gdrive")
 
-            with thumb_path.open('rb') as f:
-                data = f.read()
-
-            file_id = gdrive.upload(filename, data)
-            logger.info("Upload successful: %r", file_id)
-
-
-@scraper_manager.command
-def get_pictures(year='2016'):
-    from mptracker.scraper.gdrive import PictureFolder
-
-    pictures_dir = path(flask.current_app.static_folder) / 'pictures' / year
-    pictures_dir.mkdir_p()
-
-    gdrive = PictureFolder(PICTURES_FOLDER_KEY)
-
-    for picture in gdrive.list():
-        fs_path = pictures_dir / picture.filename
-        if fs_path.exists():
-            with fs_path.open('rb') as f:
-                md5 = calculate_md5(iter_file(f))
-
-            if md5 == picture.md5:
-                logger.info("Already up to date %r", picture.filename)
-                continue
-
-        logger.info("Downloading %r", picture.filename)
-        with tempfile.NamedTemporaryFile(dir=pictures_dir, delete=False) as f:
-            for chunk in gdrive.download(picture):
-                f.write(chunk)
-
-        path(f.name).rename(fs_path)
+            thumb_path.rename(fs_path)
+            logger.info("Got photo: %r", filename)
 
 
 @scraper_manager.command
