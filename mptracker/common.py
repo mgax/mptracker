@@ -38,27 +38,25 @@ QUESTION_TYPE_LABEL = {
 
 
 PARTY_COLOR = {
-    "Indep.": "#eee",
-    "Mino.": "#888",
+    #"Indep.": "#eee",
+    "ALDE": "#0f7bc4",
+    "PMP": "#a7cd45",
     "PNL": "#e9e900",
     "PSD": "#f00",
     "UDMR": "#005900",
-    "ALDE": "#0f7bc4",
-    "UNPR": "#b9292c",
+    "USR": "#1cabe4",
+    "Minoritati": "#888",
 }
 
 
 PARTY_ORDER = [
-    'DP',
     'PSD',
-    'PC-PLR',
-    'Mino.',
-    'Indep.',
-    'UDMR',
-    'PNL',
     'ALDE',
-    'PDL',
-    'UNPR',
+    'UDMR',
+    'Minoritati',
+    'PNL',
+    'USR',
+    'PMP',
 ]
 
 

@@ -94,7 +94,8 @@ class DataAccess:
 
         mandate_data = defaultdict(list)
         for m in mandates:
-            key = '%s%d' % (m.county.code, m.college)
+            #key = '%s%d' % (m.county.code, m.college)
+            key = m.county.code
             mandate_data[key].append({
                 'name': m.person.name_first_last,
                 'person_slug': m.person.slug,
@@ -913,6 +914,7 @@ class DataAccess:
                 func.count(MpGroupMembership.id),
             )
             .join(MpGroupMembership.mp_group)
+            .filter(MpGroup.year == 2016)
             .filter(func.upper(MpGroupMembership.interval) == 'infinity')
             .group_by(MpGroup.short_name)
             .all()
