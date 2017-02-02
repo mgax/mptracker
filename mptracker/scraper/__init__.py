@@ -1491,7 +1491,7 @@ def daily():
     with log_to_sentry():
         get_transcripts(n_sessions=20)
         get_questions(autoanalyze=True)
-        get_votes(days=20, autoanalyze=True)
+        #get_votes(days=20, autoanalyze=True)
         get_groups()
         get_proposal_pages()
         get_proposals(autoanalyze=True)
