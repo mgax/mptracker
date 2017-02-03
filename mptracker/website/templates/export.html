@@ -15,9 +15,9 @@
         <tr>
           <td>Componența partidelor</td>
           <td>
-            {% set url = url_for('.export_group_membership', date='2012-12-19') %}
+            {% set url = url_for('.export_group_membership', date='2016-12-21') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> alegeri 2012
+              <i class="icon-download"></i> alegeri 2016
             </a>
 
             {% set url = url_for('.export_bounded_mandates', rq='late_start') %}
@@ -35,27 +35,12 @@
               <i class="icon-download"></i> actual
             </a>
 
-            {% set url = url_for('.export_migrations', start='2013-01-01', end='2014-01-01') %}
+            {% set url = url_for('.export_migrations', start='2017-01-01', end='2018-01-01') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> migrări 2013
+              <i class="icon-download"></i> migrări 2017
             </a>
 
-            {% set url = url_for('.export_migrations', start='2014-01-01', end='2015-01-01') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> migrări 2014
-            </a>
-
-            {% set url = url_for('.export_migrations', start='2015-01-01', end='2016-01-01') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> migrări 2015
-            </a>
-
-            {% set url = url_for('.export_migrations', start='2016-01-01', end='2017-01-01') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> migrări 2016
-            </a>
-
-            {% set url = url_for('.export_migrations', start='2012-12-19') %}
+            {% set url = url_for('.export_migrations', start='2016-12-21') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
               <i class="icon-download"></i> toate migrările
             </a>
@@ -65,29 +50,9 @@
         <tr>
           <td>Voturi</td>
           <td>
-            {% set url = url_for('.export_votes', year='2012') %}
+            {% set url = url_for('.export_votes', year='2017') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2012
-            </a>
-
-            {% set url = url_for('.export_votes', year='2013') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2013
-            </a>
-
-            {% set url = url_for('.export_votes', year='2014') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2014
-            </a>
-
-            {% set url = url_for('.export_votes', year='2015') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2015
-            </a>
-
-            {% set url = url_for('.export_votes', year='2016') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2016
+              <i class="icon-download"></i> 2017
             </a>
 
             {% set url = url_for('.export_votes') %}
@@ -100,24 +65,9 @@
         <tr>
           <td>Întrebări și interpelări</td>
           <td>
-            {% set url = url_for('.export_questions', year='2013') %}
+            {% set url = url_for('.export_questions', year='2017') %}
             <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2013
-            </a>
-
-            {% set url = url_for('.export_questions', year='2014') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2014
-            </a>
-
-            {% set url = url_for('.export_questions', year='2015') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2015
-            </a>
-
-            {% set url = url_for('.export_questions', year='2016') %}
-            <a href="{{ url }}" class="btn btn-sm btn-primary">
-              <i class="icon-download"></i> 2016
+              <i class="icon-download"></i> 2017
             </a>
 
             {% set url = url_for('.export_questions') %}
@@ -131,24 +81,9 @@
           <tr>
             <td>Propuneri legislative</td>
             <td>
-              {% set url = url_for('.export_proposals', year='2013') %}
+              {% set url = url_for('.export_proposals', year='2017') %}
               <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2013
-              </a>
-
-              {% set url = url_for('.export_proposals', year='2014') %}
-              <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2014
-              </a>
-
-              {% set url = url_for('.export_proposals', year='2015') %}
-              <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2015
-              </a>
-
-              {% set url = url_for('.export_proposals', year='2016') %}
-              <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2016
+                <i class="icon-download"></i> 2017
               </a>
             </td>
           </tr>
@@ -156,24 +91,9 @@
           <tr>
             <td>Activitate deputați</td>
             <td>
-              {% set url = url_for('.export_activity', year='2013') %}
+              {% set url = url_for('.export_activity', year='2017') %}
               <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2013
-              </a>
-
-              {% set url = url_for('.export_activity', year='2014') %}
-              <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2014
-              </a>
-
-              {% set url = url_for('.export_activity', year='2015') %}
-              <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2015
-              </a>
-
-              {% set url = url_for('.export_activity', year='2016') %}
-              <a href="{{ url }}" class="btn btn-sm btn-primary">
-                <i class="icon-download"></i> 2016
+                <i class="icon-download"></i> 2017
               </a>
 
               {% set url = url_for('.export_policy') %}

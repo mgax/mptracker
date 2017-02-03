@@ -268,6 +268,7 @@ class DataAccess:
             )
             .join(MpGroupMembership.mp_group)
             .join(MpGroupMembership.mandate)
+            .filter(Mandate.year == 2016)
             .join(Mandate.person)
             .filter(MpGroupMembership.interval.contains(day))
             .order_by(
