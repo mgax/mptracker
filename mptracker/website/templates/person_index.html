@@ -133,14 +133,17 @@
 <script src="{{ url_for('static', filename='lib/topojson/topojson.js') }}"></script>
 <script src="https://unpkg.com/leaflet-pip@1.0.0/leaflet-pip.js"></script>
 <script src="{{ url_for('static', filename='lib/leaflet.geocoding/leaflet.geocoding.js') }}"></script>
-<script src="{{ url_for('static', filename='constituency.js') }}"></script>
+<script src="{{ url_for('static', filename='constituency_judete.js') }}"></script>
 <script>
 (function() {
   "use strict";
-  {%- set colleges_url = url_for('static', filename='colleges.topojson') %}
+  {%- set judete_url = url_for('static', filename='judete.topojson') %}
+
+  var county_code_map = { "1": "AB", "2": "AR", "3": "AG", "4": "BC", "5": "BH", "6": "BN", "7": "BT", "8": "BV", "9": "BR", "10": "BZ", "11": "CS", "12": "CJ", "13": "CT", "14": "CV", "15": "DB", "16": "DJ", "17": "GL", "18": "GJ", "19": "HR", "20": "HD", "21": "IL", "22": "IS", "23": "IF", "24": "MM", "25": "MH", "26": "MS", "27": "NT", "28": "OT", "29": "PH", "30": "SM", "31": "SJ", "32": "SB", "33": "SV", "34": "TR", "35": "TM", "36": "TL", "37": "VS", "38": "VL", "39": "VN", "40": "B", "51": "CL", "52": "GR"};
   app.create_map({
-    colleges_url: {{ colleges_url|tojson|safe }},
+    judete_url: {{ judete_url|tojson|safe }},
     county_name: {{ county_name_map|tojson|safe }},
+    county_code_map: county_code_map,
     mandate_data: {{ mandates_by_county|tojson|safe }}
   });
 })();
