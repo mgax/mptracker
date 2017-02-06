@@ -47,6 +47,7 @@ $(window).resize(render);
 function render() {
     var barchart_container = $('#similarity-barchart').empty()[0];
 
+    {#
     app.render_similarity_barchart({
         container: barchart_container,
         label: "prezență la vot",
@@ -76,6 +77,7 @@ function render() {
             {'class': 'other', 'value': other.stats.vote['cabinet_loyalty']},
             ]|tojson }}
     });
+    #}
 
     var max_scalar = {{ ([
             stats.speeches, other.stats.speeches,
@@ -132,10 +134,12 @@ function render() {
         data: {{ attendance_data|tojson}}
     });
 
+    {#
     app.render_similarity_vote_venn({
         container: $('#similarity-vote-venn').empty(),
         overlap: {{ similarity|tojson|safe }}
     });
+    #}
 }
 
 })();
