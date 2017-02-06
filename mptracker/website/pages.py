@@ -790,7 +790,8 @@ def alegeri2016(judet=None):
                     try:
                         person = dal.get_person(slug)
                     except:
-                        raise RuntimeError("Can't find person %r" % slug)
+                        continue
+                        #raise RuntimeError("Can't find person %r" % slug)
                     chamber = {'0': 'cdep', '1': 'senat'}[line['senate']]
                     party = line['party']
                     candidates[chamber][party].append({
