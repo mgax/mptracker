@@ -1200,12 +1200,13 @@ def get_cabinet_party():
 
     with patcher.process(remove=True) as add_membership:
         for row in get_gdrive_csv(CABINET_PARTY_CSV_KEY):
-            assert row['legislature'] == '2016'
-            group = group_by_code[row['code']]
-            add_membership({
-                'mp_group_id': group.id,
-                'interval': parse_interval(row['start_date'], row['end_date']),
-            })
+            if row['legislature'] == '2016':
+                group = group_by_code[row['code']]
+                interval = parse_interval(row['start_date'], row['end_date'])
+                add_membership({
+                    'mp_group_id': group.id,
+                    'interval': interval,
+                })
 
     models.db.session.commit()
 
