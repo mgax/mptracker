@@ -243,6 +243,8 @@ class DalPerson:
 
         rv['vote'] = {
             'attendance': votes_attended / voting_session_count,
+            'loyalty': 1,
+            'cabinet_loyalty': 1,
         }
         if votes_attended > 0:
             rv['vote']['loyalty'] = votes_loyal / votes_attended
