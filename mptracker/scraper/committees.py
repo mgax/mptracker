@@ -82,7 +82,7 @@ class CommitteeScraper(Scraper):
                         current_members=[],
                         former_members=[],
                     )
-                return
+                continue
 
             url = self.listing_page_url.format(chamber_id=chamber_id)
             listing_page = self.fetch_url(url)
