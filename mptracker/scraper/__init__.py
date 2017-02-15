@@ -69,7 +69,7 @@ def _get_config_cache_name():
 
 @scraper_manager.command
 def get_questions(
-        year='2016',
+        year='2017',
         existing_reimport=False,
         cache_name=None,
         throttle=None,
