@@ -1,6 +1,5 @@
 {%- macro person_stats(slug, stats) %}
   <dl class="dl-horizontal">
-    {#
     {%- set url = url_for('.person_votes', person_slug=slug) %}
     <dt>prezență la vot</dt>
     <dd>{{ stats.vote['attendance']|percent }}</dd>
@@ -18,7 +17,6 @@
         <a href="{{ url }}">{{ stats.vote['cabinet_loyalty']|percent }}</a>
       </dd>
     {%- endif %}
-    #}
 
     <dt>luări de cuvânt</dt>
     <dd>

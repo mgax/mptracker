@@ -226,41 +226,41 @@ class DalPerson:
 
     def get_stats(self):
         rv = {}
-        #voting_session_count = (
-        #    VotingSession.query
-        #    .filter(VotingSession.final == True)
-        #    .filter(VotingSession.date >= self.mandate.interval.lower)
-        #    .filter(VotingSession.date < self.mandate.interval.upper)
-        #    .count()
-        #)
-        #final_votes = (
-        #    self.mandate.votes
-        #    .join(Vote.voting_session)
-        #    .filter(VotingSession.final == True)
-        #)
-        #votes_attended = final_votes.count()
-        #votes_loyal = final_votes.filter(Vote.loyal == True).count()
+        voting_session_count = (
+            VotingSession.query
+            .filter(VotingSession.final == True)
+            .filter(VotingSession.date >= self.mandate.interval.lower)
+            .filter(VotingSession.date < self.mandate.interval.upper)
+            .count()
+        )
+        final_votes = (
+            self.mandate.votes
+            .join(Vote.voting_session)
+            .filter(VotingSession.final == True)
+        )
+        votes_attended = final_votes.count()
+        votes_loyal = final_votes.filter(Vote.loyal == True).count()
 
-        #rv['vote'] = {
-        #    'attendance': votes_attended / voting_session_count,
-        #}
-        #if votes_attended > 0:
-        #    rv['vote']['loyalty'] = votes_loyal / votes_attended
+        rv['vote'] = {
+            'attendance': votes_attended / voting_session_count,
+        }
+        if votes_attended > 0:
+            rv['vote']['loyalty'] = votes_loyal / votes_attended
 
-        #    votes_with_cabinet = (
-        #        final_votes
-        #        .filter(Vote.loyal_to_cabinet != None)
-        #        .count()
-        #    )
-        #    if votes_with_cabinet:
-        #        votes_cabinet_loyal = (
-        #            final_votes
-        #            .filter(Vote.loyal_to_cabinet == True)
-        #            .count()
-        #        )
-        #        rv['vote']['cabinet_loyalty'] = (
-        #            votes_cabinet_loyal / votes_with_cabinet
-        #        )
+            votes_with_cabinet = (
+                final_votes
+                .filter(Vote.loyal_to_cabinet != None)
+                .count()
+            )
+            if votes_with_cabinet:
+                votes_cabinet_loyal = (
+                    final_votes
+                    .filter(Vote.loyal_to_cabinet == True)
+                    .count()
+                )
+                rv['vote']['cabinet_loyalty'] = (
+                    votes_cabinet_loyal / votes_with_cabinet
+                )
 
         rv['speeches'] = self.mandate.transcripts.count()
         rv['questions'] = self.mandate.asked.count()
