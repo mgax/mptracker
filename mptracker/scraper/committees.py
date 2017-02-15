@@ -48,6 +48,22 @@ class CommonCommitteeMembershipParser(CommitteeMembershipParser):
     person_txt = "Numele şi prenumele"
 
 
+SENATE_2016_COMMITTEES = [
+    (1, "Comisia economică, industrii şi servicii"),
+    (3, "Comisia pentru buget, finanţe, activitate bancară şi piaţă de capital"),
+    (4, "Comisia pentru agricultură, silvicultură şi dezvoltare rurală"),
+    (5, "Comisia pentru politică externă"),
+    (6, "Comisia pentru apărare, ordine publică şi siguranţă naţională"),
+    (7, "Comisia pentru drepturile omului, culte şi minorităţi"),
+    (8, "Comisia pentru muncă, familie şi protecţie socială"),
+    (9, "Comisia pentru învăţământ, ştiinţă, tineret şi sport"),
+    (10, "Comisia pentru cultură, artă şi mijloace de informare în masă"),
+    (11, "Comisia pentru administraţie publică, organizarea teritoriului şi protecţia mediului"),
+    (12, "Comisia juridică, de numiri, disciplină, imunităţi şi validări"),
+    (14, "Comisia pentru sănătate publică"),
+]
+
+
 class CommitteeScraper(Scraper):
 
     listing_page_url = \
@@ -57,6 +73,17 @@ class CommitteeScraper(Scraper):
 
     def fetch_committees(self):
         for chamber_id in [0, 1, 2]:
+            if chamber_id == 1:
+                for (id, name) in SENATE_2016_COMMITTEES:
+                    yield Committee(
+                        cdep_id=id,
+                        chamber_id=1,
+                        name=name,
+                        current_members=[],
+                        former_members=[],
+                    )
+                return
+
             url = self.listing_page_url.format(chamber_id=chamber_id)
             listing_page = self.fetch_url(url)
 
