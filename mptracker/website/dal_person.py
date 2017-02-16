@@ -241,8 +241,13 @@ class DalPerson:
         votes_attended = final_votes.count()
         votes_loyal = final_votes.filter(Vote.loyal == True).count()
 
+        if voting_session_count > 0:
+            attendance = votes_attended / voting_session_count
+        else:
+            attendance = 0
+
         rv['vote'] = {
-            'attendance': votes_attended / voting_session_count,
+            'attendance': attendance,
             'loyalty': 1,
             'cabinet_loyalty': 1,
         }
