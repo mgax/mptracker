@@ -6,7 +6,9 @@ from collections import defaultdict
 from pyquery import PyQuery as pq
 from werkzeug.urls import url_decode
 from mptracker.scraper.common import (
-    Scraper, pqitems, get_cdep_id, sanitize, url_args, GenericModel)
+    Scraper, pqitems, get_cdep_id, sanitize, url_args, GenericModel,
+    PageNotFoundError,
+)
 from mptracker.common import fix_local_chars
 
 
@@ -112,7 +114,10 @@ class ProposalScraper(Scraper):
             'http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp=%d&cam=%d'
             % (pk, chamber)
         )
-        page = self.fetch_url(url)
+        try:
+            page = self.fetch_url(url)
+        except PageNotFoundError:
+            return None
 
         if chamber == 1:
             rv['pk_senate'] = pk

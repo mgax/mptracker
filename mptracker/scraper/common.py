@@ -29,6 +29,10 @@ SPREADSHEET_NEW_CSV_URL_TEMPLATE = (
 )
 
 
+class PageNotFoundError(RuntimeError):
+    pass
+
+
 class Scraper(object):
 
     use_cdep_opener = True
@@ -40,6 +44,8 @@ class Scraper(object):
         # we need to pass in all the hooks because of a bug in requests 2.0.0
         # https://github.com/kennethreitz/requests/issues/1655
         resp = self.session.get(url, hooks=self.session.hooks)
+        if resp.status_code != 200:
+            raise PageNotFoundError
         if self.use_cdep_opener:
             text = resp.content.decode('iso-8859-2')
             # we use utf-16 because the parser's autodetect works fine with it
