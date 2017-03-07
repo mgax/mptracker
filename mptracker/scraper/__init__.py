@@ -630,6 +630,7 @@ def get_proposal_single_page(
     logger.info("scraping %d %d", chamber, pk)
     result = scraper.scrape_proposal_page(chamber, pk)
     if result is None:
+        logger.warn("page not found %d %d", chamber, pk)
         return
 
     scraped_page = models.ScrapedProposalPage(**record)
