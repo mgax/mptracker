@@ -314,10 +314,10 @@ class TableParser:
 class MembershipParser:
 
     member_cls = GenericModel
-    role_txt = "Funcţia"
-    person_txt = "Nume şi prenume"
+    role_txt = "Functia"
+    person_txt = "Nume si prenume"
     start_date_txt = "Membru din"
-    end_date_txt = "Membru până"
+    end_date_txt = "Membru pâna"
     date_fmt = 'ro_short_month'
     table_parser_args = {}
 
