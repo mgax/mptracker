@@ -687,6 +687,7 @@ def get_proposals(
 
         else:
             p = models.Proposal()
+            models.db.session.add(p)
 
         if p.cdeppk_cdep:
             if pk_cdep != p.cdeppk_cdep:
