@@ -667,7 +667,7 @@ def get_proposals(
         pk_cdep = result.get('pk_cdep')
         pk_senate = result.get('pk_senate')
 
-        if pk_cdep in [15781]:
+        if pk_cdep in [15309, 15781]:
             continue
 
         if pk_cdep and pk_cdep in index['pk_cdep']:
