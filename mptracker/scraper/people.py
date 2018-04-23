@@ -95,7 +95,7 @@ class MandateScraper(Scraper):
                 )
 
             if has_start_date:
-                start_date_txt = cols.eq(6).text()
+                start_date_txt = cols.eq(5).text()
                 if start_date_txt:
                     mandate.start_date = parse_date(
                         start_date_txt, 'ro_short_month')
