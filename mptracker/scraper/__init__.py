@@ -1482,14 +1482,14 @@ def daily_long():
 def daily_gdrive():
     with log_to_sentry():
         get_vote_controversy()
-        get_position()
-        get_cabinet_party()
+        #get_position()
+        #get_cabinet_party()
         get_policy_domain()
-        get_stop_words()
+        #get_stop_words()
         #get_committee_attendance()
         get_proposal_controversy()
-        get_member_count()
-        get_committee_policy()
+        #get_member_count()
+        #get_committee_policy()
 
 
 @scraper_manager.command
