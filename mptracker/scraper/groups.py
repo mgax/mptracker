@@ -118,6 +118,16 @@ class GroupScraper(Scraper):
                 if member.start_date is None:
                     member.start_date = date(2016, 2, 1)
 
+            if year == 2016 and group.idg == 8:
+                if member.start_date is None:
+                    member.start_date = date(2019, 6, 12)
+
+            if year == 2016 and group.idg == 5:
+                # XXX About a dozen MPs moved from PRO Europa to ALDE
+                # on 2019-10-22
+                if member.start_date == date(2019, 10, 21):
+                    member.start_date = date(2019, 10, 23)
+
         for member in to_remove:
             group.current_members.remove(member)
 

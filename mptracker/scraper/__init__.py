@@ -409,7 +409,8 @@ def get_groups(
                 )
                 new_intervals.append(interval)
             elif interval_one.end > interval_two.start:
-                raise RuntimeError("Overlapping intervals")
+                raise RuntimeError("Overlapping intervals; TODO add "
+                    " exception in GroupScraper.fetch_group")
 
         interval_list.extend(new_intervals)
         interval_list.sort()
