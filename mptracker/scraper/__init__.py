@@ -591,9 +591,7 @@ def get_proposal_pages(
         )
     }
 
-    for record in chain(scraper.list_proposals(2, year),
-                        scraper.list_proposals(1, year)):
-
+    for record in scraper.list_proposals(2, year):
         old_date = db_page_date.get((record['chamber'], record['pk']))
         if old_date and old_date >= record['date']:
             continue

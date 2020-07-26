@@ -155,14 +155,16 @@ class ProposalScraper(Scraper):
                     rv['pk_cdep'] = args.get('idp', type=int)
 
             elif label == "- Senat:":
-                txt = val_td.text()
-                rv['number_senate'] = parse_proposal_number(txt)[1]
-                date_texts.append(txt)
-                link = val_td.find('a')
-                if link:
-                    args = url_args(link.attr('href'))
-                    assert args.get('cam') == '1'
-                    rv['pk_senate'] = args.get('idp', type=int)
+                # XXX we don't parse senate laws any more
+                continue
+                # txt = val_td.text()
+                # rv['number_senate'] = parse_proposal_number(txt)[1]
+                # date_texts.append(txt)
+                # link = val_td.find('a')
+                # if link:
+                #     args = url_args(link.attr('href'))
+                #     assert args.get('cam') == '1'
+                #     rv['pk_senate'] = args.get('idp', type=int)
 
             elif label == "Tip initiativa:":
                 rv['proposal_type'] = val_td.text()
