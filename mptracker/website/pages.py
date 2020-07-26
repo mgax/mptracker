@@ -885,11 +885,13 @@ def export_bounded_mandates(rq):
 @pages.route('/export/voturi-<int:year>.csv')
 @section('export')
 def export_votes(year):
-    cols = ['data', 'cod cdep', 'nume', 'vot', 'vot grup']
+    cols = ['data', 'cod cdep', 'link cdep', 'subiect', 'nume', 'vot', 'vot grup']
     rows = (
         {
             'data': row['date'].isoformat(),
             'cod cdep': row['cdeppk'],
+            'link cdep': 'http://www.cdep.ro/pls/proiecte/upl_pck.proiect?idp={}&cam=2'.format(row['cdeppk']),
+            'subiect': row['subject'],
             'nume': row['name'],
             'vot': VOTE_LABEL.get(row['choice'], ''),
             'vot grup': VOTE_LABEL.get(row['group_choice'], ''),

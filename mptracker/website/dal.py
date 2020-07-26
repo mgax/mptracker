@@ -704,6 +704,7 @@ class DataAccess:
                 GroupVote.choice.label('group_choice'),
                 VotingSession.date,
                 VotingSession.cdeppk,
+                VotingSession.subject,
             )
             .join(Vote.voting_session)
             .filter_by(final=True)
@@ -731,6 +732,7 @@ class DataAccess:
                 'group_choice': row.group_choice,
                 'cdeppk': row.cdeppk,
                 'date': row.date,
+                'subject': row.subject,
             }
 
     def get_all_questions(self, year):
