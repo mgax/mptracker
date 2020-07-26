@@ -8,7 +8,7 @@ from flask.ext.script import Manager
 from flask.ext.rq import job
 from sqlalchemy import or_
 from mptracker import models
-from mptracker.common import VOTE_LABEL, csv_lines
+from mptracker.common import VOTE_LABEL, csv_lines, parse_date
 
 
 logger = logging.getLogger(__name__)
@@ -203,13 +203,18 @@ def proposals():
 
 
 @votes_manager.command
-def dump():
+def dump(start=None):
     voting_sessions = (
         models.VotingSession.query
             .order_by(
                 models.VotingSession.date,
                 models.VotingSession.cdeppk,
             ))
+
+    if start is not None:
+        voting_sessions = voting_sessions.filter(
+            models.VotingSession.date >= parse_date(start)
+        )
 
     def iter_rows():
         for voting_session in voting_sessions:
