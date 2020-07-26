@@ -733,6 +733,7 @@ class DataAccess:
                 'cdeppk': row.cdeppk,
                 'date': row.date,
                 'subject': row.subject,
+                'cdep_url': VotingSession.generate_cdep_url(row.cdeppk),
             }
 
     def get_all_questions(self, year):

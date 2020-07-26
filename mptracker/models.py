@@ -518,8 +518,12 @@ class VotingSession(db.Model):
 
     @property
     def cdep_url(self):
+        return self.generate_cdep_url(self.cdeppk)
+
+    @staticmethod
+    def generate_cdep_url(cdeppk):
         return ("http://www.cdep.ro/pls/steno/evot.nominal"
-                "?idv={s.cdeppk}").format(s=self)
+                "?idv={}").format(cdeppk)
 
 
 class GroupVote(db.Model):
