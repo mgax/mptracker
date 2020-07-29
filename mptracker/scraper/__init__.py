@@ -69,7 +69,7 @@ def _get_config_cache_name():
 
 @scraper_manager.command
 def get_questions(
-        year='2018',
+        year=None,
         existing_reimport=False,
         cache_name=None,
         throttle=None,
@@ -79,6 +79,9 @@ def get_questions(
     from mptracker.scraper.questions import QuestionScraper
     from mptracker.questions import ocr_question, ocr_answer
     from mptracker.policy import calculate_question
+
+    if year is None:
+        year = date.today().year
 
     if existing_reimport:
         known_urls = set()
