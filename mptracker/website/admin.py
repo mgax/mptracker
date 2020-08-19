@@ -29,7 +29,10 @@ def setup_admin(app):
         consumer_key=app.config['GLOGIN_CLIENT_ID'],
         consumer_secret=app.config['GLOGIN_CLIENT_SECRET'],
         request_token_params={
-            'scope': 'https://www.googleapis.com/auth/userinfo.email'},
+            'scope': [
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/userinfo.profile',
+            ]},
         base_url='https://www.googleapis.com/oauth2/v1/',
         request_token_url=None,
         access_token_method='POST',
