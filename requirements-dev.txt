@@ -1,5 +1,5 @@
 -r requirements.txt
 mock==1.0.1
 pip-tools==0.3.4
-py==1.4.15
+py==1.10.0
 pytest==2.3.5
