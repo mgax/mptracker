@@ -1,6 +1,6 @@
 -e git+https://github.com/mitsuhiko/flask.git@2e17ad7fd42d8575f308af9c17496d38ceb72b5e#egg=Flask-dev
 alembic==0.6.0
-Babel==1.3
+Babel==2.9.1
 blinker==1.3
 chaussette==1.0
 cssselect==0.8
